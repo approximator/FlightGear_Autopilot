@@ -20,6 +20,10 @@ public:
     explicit FgAircraft(QObject *parent = 0);
     ~FgAircraft();
 
+    inline QString getString(const QString& node) const;
+    inline qreal getFloat(const QString& node) const;
+    inline qint32 getInt(const QString& node) const;
+
 private:
     QString m_Callsign;
 

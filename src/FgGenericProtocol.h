@@ -40,6 +40,7 @@ public:
     ~FgGenericProtocol();
 
     bool writeXml(const QString& fileName);
+    inline int getParamIndex(const QString& node) const;
 
 private:
     QHash<QString, Parameter> m_Parameters;
@@ -51,6 +52,11 @@ public slots:
 
 
 // Inline functions
+int FgGenericProtocol::getParamIndex(const QString& node) const
+{
+    return m_Parameters.value(node, Parameter(-1, Parameter::INT)).index;
+}
+
 const QString FgGenericProtocol::Parameter::typeStr() const
 {
     switch (type)

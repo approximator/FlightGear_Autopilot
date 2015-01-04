@@ -43,14 +43,14 @@ void FgTransport::onSocketRead()
     {
         QByteArray datagram;
         datagram.resize(m_Socket->pendingDatagramSize());
+
         QHostAddress sender;
         quint16 senderPort;
+        m_Socket->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
+        m_FdmData = QString::fromLocal8Bit(datagram).split("\t");
+//        qDebug() << m_FdmData;
 
-        m_Socket->readDatagram(datagram.data(), datagram.size(),
-                                &sender, &senderPort);
-
-        qDebug() << datagram;
-        //processTheDatagram(datagram);
+        emit dataUpdated();
     }
 }
 
