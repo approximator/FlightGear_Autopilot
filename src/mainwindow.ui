@@ -60,7 +60,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QListView" name="listView_otherPilots">
+       <widget class="QListWidget" name="listWidget_otherPilots">
         <property name="maximumSize">
          <size>
           <width>130</width>
@@ -93,7 +93,7 @@
      <x>0</x>
      <y>0</y>
      <width>673</width>
-     <height>25</height>
+     <height>27</height>
     </rect>
    </property>
   </widget>

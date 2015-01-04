@@ -26,6 +26,9 @@ private:
 
     QList<FgAircraft *> m_Aircrafts;
     QList<FgAircraft *> m_OtherPilots;
+
+private slots:
+    void onDataUpdated();
 };
 
 #endif // MAINWINDOW_H
