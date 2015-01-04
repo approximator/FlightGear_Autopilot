@@ -18,10 +18,10 @@
 
 FgGenericProtocol::FgGenericProtocol(QObject *parent) : QObject(parent)
 {
-    // Parameter of instance than we control
+    // Parameters of instance than we control
     int index = 0;
 
-    m_Parameters.insert("/sim/multiplay/callsing", Parameter(index++, Parameter::STRING));
+    m_Parameters.insert("/sim/multiplay/callsign", Parameter(index++, Parameter::STRING));
     m_Parameters.insert("/orientation/heading-deg", Parameter(index++, Parameter::FLOAT));
     m_Parameters.insert("/orientation/pitch-deg", Parameter(index++, Parameter::FLOAT));
     m_Parameters.insert("/orientation/roll-deg", Parameter(index++, Parameter::FLOAT));
@@ -65,7 +65,6 @@ FgGenericProtocol::~FgGenericProtocol()
 
 bool FgGenericProtocol::writeXml(const QString &fileName)
 {
-    //    /usr/share/games/flightgear/Protocol/FgaOut.xml
     QMap<int, QPair<QString, const Parameter*> > tmpList;
 
     { // copy parameters to QMap to get them sorted

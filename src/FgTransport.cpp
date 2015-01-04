@@ -56,7 +56,7 @@ void FgTransport::onSocketRead()
 
 /*
 
-# How to run myltiplayer
+# How to run multiplayer
 
 /usr/games/fgfs \
   --airport=KSFO \
@@ -74,7 +74,7 @@ void FgTransport::onSocketRead()
   --enable-clouds3d \
   --enable-horizon-effect \
   --enable-enhanced-lighting \
-  --callsign=Approximator \
+  --callsign=App1 \
   --multiplay=out,10,mpserver02.flightgear.org,5000 \
   --multiplay=in,10,,5000 \
   --httpd=5050 \

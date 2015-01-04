@@ -28,36 +28,9 @@ public:
             STRING
         } ;
 
-        Parameter(int i, ParamType t): index(i), type(t)
-        {
-        }
-
-        QString typeStr() const
-        {
-            switch (type) {
-            case INT:
-                return "int";
-            case FLOAT:
-                return "float";
-            case STRING:
-                return "string";
-            default:
-                return "unknown";
-                break;
-            }
-        }
-
-        QString formatStr() const
-        {
-            switch (type) {
-            case INT:
-                return "%d";
-            case FLOAT:
-                return "%f";
-            default:
-                return "%s";
-            }
-        }
+        Parameter(int idx, ParamType t): index(idx), type(t) {}
+        inline const QString typeStr() const;
+        inline const QString formatStr() const;
 
         int index;
         ParamType type;
@@ -68,11 +41,43 @@ public:
 
     bool writeXml(const QString& fileName);
 
-    QHash<QString, Parameter> m_Parameters; //! @todo make private
+private:
+    QHash<QString, Parameter> m_Parameters;
 
 signals:
 
 public slots:
 };
+
+
+// Inline functions
+const QString FgGenericProtocol::Parameter::typeStr() const
+{
+    switch (type)
+    {
+    case INT:
+        return "int";
+    case FLOAT:
+        return "float";
+    case STRING:
+        return "string";
+    default:
+        return "unknown";
+        break;
+    }
+}
+
+const QString FgGenericProtocol::Parameter::formatStr() const
+{
+    switch (type)
+    {
+    case INT:
+        return "%d";
+    case FLOAT:
+        return "%f";
+    default:
+        return "%s";
+    }
+}
 
 #endif // FGGENERICPROTOCOL_H
