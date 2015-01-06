@@ -11,7 +11,6 @@
 #include "FgGenericProtocol.h"
 
 #include <QXmlStreamWriter>
-#include <QLinkedList>
 #include <QPair>
 #include <QFile>
 #include <QDebug>

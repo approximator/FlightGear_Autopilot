@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jan 04, 2015
+ * @date Modified Jan 06, 2015
  */
 
 #ifndef FGPROTOCOL_H
@@ -17,7 +17,6 @@
 #include <QHostAddress>
 
 class QUdpSocket;
-class FgGenericProtocol;
 
 class FgTransport : public QObject
 {
@@ -26,9 +25,10 @@ public:
     explicit FgTransport(QObject *parent = 0);
     ~FgTransport();
 
-    inline QString getString(const QString& node) const;
-    inline qreal getFloat(const QString& node) const;
-    inline qint32 getInt(const QString& node) const;
+    inline QString getString(const QString& node, bool *exists = 0) const;
+    inline qreal getFloat(const QString& node, bool *exists = 0) const;
+    inline qint32 getInt(const QString& node, bool *exists = 0) const;
+    inline void setExists(bool *exists, bool value) const;
 
 private:
     QUdpSocket *m_Socket;
@@ -49,51 +49,37 @@ private slots:
 };
 
 //
-QString FgTransport::getString(const QString& node) const
+QString FgTransport::getString(const QString& node, bool *exists) const
 {
     int paramIndex = m_Protocol->getParamIndex(node);
     if (paramIndex > -1)
     {
-        return m_FdmData[paramIndex];
+        setExists(exists, true);
+        return m_FdmData[paramIndex]; //! @todo check index
     }
 
+    setExists(exists, false);
     return "";
 }
 
-qreal FgTransport::getFloat(const QString& node) const
+qreal FgTransport::getFloat(const QString& node, bool *exists) const
 {
     QString param = getString(node);
-    if (param.isEmpty())
-    {
-        return 0.0;
-    }
-
-    bool ok = false;
-    qreal res = param.toFloat(&ok);
-    if (!ok)
-    {
-        return 0.0;
-    }
-
-    return res;
+    return param.isEmpty() ? 0.0 : param.toFloat(exists);
 }
 
-qint32 FgTransport::getInt(const QString& node) const
+qint32 FgTransport::getInt(const QString& node, bool *exists) const
 {
     QString param = getString(node);
-    if (param.isEmpty())
-    {
-        return 0.0;
-    }
+    return param.isEmpty() ? 0 : param.toInt(exists);
+}
 
-    bool ok = false;
-    qint32 res = param.toInt(&ok);
-    if (!ok)
+void FgTransport::setExists(bool *exists, bool value) const
+{
+    if (exists)
     {
-        return 0.0;
+        *exists = value;
     }
-
-    return res;
 }
 
 #endif // FGPROTOCOL_H

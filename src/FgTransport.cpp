@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jan 04, 2015
+ * @date Modified Jan 06, 2015
  */
 
 #include "FgTransport.h"
@@ -22,7 +22,7 @@ FgTransport::FgTransport(QObject *parent) :
     m_Port(5555)
 {
     m_Protocol = new FgGenericProtocol(this);
-    m_Protocol->writeXml("/usr/share/games/flightgear/Protocol/FgaOut.xml");
+    m_Protocol->writeXml("/usr/share/games/flightgear/Protocol/FgaOut.xml"); //! @todo check file location in windows
 
     m_Socket = new QUdpSocket(this);
     m_Socket->bind(QHostAddress::Any, 5555);
@@ -79,5 +79,8 @@ void FgTransport::onSocketRead()
   --multiplay=in,10,,5000 \
   --httpd=5050 \
   --generic=socket,out,40,localhost,5555,udp,FgaOut --generic=socket,in,45,localhost,5010,udp,FgaIn
+
+  --prop:/engines/engine/running=true
+  --prop:/engines/engine/rpm=1000
 */
 
