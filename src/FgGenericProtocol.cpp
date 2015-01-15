@@ -20,41 +20,45 @@ FgGenericProtocol::FgGenericProtocol(QObject *parent) : QObject(parent)
     // Parameters of instance than we control
     int index = 0;
 
-    m_Parameters.insert("/sim/multiplay/callsign", Parameter(index++, Parameter::STRING));
-    m_Parameters.insert("/orientation/heading-deg", Parameter(index++, Parameter::FLOAT));
-    m_Parameters.insert("/orientation/pitch-deg", Parameter(index++, Parameter::FLOAT));
-    m_Parameters.insert("/orientation/roll-deg", Parameter(index++, Parameter::FLOAT));
-    m_Parameters.insert("/orientation/yaw-deg", Parameter(index++, Parameter::FLOAT));
-    m_Parameters.insert("/position/altitude-ft", Parameter(index++, Parameter::INT));
-    m_Parameters.insert("/position/latitude-deg", Parameter(index++, Parameter::FLOAT));
-    m_Parameters.insert("/position/longitude-deg", Parameter(index++, Parameter::FLOAT));
+#define ADD_PARAM(node, type) m_Parameters.insert(node, Parameter(index++, type));
+
+    ADD_PARAM("/sim/multiplay/callsign", Parameter::STRING);
+    ADD_PARAM("/orientation/heading-deg", Parameter::FLOAT);
+    ADD_PARAM("/orientation/pitch-deg", Parameter::FLOAT);
+    ADD_PARAM("/orientation/roll-deg", Parameter::FLOAT);
+    ADD_PARAM("/orientation/yaw-deg", Parameter::FLOAT);
+    ADD_PARAM("/position/altitude-ft", Parameter::INT);
+    ADD_PARAM("/position/latitude-deg", Parameter::FLOAT);
+    ADD_PARAM("/position/longitude-deg", Parameter::FLOAT);
 
     // other pilots' parameters
     // firstly, get actual number of other pilots
-    m_Parameters.insert("/ai/models/num-players", Parameter(index++, Parameter::INT));
+    ADD_PARAM("/ai/models/num-players", Parameter::INT);
 
     // then do 20 iterations to get at most 20 other aircrafts
-    m_Parameters.insert("/ai/models/multiplayer/callsign", Parameter(index++, Parameter::STRING));
-    m_Parameters.insert("/ai/models/multiplayer/orientation/heading-deg", Parameter(index++, Parameter::FLOAT));
-    m_Parameters.insert("/ai/models/multiplayer/orientation/pitch-deg", Parameter(index++, Parameter::FLOAT));
-    m_Parameters.insert("/ai/models/multiplayer/orientation/roll-deg", Parameter(index++, Parameter::FLOAT));
-    m_Parameters.insert("/ai/models/multiplayer/orientation/yaw-deg", Parameter(index++, Parameter::FLOAT));
-    m_Parameters.insert("/ai/models/multiplayer/position/altitude-ft", Parameter(index++, Parameter::INT));
-    m_Parameters.insert("/ai/models/multiplayer/position/latitude-deg", Parameter(index++, Parameter::FLOAT));
-    m_Parameters.insert("/ai/models/multiplayer/position/longitude-deg", Parameter(index++, Parameter::FLOAT));
+    ADD_PARAM("/ai/models/multiplayer/callsign", Parameter::STRING);
+    ADD_PARAM("/ai/models/multiplayer/orientation/heading-deg", Parameter::FLOAT);
+    ADD_PARAM("/ai/models/multiplayer/orientation/pitch-deg", Parameter::FLOAT);
+    ADD_PARAM("/ai/models/multiplayer/orientation/roll-deg", Parameter::FLOAT);
+    ADD_PARAM("/ai/models/multiplayer/orientation/yaw-deg", Parameter::FLOAT);
+    ADD_PARAM("/ai/models/multiplayer/position/altitude-ft", Parameter::INT);
+    ADD_PARAM("/ai/models/multiplayer/position/latitude-deg", Parameter::FLOAT);
+    ADD_PARAM("/ai/models/multiplayer/position/longitude-deg", Parameter::FLOAT);
     for (int i = 0; i < 20; ++i)
     {
-        m_Parameters.insert("/ai/models/multiplayer[" + QString::number(i) + "]/callsign", Parameter(index++, Parameter::STRING));
-        m_Parameters.insert("/ai/models/multiplayer[" + QString::number(i) + "]/orientation/heading-deg", Parameter(index++, Parameter::FLOAT));
-        m_Parameters.insert("/ai/models/multiplayer[" + QString::number(i) + "]/orientation/pitch-deg", Parameter(index++, Parameter::FLOAT));
-        m_Parameters.insert("/ai/models/multiplayer[" + QString::number(i) + "]/orientation/roll-deg", Parameter(index++, Parameter::FLOAT));
-        m_Parameters.insert("/ai/models/multiplayer[" + QString::number(i) + "]/orientation/yaw-deg", Parameter(index++, Parameter::FLOAT));
-        m_Parameters.insert("/ai/models/multiplayer[" + QString::number(i) + "]/position/altitude-ft", Parameter(index++, Parameter::INT));
-        m_Parameters.insert("/ai/models/multiplayer[" + QString::number(i) + "]/position/latitude-deg", Parameter(index++, Parameter::FLOAT));
-        m_Parameters.insert("/ai/models/multiplayer[" + QString::number(i) + "]/position/longitude-deg", Parameter(index++, Parameter::FLOAT));
+        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/callsign", Parameter::STRING);
+        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/orientation/heading-deg", Parameter::FLOAT);
+        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/orientation/pitch-deg", Parameter::FLOAT);
+        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/orientation/roll-deg", Parameter::FLOAT);
+        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/orientation/yaw-deg", Parameter::FLOAT);
+        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/position/altitude-ft", Parameter::INT);
+        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/position/latitude-deg", Parameter::FLOAT);
+        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/position/longitude-deg", Parameter::FLOAT);
     }
 
 //    /velocities/airspeed-kt
+
+#undef ADD_PARAM
 }
 
 FgGenericProtocol::~FgGenericProtocol()

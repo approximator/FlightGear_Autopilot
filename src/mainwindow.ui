@@ -6,20 +6,29 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>673</width>
-    <height>379</height>
+    <width>1011</width>
+    <height>551</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">
+
+ QToolButton {
+     border: 2px solid #070;
+     border-radius: 5px;
+     background-color: #cccccc;
+     min-width: 80px;
+ }
+
+</string>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
       <property name="bottomMargin">
        <number>0</number>
       </property>
@@ -32,7 +41,7 @@
          </size>
         </property>
         <property name="text">
-         <string>TextLabel</string>
+         <string>Our aircrafts:</string>
         </property>
        </widget>
       </item>
@@ -55,7 +64,7 @@
          </size>
         </property>
         <property name="text">
-         <string>TextLabel</string>
+         <string>Other pilots:</string>
         </property>
        </widget>
       </item>
@@ -72,18 +81,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <property name="rightMargin">
-       <number>10</number>
-      </property>
-      <item>
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <widget class="QGraphicsView" name="graphicsView"/>
     </item>
    </layout>
   </widget>
@@ -92,10 +90,27 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>673</width>
-     <height>27</height>
+     <width>1011</width>
+     <height>25</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuProtocol">
+    <property name="title">
+     <string>FG Protocol</string>
+    </property>
+    <addaction name="actionCheckProtocol"/>
+    <addaction name="actionWriteProtocol"/>
+    <addaction name="actionDeleteProtocol"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuProtocol"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -104,10 +119,149 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="separator"/>
+   <addaction name="actionExit"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QDockWidget" name="dock_status">
+   <property name="maximumSize">
+    <size>
+     <width>524287</width>
+     <height>524287</height>
+    </size>
+   </property>
+   <property name="floating">
+    <bool>false</bool>
+   </property>
+   <property name="features">
+    <set>QDockWidget::AllDockWidgetFeatures</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::AllDockWidgetAreas</set>
+   </property>
+   <property name="windowTitle">
+    <string/>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_2">
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>FlightGear:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_fgPath"/>
+       </item>
+       <item>
+        <widget class="QToolButton" name="toolButton_selectFgPath">
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="maximumSize">
+          <size>
+           <width>120</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Protocol status:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_protocolStatus">
+         <property name="text">
+          <string>checking status...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="toolButton_writeProtocol">
+         <property name="toolTip">
+          <string>Write FlightGear protocol</string>
+         </property>
+         <property name="text">
+          <string>write protocol</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionCheckProtocol">
+   <property name="text">
+    <string>Check</string>
+   </property>
+   <property name="toolTip">
+    <string>Check FlightGear protocol file</string>
+   </property>
+  </action>
+  <action name="actionWriteProtocol">
+   <property name="text">
+    <string>Write</string>
+   </property>
+   <property name="toolTip">
+    <string>Write FlightGear protocol</string>
+   </property>
+  </action>
+  <action name="actionDeleteProtocol">
+   <property name="text">
+    <string>Delete</string>
+   </property>
+   <property name="toolTip">
+    <string>Delete FlightGear protocol</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>toolButton_writeProtocol</sender>
+   <signal>clicked()</signal>
+   <receiver>actionWriteProtocol</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>946</x>
+     <y>506</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

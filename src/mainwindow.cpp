@@ -29,3 +29,13 @@ void MainWindow::onDataUpdated()
         ui->listWidget_otherPilots->addItem(m_Transport->getString("/ai/models/multiplayer[" + QString::number(i) + "]/callsign"));
     }
 }
+
+void MainWindow::on_actionExit_triggered()
+{
+    this->close();
+}
+
+void MainWindow::on_actionWriteProtocol_triggered()
+{
+    qDebug() << "Write protocol";
+}
