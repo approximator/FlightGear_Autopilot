@@ -16,12 +16,45 @@
   <property name="styleSheet">
    <string notr="true">
 
- QToolButton {
-     border: 2px solid #070;
-     border-radius: 5px;
-     background-color: #cccccc;
-     min-width: 80px;
+QMainWindow, QToolBar, QMainMenu {
+    background-color: #ececec;
+    font-size: 30px;
+}
+
+QToolButton {
+    background-color: #ecfcec;
+    border: 1px solid #a0a0b0;
+    border-radius: 3px;
  }
+
+QToolButton:hover {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f6fcff, stop: 1.0 #a0f0d0);
+}
+
+QToolButton:pressed {
+    background-color: #e0e3ff;
+}
+
+QListView, QGraphicsView {
+    background-color: #ecefec;
+    alternate-background-color: yellow;
+    border: 1px solid #a0a0b0;
+    border-radius: 5px;
+}
+
+[header=true]
+{
+    background-color: #777;
+    color: #fff;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+[name=&quot;actionExit&quot;]
+{
+    background-color: #dd1111;
+}
+
 
 </string>
   </property>
@@ -41,7 +74,16 @@
          </size>
         </property>
         <property name="text">
-         <string>Our aircrafts:</string>
+         <string>Our aircrafts</string>
+        </property>
+        <property name="textFormat">
+         <enum>Qt::PlainText</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="header" stdset="0">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -63,8 +105,23 @@
           <height>16777215</height>
          </size>
         </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
         <property name="text">
-         <string>Other pilots:</string>
+         <string>Other pilots</string>
+        </property>
+        <property name="textFormat">
+         <enum>Qt::PlainText</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="header" stdset="0">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -86,6 +143,9 @@
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -93,6 +153,12 @@
      <width>1011</width>
      <height>25</height>
     </rect>
+   </property>
+   <property name="defaultUp">
+    <bool>false</bool>
+   </property>
+   <property name="nativeMenuBar">
+    <bool>false</bool>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -113,14 +179,33 @@
    <addaction name="menuProtocol"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextBesideIcon</enum>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="separator"/>
    <addaction name="actionExit"/>
+   <addaction name="separator"/>
+   <addaction name="actionCheckProtocol"/>
+   <addaction name="actionWriteProtocol"/>
+   <addaction name="actionDeleteProtocol"/>
+   <addaction name="separator"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="dock_status">
@@ -204,6 +289,19 @@
          <property name="text">
           <string>write protocol</string>
          </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/res/icons/svg/appbar.save.svg</normaloff>:/res/icons/svg/appbar.save.svg</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
+         </property>
         </widget>
        </item>
       </layout>
@@ -212,6 +310,10 @@
    </widget>
   </widget>
   <action name="actionExit">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/svg/appbar.close.svg</normaloff>:/res/icons/svg/appbar.close.svg</iconset>
+   </property>
    <property name="text">
     <string>Exit</string>
    </property>
@@ -220,6 +322,10 @@
    </property>
   </action>
   <action name="actionCheckProtocol">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/svg/appbar.list.check.svg</normaloff>:/res/icons/svg/appbar.list.check.svg</iconset>
+   </property>
    <property name="text">
     <string>Check</string>
    </property>
@@ -228,6 +334,10 @@
    </property>
   </action>
   <action name="actionWriteProtocol">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/svg/appbar.save.svg</normaloff>:/res/icons/svg/appbar.save.svg</iconset>
+   </property>
    <property name="text">
     <string>Write</string>
    </property>
@@ -236,6 +346,10 @@
    </property>
   </action>
   <action name="actionDeleteProtocol">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/svg/appbar.noentry.svg</normaloff>:/res/icons/svg/appbar.noentry.svg</iconset>
+   </property>
    <property name="text">
     <string>Delete</string>
    </property>
@@ -245,7 +359,9 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>toolButton_writeProtocol</sender>
@@ -260,6 +376,22 @@
     <hint type="destinationlabel">
      <x>-1</x>
      <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionExit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>505</x>
+     <y>275</y>
     </hint>
    </hints>
   </connection>

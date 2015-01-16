@@ -25,3 +25,6 @@ HEADERS  += mainwindow.h \
     FgGenericProtocol.h
 
 FORMS    += mainwindow.ui
+
+RESOURCES += \
+    resources.qrc

@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_Transport(0)
 {
     ui->setupUi(this);
+    ui->menuBar->setVisible(false);
 
     m_Transport = new FgTransport(this);
     connect(m_Transport, SIGNAL(dataUpdated()), this, SLOT(onDataUpdated()));
@@ -30,12 +31,8 @@ void MainWindow::onDataUpdated()
     }
 }
 
-void MainWindow::on_actionExit_triggered()
-{
-    this->close();
-}
-
 void MainWindow::on_actionWriteProtocol_triggered()
 {
     qDebug() << "Write protocol";
 }
+

@@ -29,7 +29,6 @@ private:
 
 private slots:
     void onDataUpdated();
-    void on_actionExit_triggered();
     void on_actionWriteProtocol_triggered();
 };
 
