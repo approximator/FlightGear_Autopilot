@@ -22,7 +22,6 @@ FgTransport::FgTransport(QObject *parent) :
     m_Port(5555)
 {
     m_Protocol = new FgGenericProtocol(this);
-    m_Protocol->writeXml("/usr/share/games/flightgear/Protocol/FgaOut.xml"); //! @todo check file location in windows
 
     m_Socket = new QUdpSocket(this);
     m_Socket->bind(QHostAddress::Any, 5555);

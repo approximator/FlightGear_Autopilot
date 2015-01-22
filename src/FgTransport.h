@@ -30,6 +30,8 @@ public:
     inline qint32 getInt(const QString& node, bool *exists = 0) const;
     inline void setExists(bool *exists, bool value) const;
 
+    inline FgGenericProtocol* protocol() const;
+
 private:
     QUdpSocket *m_Socket;
     FgGenericProtocol *m_Protocol;
@@ -80,6 +82,11 @@ void FgTransport::setExists(bool *exists, bool value) const
     {
         *exists = value;
     }
+}
+
+FgGenericProtocol *FgTransport::protocol() const
+{
+    return m_Protocol;
 }
 
 #endif // FGPROTOCOL_H

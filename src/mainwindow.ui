@@ -151,7 +151,7 @@ QListView, QGraphicsView {
      <x>0</x>
      <y>0</y>
      <width>1011</width>
-     <height>25</height>
+     <height>27</height>
     </rect>
    </property>
    <property name="defaultUp">
@@ -245,7 +245,11 @@ QListView, QGraphicsView {
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_fgPath"/>
+        <widget class="QLineEdit" name="lineEdit_fgPath">
+         <property name="text">
+          <string>/usr/share/games/flightgear/Protocol/FgaOut.xml</string>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QToolButton" name="toolButton_selectFgPath">

@@ -34,5 +34,6 @@ void MainWindow::onDataUpdated()
 void MainWindow::on_actionWriteProtocol_triggered()
 {
     qDebug() << "Write protocol";
+    m_Transport->protocol()->writeXml(ui->lineEdit_fgPath->text());
 }
 
