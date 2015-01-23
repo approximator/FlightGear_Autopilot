@@ -4,5 +4,6 @@
         <file>res/icons/svg/appbar.save.svg</file>
         <file>res/icons/svg/appbar.list.check.svg</file>
         <file>res/icons/svg/appbar.noentry.svg</file>
+        <file>res/qml/main.qml</file>
     </qresource>
 </RCC>
