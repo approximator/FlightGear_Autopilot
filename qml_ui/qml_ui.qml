@@ -18,39 +18,20 @@ Rectangle {
         radius: 4
     }
 
-    RowLayout {
-        anchors.bottom: mainRect.bottom
-        anchors.bottomMargin: mainRect.height * 0.1
-        anchors.left: mainRect.left
-        anchors.leftMargin: mainRect.width * 0.01
-        width: mainRect.width
+    property variant buttons: ["AP", "FD", "HDG", "NAV", "APR", "REV", "ALT", "DN"]
+        RowLayout {
+            anchors.bottom: mainRect.bottom
+            anchors.bottomMargin: mainRect.height * 0.1
+            anchors.left: mainRect.left
+            anchors.leftMargin: mainRect.width * 0.01
+            width: mainRect.width
+            Repeater{
 
-        ApButton {
-            text: "AP"
+                model: buttons.length
+                ApButton {
+                    text: buttons[index]
+                }
+            }
         }
-        ApButton {
-            text: "FD"
-        }
-        ApButton {
-            text: "HDG"
-        }
-        ApButton {
-            text: "NAV"
-        }
-        ApButton {
-            text: "APR"
-        }
-        ApButton {
-            text: "REV"
-        }
-        ApButton {
-            text: "ALT"
-        }
-        ApButton {
-            text: "DN"
-        }
-    }
-
-
 }
 
