@@ -28,7 +28,7 @@ FgTransport::FgTransport(QObject *parent) :
 
     connect(m_Socket, SIGNAL(readyRead()), this, SLOT(onSocketRead()));
 
-    qDebug() << "FgTransport ready [" << m_Ip << ":" << m_Port << "]";
+    qDebug() << "FgTransport ready [" << m_Ip.toString() << ":" << m_Port << "]";
 }
 
 FgTransport::~FgTransport()
@@ -38,6 +38,10 @@ FgTransport::~FgTransport()
 
 void FgTransport::onSocketRead()
 {
+    /*
+     * Send UDP packet via console:
+     * echo "foo" | nc -w1 -u localhost 5555
+     */
     while (m_Socket->hasPendingDatagrams())
     {
         QByteArray datagram;
@@ -47,9 +51,9 @@ void FgTransport::onSocketRead()
         quint16 senderPort;
         m_Socket->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
         m_FdmData = QString::fromLocal8Bit(datagram).split("\t");
-//        qDebug() << m_FdmData;
+        //qDebug() << m_FdmData;
 
-        emit dataUpdated();
+        emit fgDataReceived(QString::fromLocal8Bit(datagram));
     }
 }
 

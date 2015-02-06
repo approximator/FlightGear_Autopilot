@@ -12,9 +12,9 @@
 
 #include <QDebug>
 
-FgAircraft::FgAircraft(QObject *parent) :
+FgAircraft::FgAircraft(const QString& sign, QObject *parent) :
     QObject(parent),
-    m_Callsign("(none)")
+    m_Callsign(sign)
 {
 
 }

@@ -42,7 +42,7 @@ private:
     QStringList m_FdmData;
 
 signals:
-    void dataUpdated();
+    void fgDataReceived(const QString &data);
 
 public slots:
 

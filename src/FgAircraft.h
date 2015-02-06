@@ -16,10 +16,12 @@
 class FgAircraft : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString callsign READ getCallsign)
 public:
-    explicit FgAircraft(QObject *parent = 0);
+    explicit FgAircraft(const QString& sign, QObject *parent = 0);
     ~FgAircraft();
 
+    QString getCallsign() const { return m_Callsign; }
     inline QString getString(const QString& node) const;
     inline qreal getFloat(const QString& node) const;
     inline qint32 getInt(const QString& node) const;

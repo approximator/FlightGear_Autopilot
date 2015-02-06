@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>svg/appbar.close.svg</file>
+        <file>svg/appbar.save.svg</file>
+        <file>svg/appbar.list.check.svg</file>
+        <file>svg/appbar.noentry.svg</file>
+    </qresource>
+</RCC>

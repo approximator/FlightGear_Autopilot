@@ -17,14 +17,20 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     FgAircraft.cpp \
     FgTransport.cpp \
-    FgGenericProtocol.cpp
+    FgGenericProtocol.cpp \
+    FgController.cpp
 
 HEADERS  += mainwindow.h \
     FgAircraft.h \
     FgTransport.h \
-    FgGenericProtocol.h
+    FgGenericProtocol.h \
+    FgController.h
 
 FORMS    += mainwindow.ui
 
-RESOURCES += \
-    resources.qrc
+include(res/resources.pri)
+# Additional import path used to resolve QML modules in Qt Creator's code model
+QML_IMPORT_PATH =
+
+# Default rules for deployment.
+include(deployment.pri)
