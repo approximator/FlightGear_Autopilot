@@ -1,5 +1,7 @@
 # FlightGear_Autopilot
 
+[![Build Status](https://travis-ci.org/approximator/FlightGear_Autopilot.svg?branch=master)](https://travis-ci.org/approximator/FlightGear_Autopilot)
+
 Autopilot to control FlightGear's aircrafts
 
 -----------------------------------------
