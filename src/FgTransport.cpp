@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jan 06, 2015
+ * @date Modified Feb 09, 2015
  */
 
 #include "FgTransport.h"
@@ -19,7 +19,8 @@ FgTransport::FgTransport(QObject *parent) :
     m_Socket(0),
     m_Protocol(0),
     m_Ip("127.0.0.1"),
-    m_Port(5555)
+    m_Port(5555),
+    m_Buffer()
 {
     m_Protocol = new FgGenericProtocol(this);
 
@@ -44,14 +45,33 @@ void FgTransport::onSocketRead()
      */
     while (m_Socket->hasPendingDatagrams())
     {
-        QByteArray datagram;
-        datagram.resize(m_Socket->pendingDatagramSize());
+        {
+            QByteArray datagram;
+            datagram.resize(m_Socket->pendingDatagramSize());
 
-        QHostAddress sender;
-        quint16 senderPort;
-        m_Socket->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
-        m_FdmData = QString::fromLocal8Bit(datagram).split("\t");
-        //qDebug() << m_FdmData;
+            QHostAddress sender;
+            quint16 senderPort;
+            m_Socket->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
+
+            // we will process only whole line
+            // add datagram to buffer
+            m_Buffer.append(datagram);
+        }
+
+        int newLineIndex = m_Buffer.indexOf('\n', 0);
+        if (newLineIndex < 0)
+        {
+//            qDebug() << "return";
+            return;
+        }
+
+        // we have the whole line
+        QString line = QString::fromLocal8Bit(m_Buffer.data(), newLineIndex);
+        m_FdmData = line.split("\t");
+        m_Buffer.remove(0, newLineIndex + 1);
+
+//        qDebug() << "Data: " << m_FdmData;
+//        qDebug() << "Buff: " << m_Buffer;
 
         emit fgDataReceived(QString::fromLocal8Bit(datagram));
     }

@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jan 06, 2015
+ * @date Modified Feb 09, 2015
  */
 
 #ifndef FGPROTOCOL_H
@@ -38,6 +38,7 @@ private:
 
     QHostAddress m_Ip;
     quint16 m_Port;
+    QByteArray m_Buffer;
 
     QStringList m_FdmData;
 

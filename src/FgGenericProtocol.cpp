@@ -17,7 +17,7 @@
 
 FgGenericProtocol::FgGenericProtocol(QObject *parent) : QObject(parent)
 {
-    // Parameters of instance than we control
+    // Parameters of instance that we control
     int index = 0;
 
 #define ADD_PARAM(node, type) m_Parameters.insert(node, Parameter(index++, type));
@@ -34,6 +34,7 @@ FgGenericProtocol::FgGenericProtocol(QObject *parent) : QObject(parent)
     // other pilots' parameters
     // firstly, get actual number of other pilots
     ADD_PARAM("/ai/models/num-players", Parameter::INT);
+    ADD_PARAM("/ai/models/count", Parameter::INT);
 
     // then do 20 iterations to get at most 20 other aircrafts
     ADD_PARAM("/ai/models/multiplayer/callsign", Parameter::STRING);
@@ -59,6 +60,8 @@ FgGenericProtocol::FgGenericProtocol(QObject *parent) : QObject(parent)
 //    /velocities/airspeed-kt
 
 #undef ADD_PARAM
+
+    writeXml("/usr/share/games/flightgear/Protocol/FgaOut.xml");
 }
 
 FgGenericProtocol::~FgGenericProtocol()
