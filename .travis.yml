@@ -1,8 +1,27 @@
+language: c++
+env:
+    global:
+        # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+        #   via the "travis encrypt" command using the project repo's public key
+        - secure: "N5FQq0cjwij8gP8ny0/EMWo9UV6D1AX23Jxcji6rK8NsYSZ2STi9hEOmuUupfUVvYBpuzwtp/AgcbBmoU+51qMGJj06dEzIDvmg4s+Ew10T319Lcxxg5LFdztBypjPRWR1cyWOSQr4RLKLBg9RuEtTmOxreUQEKRAH04xnemejY="
+
+addons:
+    coverity_scan:
+    project:
+        name: "approximator/FlightGear_Autopilot"
+        description: "Build submitted via Travis CI"
+    notification_email: alex@nls.la
+    build_command_prepend: "source /opt/qt53/bin/qt53-env.sh && qmake"
+    build_command: "make"
+    branch_pattern: master
+
 before_install:
     - sudo add-apt-repository -y ppa:beineri/opt-qt532
     - sudo apt-get update
+
 install:
     - sudo apt-get -y install qt53-meta-full
+
 before_script:
     - source /opt/qt53/bin/qt53-env.sh
     - git clone git://github.com/papyros/qml-material.git
@@ -15,6 +34,7 @@ before_script:
     - qmake
     - sudo make install
     - popd
+
 script:
     - source /opt/qt53/bin/qt53-env.sh
     - pwd
