@@ -42,5 +42,6 @@ script:
     - pwd
     - qmake -v
     - qmake
+    - make clean
     - make
     - cat $TRAVIS_BUILD_DIR/src/cov-int/scm_log.txt
