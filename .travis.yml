@@ -27,11 +27,17 @@ before_script:
     - git clone git://github.com/papyros/qml-material.git
     - cd $TRAVIS_BUILD_DIR/qml-material
     - qmake
+    - make
     - sudo make install
     - cd $TRAVIS_BUILD_DIR
     - git clone git://github.com/papyros/qml-extras.git
     - cd $TRAVIS_BUILD_DIR/qml-extras
     - qmake
+    - make
+    - sudo make install
+    - cd $TRAVIS_BUILD_DIR/src/qml-fgear
+    - qmake
+    - make
     - sudo make install
 
 script:
