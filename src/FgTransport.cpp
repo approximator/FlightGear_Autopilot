@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Feb 09, 2015
+ * @date Modified Feb 10, 2015
  */
 
 #include "FgTransport.h"
@@ -39,10 +39,6 @@ FgTransport::~FgTransport()
 
 void FgTransport::onSocketRead()
 {
-    /*
-     * Send UDP packet via console:
-     * echo "foo" | nc -w1 -u localhost 5555
-     */
     while (m_Socket->hasPendingDatagrams())
     {
         {
@@ -61,7 +57,6 @@ void FgTransport::onSocketRead()
         int newLineIndex = m_Buffer.indexOf('\n', 0);
         if (newLineIndex < 0)
         {
-//            qDebug() << "return";
             return;
         }
 
@@ -73,7 +68,7 @@ void FgTransport::onSocketRead()
 //        qDebug() << "Data: " << m_FdmData;
 //        qDebug() << "Buff: " << m_Buffer;
 
-        emit fgDataReceived(QString::fromLocal8Bit(datagram));
+        emit fgDataReceived();
     }
 }
 

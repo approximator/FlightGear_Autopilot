@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Feb 09, 2015
+ * @date Modified Feb 10, 2015
  */
 
 #ifndef FGPROTOCOL_H
@@ -28,7 +28,6 @@ public:
     inline QString getString(const QString& node, bool *exists = 0) const;
     inline qreal getFloat(const QString& node, bool *exists = 0) const;
     inline qint32 getInt(const QString& node, bool *exists = 0) const;
-    inline void setExists(bool *exists, bool value) const;
 
     inline FgGenericProtocol* protocol() const;
 
@@ -39,11 +38,10 @@ private:
     QHostAddress m_Ip;
     quint16 m_Port;
     QByteArray m_Buffer;
-
     QStringList m_FdmData;
 
 signals:
-    void fgDataReceived(const QString &data);
+    void fgDataReceived();
 
 public slots:
 
@@ -57,11 +55,17 @@ QString FgTransport::getString(const QString& node, bool *exists) const
     int paramIndex = m_Protocol->getParamIndex(node);
     if (paramIndex > -1)
     {
-        setExists(exists, true);
+        if (exists)
+        {
+            *exists = true;
+        }
         return m_FdmData[paramIndex]; //! @todo check index
     }
 
-    setExists(exists, false);
+    if (exists)
+    {
+        *exists = false;
+    }
     return "";
 }
 
@@ -75,14 +79,6 @@ qint32 FgTransport::getInt(const QString& node, bool *exists) const
 {
     QString param = getString(node);
     return param.isEmpty() ? 0 : param.toInt(exists);
-}
-
-void FgTransport::setExists(bool *exists, bool value) const
-{
-    if (exists)
-    {
-        *exists = value;
-    }
 }
 
 FgGenericProtocol *FgTransport::protocol() const

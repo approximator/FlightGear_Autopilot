@@ -14,13 +14,12 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
     FgAircraft.cpp \
     FgTransport.cpp \
     FgGenericProtocol.cpp \
     FgController.cpp
 
-HEADERS  += mainwindow.h \
+HEADERS  += \
     FgAircraft.h \
     FgTransport.h \
     FgGenericProtocol.h \
