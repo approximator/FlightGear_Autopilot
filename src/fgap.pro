@@ -25,7 +25,7 @@ HEADERS  += \
     FgGenericProtocol.h \
     FgController.h
 
-FORMS    += mainwindow.ui
+FORMS    +=
 
 include(res/resources.pri)
 # Additional import path used to resolve QML modules in Qt Creator's code model
