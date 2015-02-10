@@ -23,10 +23,12 @@ install:
 
 before_script:
     - source /opt/qt53/bin/qt53-env.sh
+    - cd $TRAVIS_BUILD_DIR
     - git clone git://github.com/papyros/qml-material.git
     - cd $TRAVIS_BUILD_DIR/qml-material
     - qmake
     - sudo make install
+    - cd $TRAVIS_BUILD_DIR
     - git clone git://github.com/papyros/qml-extras.git
     - cd $TRAVIS_BUILD_DIR/qml-extras
     - qmake
