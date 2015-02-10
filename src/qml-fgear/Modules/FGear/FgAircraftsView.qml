@@ -87,6 +87,7 @@ FgAiModel{
         id: __itemDelegate
         ListItem.Standard {
             text: name
+            interactive: true
             selected: ListView.isCurrentItem
             onTriggered:{
                 currentAiPagePath = pagePath;
@@ -113,6 +114,7 @@ FgAiModel{
         id: __otherItemDelegate
         ListItem.Standard {
             text: name
+            interactive: true
             selected: ListView.isCurrentItem
             onTriggered:{
                 __aiView.currentIndex = -1;
