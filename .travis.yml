@@ -3,7 +3,7 @@ env:
     global:
         # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
         #   via the "travis encrypt" command using the project repo's public key
-        - secure: "N5FQq0cjwij8gP8ny0/EMWo9UV6D1AX23Jxcji6rK8NsYSZ2STi9hEOmuUupfUVvYBpuzwtp/AgcbBmoU+51qMGJj06dEzIDvmg4s+Ew10T319Lcxxg5LFdztBypjPRWR1cyWOSQr4RLKLBg9RuEtTmOxreUQEKRAH04xnemejY="
+        - secure: "K0BgqMzt8As7n0jrsUMR8zBFlennQ2UFKNR99tpL9l54Hf1cZFGNUNdDGFqCL2d1jQHXL79q0ByJMDKLe6idvuDJH3RsmuNSRZgVVtDvl1Xa1+8V0NJW7W4VOl1++7ZXIxUJ9xLP2fz26SLkH6cTCVNDKqxz5KQ7H1U66I23eBM="
 
 addons:
     coverity_scan:
@@ -43,3 +43,4 @@ script:
     - qmake -v
     - qmake
     - make
+    - cat $TRAVIS_BUILD_DIR/src/cov-int/scm_log.txt
