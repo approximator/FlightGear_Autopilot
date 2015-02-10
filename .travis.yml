@@ -15,6 +15,11 @@ before_script:
     - qmake
     - sudo make install
     - popd
+    - pushd src/qml-fgear
+    - qmake
+    - make
+    - sudo make install
+    - popd
 script:
     - source /opt/qt53/bin/qt53-env.sh
     - pwd

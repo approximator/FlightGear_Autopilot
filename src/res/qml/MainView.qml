@@ -1,6 +1,6 @@
 import QtQuick 2.3
 import Material 0.1
-import Material.ListItems 0.1 as ListItem
+import FGear 0.1
 
 ApplicationWindow {
     id: fgview
@@ -12,16 +12,12 @@ ApplicationWindow {
 
     initialPage: page
 
-    ListModel {
-        id: aircrafts
-    }
-
-    Connections {
-        target: fgController
-        onAircraftConnected: {
-            aircrafts.append({"callsign": aircraft.callsign});
-        }
-    }
+//    Connections {
+//        target: fgController
+//        onAircraftConnected: {
+//            aircrafts.append({"callsign": aircraft.callsign});
+//        }
+//    }
 
     Page {
         id: page
@@ -58,31 +54,23 @@ ApplicationWindow {
         Sidebar {
             id: sidebar
 
-            Column {
+            FgAircraftsView {
+                id: aircraftsView
                 width: parent.width
-
-                Repeater {
-                    model: aircrafts
-                    delegate: ListItem.Standard {
-                        text: callsign
-//                        selected: modelData == selectedComponent
-//                        onTriggered: selectedComponent = modelData
-                    }
-                }
+                height: page.height
             }
         }
 
-//        Loader {
-//            anchors {
-//                left: sidebar.right
-//                right: parent.right
-//                top: parent.top
-//                bottom: parent.bottom
-//            }
+        Loader {
+            anchors {
+                left: sidebar.right
+                right: parent.right
+                top: parent.top
+                bottom: parent.bottom
+            }
 
-//            // selectedComponent will always be valid, as it defaults to the first component
-//            source: Qt.resolvedUrl("%1Demo.qml").arg(selectedComponent.replace(" ", ""))
-//            asynchronous: true
-//        }
+            source: Qt.resolvedUrl(aircraftsView.currentAiPagePath)
+            asynchronous: true
+        }
     }
 }
