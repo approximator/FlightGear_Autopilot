@@ -10,7 +10,7 @@ addons:
         project:
             name: "approximator/FlightGear_Autopilot"
         notification_email: alex@nls.la
-        build_command_prepend: "source /opt/qt53/bin/qt53-env.sh && qmake"
+        build_command_prepend: "source /opt/qt53/bin/qt53-env.sh && cd $TRAVIS_BUILD_DIR/src && qmake"
         build_command: "make"
         branch_pattern: master
 
@@ -24,15 +24,13 @@ install:
 before_script:
     - source /opt/qt53/bin/qt53-env.sh
     - git clone git://github.com/papyros/qml-material.git
-    - pushd qml-material
+    - cd $TRAVIS_BUILD_DIR/qml-material
     - qmake
     - sudo make install
-    - popd
     - git clone git://github.com/papyros/qml-extras.git
-    - pushd qml-extras
+    - cd $TRAVIS_BUILD_DIR/qml-extras
     - qmake
     - sudo make install
-    - popd
 
 script:
     - source /opt/qt53/bin/qt53-env.sh
