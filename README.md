@@ -12,6 +12,3 @@ Depends on:
 * https://github.com/papyros/qml-extras
 
 -----------------------------------------
-
-Icons from ModernUIIcons.com
-
