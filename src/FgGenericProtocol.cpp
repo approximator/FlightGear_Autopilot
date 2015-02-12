@@ -34,7 +34,7 @@ FgGenericProtocol::FgGenericProtocol(QObject *parent) : QObject(parent)
     // other pilots' parameters
     // firstly, get actual number of other pilots
     ADD_PARAM("/ai/models/num-players", Parameter::INT);
-    ADD_PARAM("/ai/models/count", Parameter::INT);
+//    ADD_PARAM("/ai/models/count", Parameter::INT);
 
     // then do 20 iterations to get at most 20 other aircrafts
     ADD_PARAM("/ai/models/multiplayer/callsign", Parameter::STRING);

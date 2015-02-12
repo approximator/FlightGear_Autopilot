@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Feb 10, 2015
+ * @date Modified Feb 12, 2015
  */
 
 #ifndef FGCONTROLLER_H
@@ -24,11 +24,12 @@ class FgController : public QObject
     Q_OBJECT
 public:
     explicit FgController(QObject *parent = 0);
+    typedef QHash<QString, FgAircraft*> TFgAircraftList;
 
 private:
     FgTransport *m_Transport;
-    QHash<QString, FgAircraft*> m_OurAircrafts;
-    QHash<QString, FgAircraft*> m_OtherAircrafts;
+    TFgAircraftList m_OurAircrafts;
+    TFgAircraftList m_OtherAircrafts;
     qint32 m_AircraftsCount;
 
     void updateOurAircraftsCount();

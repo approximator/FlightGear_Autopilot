@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Feb 10, 2015
+ * @date Modified Feb 12, 2015
  */
 
 #include "FgController.h"
@@ -57,7 +57,7 @@ void FgController::updateOurAircraftsCount()
     }
 
     FgAircraft* ourAircraft = new FgAircraft(callsign, this); //! @todo parent of ourAircraft
-    m_OurAircrafts[ourAircraft->getCallsign()] = ourAircraft;
+    m_OurAircrafts[ourAircraft->callsign()] = ourAircraft;
     emit ourAircraftConnected(ourAircraft);
     qDebug() << "ourAircraftConnected";
 }
@@ -72,5 +72,51 @@ void FgController::updateOtherAircraftsCount()
         return;
     }
 
-    //! @todo add or remove aircrafts
+    m_AircraftsCount = count;
+
+//    qDebug() << "Num players changed";
+//    qDebug() << "other aircrafts = " << m_OtherAircrafts;
+
+    // get all aircrafts and add new ones to the list
+    QList<QString> callsigns;
+    for (int i = 0; i < count; ++i)
+    {
+        QString callsign = m_Transport->getString("/ai/models/multiplayer[" + QString::number(i) + "]/callsign");
+        callsigns.push_back(callsign);
+        if (m_OtherAircrafts.contains(callsigns.back()))
+        {
+            continue;
+        }
+
+        FgAircraft* aircraft = new FgAircraft(callsign, this); //! @todo parent of ourAircraft
+        //! @todo  aircraft->setIndex();
+        m_OtherAircrafts[callsign] = aircraft;
+        emit aircraftConnected(aircraft);
+        qDebug() << "otherAircraftConnected";
+    }
+
+//    qDebug() << "callsign = " << callsigns;
+
+    // remove disconnected aircrafts from the list
+    TFgAircraftList::iterator it = m_OtherAircrafts.begin();
+    TFgAircraftList::iterator itEnd = m_OtherAircrafts.end();
+    for (; it != itEnd; ++it)
+    {
+        if (!callsigns.contains((*it)->callsign()))
+        {
+            emit aircraftDisconnected(*it);
+            qDebug() << "aircraftDisconnected";
+
+            m_OtherAircrafts.remove((*it)->callsign());     //! @todo where to delete this aircraft
+            if (m_OtherAircrafts.isEmpty())
+            {
+                return;
+            }
+
+            // iterators invalidated
+            //! @todo rewrite this
+            it = m_OtherAircrafts.begin();
+            itEnd = m_OtherAircrafts.end();
+        }
+    }
 }

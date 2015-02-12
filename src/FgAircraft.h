@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jan 04, 2015
+ * @date Modified Feb 12, 2015
  */
 
 #ifndef FGAIRCRAFT_H
@@ -16,22 +16,27 @@
 class FgAircraft : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString callsign READ getCallsign)
+    Q_PROPERTY(QString callsign READ callsign)
 public:
     explicit FgAircraft(const QString& sign, QObject *parent = 0);
     ~FgAircraft();
 
-    QString getCallsign() const { return m_Callsign; }
-    inline QString getString(const QString& node) const;
-    inline qreal getFloat(const QString& node) const;
-    inline qint32 getInt(const QString& node) const;
+    inline QString callsign() const;
 
 private:
     QString m_Callsign;
+    qint32 m_Index;
 
 signals:
 
 public slots:
 };
+
+//
+
+inline QString FgAircraft::callsign() const
+{
+    return m_Callsign;
+}
 
 #endif // FGAIRCRAFT_H
