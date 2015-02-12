@@ -7,6 +7,16 @@ Item {
 
     property string currentAiPagePath;
     property alias expanderText: __expander.text
+    property QtObject fgController: null
+
+    Connections{
+        target: fgController
+        onAircraftConnected: addAircraft(__othersAiModel,aircraft)
+        onOurAircraftConnected: addAircraft(__controlledAiModel,aircraft)
+        onAircraftDisconnected: removeAircraft(__othersAiModel,aircraft)
+//        onAircraftUpdateded:
+    }
+
     ColumnLayout{
         anchors.fill: parent
 
@@ -19,7 +29,7 @@ Item {
 
             clip: true
             boundsBehavior: Flickable.StopAtBounds
-            model: __othersAiModel
+            model: __controlledAiModel
             delegate: __itemDelegate
             header: __header
         }
@@ -58,7 +68,7 @@ Item {
                     right: parent.right
                 }
                 clip: true
-                model: __controlledAiModel
+                model: __othersAiModel
                 delegate: __otherItemDelegate
                 boundsBehavior: Flickable.StopAtBounds
             }
@@ -75,18 +85,18 @@ Item {
         __otherView.currentIndex = -1;
     }
 
-FgAiModel{
+ListModel{
     id: __controlledAiModel
 }
 
-FgAiModel{
+ListModel{
     id: __othersAiModel
 }
 
     Component {
         id: __itemDelegate
         ListItem.Standard {
-            text: name
+            text: callsign
             interactive: true
             selected: ListView.isCurrentItem
             onTriggered:{
@@ -106,19 +116,41 @@ FgAiModel{
 
             property QtObject currentModelItem: ListView.view.model.get(ListView.view.currentIndex) || null
             imageSource: currentModelItem.imagePath
-            text: currentModelItem.name
+            text: currentModelItem.callsign
         }
     }
 
     Component {
         id: __otherItemDelegate
         ListItem.Standard {
-            text: name
+            text: callsign
             interactive: true
             selected: ListView.isCurrentItem
             onTriggered:{
                 __aiView.currentIndex = -1;
                 ListView.view.currentIndex = index;
+            }
+        }
+    }
+
+    // adds aircraft to controlled* or otherAiModel
+    function addAircraft (_model,_aircraft) {
+        var modelObj = _aircraft.params;
+        modelObj["callsign"] = _aircraft.callsign;
+
+        // Got picture path by flight model
+        modelObj["imagePath"] = "flight_pic/b1900d.jpg" //Fixme: get appropriate picture
+        modelObj["pagePath"] = "AircraftPage.qml"; //Fixme: get appropriate page
+        _model.append(modelObj);
+    }
+
+    function removeAircraft (_model,_aircraft) {
+        var aiCallsigh = _aircraft.callsign;
+        var i = 0;
+        for (;i < _model.count; i+=1) {
+            if (_model.get(i).callsign == aiCallsigh) {
+                _model.remove(i);
+                break;
             }
         }
     }

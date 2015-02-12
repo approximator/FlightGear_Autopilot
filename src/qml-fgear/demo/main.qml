@@ -23,6 +23,7 @@ ApplicationWindow {
                 id: aircraftsView
                 width: parent.width
                 height: page.height
+                fgController: controller
             }
         }
 
@@ -39,4 +40,30 @@ ApplicationWindow {
             asynchronous: true
         }
     }
+
+    QtObject {
+        id: controller
+        signal aircraftConnected(var aircraft);
+    }
+
+    Timer {
+        property int counter: 0
+        id: controllerTimer
+        interval: 2000; running: false; repeat: true
+        onTriggered: {
+           if (counter < 5) {
+               var obj = {};
+               obj.callsign = Date().toString();
+               obj.params = {
+                   name: "blabla",
+                   angle: 13
+               }
+               controller.aircraftConnected(obj);
+               counter+=1;
+           } else {
+               stop();
+           }
+        }
+    }
+Component.onCompleted: controllerTimer.start()
 }

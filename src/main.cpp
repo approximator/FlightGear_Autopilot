@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     FgController fgController;
     QQmlApplicationEngine engine;
     QQmlContext *context=engine.rootContext();
-    context->setContextProperty("fgController", &fgController);
+    context->setContextProperty("fg_controller", &fgController);
     engine.load(QUrl(QStringLiteral("qrc:qml/MainView.qml")));
 
     return app.exec();

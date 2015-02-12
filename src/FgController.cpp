@@ -11,7 +11,6 @@
 
 #include "FgController.h"
 #include "FgTransport.h"
-#include "FgAircraft.h"
 
 FgController::FgController(QObject *parent) :
     QObject(parent),

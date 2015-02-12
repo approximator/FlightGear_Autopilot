@@ -15,9 +15,10 @@
 #include <QObject>
 #include <QHash>
 
+#include "FgAircraft.h" //DO NOT REMOVE THIS (needed for transferring types in signals)!!!
 
-class FgAircraft;
 class FgTransport;
+class FgAircraft;
 
 class FgController : public QObject
 {

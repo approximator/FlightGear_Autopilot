@@ -12,12 +12,6 @@ ApplicationWindow {
 
     initialPage: page
 
-//    Connections {
-//        target: fgController
-//        onAircraftConnected: {
-//            aircrafts.append({"callsign": aircraft.callsign});
-//        }
-//    }
 
     Page {
         id: page
@@ -58,6 +52,7 @@ ApplicationWindow {
                 id: aircraftsView
                 width: parent.width
                 height: page.height
+                fgController: fg_controller
             }
         }
 
