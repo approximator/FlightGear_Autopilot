@@ -98,25 +98,20 @@ void FgController::updateOtherAircraftsCount()
 //    qDebug() << "callsign = " << callsigns;
 
     // remove disconnected aircrafts from the list
-    TFgAircraftList::iterator it = m_OtherAircrafts.begin();
-    TFgAircraftList::iterator itEnd = m_OtherAircrafts.end();
-    for (; it != itEnd; ++it)
+    auto it = m_OtherAircrafts.begin();
+    while ( it != m_OtherAircrafts.end() )
     {
         if (!callsigns.contains((*it)->callsign()))
         {
             emit aircraftDisconnected(*it);
             qDebug() << "aircraftDisconnected";
 
-            m_OtherAircrafts.remove((*it)->callsign());     //! @todo where to delete this aircraft
-            if (m_OtherAircrafts.isEmpty())
-            {
-                return;
-            }
-
-            // iterators invalidated
-            //! @todo rewrite this
-            it = m_OtherAircrafts.begin();
-            itEnd = m_OtherAircrafts.end();
+            delete *it; //FIXME: check it with gui
+            it = m_OtherAircrafts.erase(it);     //! @todo where to delete this aircraft;
+        }
+        else
+        {
+            ++it;
         }
     }
 }
