@@ -29,6 +29,9 @@ public:
 
     inline const QString callsign() const;
     inline const QJsonObject getParams() const;
+    inline void setAilerons(qreal val);
+    inline void setElevator(qreal val);
+    inline void setRudder(qreal val);
 
 private:
     QString m_Callsign;
@@ -43,6 +46,11 @@ private:
     qreal m_Latitude;   // deg
     qreal m_Altitude;   // ft
     qreal m_Heading;    // deg
+
+    // controls
+    qreal m_Ailerons;
+    qreal m_Elevator;
+    qreal m_Rudder;
 
 signals:
     void paramsChanged();
@@ -60,6 +68,21 @@ const QString FgAircraft::callsign() const
 const QJsonObject FgAircraft::getParams() const
 {
     return m_Params;
+}
+
+void FgAircraft::setAilerons(qreal val)
+{
+    m_Ailerons = val;
+}
+
+void FgAircraft::setElevator(qreal val)
+{
+    m_Elevator = val;
+}
+
+void FgAircraft::setRudder(qreal val)
+{
+    m_Rudder = val;
 }
 
 #endif // FGAIRCRAFT_H
