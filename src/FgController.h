@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Feb 12, 2015
+ * @date Modified Feb 13, 2015
  */
 
 #ifndef FGCONTROLLER_H
@@ -47,6 +47,8 @@ signals:
     void ourAircraftConnected(FgAircraft* aircraft);
     void aircraftDisconnected(FgAircraft* aircraft);
     void aircraftUpdateded(FgAircraft* aircraft);
+
+    void fdmDataChanged(FgTransport* transport);
 };
 
 #endif // FGCONTROLLER_H

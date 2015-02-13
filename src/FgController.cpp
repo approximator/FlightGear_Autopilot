@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Feb 12, 2015
+ * @date Modified Feb 13, 2015
  */
 
 #include "FgController.h"
@@ -37,6 +37,8 @@ void FgController::onDataReceived()
 {
     updateOurAircraftsCount();
     updateOtherAircraftsCount();
+
+    emit fdmDataChanged(m_Transport);
 }
 
 void FgController::updateOurAircraftsCount()
@@ -58,6 +60,8 @@ void FgController::updateOurAircraftsCount()
     FgAircraft* ourAircraft = new FgAircraft(callsign, this); //! @todo parent of ourAircraft
     m_OurAircrafts[ourAircraft->callsign()] = ourAircraft;
     emit ourAircraftConnected(ourAircraft);
+
+    connect(this, SIGNAL(fdmDataChanged(FgTransport*)), ourAircraft, SLOT(onFdmDataChanged(FgTransport*)));
     qDebug() << "ourAircraftConnected";
 }
 
@@ -72,9 +76,6 @@ void FgController::updateOtherAircraftsCount()
     }
 
     m_AircraftsCount = count;
-
-//    qDebug() << "Num players changed";
-//    qDebug() << "other aircrafts = " << m_OtherAircrafts;
 
     // get all aircrafts and add new ones to the list
     QList<QString> callsigns;
@@ -94,11 +95,9 @@ void FgController::updateOtherAircraftsCount()
         qDebug() << "otherAircraftConnected";
     }
 
-//    qDebug() << "callsign = " << callsigns;
-
     // remove disconnected aircrafts from the list
     auto it = m_OtherAircrafts.begin();
-    while ( it != m_OtherAircrafts.end() )
+    while (it != m_OtherAircrafts.end())
     {
         if (!callsigns.contains((*it)->callsign()))
         {

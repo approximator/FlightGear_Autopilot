@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Feb 10, 2015
+ * @date Modified Feb 13, 2015
  */
 
 #ifndef FGPROTOCOL_H
@@ -25,9 +25,9 @@ public:
     explicit FgTransport(QObject *parent = 0);
     ~FgTransport();
 
-    inline QString getString(const QString& node, bool *exists = 0) const;
-    inline qreal getFloat(const QString& node, bool *exists = 0) const;
-    inline qint32 getInt(const QString& node, bool *exists = 0) const;
+    inline QString getString(const QString& node, bool *exists = nullptr) const;
+    inline qreal getFloat(const QString& node, bool *exists = nullptr) const;
+    inline qint32 getInt(const QString& node, bool *exists = nullptr) const;
 
     inline FgGenericProtocol* protocol() const;
 
@@ -43,10 +43,10 @@ private:
 signals:
     void fgDataReceived();
 
-public slots:
-
 private slots:
     void onSocketRead();
+
+public slots:
 };
 
 //

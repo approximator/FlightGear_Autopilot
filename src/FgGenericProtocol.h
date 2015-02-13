@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jan 04, 2015
+ * @date Modified Feb 13, 2015
  */
 
 #ifndef FGGENERICPROTOCOL_H
@@ -28,7 +28,7 @@ public:
             STRING
         } ;
 
-        Parameter(int idx, ParamType t): index(idx), type(t) {}
+        inline Parameter(int idx, ParamType t);
         inline const QString typeStr() const;
         inline const QString formatStr() const;
 
@@ -55,6 +55,13 @@ public slots:
 int FgGenericProtocol::getParamIndex(const QString& node) const
 {
     return m_Parameters.value(node, Parameter(-1, Parameter::INT)).index;
+}
+
+FgGenericProtocol::Parameter::Parameter(int idx, ParamType t):
+    index(idx),
+    type(t)
+{
+
 }
 
 const QString FgGenericProtocol::Parameter::typeStr() const
