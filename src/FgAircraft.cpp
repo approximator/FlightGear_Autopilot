@@ -10,6 +10,7 @@
 
 #include "FgAircraft.h"
 #include "FgTransport.h"
+#include "FgAutopilot.h"
 
 #include <QDebug>
 
@@ -17,6 +18,7 @@ FgAircraft::FgAircraft(const QString& sign, QObject *parent) :
     QObject(parent),
     m_Callsign(sign),
     m_Index(-1),
+    m_Autopilot(nullptr),
     m_Params(),
     m_Pitch(0.0),
     m_Roll(0.0),
@@ -27,6 +29,8 @@ FgAircraft::FgAircraft(const QString& sign, QObject *parent) :
     m_Heading(0.0)
 {
     qDebug() << callsign() << " created";
+
+    m_Autopilot = new FgAutopilot(this);
 }
 
 FgAircraft::~FgAircraft()

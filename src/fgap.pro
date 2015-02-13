@@ -18,13 +18,15 @@ SOURCES += main.cpp\
     FgAircraft.cpp \
     FgTransport.cpp \
     FgGenericProtocol.cpp \
-    FgController.cpp
+    FgController.cpp \
+    FgAutopilot.cpp
 
 HEADERS  += \
     FgAircraft.h \
     FgTransport.h \
     FgGenericProtocol.h \
-    FgController.h
+    FgController.h \
+    FgAutopilot.h
 
 FORMS    +=
 

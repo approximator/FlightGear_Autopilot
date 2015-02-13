@@ -15,6 +15,7 @@
 #include <QJsonObject>
 
 class FgTransport;
+class FgAutopilot;
 
 class FgAircraft : public QObject
 {
@@ -32,6 +33,7 @@ public:
 private:
     QString m_Callsign;
     qint32 m_Index;
+    FgAutopilot* m_Autopilot;
     QJsonObject m_Params;
 
     qreal m_Pitch;      // deg
