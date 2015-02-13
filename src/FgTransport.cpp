@@ -65,9 +65,6 @@ void FgTransport::onSocketRead()
         m_FdmData = line.split("\t");
         m_Buffer.remove(0, newLineIndex + 1);
 
-//        qDebug() << "Data: " << m_FdmData;
-//        qDebug() << "Buff: " << m_Buffer;
-
         emit fgDataReceived();
     }
 }

@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jan 04, 2015
+ * @date Modified Feb 14, 2015
  */
 
 #include "FgGenericProtocol.h"
@@ -15,12 +15,15 @@
 #include <QFile>
 #include <QDebug>
 
-FgGenericProtocol::FgGenericProtocol(QObject *parent) : QObject(parent)
+FgGenericProtocol::FgGenericProtocol(QObject *parent) :
+    QObject(parent),
+    m_InParameters(),
+    m_OutParameters()
 {
     // Parameters of instance that we control
     int index = 0;
 
-#define ADD_PARAM(node, type) m_Parameters.insert(node, Parameter(index++, type));
+#define ADD_PARAM(node, type) m_InParameters.insert(node, Parameter(index++, type));
 
     ADD_PARAM("/sim/multiplay/callsign", Parameter::STRING);
     ADD_PARAM("/orientation/heading-deg", Parameter::FLOAT);
@@ -74,8 +77,8 @@ bool FgGenericProtocol::writeXml(const QString &fileName)
     QMap<int, QPair<QString, const Parameter*> > tmpList;
 
     { // copy parameters to QMap to get them sorted
-        QHash<QString, Parameter>::const_iterator param = m_Parameters.constBegin();
-        QHash<QString, Parameter>::const_iterator paramEnd = m_Parameters.constEnd();
+        QHash<QString, Parameter>::const_iterator param = m_InParameters.constBegin();
+        QHash<QString, Parameter>::const_iterator paramEnd = m_InParameters.constEnd();
         for (; param != paramEnd; ++param)
         {
             tmpList.insert(param.value().index, qMakePair(param.key(), &param.value()));

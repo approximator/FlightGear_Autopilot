@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Feb 13, 2015
+ * @date Modified Feb 14, 2015
  */
 
 #ifndef FGGENERICPROTOCOL_H
@@ -43,7 +43,8 @@ public:
     inline int getParamIndex(const QString& node) const;
 
 private:
-    QHash<QString, Parameter> m_Parameters;
+    QHash<QString, Parameter> m_InParameters;
+    QHash<QString, Parameter> m_OutParameters;
 
 signals:
 
@@ -54,7 +55,7 @@ public slots:
 // Inline functions
 int FgGenericProtocol::getParamIndex(const QString& node) const
 {
-    return m_Parameters.value(node, Parameter(-1, Parameter::INT)).index;
+    return m_InParameters.value(node, Parameter(-1, Parameter::INT)).index;
 }
 
 FgGenericProtocol::Parameter::Parameter(int idx, ParamType t):
