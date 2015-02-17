@@ -56,6 +56,13 @@ FgGenericProtocol::FgGenericProtocol(QObject *parent) :
 
 #undef ADD_PARAM
 
+
+    // Parameteres to control
+#define ADD_PARAM(node, type) m_OutParameters.insert(node, Parameter(index++, type));
+    index = 0;
+    ADD_PARAM("/controls/flight/aileron", Parameter::FLOAT);
+    ADD_PARAM("/controls/flight/elevator", Parameter::FLOAT);
+
     writeXml("/usr/share/games/flightgear/Protocol/FgaOut.xml");
 }
 
@@ -66,14 +73,22 @@ FgGenericProtocol::~FgGenericProtocol()
 
 bool FgGenericProtocol::writeXml(const QString &fileName)
 {
-    QMap<int, QPair<QString, const Parameter*> > tmpList;
+    QMap<int, QPair<QString, const Parameter*> > inParamsList;
+    QMap<int, QPair<QString, const Parameter*> > outParamsList;
 
     { // copy parameters to QMap to get them sorted
-        QHash<QString, Parameter>::const_iterator param = m_InParameters.constBegin();
-        QHash<QString, Parameter>::const_iterator paramEnd = m_InParameters.constEnd();
+        auto param = m_InParameters.constBegin();
+        auto paramEnd = m_InParameters.constEnd();
         for (; param != paramEnd; ++param)
         {
-            tmpList.insert(param.value().index, qMakePair(param.key(), &param.value()));
+            inParamsList.insert(param.value().index, qMakePair(param.key(), &param.value()));
+        }
+
+        param = m_OutParameters.constBegin();
+        paramEnd = m_OutParameters.constEnd();
+        for (; param != paramEnd; ++param)
+        {
+            outParamsList.insert(param.value().index, qMakePair(param.key(), &param.value()));
         }
     }
 
@@ -90,12 +105,14 @@ bool FgGenericProtocol::writeXml(const QString &fileName)
 
     stream.writeStartElement("PropertyList");
     stream.writeStartElement("generic");
+
+    // output section
     stream.writeStartElement("output");
     stream.writeTextElement("line_separator", "newline");
     stream.writeTextElement("var_separator", "tab");
 
-    QMap<int, QPair<QString, const Parameter*> >::const_iterator param = tmpList.constBegin();
-    QMap<int, QPair<QString, const Parameter*> >::const_iterator paramEnd = tmpList.constEnd();
+    auto param = inParamsList.constBegin();
+    auto paramEnd = inParamsList.constEnd();
     for (; param != paramEnd; ++param)
     {
         stream.writeStartElement("chunk");
@@ -105,8 +122,25 @@ bool FgGenericProtocol::writeXml(const QString &fileName)
         stream.writeTextElement("format", param.value().second->formatStr());
         stream.writeEndElement(); // chunk
     }
-
     stream.writeEndElement(); // output
+
+    // input section
+    stream.writeStartElement("input");
+    stream.writeTextElement("line_separator", "newline");
+    stream.writeTextElement("var_separator", "tab");
+    param = outParamsList.constBegin();
+    paramEnd = outParamsList.constEnd();
+    for (; param != paramEnd; ++param)
+    {
+        stream.writeStartElement("chunk");
+        stream.writeTextElement("name", param.value().first);
+        stream.writeTextElement("node", param.value().first);
+        stream.writeTextElement("type", param.value().second->typeStr());
+        stream.writeTextElement("format", param.value().second->formatStr());
+        stream.writeEndElement(); // chunk
+    }
+    stream.writeEndElement(); // input
+
     stream.writeEndElement(); // generic
     stream.writeEndElement(); // PropertyList
 
