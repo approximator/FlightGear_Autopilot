@@ -5,14 +5,14 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 14, 2015
- * @date Modified Feb 14, 2015
+ * @date Modified Feb 17, 2015
  */
 #ifndef FGAUTOPILOT_H
 #define FGAUTOPILOT_H
 
 #include <QObject>
 
-class FgAircraft;
+class FgControlledAircraft;
 
 class FgAutopilot : public QObject
 {
@@ -27,7 +27,7 @@ public:
 
     explicit FgAutopilot(QObject *parent = 0);
 
-    void computeControl(FgAircraft* aircraft);
+    void computeControl(FgControlledAircraft* aircraft);
 
 private:
     AUTOPILOT_MODE m_Mode;
@@ -40,9 +40,9 @@ private:
     qreal m_DesiredAltitude;   // ft
     qreal m_DesiredHeading;    // deg
 
-    void holdAltitude(FgAircraft* aircraft);
-    void holdAngles(FgAircraft* aircraft);
-    void follow(FgAircraft* aircraft);
+    void holdAltitude(FgControlledAircraft* aircraft);
+    void holdAngles(FgControlledAircraft *aircraft);
+    void follow(FgControlledAircraft* aircraft);
 
 signals:
 

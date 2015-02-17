@@ -5,10 +5,12 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 14, 2015
- * @date Modified Feb 14, 2015
+ * @date Modified Feb 17, 2015
  */
 #include "FgAutopilot.h"
-#include "FgAircraft.h"
+#include "FgControlledAircraft.h"
+
+#include <QDebug>
 
 FgAutopilot::FgAutopilot(QObject *parent) :
     QObject(parent),
@@ -23,7 +25,7 @@ FgAutopilot::FgAutopilot(QObject *parent) :
 {
 }
 
-void FgAutopilot::computeControl(FgAircraft *aircraft)
+void FgAutopilot::computeControl(FgControlledAircraft *aircraft)
 {
     switch (m_Mode)
     {
@@ -41,17 +43,31 @@ void FgAutopilot::computeControl(FgAircraft *aircraft)
     }
 }
 
-void FgAutopilot::holdAltitude(FgAircraft * /* aircraft */)
+void FgAutopilot::holdAltitude(FgControlledAircraft * /* aircraft */)
 {
 
 }
 
-void FgAutopilot::holdAngles(FgAircraft * /* aircraft */)
+void FgAutopilot::holdAngles(FgControlledAircraft * aircraft)
 {
+    qreal pitch = aircraft->pitch();
+    qreal roll = aircraft->roll();
 
+    // simple proportional control
+    //! @todo improve this
+    qreal pitchError = m_DesiredPitch - pitch;
+    qreal rollError = m_DesiredRoll - roll;
+
+    qreal pitchOut = pitchError * 0.05;
+    qreal rollOut = rollError * 0.05;
+
+    aircraft->setElevator(pitchOut);
+    aircraft->setAilerons(rollOut);
+
+//    qDebug() << "Autopilot ready";
 }
 
-void FgAutopilot::follow(FgAircraft * /* aircraft */)
+void FgAutopilot::follow(FgControlledAircraft * /* aircraft */)
 {
 
 }
