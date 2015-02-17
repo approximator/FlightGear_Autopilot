@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Feb 13, 2015
+ * @date Modified Feb 17, 2015
  */
 
 #include "FgController.h"
@@ -14,38 +14,39 @@
 
 FgController::FgController(QObject *parent) :
     QObject(parent),
-    m_Transport(0),
+    m_Transport(nullptr),
     m_OurAircrafts(),
     m_OtherAircrafts(),
     m_AircraftsCount(0)
 {
-    m_Transport = new FgTransport(this);
+    FgControlledAircraft* aircraft = new FgControlledAircraft("Not connected yet", this);
+    m_Transport = aircraft->transport();
+    m_OurAircrafts[aircraft->callsign()] = aircraft;
+
     //! @todo Connections!!
     connect(m_Transport, SIGNAL(fgDataReceived()), this, SLOT(onDataReceived()));
 }
 
 void FgController::updateAircraft(const QString & /* aircraftId */)
 {
-//    if (!m_OtherAircrafts.isEmpty())
-//    {
-//        FgAircraft *aircraft = m_OtherAircrafts.value(aircraftId);
-//        emit aircraftUpdateded(aircraft);
-//    }
 }
 
 void FgController::onDataReceived()
 {
+    //! @todo fix for several controlled aircrafts
     updateOurAircraftsCount();
     updateOtherAircraftsCount();
 
     emit fdmDataChanged(m_Transport);
+
+//    qDebug() << "end of data received";
 }
 
 void FgController::updateOurAircraftsCount()
 {
     // currently we are dealing with one controlled aircraft
     //! @todo Add multiple aircrafts handling
-    if (!m_OurAircrafts.isEmpty())
+    if (m_OurAircrafts.isEmpty())
     {
         return;
     }
@@ -57,12 +58,19 @@ void FgController::updateOurAircraftsCount()
         qDebug() << "ERROR! Our callsign is empty!";
     }
 
-    FgAircraft* ourAircraft = new FgAircraft(callsign, this); //! @todo parent of ourAircraft
-    m_OurAircrafts[ourAircraft->callsign()] = ourAircraft;
-    emit ourAircraftConnected(ourAircraft);
+    FgControlledAircraft* aircraft = *m_OurAircrafts.begin();
+    m_OurAircrafts.clear(); //! @fixme
 
-    connect(this, SIGNAL(fdmDataChanged(FgTransport*)), ourAircraft, SLOT(onFdmDataChanged(FgTransport*)));
-    qDebug() << "ourAircraftConnected";
+    if (aircraft->callsign() == "Not connected yet")
+    {
+        aircraft->setCallsign(callsign);
+        emit ourAircraftConnected(aircraft);
+
+        connect(this, SIGNAL(fdmDataChanged(FgTransport*)), aircraft, SLOT(onFdmDataChanged(FgTransport*)));
+        m_OurAircrafts[aircraft->callsign()] = aircraft; //! @fixme
+
+        qDebug() << "ourAircraftConnected";
+    }
 }
 
 void FgController::updateOtherAircraftsCount()
@@ -88,7 +96,7 @@ void FgController::updateOtherAircraftsCount()
             continue;
         }
 
-        FgAircraft* aircraft = new FgAircraft(callsign, this); //! @todo parent of ourAircraft
+        FgAircraft* aircraft = new FgAircraft(callsign, this); //! @todo parent
         //! @todo  aircraft->setIndex();
         m_OtherAircrafts[callsign] = aircraft;
         emit aircraftConnected(aircraft);
@@ -105,7 +113,7 @@ void FgController::updateOtherAircraftsCount()
             qDebug() << "aircraftDisconnected";
 
             delete *it; //FIXME: check it with gui
-            it = m_OtherAircrafts.erase(it);     //! @todo where to delete this aircraft;
+            it = m_OtherAircrafts.erase(it);
         }
         else
         {

@@ -19,14 +19,16 @@ SOURCES += main.cpp\
     FgTransport.cpp \
     FgGenericProtocol.cpp \
     FgController.cpp \
-    FgAutopilot.cpp
+    FgAutopilot.cpp \
+    FgControlledAircraft.cpp
 
 HEADERS  += \
     FgAircraft.h \
     FgTransport.h \
     FgGenericProtocol.h \
     FgController.h \
-    FgAutopilot.h
+    FgAutopilot.h \
+    FgControlledAircraft.h
 
 FORMS    +=
 

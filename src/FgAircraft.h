@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Feb 13, 2015
+ * @date Modified Feb 17, 2015
  */
 
 #ifndef FGAIRCRAFT_H
@@ -25,18 +25,19 @@ class FgAircraft : public QObject
 
 public:
     explicit FgAircraft(const QString& sign, QObject *parent = 0);
-    ~FgAircraft();
+    virtual ~FgAircraft();
 
     inline const QString callsign() const;
+    inline qreal pitch() const;
+    inline qreal roll() const;
+    inline qreal yaw() const;
     inline const QJsonObject getParams() const;
-    inline void setAilerons(qreal val);
-    inline void setElevator(qreal val);
-    inline void setRudder(qreal val);
 
-private:
+    inline void setCallsign(const QString& newCallsign);
+
+protected:
     QString m_Callsign;
     qint32 m_Index;
-    FgAutopilot* m_Autopilot;
     QJsonObject m_Params;
 
     qreal m_Pitch;      // deg
@@ -56,7 +57,7 @@ signals:
     void paramsChanged();
 
 public slots:
-    void onFdmDataChanged(FgTransport* transport);
+    virtual void onFdmDataChanged(FgTransport* transport);
 };
 
 //
@@ -65,24 +66,29 @@ const QString FgAircraft::callsign() const
     return m_Callsign;
 }
 
+qreal FgAircraft::pitch() const
+{
+    return m_Pitch;
+}
+
+qreal FgAircraft::roll() const
+{
+    return m_Roll;
+}
+
+qreal FgAircraft::yaw() const
+{
+    return m_Yaw;
+}
+
 const QJsonObject FgAircraft::getParams() const
 {
     return m_Params;
 }
 
-void FgAircraft::setAilerons(qreal val)
+void FgAircraft::setCallsign(const QString &newCallsign)
 {
-    m_Ailerons = val;
-}
-
-void FgAircraft::setElevator(qreal val)
-{
-    m_Elevator = val;
-}
-
-void FgAircraft::setRudder(qreal val)
-{
-    m_Rudder = val;
+    m_Callsign = newCallsign;
 }
 
 #endif // FGAIRCRAFT_H
