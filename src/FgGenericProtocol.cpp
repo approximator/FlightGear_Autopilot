@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Feb 14, 2015
+ * @date Modified Feb 17, 2015
  */
 
 #include "FgGenericProtocol.h"
@@ -37,17 +37,9 @@ FgGenericProtocol::FgGenericProtocol(QObject *parent) :
     // other pilots' parameters
     // firstly, get actual number of other pilots
     ADD_PARAM("/ai/models/num-players", Parameter::INT);
-//    ADD_PARAM("/ai/models/count", Parameter::INT);
+    ADD_PARAM("/ai/models/count", Parameter::INT);
 
     // then do 20 iterations to get at most 20 other aircrafts
-    ADD_PARAM("/ai/models/multiplayer/callsign", Parameter::STRING);
-    ADD_PARAM("/ai/models/multiplayer/orientation/heading-deg", Parameter::FLOAT);
-    ADD_PARAM("/ai/models/multiplayer/orientation/pitch-deg", Parameter::FLOAT);
-    ADD_PARAM("/ai/models/multiplayer/orientation/roll-deg", Parameter::FLOAT);
-    ADD_PARAM("/ai/models/multiplayer/orientation/yaw-deg", Parameter::FLOAT);
-    ADD_PARAM("/ai/models/multiplayer/position/altitude-ft", Parameter::INT);
-    ADD_PARAM("/ai/models/multiplayer/position/latitude-deg", Parameter::FLOAT);
-    ADD_PARAM("/ai/models/multiplayer/position/longitude-deg", Parameter::FLOAT);
     for (int i = 0; i < 20; ++i)
     {
         ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/callsign", Parameter::STRING);
