@@ -16,15 +16,17 @@
 
 FgTransport::FgTransport(QObject *parent) :
     QObject(parent),
-    m_Socket(0),
-    m_Protocol(0),
+    m_Socket(nullptr),
+    m_SocketOut(nullptr),
+    m_Protocol(nullptr),
     m_Ip("127.0.0.1"),
-    m_Port(5555),
+    m_Port(5556),
     m_Buffer()
 {
     m_Protocol = new FgGenericProtocol(this);
 
     m_Socket = new QUdpSocket(this);
+    m_SocketOut = new QUdpSocket(this);
     m_Socket->bind(QHostAddress::Any, 5555);
 
     connect(m_Socket, SIGNAL(readyRead()), this, SLOT(onSocketRead()));
@@ -71,9 +73,8 @@ void FgTransport::onSocketRead()
 
 bool FgTransport::writeData(const QString &data)
 {
-    qDebug() << "Write: " << data;
-    qDebug() << "Write datagram result: " << m_Socket->writeDatagram(data.toLocal8Bit(), m_Ip, m_Port);
-//    m_Socket->write(data.toLocal8Bit());
+//    qDebug() << "Write: " << data;
+    m_SocketOut->writeDatagram(data.toLocal8Bit(), m_Ip, m_Port);
     return true;
 }
 
@@ -101,9 +102,13 @@ bool FgTransport::writeData(const QString &data)
   --multiplay=out,10,mpserver02.flightgear.org,5000 \
   --multiplay=in,10,,5000 \
   --httpd=5050 \
-  --generic=socket,out,40,localhost,5555,udp,FgaOut --generic=socket,in,45,localhost,5010,udp,FgaIn
+  --generic=socket,out,40,localhost,5555,udp,FgaOut \
+  --generic=socket,in,40,localhost,5555,udp,FgaIn
 
   --prop:/engines/engine/running=true
   --prop:/engines/engine/rpm=1000
+*/
+
+/* /usr/games/fgfs   --airport=KSFO   --runway=10L   --aircraft=c172p   --console   --bpp=32   --disable-random-objects   --disable-ai-models   --disable-ai-traffic   --disable-real-weather-fetch   --geometry=1366x768   --timeofday=morning   --enable-terrasync   --enable-clouds3d   --enable-horizon-effect   --enable-enhanced-lighting   --callsign=App1   --multiplay=out,10,mpserver02.flightgear.org,5000   --multiplay=in,10,,5000   --httpd=5050   --generic=socket,out,40,localhost,5555,udp,FgaOut   --generic=socket,in,40,localhost,5556,udp,FgaIn --prop:/engines/engine/running=true --prop:/engines/engine/rpm=1000 --in-air --altitude=2000
 */
 

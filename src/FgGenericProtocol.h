@@ -56,7 +56,7 @@ public slots:
 // Inline functions
 int FgGenericProtocol::getParamIndex(const QString& node) const
 {
-    qDebug() << "getParamIndex for node = " << node;
+//    qDebug() << "getParamIndex for node = " << node;
     return m_InParameters.value(node, Parameter(-1, Parameter::INT)).index;
 }
 

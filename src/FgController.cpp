@@ -33,7 +33,7 @@ void FgController::updateAircraft(const QString & /* aircraftId */)
 
 void FgController::onDataReceived()
 {
-    qDebug() << "On data received";
+//    qDebug() << "On data received";
     //! @todo fix for several controlled aircrafts
     updateOurAircraftsCount();
     updateOtherAircraftsCount();
@@ -45,12 +45,13 @@ void FgController::onDataReceived()
 
     if (m_OurAircrafts.isEmpty())
     {
+        qDebug() << "Our aircraft is empty!";
         return;
     }
 
     FgControlledAircraft* aircraft = *m_OurAircrafts.begin();
     QString data = QString::number(aircraft->ailerons()) + '\t' + QString::number(aircraft->elevator()) + "\n";
-//    m_Transport->writeData(data);
+    m_Transport->writeData(data);
 }
 
 void FgController::updateOurAircraftsCount()
@@ -70,10 +71,10 @@ void FgController::updateOurAircraftsCount()
     }
 
     FgControlledAircraft* aircraft = *m_OurAircrafts.begin();
-    m_OurAircrafts.clear(); //! @fixme
 
     if (aircraft->callsign() == "Not connected yet")
     {
+        m_OurAircrafts.clear(); //! @fixme
         aircraft->setCallsign(callsign);
         emit ourAircraftConnected(aircraft);
 

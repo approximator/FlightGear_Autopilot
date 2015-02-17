@@ -35,6 +35,7 @@ public:
 
 private:
     QUdpSocket *m_Socket;
+    QUdpSocket *m_SocketOut;
     FgGenericProtocol *m_Protocol;
 
     QHostAddress m_Ip;
