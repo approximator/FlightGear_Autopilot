@@ -13,6 +13,7 @@
 
 #include <QObject>
 #include <QJsonObject>
+#include <QDebug>
 
 class FgTransport;
 class FgAutopilot;
@@ -32,6 +33,8 @@ public:
     inline qreal roll() const;
     inline qreal yaw() const;
     inline const QJsonObject getParams() const;
+    inline qreal ailerons() const;
+    inline qreal elevator() const;
 
     inline void setCallsign(const QString& newCallsign);
 
@@ -57,7 +60,7 @@ signals:
     void paramsChanged();
 
 public slots:
-    virtual void onFdmDataChanged(FgTransport* transport);
+    void onFdmDataChanged(FgTransport* transport);
 };
 
 //
@@ -86,8 +89,19 @@ const QJsonObject FgAircraft::getParams() const
     return m_Params;
 }
 
+qreal FgAircraft::ailerons() const
+{
+    return m_Ailerons;
+}
+
+qreal FgAircraft::elevator() const
+{
+    return m_Elevator;
+}
+
 void FgAircraft::setCallsign(const QString &newCallsign)
 {
+    qDebug() << m_Callsign << " -> " << newCallsign;
     m_Callsign = newCallsign;
 }
 

@@ -33,13 +33,24 @@ void FgController::updateAircraft(const QString & /* aircraftId */)
 
 void FgController::onDataReceived()
 {
+    qDebug() << "On data received";
     //! @todo fix for several controlled aircrafts
     updateOurAircraftsCount();
     updateOtherAircraftsCount();
 
     emit fdmDataChanged(m_Transport);
 
-//    qDebug() << "end of data received";
+    //eleron
+    //elevator
+
+    if (m_OurAircrafts.isEmpty())
+    {
+        return;
+    }
+
+    FgControlledAircraft* aircraft = *m_OurAircrafts.begin();
+    QString data = QString::number(aircraft->ailerons()) + '\t' + QString::number(aircraft->elevator()) + "\n";
+//    m_Transport->writeData(data);
 }
 
 void FgController::updateOurAircraftsCount()
@@ -90,6 +101,7 @@ void FgController::updateOtherAircraftsCount()
     for (int i = 0; i < count; ++i)
     {
         QString callsign = m_Transport->getString("/ai/models/multiplayer[" + QString::number(i) + "]/callsign");
+        qDebug() << "callsign = " << callsign;
         callsigns.push_back(callsign);
         if (m_OtherAircrafts.contains(callsigns.back()))
         {

@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Feb 10, 2015
+ * @date Modified Feb 17, 2015
  */
 
 #include "FgTransport.h"
@@ -67,6 +67,14 @@ void FgTransport::onSocketRead()
 
         emit fgDataReceived();
     }
+}
+
+bool FgTransport::writeData(const QString &data)
+{
+    qDebug() << "Write: " << data;
+    qDebug() << "Write datagram result: " << m_Socket->writeDatagram(data.toLocal8Bit(), m_Ip, m_Port);
+//    m_Socket->write(data.toLocal8Bit());
+    return true;
 }
 
 /*

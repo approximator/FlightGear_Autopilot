@@ -31,6 +31,8 @@ public:
 
     inline FgGenericProtocol* protocol() const;
 
+    bool writeData(const QString& data);
+
 private:
     QUdpSocket *m_Socket;
     FgGenericProtocol *m_Protocol;

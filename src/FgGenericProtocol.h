@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Feb 14, 2015
+ * @date Modified Feb 17, 2015
  */
 
 #ifndef FGGENERICPROTOCOL_H
@@ -13,6 +13,7 @@
 
 #include <QObject>
 #include <QHash>
+#include <QDebug>
 
 class FgGenericProtocol : public QObject
 {
@@ -55,6 +56,7 @@ public slots:
 // Inline functions
 int FgGenericProtocol::getParamIndex(const QString& node) const
 {
+    qDebug() << "getParamIndex for node = " << node;
     return m_InParameters.value(node, Parameter(-1, Parameter::INT)).index;
 }
 
