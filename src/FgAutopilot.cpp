@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 14, 2015
- * @date Modified Feb 17, 2015
+ * @date Modified Feb 18, 2015
  */
 #include "FgAutopilot.h"
 #include "FgControlledAircraft.h"
@@ -15,7 +15,7 @@
 FgAutopilot::FgAutopilot(QObject *parent) :
     QObject(parent),
     m_Mode(FG_MODE_ANGLES_HOLD),
-    m_DesiredPitch(10.0),
+    m_DesiredPitch(3.0),
     m_DesiredRoll(0.0),
     m_DesiredYaw(0.0),
     m_DesiredLongitude(0.0),
@@ -58,8 +58,8 @@ void FgAutopilot::holdAngles(FgControlledAircraft * aircraft)
     qreal pitchError = pitch - m_DesiredPitch;
     qreal rollError = roll - m_DesiredRoll;
 
-    qreal pitchOut = pitchError * 0.05;
-    qreal rollOut = -1 * rollError * 0.05;
+    qreal pitchOut = pitchError * 0.03;
+    qreal rollOut = -1 * rollError * 0.01;
 
     // limit control outputs
     if (qAbs(pitchOut) > 0.6)

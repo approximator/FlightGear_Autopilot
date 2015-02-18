@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Feb 17, 2015
+ * @date Modified Feb 18, 2015
  */
 
 #include "FgGenericProtocol.h"
@@ -63,7 +63,7 @@ FgGenericProtocol::FgGenericProtocol(QObject *parent) :
     ADD_PARAM("/controls/flight/aileron", Parameter::FLOAT);
     ADD_PARAM("/controls/flight/elevator", Parameter::FLOAT);
 
-    writeXml("/usr/share/games/flightgear/Protocol/FgaOut.xml");
+    writeXml("/usr/share/games/flightgear/Protocol/FgaProtocol.xml");
 }
 
 FgGenericProtocol::~FgGenericProtocol()

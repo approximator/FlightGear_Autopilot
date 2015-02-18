@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Feb 17, 2015
+ * @date Modified Feb 18, 2015
  */
 
 #include "FgTransport.h"
@@ -102,13 +102,14 @@ bool FgTransport::writeData(const QString &data)
   --multiplay=out,10,mpserver02.flightgear.org,5000 \
   --multiplay=in,10,,5000 \
   --httpd=5050 \
-  --generic=socket,out,40,localhost,5555,udp,FgaOut \
-  --generic=socket,in,40,localhost,5555,udp,FgaIn
+  --generic=socket,out,40,localhost,5555,udp,FgaProtocol \
+  --generic=socket,in,40,localhost,5555,udp,FgaProtocol
 
   --prop:/engines/engine/running=true
   --prop:/engines/engine/rpm=1000
 */
 
-/* /usr/games/fgfs   --airport=KSFO   --runway=10L   --aircraft=c172p   --console   --bpp=32   --disable-random-objects   --disable-ai-models   --disable-ai-traffic   --disable-real-weather-fetch   --geometry=1366x768   --timeofday=morning   --enable-terrasync   --enable-clouds3d   --enable-horizon-effect   --enable-enhanced-lighting   --callsign=App1   --multiplay=out,10,mpserver02.flightgear.org,5000   --multiplay=in,10,,5000   --httpd=5050   --generic=socket,out,40,localhost,5555,udp,FgaOut   --generic=socket,in,40,localhost,5556,udp,FgaIn --prop:/engines/engine/running=true --prop:/engines/engine/rpm=1000 --in-air --altitude=2000
+/* /usr/games/fgfs   --airport=KSFO   --runway=10L   --aircraft=c172p   --console   --bpp=32   --disable-random-objects   --disable-ai-models   --disable-ai-traffic   --disable-real-weather-fetch   --geometry=800x600   --timeofday=morning   --enable-terrasync   --enable-clouds3d   --enable-horizon-effect   --enable-enhanced-lighting   --callsign=App1   --multiplay=out,10,mpserver02.flightgear.org,5000   --multiplay=in,10,,5000   --httpd=5050   --generic=socket,out,40,localhost,5555,udp,FgaProtocol   --generic=socket,in,40,localhost,5556,udp,FgaProtocol --prop:/engines/engine/running=true --prop:/engines/engine/rpm=2000 --in-air --altitude=2000
+
 */
 
