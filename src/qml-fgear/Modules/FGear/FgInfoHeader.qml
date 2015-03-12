@@ -54,6 +54,6 @@ ListItem.BaseListItem {
 
         name: "navigation/expand_less"
         color: "white"
-        onTriggered: expanded = false
+//        onTriggered: expanded = false
     }
 }

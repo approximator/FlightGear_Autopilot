@@ -99,13 +99,13 @@ ListModel{
             text: callsign
             interactive: true
             selected: ListView.isCurrentItem
-            onTriggered:{
-                currentAiPagePath = pagePath;
-                ListView.view.currentIndex = index;
-                ListView.view.headerItem.expanded = true;
-                __expander.expanded = false;
-                __otherView.currentIndex = -1;
-            }
+//            onTriggered:{
+//                currentAiPagePath = pagePath;
+//                ListView.view.currentIndex = index;
+//                ListView.view.headerItem.expanded = true;
+//                __expander.expanded = false;
+//                __otherView.currentIndex = -1;
+//            }
         }
     }
 
@@ -126,10 +126,10 @@ ListModel{
             text: callsign
             interactive: true
             selected: ListView.isCurrentItem
-            onTriggered:{
-                __aiView.currentIndex = -1;
-                ListView.view.currentIndex = index;
-            }
+//            onTriggered:{
+//                __aiView.currentIndex = -1;
+//                ListView.view.currentIndex = index;
+//            }
         }
     }
 
