@@ -15,7 +15,7 @@ Application {
 //        fgap.sharedSourcesDir + "/qtlockedfile",
 //    ]
 
-    Depends { name: "Qt"; submodules: ["widgets", "qml", "quick", "gui", "network"] }
+    Depends { name: "Qt"; submodules: ["widgets", "qml", "quick", "gui", "network", "xml", "svg"] }
 
     Group {
         name: "Sources"

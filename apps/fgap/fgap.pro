@@ -1,6 +1,8 @@
 include(../../autopilot.pri)
 
-QT += widgets gui qml quick network
+QT += widgets gui qml quick network xml svg
+#QTPLUGIN += qsvg
+
 TARGET = $$FGAP_APP_TARGET
 DESTDIR = $$FGAP_APP_PATH
 TEMPLATE = app
@@ -27,9 +29,12 @@ HEADERS  += \
     $$PWD/src/FgControlledAircraft.h
 INCLUDEPATH = $$PWD/src
 
+include(../../rpath.pri)
+
 include(res/resources.pri)
 
-include(../../qml-libs/qml-libs-deploy.pri)
+# Use make dmg instead of this. Only for Mac
+#include(../../qml-libs/qml-libs-deploy.pri)
 
 # Default rules for deployment.
 include(deployment.pri)

@@ -16,20 +16,20 @@ isEmpty(FGAP_BUILD_TREE) {
 FGAP_APP_PATH = $$FGAP_BUILD_TREE/bin
 
 macx {
-    FGAP_APP_TARGET    = "FlightGear Autopilot"
-    FGAP_BUNDLE_PATH = $$FGAP_APP_PATH/$${FGAP_APP_TARGET}.app
-    FGAP_LIBRARY_PATH = $$FGAP_BUNDLE_PATH/Contents/PlugIns
-    FGAP_DATA_PATH    = $$FGAP_BUNDLE_PATH/Contents/Resources
-    FGAP_DOC_PATH     = $$FGAP_DATA_PATH/doc
-    FGAP_BIN_PATH     = $$FGAP_BUNDLE_PATH/Contents/MacOS
+    FGAP_APP_TARGET     = "FlightGear Autopilot"
+    FGAP_BUNDLE_PATH   = $$FGAP_APP_PATH/$${FGAP_APP_TARGET}.app
+    FGAP_LIBRARY_PATH  = $$FGAP_BUNDLE_PATH/Contents/PlugIns
+    FGAP_DATA_PATH        = $$FGAP_BUNDLE_PATH/Contents/Resources
+    FGAP_DOC_PATH         = $$FGAP_DATA_PATH/doc
+    FGAP_BIN_PATH           = $$FGAP_BUNDLE_PATH/Contents/MacOS
     FGAP_QML_MODULES_PATH = $$FGAP_BUNDLE_PATH/Contents/Imports/qtquick2
 } else {
-    FGAP_APP_TARGET   = fgautopilot
-    FGAP_LIBRARY_PATH = $$FGAP_BUILD_TREE/lib/fgautopilot
-    FGAP_LIBEXEC_PATH = $$FGAP_APP_PATH
-    FGAP_DATA_PATH    = $$FGAP_BUILD_TREE/share/fgautopilot
-    FGAP_DOC_PATH     = $$FGAP_BUILD_TREE/share/doc/fgautopilot
-    FGAP_BIN_PATH     = $$FGAP_APP_PATH
+    FGAP_APP_TARGET     = fgautopilot
+    FGAP_LIBRARY_PATH  = $$FGAP_BUILD_TREE/lib/fgautopilot
+    FGAP_LIBEXEC_PATH  = $$FGAP_APP_PATH
+    FGAP_DATA_PATH        = $$FGAP_BUILD_TREE/share/fgautopilot
+    FGAP_DOC_PATH         = $$FGAP_BUILD_TREE/share/doc/fgautopilot
+    FGAP_BIN_PATH           = $$FGAP_APP_PATH
     FGAP_QML_MODULES_PATH = $$FGAP_DATA_PATH/Imports/qtquick2
 }
 

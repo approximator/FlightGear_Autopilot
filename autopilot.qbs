@@ -35,7 +35,7 @@ Project {
     property string fgap_bin_path: qbs.targetOS.contains("osx")
                                   ? fgap_app_target + ".app/Contents/MacOS"
                                   : fgap_app_path
-    property string fgap_qml_modules_path: fgap_bundle_root +"/Imports/quick"
+    property string fgap_qml_modules_path: fgap_bundle_root +"/Imports/quick2"
     property string qml_bundle_modules_path: FileInfo.relativePath(fgap_bin_path,fgap_qml_modules_path)
 
 

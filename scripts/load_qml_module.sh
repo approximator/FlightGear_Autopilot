@@ -1,15 +1,17 @@
 #!/bin/bash
 
-if [ $# -lt 1 ]; then
-    echo "Usage: $(basename $0) <module_name> <download_url>"
+if [ $# -lt 2 ]; then
+    echo "Usage: $(basename $0) <module_name> <install_path> <module_url>"
     exit 1
 fi
 
+BUILD_TREE="$(dirname "${BASH_SOURCE[0]}")/.."
 MODULE_NAME="$1"
-DOWNLOAD_URL="$2"
+INSTALL_PATH="$2"
+DOWNLOAD_URL="$3"
 
+cd $INSTALL_PATH
 if [ -d "$MODULE_NAME" ]; then
-    echo $("pwd")
     echo "Module $MODULE_NAME already loaded"
 else
     if [ ! -e "$DOWNLOAD_URL" ]; then
