@@ -75,7 +75,7 @@ def is_debug(fpath):
     return coredebug.search(output)
 
 def is_debug_build(install_dir):
-    return is_debug(os.path.join(install_dir, 'bin', 'qtcreator.exe'))
+    return is_debug(os.path.join(install_dir, 'bin', 'fgautopilot.exe'))
 
 def op_failed(details = None):
     if details != None:
@@ -90,7 +90,7 @@ def fix_rpaths_helper(chrpath_bin, install_dir, dirpath, filenames):
     # patch file
     for filename in filenames:
         fpath = os.path.join(dirpath, filename)
-        relpath = os.path.relpath(install_dir+'/lib/qtcreator', dirpath)
+        relpath = os.path.relpath(install_dir+'/lib', dirpath)
         command = [chrpath_bin, '-r', '$ORIGIN/'+relpath, fpath]
         print fpath, ':', command
         try:
@@ -150,7 +150,7 @@ def copy_qt_libs(install_dir, qt_libs_dir, qt_plugin_dir, qt_import_dir, qt_qml_
     if sys.platform.startswith('win'):
         dest = os.path.join(install_dir, 'bin')
     else:
-        dest = os.path.join(install_dir, 'lib', 'qtcreator')
+        dest = os.path.join(install_dir, 'lib')
 
     if sys.platform.startswith('win'):
         if debug_build:
@@ -200,20 +200,11 @@ def add_qt_conf(install_dir):
     print "Creating qt.conf:"
     f = open(install_dir + '/bin/qt.conf', 'w')
     f.write('[Paths]\n')
-    f.write('Libraries=../lib/qtcreator\n')
+    f.write('Libraries=../lib\n')
     f.write('Plugins=plugins\n')
     f.write('Imports=imports\n')
     f.write('Qml2Imports=qml\n')
     f.close()
-
-def copy_translations(install_dir, qt_tr_dir):
-    translations = glob(os.path.join(qt_tr_dir, '*.qm'))
-    tr_dir = os.path.join(install_dir, 'share', 'qtcreator', 'translations')
-
-    print "copying translations..."
-    for translation in translations:
-        print translation, '->', tr_dir
-        shutil.copy(translation, tr_dir)
 
 def copy_libclang(install_dir, llvm_install_dir):
     libsource = ""
@@ -223,9 +214,9 @@ def copy_libclang(install_dir, llvm_install_dir):
         libtarget = os.path.join(install_dir, 'bin')
     else:
         libsource = os.path.join(llvm_install_dir, 'lib', 'libclang.so')
-        libtarget = os.path.join(install_dir, 'lib', 'qtcreator')
+        libtarget = os.path.join(install_dir, 'lib')
     resourcesource = os.path.join(llvm_install_dir, 'lib', 'clang')
-    resourcetarget = os.path.join(install_dir, 'share', 'qtcreator', 'cplusplus', 'clang')
+    resourcetarget = os.path.join(install_dir, 'share', 'cplusplus', 'clang')
     print "copying libclang..."
     print libsource, '->', libtarget
     shutil.copy(libsource, libtarget)
@@ -279,7 +270,6 @@ def main():
     QT_INSTALL_PLUGINS = readQmakeVar(qmake_bin, 'QT_INSTALL_PLUGINS')
     QT_INSTALL_IMPORTS = readQmakeVar(qmake_bin, 'QT_INSTALL_IMPORTS')
     QT_INSTALL_QML = readQmakeVar(qmake_bin, 'QT_INSTALL_QML')
-    QT_INSTALL_TRANSLATIONS = readQmakeVar(qmake_bin, 'QT_INSTALL_TRANSLATIONS')
 
     plugins = ['accessible', 'codecs', 'designer', 'iconengines', 'imageformats', 'platformthemes', 'platforminputcontexts', 'platforms', 'printsupport', 'sqldrivers']
     imports = ['Qt', 'QtWebKit']
@@ -292,7 +282,7 @@ def main():
       copy_qt_libs(install_dir, QT_INSTALL_BINS, QT_INSTALL_PLUGINS, QT_INSTALL_IMPORTS, QT_INSTALL_QML, plugins, imports)
     else:
       copy_qt_libs(install_dir, QT_INSTALL_LIBS, QT_INSTALL_PLUGINS, QT_INSTALL_IMPORTS, QT_INSTALL_QML, plugins, imports)
-    copy_translations(install_dir, QT_INSTALL_TRANSLATIONS)
+
     if "LLVM_INSTALL_DIR" in os.environ:
       copy_libclang(install_dir, os.environ["LLVM_INSTALL_DIR"])
 

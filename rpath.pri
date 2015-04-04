@@ -5,9 +5,9 @@ macx {
     # this expands to $ORIGIN (after qmake and make), it does NOT read a qmake var
     QMAKE_RPATHDIR += \$\$ORIGIN
     QMAKE_RPATHDIR += \$\$ORIGIN/..
-    QMAKE_RPATHDIR += \$\$ORIGIN/../$$IDE_LIBRARY_BASENAME/qtcreator
-    IDE_PLUGIN_RPATH = $$join(QMAKE_RPATHDIR, ":")
+    QMAKE_RPATHDIR += \$\$ORIGIN/../lib
+    PLUGIN_RPATH = $$join(QMAKE_RPATHDIR, ":")
 
-    QMAKE_LFLAGS += -Wl,-z,origin \'-Wl,-rpath,$${IDE_PLUGIN_RPATH}\'
+    QMAKE_LFLAGS += -Wl,-z,origin \'-Wl,-rpath,$${PLUGIN_RPATH}\'
     QMAKE_RPATHDIR =
 }

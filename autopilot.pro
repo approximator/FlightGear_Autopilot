@@ -3,9 +3,9 @@ include(autopilot.pri)
 TEMPLATE  = subdirs
 CONFIG   += ordered
 
-SUBDIRS = qml-libs apps
+SUBDIRS = qml-libs lib apps
 
-DISTFILES += $$files(scripts/*.sh)
+DISTFILES += $$files(scripts/*.sh) $$files(scripts/*.py)
 
 macx: PLATFORM = "mac"
 else:win32: PLATFORM = "windows"
@@ -21,17 +21,25 @@ macx {
     BINDIST_INSTALLER_SOURCE = $$BINDIST_SOURCE
     deployqt.commands = $$PWD/scripts/deployqtHelper_mac.sh \"$${APPBUNDLE}\" \"$$[QT_INSTALL_TRANSLATIONS]\" \"$$[QT_INSTALL_PLUGINS]\" \"$$[QT_INSTALL_IMPORTS]\" \"$$[QT_INSTALL_QML]\"
 }
-# else {
-#    BINDIST_SOURCE = "$(INSTALL_ROOT)$$QTC_PREFIX"
-#    BINDIST_INSTALLER_SOURCE = "$$BINDIST_SOURCE/*"
-#    deployqt.commands = python -u $$PWD/scripts/deployqt.py -i \"$(INSTALL_ROOT)$$QTC_PREFIX\" \"$(QMAKE)\"
-#    deployqt.depends = install
+ else {
+    BINDIST_SOURCE = "$$FGAP_INSTALL_PATH"
+    BINDIST_INSTALLER_SOURCE = "$$BINDIST_SOURCE/*"
+
+    deployqt.commands = python -u $$PWD/scripts/deployqt.py -i \"$$BINDIST_SOURCE\" \"$(QMAKE)\"
+    deployqt.depends = install
+
+    deploy_ext_qml.commands = $$PWD/scripts/load_qml_modules.sh \"$$PWD/qml-libs\" \"$$FGAP_QML_MODULES_PATH\"
+    deploy_ext_qml.depends = deployqt
+
+    deploy_all.commands = echo "Deploy finished"
+    deploy_all.depends = deploy_ext_qml
+
 #    win32 {
 #        deployartifacts.depends = install
 #        deployartifacts.commands = git clone "git://gitorious.org/qt-creator/binary-artifacts.git" -b $$BINARY_ARTIFACTS_BRANCH&& xcopy /s /q /y /i "binary-artifacts\\win32" \"$(INSTALL_ROOT)$$QTC_PREFIX\"&& rmdir /s /q binary-artifacts
 #        QMAKE_EXTRA_TARGETS += deployartifacts
 #    }
-#}
+}
 
 INSTALLER_ARCHIVE_FROM_ENV = $$(INSTALLER_ARCHIVE)
 isEmpty(INSTALLER_ARCHIVE_FROM_ENV) {
@@ -40,11 +48,11 @@ isEmpty(INSTALLER_ARCHIVE_FROM_ENV) {
     INSTALLER_ARCHIVE = $$OUT_PWD/$$(INSTALLER_ARCHIVE)
 }
 
-bindist.depends = deployqt
-bindist.commands = 7z a -mx9 $$OUT_PWD/$${BASENAME}.7z \"$$BINDIST_SOURCE\"
-#bindist_installer.depends = deployqt
-#bindist_installer.commands = 7z a -mx9 $${INSTALLER_ARCHIVE} \"$$BINDIST_INSTALLER_SOURCE\"
-
+linux {
+    bindist.depends = deploy_all
+    bindist.commands = 7z a -mx9 $$OUT_PWD/$${BASENAME}.7z \"$$BINDIST_SOURCE/bin\" \"$$BINDIST_SOURCE/lib\"
+    QMAKE_EXTRA_TARGETS += bindist
+}
 #win32 {
 #    deployqt.commands ~= s,/,\\\\,g
 #    bindist.commands ~= s,/,\\\\,g
@@ -52,4 +60,4 @@ bindist.commands = 7z a -mx9 $$OUT_PWD/$${BASENAME}.7z \"$$BINDIST_SOURCE\"
 #    installer.commands ~= s,/,\\\\,g
 #}
 
-QMAKE_EXTRA_TARGETS += deployqt bindist bindist_installer
+QMAKE_EXTRA_TARGETS += deployqt deploy_ext_qml deploy_all
