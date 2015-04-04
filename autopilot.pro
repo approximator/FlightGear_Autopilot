@@ -50,7 +50,7 @@ isEmpty(INSTALLER_ARCHIVE_FROM_ENV) {
 }
 
 linux {
-    bindist.depends = deploy_all
+    #bindist.depends = deploy_all
     bindist.commands = 7z a -mx9 $$OUT_PWD/$${BASENAME}.7z \"$$BINDIST_SOURCE/bin\" \"$$BINDIST_SOURCE/lib\"
     QMAKE_EXTRA_TARGETS += bindist
 }
