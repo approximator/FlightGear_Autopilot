@@ -9,19 +9,13 @@ BUILD_TREE="${PWD_PATH}/.."
 ModVersion=0.0.5
 
 # copy Qt Quick 2 imports
-imports2Dir="$1/Contents/Imports/qtquick2"
+imports2Dir="$1/Contents/Resources/qml"
 if [ -d "$5" ]; then
     if [ ! -d "$imports2Dir" ]; then
         echo "- Copying Qt Quick 2 imports"
         mkdir -p "$imports2Dir"
         cp -R "$5"/ "$imports2Dir"/
     fi
-fi
-
-# copy qt creator qt.conf
-if [ ! -f "$1/Contents/Resources/qt.conf" ]; then
-    echo "- Copying qt.conf"
-    cp -f "${BUILD_TREE}/dist/installer/mac/qt.conf" "$1/Contents/Resources/qt.conf" || exit 1
 fi
 
 #### macdeployqt

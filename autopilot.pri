@@ -22,7 +22,7 @@ macx {
     FGAP_DATA_PATH        = $$FGAP_BUNDLE_PATH/Contents/Resources
     FGAP_DOC_PATH         = $$FGAP_DATA_PATH/doc
     FGAP_BIN_PATH           = $$FGAP_BUNDLE_PATH/Contents/MacOS
-    FGAP_QML_MODULES_PATH = $$FGAP_BUNDLE_PATH/Contents/Imports/qtquick2
+    FGAP_QML_MODULES_PATH = $$FGAP_DATA_PATH/qml
 } else {
     FGAP_APP_TARGET     = fgautopilot
     FGAP_LIBRARY_PATH   = $$FGAP_BUILD_TREE/lib
