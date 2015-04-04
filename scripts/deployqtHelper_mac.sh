@@ -15,16 +15,6 @@ if [ -d "$5" ]; then
         echo "- Copying Qt Quick 2 imports"
         mkdir -p "$imports2Dir"
         cp -R "$5"/ "$imports2Dir"/
-
-        echo "- Downloading additional Qt Quick 2 imports"
-        "${PWD_PATH}/load_qml_module.sh" qml-extras "${BUILD_TREE}/qml-libs" "https://github.com/papyros/qml-extras/archive/v${ModVersion}.zip"
-        "${PWD_PATH}/load_qml_module.sh" qml-material "${BUILD_TREE}/qml-libs" "https://github.com/papyros/qml-material/archive/v${ModVersion}.zip"
-        "${PWD_PATH}/load_qml_module.sh" qml-fgear "${BUILD_TREE}/qml-libs"
-
-        echo "- Copying additional Qt Quick 2 imports"
-        cp -R "${BUILD_TREE}/qml-libs/qml-fgear/modules/FGear" "$imports2Dir"/
-        cp -R "${BUILD_TREE}/qml-libs/qml-material/modules/Material" "$imports2Dir"/
-        cp -R "${BUILD_TREE}/qml-libs/qml-extras/modules/Material" "$imports2Dir"/
     fi
 fi
 

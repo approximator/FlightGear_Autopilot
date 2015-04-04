@@ -27,6 +27,7 @@ macx {
 
     deployqt.commands = python -u $$PWD/scripts/deployqt.py -i \"$$BINDIST_SOURCE\" \"$(QMAKE)\"
     deployqt.depends = install
+}
 
     deploy_ext_qml.commands = $$PWD/scripts/load_qml_modules.sh \"$$PWD/qml-libs\" \"$$FGAP_QML_MODULES_PATH\"
     deploy_ext_qml.depends = deployqt
@@ -39,7 +40,7 @@ macx {
 #        deployartifacts.commands = git clone "git://gitorious.org/qt-creator/binary-artifacts.git" -b $$BINARY_ARTIFACTS_BRANCH&& xcopy /s /q /y /i "binary-artifacts\\win32" \"$(INSTALL_ROOT)$$QTC_PREFIX\"&& rmdir /s /q binary-artifacts
 #        QMAKE_EXTRA_TARGETS += deployartifacts
 #    }
-}
+#}
 
 INSTALLER_ARCHIVE_FROM_ENV = $$(INSTALLER_ARCHIVE)
 isEmpty(INSTALLER_ARCHIVE_FROM_ENV) {
