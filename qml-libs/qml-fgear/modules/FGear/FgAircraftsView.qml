@@ -3,11 +3,17 @@ import QtQuick.Layouts 1.1
 import Material 0.1
 import Material.ListItems 0.1 as ListItem
 
-Item {
+Flickable {
 
     property string currentAiPagePath;
-    property alias expanderText: __expander.text
-    property QtObject fgController: null
+//    property alias expanderText: __expander.text
+//    property QtObject fgController: null //initialazed in FgWindow
+
+    contentHeight: __layout.implicitHeight
+
+    clip: true;
+    pressDelay: 500 //ms
+    boundsBehavior: Flickable.StopAtBounds
 
     Connections{
         target: fgController
@@ -17,18 +23,24 @@ Item {
 //        onAircraftUpdateded:
     }
 
-    ColumnLayout{
-        anchors.fill: parent
+    ColumnLayout {
+        id: __layout
+        anchors {
+            top:parent.top
+            right: parent.right
+            left: parent.left
+        }
 
         ListView {
             id: __aiView
 
+            interactive: false
             Layout.fillWidth: true
-            Layout.fillHeight: true
+            Layout.preferredHeight: contentHeight
             Layout.alignment: Qt.AlignTop
 
-            clip: true
-            boundsBehavior: Flickable.StopAtBounds
+//            clip: true
+//            boundsBehavior: Flickable.StopAtBounds
             model: __controlledAiModel
             delegate: __itemDelegate
             header: __header
@@ -72,11 +84,6 @@ Item {
                 delegate: __otherItemDelegate
                 boundsBehavior: Flickable.StopAtBounds
             }
-
-            Scrollbar {
-                flickableItem: __otherView
-            }
-
         }
     }
 
@@ -99,13 +106,13 @@ ListModel{
             text: callsign
             interactive: true
             selected: ListView.isCurrentItem
-//            onTriggered:{
-//                currentAiPagePath = pagePath;
-//                ListView.view.currentIndex = index;
-//                ListView.view.headerItem.expanded = true;
-//                __expander.expanded = false;
-//                __otherView.currentIndex = -1;
-//            }
+            onClicked:{
+                currentAiPagePath = pagePath;
+                ListView.view.currentIndex = index;
+                ListView.view.headerItem.expanded = true;
+                __expander.expanded = false;
+                __otherView.currentIndex = -1;
+            }
         }
     }
 
@@ -126,10 +133,10 @@ ListModel{
             text: callsign
             interactive: true
             selected: ListView.isCurrentItem
-//            onTriggered:{
-//                __aiView.currentIndex = -1;
-//                ListView.view.currentIndex = index;
-//            }
+            onClicked:{
+                __aiView.currentIndex = -1;
+                ListView.view.currentIndex = index;
+            }
         }
     }
 
@@ -139,7 +146,7 @@ ListModel{
         modelObj["callsign"] = _aircraft.callsign;
 
         // Got picture path by flight model
-        modelObj["imagePath"] = "flight_pic/b1900d.jpg" //Fixme: get appropriate picture
+        modelObj["imagePath"] = _aircraft.vehicleInfo.image
         modelObj["pagePath"] = "AircraftPage.qml"; //Fixme: get appropriate page
         _model.append(modelObj);
     }
