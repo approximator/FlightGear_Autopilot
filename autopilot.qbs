@@ -8,7 +8,7 @@ Project {
     property string fgap_version_release: '5'
     property string fgap_version: fgap_version_major + '.' + fgap_version_minor + '.' + fgap_version_release
     property path fgap_source_tree: path
-    property string fgap_app_path: qbs.targetOS.contains("osx") ? "" : "bin"
+    property string fgap_app_path: qbs.targetOS.contains("osx") ? "": "bin"
     property string fgap_app_target: qbs.targetOS.contains("osx") ? "FlightGear Autopilot" : "fgautopilot"
     property string fgap_bundle_root: qbs.targetOS.contains("osx") ? fgap_app_target + ".app/Contents" : fgap_app_target
     property pathList additionalLibs: []
