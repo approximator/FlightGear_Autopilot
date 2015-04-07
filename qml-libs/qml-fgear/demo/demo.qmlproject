@@ -16,5 +16,5 @@ Project {
         directory: "."
     }
 
-    importPaths: [ "../Modules" ]
+    importPaths: [ "../modules", "../../qml-material/modules", "../../qml-extras/modules"]
 }
