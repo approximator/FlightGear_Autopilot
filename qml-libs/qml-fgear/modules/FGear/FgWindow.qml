@@ -49,14 +49,7 @@ ApplicationWindow {
 
             FgAircraftsView {
                 id: aircraftsView
-//                anchors.fill: parent
-
-                width: parent.width
-                height: page.height
-            }
-            Scrollbar {
-                flickableItem: aircraftsView
-            }
+           }
 
         }
         Flickable {

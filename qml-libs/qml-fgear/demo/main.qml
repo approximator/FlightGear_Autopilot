@@ -1,5 +1,4 @@
 import QtQuick 2.2
-import Material 0.1
 import FGear 0.1
 import "aircraftUtils.js" as AiUtils
 

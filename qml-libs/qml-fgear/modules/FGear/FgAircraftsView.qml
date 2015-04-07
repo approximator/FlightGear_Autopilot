@@ -3,17 +3,19 @@ import QtQuick.Layouts 1.1
 import Material 0.1
 import Material.ListItems 0.1 as ListItem
 
-Flickable {
+Item {
 
     property string currentAiPagePath;
 //    property alias expanderText: __expander.text
 //    property QtObject fgController: null //initialazed in FgWindow
 
-    contentHeight: __layout.implicitHeight
-
+    anchors {
+        top:parent.top
+        right: parent.right
+        left: parent.left
+    }
+    height: childrenRect.height
     clip: true;
-    pressDelay: 500 //ms
-    boundsBehavior: Flickable.StopAtBounds
 
     Connections{
         target: fgController
@@ -31,66 +33,25 @@ Flickable {
             left: parent.left
         }
 
-        ListView {
+        Repeater {
             id: __aiView
 
-            interactive: false
-            Layout.fillWidth: true
-            Layout.preferredHeight: contentHeight
-            Layout.alignment: Qt.AlignTop
-
-//            clip: true
-//            boundsBehavior: Flickable.StopAtBounds
+            property int currentIndex: -1
             model: __controlledAiModel
             delegate: __itemDelegate
-            header: __header
         }
 
-        Card {
-            Layout.fillWidth: true
-            Layout.fillHeight: false
-            Layout.preferredHeight: __expander.expanded ?  units.dp(420) + __expander.height
-                                                        : units.dp(86) + __expander.height
+        ThinDivider { Layout.preferredHeight: units.dp(5)}
 
-            Behavior on Layout.preferredHeight{ NumberAnimation { duration: 300; easing.type: Easing.InOutQuad } }
-            SlideExpander{
-                id: __expander
+        Repeater {
+            id: __otherView
 
-                text: "expander"
-                height: units.dp(16)
-                anchors{
-                    top: parent.top
-                    left: parent.left
-                    right: parent.right
-                }
-                onClicked: {
-                    __aiView.headerItem.expanded = false;
-                    expanded =! expanded
-                }
-            }
-            backgroundColor: Qt.darker(Theme.backgroundColor,1.2)
-
-            ListView {
-                id: __otherView
-
-                anchors{
-                    top: __expander.bottom
-                    bottom: parent.bottom
-                    left: parent.left
-                    right: parent.right
-                }
-                clip: true
-                model: __othersAiModel
-                delegate: __otherItemDelegate
-                boundsBehavior: Flickable.StopAtBounds
-            }
+            property int currentIndex: -1
+            model: __othersAiModel
+            delegate: __otherItemDelegate
         }
     }
 
-    Component.onCompleted: {
-        __aiView.currentIndex = -1;
-        __otherView.currentIndex = -1;
-    }
 
 ListModel{
     id: __controlledAiModel
@@ -105,12 +66,13 @@ ListModel{
         ListItem.Standard {
             text: callsign
             interactive: true
-            selected: ListView.isCurrentItem
+
+            Layout.fillWidth: true
+            Layout.fillHeight: false
+            Layout.preferredHeight:  units.dp(48)
+//            selected: currentIndex == index
             onClicked:{
                 currentAiPagePath = pagePath;
-                ListView.view.currentIndex = index;
-                ListView.view.headerItem.expanded = true;
-                __expander.expanded = false;
                 __otherView.currentIndex = -1;
             }
         }
@@ -132,10 +94,10 @@ ListModel{
         ListItem.Standard {
             text: callsign
             interactive: true
-            selected: ListView.isCurrentItem
+//            selected: currentIndex == index
             onClicked:{
                 __aiView.currentIndex = -1;
-                ListView.view.currentIndex = index;
+//                ListView.view.currentIndex = index;
             }
         }
     }
@@ -146,8 +108,8 @@ ListModel{
         modelObj["callsign"] = _aircraft.callsign;
 
         // Got picture path by flight model
-        modelObj["imagePath"] = _aircraft.vehicleInfo.image
-        modelObj["pagePath"] = "AircraftPage.qml"; //Fixme: get appropriate page
+//        modelObj["imagePath"] = _aircraft.vehicleInfo.image
+//        modelObj["pagePath"] = "AircraftPage.qml"; //Fixme: get appropriate page
         _model.append(modelObj);
     }
 
