@@ -272,7 +272,7 @@ def main():
     QT_INSTALL_QML = readQmakeVar(qmake_bin, 'QT_INSTALL_QML')
 
     plugins = ['accessible', 'codecs', 'designer', 'iconengines', 'imageformats', 'platformthemes', 'platforminputcontexts', 'platforms', 'printsupport', 'sqldrivers']
-    imports = ['Qt', 'QtWebKit']
+    imports = ['Qt']
 
     if sys.platform.startswith('win'):
         global debug_build
