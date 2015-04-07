@@ -10,7 +10,7 @@ addons:
         project:
             name: "approximator/FlightGear_Autopilot"
         notification_email: alex@nls.la
-        build_command_prepend: "source /opt/qt53/bin/qt53-env.sh && cd $TRAVIS_BUILD_DIR/src && qmake"
+        build_command_prepend: "source /opt/qt53/bin/qt53-env.sh && cd $TRAVIS_BUILD_DIR && qmake"
         build_command: "make"
         branch_pattern: master
 
@@ -19,35 +19,19 @@ before_install:
     - sudo apt-get update
 
 install:
-    - sudo apt-get -y install qt53-meta-full
+    - sudo apt-get -y install qt53-meta-full chrpath wget
 
 before_script:
-    - source /opt/qt53/bin/qt53-env.sh
-    - cd $TRAVIS_BUILD_DIR
-    - git clone git://github.com/papyros/qml-material.git
-    - cd $TRAVIS_BUILD_DIR/qml-material
-    - qmake
-    - make
-    - sudo make install
-    - cd $TRAVIS_BUILD_DIR
-    - git clone git://github.com/papyros/qml-extras.git
-    - cd $TRAVIS_BUILD_DIR/qml-extras
-    - qmake
-    - make
-    - sudo make install
-    - cd $TRAVIS_BUILD_DIR/src/qml-fgear
-    - qmake
-    - make
-    - sudo make install
 
 script:
     - source /opt/qt53/bin/qt53-env.sh
     - pwd
     - ls -lah
-    - cd $TRAVIS_BUILD_DIR/src
+    - cd $TRAVIS_BUILD_DIR
     - pwd
     - qmake -v
     - qmake
     - make clean
     - make
+    - make deploy_all
     - cat $TRAVIS_BUILD_DIR/src/cov-int/scm_log.txt
