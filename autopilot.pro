@@ -29,7 +29,7 @@ macx {
     deployqt.depends = install
 }
 
-    deploy_ext_qml.commands = $$PWD/scripts/load_qml_modules.sh \"$$PWD/qml-libs\" \"$$FGAP_QML_MODULES_PATH\"
+    deploy_ext_qml.commands = python $$PWD/scripts/load_qml_modules.py \"$$PWD/qml-libs\" \"$$FGAP_QML_MODULES_PATH\"
     deploy_ext_qml.depends = deployqt
 
     deploy_all.commands = echo "Deploy finished"
