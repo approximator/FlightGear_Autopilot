@@ -39,4 +39,4 @@ deploy:
     - "$TRAVIS_BUILD_DIR/fg-autopilot-*.7z"
     - "$TRAVIS_BUILD_DIR/screenshot.png"
   on:
-    repo: approximator/FlightGear_Autopilot
+    tags: true
