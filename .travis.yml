@@ -1,40 +1,41 @@
 language: c++
 
 before_install:
-    - sudo add-apt-repository -y ppa:beineri/opt-qt532
-    - sudo apt-get update
+  - sudo add-apt-repository -y ppa:beineri/opt-qt532
+  - sudo apt-get update
 
 install:
-    - sudo apt-get -y install qt53-meta-full chrpath xvfb imagemagick p7zip-full
+  - sudo apt-get -y install qt53-meta-full chrpath xvfb imagemagick p7zip-full
 
 before_script:
+  - echo "Before script"
 
 script:
-    - source /opt/qt53/bin/qt53-env.sh
-    - pwd
-    - ls -lah
-    - cd $TRAVIS_BUILD_DIR
-    - pwd
-    - qmake -v
-    - qmake
-    - make clean
-    - make
-    - make deploy_all
-    - Xvfb :5 -screen 0 1280x1024x32 -fbdir $TRAVIS_BUILD_DIR &
-    - XVFB_PID=$!
-    - DISPLAY=:5 $TRAVIS_BUILD_DIR/bin/fgautopilot &
-    - FGAP_PID=$!
-    - sleep 5
-    - DISPLAY=:5 import -window root screenshot.png
-    - kill -15 $FGAP_PID
-    - kill -15 $XVFB_PID
+  - source /opt/qt53/bin/qt53-env.sh
+  - pwd
+  - ls -lah
+  - cd $TRAVIS_BUILD_DIR
+  - pwd
+  - qmake -v
+  - qmake
+  - make clean
+  - make
+  - make deploy_all
+  - Xvfb :5 -screen 0 1280x1024x32 -fbdir $TRAVIS_BUILD_DIR &
+  - XVFB_PID=$!
+  - DISPLAY=:5 $TRAVIS_BUILD_DIR/bin/fgautopilot &
+  - FGAP_PID=$!
+  - sleep 5
+  - DISPLAY=:5 import -window root screenshot.png
+  - kill -15 $FGAP_PID
+  - kill -15 $XVFB_PID
 
 deploy:
-    provider: releases
-      api_key:
-        secure: Ipvu7YEsrxax0u+JbfqlHUmfga0Sjguj3ZjUWirkSFXRmyrBzhnB+5PXubctgHHK3GrvV3uO0mq6WzPZpeNxCMKb5ymE8u8eWAWS7epE6rWVMO8IN8JzNXzISWKLDgt0Pm4lhI/LRieBhYZlAVbf8IOvCTgJfuE9K10nvfsaU1s=
-    file:
-        - $TRAVIS_BUILD_DIR/fg-autopilot-*7z
-        - $TRAVIS_BUILD_DIR/screenshot.png
-    on:
-        repo: approximator/FlightGear_Autopilot
+  provider: releases
+  api_key:
+    secure: Ipvu7YEsrxax0u+JbfqlHUmfga0Sjguj3ZjUWirkSFXRmyrBzhnB+5PXubctgHHK3GrvV3uO0mq6WzPZpeNxCMKb5ymE8u8eWAWS7epE6rWVMO8IN8JzNXzISWKLDgt0Pm4lhI/LRieBhYZlAVbf8IOvCTgJfuE9K10nvfsaU1s=
+  file:
+    - "$TRAVIS_BUILD_DIR/fg-autopilot-*7z"
+    - "$TRAVIS_BUILD_DIR/screenshot.png"
+  on:
+    repo: approximator/FlightGear_Autopilot
