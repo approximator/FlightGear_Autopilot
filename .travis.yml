@@ -21,7 +21,7 @@ script:
   - make clean
   - make
   - make deploy_all
-  - Xvfb :5 -screen 0 1280x1024x32 -fbdir $TRAVIS_BUILD_DIR &
+  - Xvfb :5 -screen 0 1280x1024x24 -fbdir $TRAVIS_BUILD_DIR &
   - XVFB_PID=$!
   - DISPLAY=:5 $TRAVIS_BUILD_DIR/bin/fgautopilot &
   - FGAP_PID=$!
@@ -34,8 +34,9 @@ deploy:
   provider: releases
   api_key:
     secure: Ipvu7YEsrxax0u+JbfqlHUmfga0Sjguj3ZjUWirkSFXRmyrBzhnB+5PXubctgHHK3GrvV3uO0mq6WzPZpeNxCMKb5ymE8u8eWAWS7epE6rWVMO8IN8JzNXzISWKLDgt0Pm4lhI/LRieBhYZlAVbf8IOvCTgJfuE9K10nvfsaU1s=
+  file_glob: true
   file:
-    - "$TRAVIS_BUILD_DIR/fg-autopilot-*7z"
+    - "$TRAVIS_BUILD_DIR/fg-autopilot-*.7z"
     - "$TRAVIS_BUILD_DIR/screenshot.png"
   on:
     repo: approximator/FlightGear_Autopilot
