@@ -1,25 +1,11 @@
 language: c++
-env:
-    global:
-        # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
-        #   via the "travis encrypt" command using the project repo's public key
-        - secure: "K0BgqMzt8As7n0jrsUMR8zBFlennQ2UFKNR99tpL9l54Hf1cZFGNUNdDGFqCL2d1jQHXL79q0ByJMDKLe6idvuDJH3RsmuNSRZgVVtDvl1Xa1+8V0NJW7W4VOl1++7ZXIxUJ9xLP2fz26SLkH6cTCVNDKqxz5KQ7H1U66I23eBM="
-
-#addons:
-    #coverity_scan:
-     #   project:
-     #       name: "approximator/FlightGear_Autopilot"
-     #   notification_email: alex@nls.la
-     #   build_command_prepend: "source /opt/qt53/bin/qt53-env.sh && cd $TRAVIS_BUILD_DIR && qmake"
-     #   build_command: "make"
-     #   branch_pattern: deploy
 
 before_install:
     - sudo add-apt-repository -y ppa:beineri/opt-qt532
     - sudo apt-get update
 
 install:
-    - sudo apt-get -y install qt53-meta-full chrpath wget
+    - sudo apt-get -y install qt53-meta-full chrpath xvfb imagemagick p7zip-full
 
 before_script:
 
@@ -34,4 +20,21 @@ script:
     - make clean
     - make
     - make deploy_all
-#    - cat $TRAVIS_BUILD_DIR/src/cov-int/scm_log.txt
+    - Xvfb :5 -screen 0 1280x1024x32 -fbdir $TRAVIS_BUILD_DIR &
+    - XVFB_PID=$!
+    - DISPLAY=:5 $TRAVIS_BUILD_DIR/bin/fgautopilot &
+    - FGAP_PID=$!
+    - sleep 5
+    - DISPLAY=:5 import -window root screenshot.png
+    - kill -15 $FGAP_PID
+    - kill -15 $XVFB_PID
+
+deploy:
+    provider: releases
+      api_key:
+        secure: Ipvu7YEsrxax0u+JbfqlHUmfga0Sjguj3ZjUWirkSFXRmyrBzhnB+5PXubctgHHK3GrvV3uO0mq6WzPZpeNxCMKb5ymE8u8eWAWS7epE6rWVMO8IN8JzNXzISWKLDgt0Pm4lhI/LRieBhYZlAVbf8IOvCTgJfuE9K10nvfsaU1s=
+    file:
+        - $TRAVIS_BUILD_DIR/fg-autopilot-*7z
+        - $TRAVIS_BUILD_DIR/screenshot.png
+    on:
+        repo: approximator/FlightGear_Autopilot

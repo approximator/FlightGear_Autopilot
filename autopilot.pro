@@ -9,7 +9,7 @@ DISTFILES += $$files(scripts/*.sh) $$files(scripts/*.py)
 
 macx: PLATFORM = "mac"
 else:win32: PLATFORM = "windows"
-else:linux-*: PLATFORM = "linux-$${ARCHITECTURE}"
+else:linux-*: PLATFORM = "linux-$$QT_ARCH"
 else: PLATFORM = "unknown"
 
 BASENAME = $$(INSTALL_BASENAME)

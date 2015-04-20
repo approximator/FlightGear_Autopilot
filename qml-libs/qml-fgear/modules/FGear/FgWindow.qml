@@ -1,9 +1,14 @@
 import QtQuick 2.2
 import Material 0.1
+import QtQuick.Window 2.0
 import Material.ListItems 0.1 as ListItem
 
 ApplicationWindow {
     id: fgwindow
+    width: Screen.width * 0.8
+    height: Screen.height * 0.8
+    x: Screen.width / 2 - width / 2
+    y: Screen.height / 2 - height / 2
 
     property QtObject fgController: null
 
