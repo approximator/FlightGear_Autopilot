@@ -65,6 +65,13 @@ def which(program):
     return None
 
 def is_debug(fpath):
+    # This hack fixes fail on Windows.
+    # But it must be resolved because now deploys
+    # bouth debug and not debug libs.
+    # It takes a lot of spase (more then one Gb)
+    if sys.platform.startswith('win'):
+        return False
+
     # match all Qt Core dlls from Qt4, Qt5beta2 and Qt5rc1 and later
     # which all have the number at different places
     coredebug = re.compile(r'Qt[1-9]?Core[1-9]?d[1-9]?.dll')

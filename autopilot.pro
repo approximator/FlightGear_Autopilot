@@ -35,13 +35,6 @@ macx {
     deploy_all.commands = echo "Deploy finished"
     deploy_all.depends = deploy_ext_qml
 
-#    win32 {
-#        deployartifacts.depends = install
-#        deployartifacts.commands = git clone "git://gitorious.org/qt-creator/binary-artifacts.git" -b $$BINARY_ARTIFACTS_BRANCH&& xcopy /s /q /y /i "binary-artifacts\\win32" \"$(INSTALL_ROOT)$$QTC_PREFIX\"&& rmdir /s /q binary-artifacts
-#        QMAKE_EXTRA_TARGETS += deployartifacts
-#    }
-#}
-
 INSTALLER_ARCHIVE_FROM_ENV = $$(INSTALLER_ARCHIVE)
 isEmpty(INSTALLER_ARCHIVE_FROM_ENV) {
     INSTALLER_ARCHIVE = $$OUT_PWD/$${BASENAME}-installer-archive.7z
@@ -54,11 +47,10 @@ linux {
     bindist.commands = 7z a -mx9 $$OUT_PWD/$${BASENAME}.7z \"$$BINDIST_SOURCE/bin\" \"$$BINDIST_SOURCE/lib\"
     QMAKE_EXTRA_TARGETS += bindist
 }
-#win32 {
-#    deployqt.commands ~= s,/,\\\\,g
-#    bindist.commands ~= s,/,\\\\,g
-#    bindist_installer.commands ~= s,/,\\\\,g
-#    installer.commands ~= s,/,\\\\,g
-#}
+win32 {
+    deployqt.commands ~= s,/,\\\\,g
+    deploy_ext_qml.commands ~= s,/,\\\\,g
+    bindist_installer.commands ~= s,/,\\\\,g
+}
 
 QMAKE_EXTRA_TARGETS += deployqt deploy_ext_qml deploy_all
