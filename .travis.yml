@@ -1,12 +1,17 @@
 language: c++
 
+env:
+  global:
+    secure: "C1Ai03PHHYwsJg4PXWAYheex75locrF94Fzm9esQ0NE3BaZl86Bw8hgmXFa0EKTd1Vl1vrKlqVXZg9hhPBUP4c5KyDHj5xYGWhEGLtoenLXYqCivERP5Tqq35OrFTWjWuohFvTwTMdUFbWl0r2QqZGjm/nRkQbDNWAABIPBq+4A="
+
 before_install:
   - sudo add-apt-repository -y ppa:beineri/opt-qt532
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+  - sudo add-apt-repository -y ppa:afcowie/network
   - sudo apt-get update
 
 install:
-  - sudo apt-get -y install qt53-meta-full chrpath xvfb imagemagick p7zip-full g++-4.8
+  - sudo apt-get -y install qt53-meta-full chrpath xvfb imagemagick p7zip-full g++-4.8 httpie
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
 
 before_script:
@@ -28,9 +33,28 @@ script:
   - DISPLAY=:5 $TRAVIS_BUILD_DIR/bin/fgautopilot &
   - FGAP_PID=$!
   - sleep 5
-  - DISPLAY=:5 import -window root screenshot.png
+  - SCREENSHOT_NAME=$(date +"%d-%m-%Y-%H-%M")
+  - DISPLAY=:5 import -window root ${SCREENSHOT_NAME}.png
   - kill -15 $FGAP_PID
   - kill -15 $XVFB_PID
+  - sleep 5
+  - Xvfb :5 -screen 0 1280x1024x24 -fbdir $TRAVIS_BUILD_DIR &
+  - XVFB_PID=$!
+  - DISPLAY=:5 qmlscene $TRAVIS_BUILD_DIR/qml-libs/qml-fgear/demo/main.qml -I $TRAVIS_BUILD_DIR/bin/qml&
+  - SCENE_PID=$!
+  - sleep 10
+  - SCENE_SCREENSHOT_NAME=$(date +"%d-%m-%Y-%H-%M")
+  - SCENE_SCREENSHOT_NAME=${SCENE_SCREENSHOT_NAME}_SCENE.png
+  - echo "Screenshot name is ${SCENE_SCREENSHOT_NAME}"
+  - DISPLAY=:5 import -window root ${SCENE_SCREENSHOT_NAME}
+  - ls -lah
+  - kill -15 $SCENE_PID
+  - kill -15 $XVFB_PID
+  - echo "Uploading screenshot..."
+  - http -f POST https://api.dumpyourphoto.com/v1/photo api_key==$PHOTO_API files@$TRAVIS_BUILD_DIR/${SCREENSHOT_NAME}.png
+  - sleep 5
+  - echo "Uploading SCENE screenshot..."
+  - http -f POST https://api.dumpyourphoto.com/v1/photo api_key==$PHOTO_API files@$TRAVIS_BUILD_DIR/${SCENE_SCREENSHOT_NAME}
 
 deploy:
   provider: releases
@@ -38,7 +62,7 @@ deploy:
     secure: Ipvu7YEsrxax0u+JbfqlHUmfga0Sjguj3ZjUWirkSFXRmyrBzhnB+5PXubctgHHK3GrvV3uO0mq6WzPZpeNxCMKb5ymE8u8eWAWS7epE6rWVMO8IN8JzNXzISWKLDgt0Pm4lhI/LRieBhYZlAVbf8IOvCTgJfuE9K10nvfsaU1s=
   file_glob: true
   file:
-    - "$TRAVIS_BUILD_DIR/fg-autopilot-*.7z"
-    - "$TRAVIS_BUILD_DIR/screenshot.png"
+    - ls "$TRAVIS_BUILD_DIR/fg-autopilot-*.7z"
+    - "${SCREENSHOT_NAME}.png"
   on:
     tags: true
