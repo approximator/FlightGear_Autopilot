@@ -6,25 +6,21 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Feb 17, 2015
+ * @date Modified May 05, 2015
  */
 
 #include "FgController.h"
 #include "FgTransport.h"
 
 FgController::FgController(QObject *parent) :
-    QObject(parent),
-    m_Transport(nullptr),
-    m_OurAircrafts(),
-    m_OtherAircrafts(),
-    m_AircraftsCount(0)
+    QObject(parent)
 {
-    FgControlledAircraft* aircraft = new FgControlledAircraft("Not connected yet", this);
+    auto aircraft = std::make_shared<FgControlledAircraft>("Not connected yet");
     m_Transport = aircraft->transport();
     m_OurAircrafts[aircraft->callsign()] = aircraft;
 
     //! @todo Connections!!
-    connect(m_Transport, SIGNAL(fgDataReceived()), this, SLOT(onDataReceived()));
+    connect(m_Transport.get(), &FgTransport::fgDataReceived, this, &FgController::onDataReceived);
 }
 
 void FgController::updateAircraft(const QString & /* aircraftId */)
@@ -49,7 +45,7 @@ void FgController::onDataReceived()
         return;
     }
 
-    FgControlledAircraft* aircraft = *m_OurAircrafts.begin();
+    auto aircraft = *m_OurAircrafts.begin();
     QString data = QString::number(aircraft->ailerons()) + '\t' + QString::number(aircraft->elevator()) + "\n";
     m_Transport->writeData(data);
 }
@@ -70,15 +66,15 @@ void FgController::updateOurAircraftsCount()
         qDebug() << "ERROR! Our callsign is empty!";
     }
 
-    FgControlledAircraft* aircraft = *m_OurAircrafts.begin();
+    auto aircraft = *m_OurAircrafts.begin();
 
     if (aircraft->callsign() == "Not connected yet")
     {
         m_OurAircrafts.clear(); //! @fixme
         aircraft->setCallsign(callsign);
-        emit ourAircraftConnected(aircraft);
+        emit ourAircraftConnected(aircraft.get());
 
-        connect(this, SIGNAL(fdmDataChanged(FgTransport*)), aircraft, SLOT(onFdmDataChanged(FgTransport*)));
+        connect(this, &FgController::fdmDataChanged, aircraft.get(), &FgControlledAircraft::onFdmDataChanged);
         m_OurAircrafts[aircraft->callsign()] = aircraft; //! @fixme
 
         qDebug() << "ourAircraftConnected";
@@ -109,10 +105,10 @@ void FgController::updateOtherAircraftsCount()
             continue;
         }
 
-        FgAircraft* aircraft = new FgAircraft(callsign, this); //! @todo parent
+        auto aircraft = std::make_shared<FgAircraft>(callsign);
         //! @todo  aircraft->setIndex();
         m_OtherAircrafts[callsign] = aircraft;
-        emit aircraftConnected(aircraft);
+        emit aircraftConnected(aircraft.get());
         qDebug() << "otherAircraftConnected";
     }
 
@@ -122,10 +118,9 @@ void FgController::updateOtherAircraftsCount()
     {
         if (!callsigns.contains((*it)->callsign()))
         {
-            emit aircraftDisconnected(*it);
+            emit aircraftDisconnected((*it).get());
             qDebug() << "aircraftDisconnected";
 
-            delete *it; //FIXME: check it with gui
             it = m_OtherAircrafts.erase(it);
         }
         else

@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Feb 17, 2015
+ * @date Modified May 05, 2015
  */
 
 #ifndef FGGENERICPROTOCOL_H
@@ -44,8 +44,8 @@ public:
     inline int getParamIndex(const QString& node) const;
 
 private:
-    QHash<QString, Parameter> m_InParameters;
-    QHash<QString, Parameter> m_OutParameters;
+    QHash<QString, Parameter> m_InParameters  { };
+    QHash<QString, Parameter> m_OutParameters { };
 
 signals:
 

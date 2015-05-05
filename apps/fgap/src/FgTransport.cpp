@@ -5,31 +5,20 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Feb 18, 2015
+ * @date Modified May 05, 2015
  */
 
 #include "FgTransport.h"
 #include "FgGenericProtocol.h"
 
-#include <QUdpSocket>
 #include <QDebug>
 
 FgTransport::FgTransport(QObject *parent) :
-    QObject(parent),
-    m_Socket(nullptr),
-    m_SocketOut(nullptr),
-    m_Protocol(nullptr),
-    m_Ip("127.0.0.1"),
-    m_Port(5556),
-    m_Buffer()
+    QObject(parent)
 {
-    m_Protocol = new FgGenericProtocol(this);
-
-    m_Socket = new QUdpSocket(this);
-    m_SocketOut = new QUdpSocket(this);
     m_Socket->bind(QHostAddress::Any, 5555);
 
-    connect(m_Socket, SIGNAL(readyRead()), this, SLOT(onSocketRead()));
+    connect(m_Socket.get(), &QUdpSocket::readyRead, this, &FgTransport::onSocketRead);
 
     qDebug() << "FgTransport ready [" << m_Ip.toString() << ":" << m_Port << "]";
 }

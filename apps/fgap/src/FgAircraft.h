@@ -5,12 +5,13 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Feb 17, 2015
+ * @date Modified May 05, 2015
  */
 
 #ifndef FGAIRCRAFT_H
 #define FGAIRCRAFT_H
 
+#include <memory>
 #include <QObject>
 #include <QJsonObject>
 #include <QDebug>
@@ -39,28 +40,28 @@ public:
     inline void setCallsign(const QString& newCallsign);
 
 protected:
-    QString m_Callsign;
-    qint32 m_Index;
-    QJsonObject m_Params;
+    QString m_Callsign   = "";
+    qint32 m_Index       = -1;
+    QJsonObject m_Params { };
 
-    qreal m_Pitch;      // deg
-    qreal m_Roll;       // deg
-    qreal m_Yaw;        // deg
-    qreal m_Longitude;  // deg
-    qreal m_Latitude;   // deg
-    qreal m_Altitude;   // ft
-    qreal m_Heading;    // deg
+    qreal m_Pitch     = 0.0; // deg
+    qreal m_Roll      = 0.0; // deg
+    qreal m_Yaw       = 0.0; // deg
+    qreal m_Longitude = 0.0; // deg
+    qreal m_Latitude  = 0.0; // deg
+    qreal m_Altitude  = 0.0; // ft
+    qreal m_Heading   = 0.0; // deg
 
     // controls
-    qreal m_Ailerons;
-    qreal m_Elevator;
-    qreal m_Rudder;
+    qreal m_Ailerons = 0.0;
+    qreal m_Elevator = 0.0;
+    qreal m_Rudder   = 0.0;
 
 signals:
     void paramsChanged();
 
 public slots:
-    void onFdmDataChanged(FgTransport* transport);
+    void onFdmDataChanged(std::shared_ptr<FgTransport> transport);
 };
 
 //

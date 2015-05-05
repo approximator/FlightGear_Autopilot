@@ -5,15 +5,16 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 17, 2015
- * @date Modified Feb 17, 2015
+ * @date Modified May 05, 2015
  */
 #ifndef FGCONTROLLEDAIRCRAFT_H
 #define FGCONTROLLEDAIRCRAFT_H
 
 #include "FgAircraft.h"
 #include "FgTransport.h"
+#include "FgAutopilot.h"
 
-class FgAutopilot;
+#include <memory>
 
 class FgControlledAircraft : public FgAircraft
 {
@@ -22,25 +23,25 @@ public:
     explicit FgControlledAircraft(const QString& sign, QObject *parent = 0);
     ~FgControlledAircraft();
 
-    inline FgTransport* transport() const;
+    inline std::shared_ptr<FgTransport> transport() const;
 
     inline void setAilerons(qreal val);
     inline void setElevator(qreal val);
     inline void setRudder(qreal val);
 
 private:
-    FgTransport* m_Transport;
-    FgAutopilot* m_Autopilot;
+    std::shared_ptr<FgTransport> m_Transport { std::make_shared<FgTransport>() };
+    std::shared_ptr<FgAutopilot> m_Autopilot { std::make_shared<FgAutopilot>() };
 
 signals:
 
 public slots:
-    virtual void onFdmDataChanged(FgTransport* transport);
+    virtual void onFdmDataChanged(std::shared_ptr<FgTransport> transport);
 
 };
 
 //
-FgTransport *FgControlledAircraft::transport() const
+std::shared_ptr<FgTransport> FgControlledAircraft::transport() const
 {
     return m_Transport;
 }

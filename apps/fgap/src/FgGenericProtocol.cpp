@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Feb 18, 2015
+ * @date Modified May 05, 2015
  */
 
 #include "FgGenericProtocol.h"
@@ -16,9 +16,7 @@
 #include <QDebug>
 
 FgGenericProtocol::FgGenericProtocol(QObject *parent) :
-    QObject(parent),
-    m_InParameters(),
-    m_OutParameters()
+    QObject(parent)
 {
     // Parameters of instance that we control
     int index = 0;

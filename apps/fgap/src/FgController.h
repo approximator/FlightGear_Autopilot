@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Feb 17, 2015
+ * @date Modified May 05, 2015
  */
 
 #ifndef FGCONTROLLER_H
@@ -27,10 +27,10 @@ public:
     explicit FgController(QObject *parent = 0);
 
 private:
-    FgTransport* m_Transport;
-    QHash<QString, FgControlledAircraft*> m_OurAircrafts;
-    QHash<QString, FgAircraft*> m_OtherAircrafts;
-    qint32 m_AircraftsCount;
+    std::shared_ptr<FgTransport> m_Transport { };
+    QHash<QString, std::shared_ptr<FgControlledAircraft>> m_OurAircrafts { };
+    QHash<QString, std::shared_ptr<FgAircraft>> m_OtherAircrafts { };
+    qint32 m_AircraftsCount { 0 };
 
     void updateOurAircraftsCount();
     void updateOtherAircraftsCount();
@@ -47,7 +47,7 @@ signals:
     void aircraftDisconnected(FgAircraft* aircraft);
     void aircraftUpdateded(FgAircraft* aircraft);
 
-    void fdmDataChanged(FgTransport* transport);
+    void fdmDataChanged(std::shared_ptr<FgTransport> transport);
 };
 
 #endif // FGCONTROLLER_H

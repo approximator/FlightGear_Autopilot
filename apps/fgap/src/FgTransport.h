@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Feb 13, 2015
+ * @date Modified May 05, 2015
  */
 
 #ifndef FGPROTOCOL_H
@@ -13,10 +13,10 @@
 
 #include "FgGenericProtocol.h"
 
+#include <memory>
 #include <QObject>
+#include <QUdpSocket>
 #include <QHostAddress>
-
-class QUdpSocket;
 
 class FgTransport : public QObject
 {
@@ -29,19 +29,19 @@ public:
     inline qreal getFloat(const QString& node, bool *exists = nullptr) const;
     inline qint32 getInt(const QString& node, bool *exists = nullptr) const;
 
-    inline FgGenericProtocol* protocol() const;
+    inline std::shared_ptr<FgGenericProtocol> protocol() const;
 
     bool writeData(const QString& data);
 
 private:
-    QUdpSocket *m_Socket;
-    QUdpSocket *m_SocketOut;
-    FgGenericProtocol *m_Protocol;
+    std::shared_ptr<QUdpSocket> m_Socket          { std::make_shared<QUdpSocket>() };
+    std::shared_ptr<QUdpSocket> m_SocketOut       { std::make_shared<QUdpSocket>() };
+    std::shared_ptr<FgGenericProtocol> m_Protocol { std::make_shared<FgGenericProtocol>() };
 
-    QHostAddress m_Ip;
-    quint16 m_Port;
-    QByteArray m_Buffer;
-    QStringList m_FdmData;
+    QHostAddress m_Ip     { "127.0.0.1" };
+    quint16 m_Port        { 5556 };
+    QByteArray m_Buffer   { };
+    QStringList m_FdmData { };
 
 signals:
     void fgDataReceived();
@@ -84,7 +84,7 @@ qint32 FgTransport::getInt(const QString& node, bool *exists) const
     return param.isEmpty() ? 0 : param.toInt(exists);
 }
 
-FgGenericProtocol *FgTransport::protocol() const
+std::shared_ptr<FgGenericProtocol> FgTransport::protocol() const
 {
     return m_Protocol;
 }

@@ -5,11 +5,12 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 14, 2015
- * @date Modified Feb 17, 2015
+ * @date Modified May 05, 2015
  */
 #ifndef FGAUTOPILOT_H
 #define FGAUTOPILOT_H
 
+#include <memory>
 #include <QObject>
 
 class FgControlledAircraft;
@@ -27,18 +28,18 @@ public:
 
     explicit FgAutopilot(QObject *parent = 0);
 
-    void computeControl(FgControlledAircraft* aircraft);
+    void computeControl(FgControlledAircraft *aircraft);
 
 private:
-    AUTOPILOT_MODE m_Mode;
+    AUTOPILOT_MODE m_Mode = FG_MODE_ANGLES_HOLD;
 
-    qreal m_DesiredPitch;      // deg
-    qreal m_DesiredRoll;       // deg
-    qreal m_DesiredYaw;        // deg
-    qreal m_DesiredLongitude;  // deg
-    qreal m_DesiredLatitude;   // deg
-    qreal m_DesiredAltitude;   // ft
-    qreal m_DesiredHeading;    // deg
+    qreal m_DesiredPitch     = 3.0;    // deg
+    qreal m_DesiredRoll      = 0.0;    // deg
+    qreal m_DesiredYaw       = 0.0;    // deg
+    qreal m_DesiredLongitude = 0.0;    // deg
+    qreal m_DesiredLatitude  = 0.0;    // deg
+    qreal m_DesiredAltitude  = 1000.0; // ft
+    qreal m_DesiredHeading   = 0.0;    // deg
 
     void holdAltitude(FgControlledAircraft* aircraft);
     void holdAngles(FgControlledAircraft *aircraft);

@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 14, 2015
- * @date Modified Feb 18, 2015
+ * @date Modified May 05, 2015
  */
 #include "FgAutopilot.h"
 #include "FgControlledAircraft.h"
@@ -13,19 +13,11 @@
 #include <QDebug>
 
 FgAutopilot::FgAutopilot(QObject *parent) :
-    QObject(parent),
-    m_Mode(FG_MODE_ANGLES_HOLD),
-    m_DesiredPitch(3.0),
-    m_DesiredRoll(0.0),
-    m_DesiredYaw(0.0),
-    m_DesiredLongitude(0.0),
-    m_DesiredLatitude(0.0),
-    m_DesiredAltitude(1000.0),
-    m_DesiredHeading(0.0)
+    QObject(parent)
 {
 }
 
-void FgAutopilot::computeControl(FgControlledAircraft *aircraft)
+void FgAutopilot::computeControl(FgControlledAircraft* aircraft)
 {
     switch (m_Mode)
     {
