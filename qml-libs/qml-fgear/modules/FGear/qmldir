@@ -1,7 +1,4 @@
 module FGear
-FgWindow 0.1 FgWindow.qml
-FgThemeChanger 0.1 FgThemeChanger.qml
 FgAircraftsView 0.1 FgAircraftsView.qml
 FgAiModel 0.1 FgAiModel.qml
 FgInfoHeader 0.1 FgInfoHeader.qml
-SlideExpander 0.1 SlideExpander.qml

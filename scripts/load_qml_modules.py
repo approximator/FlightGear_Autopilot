@@ -5,7 +5,8 @@ import urllib2
 import zipfile
 import tempfile
 
-MODULES_VERSION = '0.0.5'
+QML_MATERIAL_VERSION = '0.0.6'
+QML_EXTRAS_VERSION = '0.0.5'
 
 
 class ModulesLoader:
@@ -57,8 +58,9 @@ class ModulesLoader:
         self.deploy(os.path.join(download_dir, src_dir), module_name)
 
     def run(self):
-        self.download_and_deploy('qml-material',  'Material', 'https://github.com/papyros/qml-material/archive/v' + MODULES_VERSION + '.zip')
-        self.download_and_deploy('qml-extras', 'Material/Extras', 'https://github.com/papyros/qml-extras/archive/v' + MODULES_VERSION + '.zip')
+        self.download_and_deploy('qml-material', 'Material', 'https://github.com/papyros/qml-material/archive/v' + QML_MATERIAL_VERSION + '.zip')
+        self.download_and_deploy('qml-extras', 'Material/Extras', 'https://github.com/papyros/qml-extras/archive/v' + QML_EXTRAS_VERSION + '.zip')
+        self.download_and_deploy('qml-material-components', 'Material/Components', 'https://github.com/AndreyShelest/qml-material-components/archive/master.zip')
         self.deploy(os.path.join(self.sources_path, 'qml-fgear'), 'FGear')
 
 if __name__ == '__main__':

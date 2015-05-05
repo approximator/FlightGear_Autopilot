@@ -1,12 +1,24 @@
 import QtQuick 2.2
 import FGear 0.1
+import Material.Components 0.1 as MGui
 import "aircraftUtils.js" as AiUtils
 
-FgWindow {
+MGui.MainWindow {
 
     title: "FGap Gui Test"
 
+    width: 1280
+    height: 768
 
+    Component.onCompleted: {
+        controllerTimer.start();
+    }
+
+    leftSidebarContent: FgAircraftsView {
+        fgController: controller
+    }
+
+    /* debug objects and functions*/
     QtObject {
         id: controller
 
@@ -15,8 +27,6 @@ FgWindow {
         signal ourAircraftConnected(var aircraft);
         signal aircraftDisconnected(var aircraft);
     }
-
-    fgController: controller
 
     Timer {
         property int counter: 0
@@ -32,5 +42,4 @@ FgWindow {
 //           stop();
         }
     }
-Component.onCompleted: controllerTimer.start()
 }

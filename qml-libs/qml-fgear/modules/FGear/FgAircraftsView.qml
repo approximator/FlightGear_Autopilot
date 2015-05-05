@@ -7,7 +7,7 @@ Item {
 
     property string currentAiPagePath;
 //    property alias expanderText: __expander.text
-//    property QtObject fgController: null //initialazed in FgWindow
+    property QtObject fgController: null
 
     anchors {
         top:parent.top
