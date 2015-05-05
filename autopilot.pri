@@ -4,6 +4,16 @@ FGAP_PRI_INCLUDED = 1
 FILIGHTGEARAUTOPILOT_VERSION = 0.0.2
 CONFIG += c++11
 
+unix {
+    # enable additional warnings
+    QMAKE_CXXFLAGS += -Wall -Wextra -pedantic -Weffc++ -Wold-style-cast
+
+    # get rid of Qt related warnings
+    QMAKE_CXXFLAGS += -isystem "$$[QT_INSTALL_HEADERS]" -isystem "$$[QT_INSTALL_HEADERS]/QtWidgets"
+    QMAKE_CXXFLAGS += -isystem "$$[QT_INSTALL_HEADERS]/QtXml" -isystem "$$[QT_INSTALL_HEADERS]/QtGui"
+    QMAKE_CXXFLAGS += -isystem "$$[QT_INSTALL_HEADERS]/QtCore"
+}
+
 FGAP_SOURCE_TREE = $$PWD
 
 isEmpty(FGAP_BUILD_TREE) {
