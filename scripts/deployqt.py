@@ -108,7 +108,7 @@ def fix_rpaths_helper(chrpath_bin, install_dir, dirpath, filenames):
 def check_unix_binary_exec_helper(dirpath, filename):
     """ Whether a file is really a binary executable and not a script (unix only)"""
     fpath = os.path.join(dirpath, filename)
-    if os.path.exists(fpath) and os.access(fpath, os.X_OK):
+    if os.path.exists(fpath) and os.access(fpath, os.X_OK) and not filename.endswith('.png'):
         with open(fpath) as f:
             return f.read(2) != "#!"
 
