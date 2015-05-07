@@ -4,10 +4,23 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.1
 import Material 0.1
 import Material.ListItems 0.1 as ListItem
+import QtQuick.Dialogs 1.0
+
 
 Page {
     id: page
     title: "Settings"
+
+    FileDialog {
+        id: fileDialog
+        title: "Please choose a file"
+        selectFolder: true
+        visible: false
+        onRejected: {
+            console.log("Canceled")
+            visible: false
+        }
+    }
 
     ColumnLayout {
         anchors {
@@ -74,6 +87,7 @@ Page {
                             Layout.preferredWidth: units.dp(100)
                         }
                         TextField {
+                            id: executableField
                             Layout.fillWidth: true
                             Layout.alignment: Qt.AlignVCenter
                             text: "/usr/games/fgfs"
@@ -82,6 +96,15 @@ Page {
                             Layout.alignment: Qt.AlignVCenter
                             text: "Browse"
                             textColor: Theme.primaryColor
+                            onClicked: {
+                                fileDialog.setSelectFolder(false)
+                                fileDialog.title = "Select Flightgear executable"
+                                fileDialog.accepted.connect(function() {
+                                    executableField.text = decodeURIComponent(fileDialog.fileUrl.toString().replace("file://",""))
+                                    fileDialog.destroy()
+                                })
+                                fileDialog.open()
+                            }
                         }
                     }
                 }
@@ -103,6 +126,7 @@ Page {
                             Layout.preferredWidth: units.dp(100)
                         }
                         TextField {
+                            id: dataField
                             Layout.fillWidth: true
                             Layout.alignment: Qt.AlignVCenter
                             text: "/usr/share/games/flightgear/"
@@ -111,6 +135,15 @@ Page {
                             Layout.alignment: Qt.AlignVCenter
                             text: "Browse"
                             textColor: Theme.primaryColor
+                            onClicked: {
+                                fileDialog.setSelectFolder(true)
+                                fileDialog.title = "Select Flightgear data directory"
+                                fileDialog.accepted.connect(function() {
+                                    dataField.text = decodeURIComponent(fileDialog.fileUrl.toString().replace("file://",""))
+                                    fileDialog.destroy()
+                                })
+                                fileDialog.open()
+                            }
                         }
                     }
                 }
