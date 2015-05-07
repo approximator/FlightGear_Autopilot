@@ -28,6 +28,7 @@ script:
   - make clean
   - make
   - make deploy_all
+  - make bindist
   - Xvfb :5 -screen 0 1280x1024x24 -fbdir $TRAVIS_BUILD_DIR &
   - XVFB_PID=$!
   - DISPLAY=:5 $TRAVIS_BUILD_DIR/bin/fgautopilot &
