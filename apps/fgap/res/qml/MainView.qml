@@ -1,4 +1,5 @@
 import QtQuick 2.3
+import QtQuick.Controls 1.2
 import FGear 0.1
 import Material.Components 0.1 as MGui
 
@@ -13,5 +14,12 @@ MGui.MainWindow {
     leftSidebarContent: FgAircraftsView {
         fgController: fg_controller
     }
+
+    Component {
+        id: settingsComponent
+        SettingsPage{ }
+    }
+
+    onSettings: pageStack.push(settingsComponent.createObject());
 
 }

@@ -2,3 +2,4 @@ module FGear
 FgAircraftsView 0.1 FgAircraftsView.qml
 FgAiModel 0.1 FgAiModel.qml
 FgInfoHeader 0.1 FgInfoHeader.qml
+SettingsPage 0.1 SettingsPage.qml
