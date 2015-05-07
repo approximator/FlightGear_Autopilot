@@ -4,7 +4,6 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.1
 import Material 0.1
 import Material.ListItems 0.1 as ListItem
-import Material.Extras 0.1
 
 Page {
     id: page
@@ -28,7 +27,7 @@ Page {
 
             height: column.implicitHeight + units.dp(32)
 
-            elevation: 10
+            elevation: 1
             radius: units.dp(2)
 
             ColumnLayout {
@@ -72,6 +71,7 @@ Page {
                         Label {
                             style: "dialog"
                             text: "Executable:"
+                            Layout.preferredWidth: units.dp(100)
                         }
                         TextField {
                             Layout.fillWidth: true
@@ -79,7 +79,6 @@ Page {
                             text: "/usr/games/fgfs"
                         }
                         Button {
-                            width: 100
                             Layout.alignment: Qt.AlignVCenter
                             text: "Browse"
                             textColor: Theme.primaryColor
@@ -101,6 +100,7 @@ Page {
                         Label {
                             style: "dialog"
                             text: "Data dir:"
+                            Layout.preferredWidth: units.dp(100)
                         }
                         TextField {
                             Layout.fillWidth: true
@@ -108,7 +108,6 @@ Page {
                             text: "/usr/share/games/flightgear/"
                         }
                         Button {
-                            width: 100
                             Layout.alignment: Qt.AlignVCenter
                             text: "Browse"
                             textColor: Theme.primaryColor
@@ -130,6 +129,7 @@ Page {
                         Label {
                             style: "dialog"
                             text: "Protocol file:"
+                            Layout.preferredWidth: units.dp(100)
                         }
                         TextField {
                             Layout.fillWidth: true
@@ -137,7 +137,6 @@ Page {
                             text: "/usr/share/games/flightgear/Protocol/FgaProtocol.xml"
                         }
                         Button {
-                            width: 100
                             Layout.alignment: Qt.AlignVCenter
                             text: "Write"
                             textColor: Theme.primaryColor
@@ -149,7 +148,6 @@ Page {
                     action: Item { }
 
                     content: Button {
-                            width: 100
                             Layout.alignment: Qt.AlignVCenter
                             text: "Run"
                             textColor: Theme.primaryColor
