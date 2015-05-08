@@ -1,0 +1,5 @@
+module FGear.AutopilotItems
+BaseButton 0.1 BaseButton.qml
+Display 0.1 Display.qml
+Indicator 0.1 Indicator.qml
+Dial 0.1 Dial.qml
