@@ -25,6 +25,7 @@ class FgController : public QObject
     Q_OBJECT
 public:
     explicit FgController(QObject *parent = 0);
+    bool init();
 
 private:
     std::shared_ptr<FgTransport> m_Transport { };
@@ -45,7 +46,7 @@ signals:
     void aircraftConnected(FgAircraft* aircraft);
     void ourAircraftConnected(FgAircraft* aircraft);
     void aircraftDisconnected(FgAircraft* aircraft);
-    void aircraftUpdateded(FgAircraft* aircraft);
+    void aircraftUpdated(FgAircraft* aircraft);
 
     void fdmDataChanged(std::shared_ptr<FgTransport> transport);
 };

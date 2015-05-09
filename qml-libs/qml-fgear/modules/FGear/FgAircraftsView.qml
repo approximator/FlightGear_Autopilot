@@ -19,10 +19,10 @@ Item {
 
     Connections{
         target: fgController
-        onAircraftConnected: addAircraft(__othersAiModel,aircraft)
-        onOurAircraftConnected: addAircraft(__controlledAiModel,aircraft)
-        onAircraftDisconnected: removeAircraft(__othersAiModel,aircraft)
-//        onAircraftUpdateded:
+        onAircraftConnected: addAircraft(__othersAiModel, aircraft)
+        onOurAircraftConnected: addAircraft(__controlledAiModel, aircraft)
+        onAircraftDisconnected: removeAircraft(__othersAiModel, aircraft)
+        onAircraftUpdated: updateAircraft(__controlledAiModel, aircraft)
     }
 
     ColumnLayout {
@@ -64,15 +64,40 @@ ListModel{
     Component {
         id: __itemDelegate
         ListItem.Standard {
-            text: callsign
+            action: Icon {
+                anchors.centerIn: parent
+                name: "maps/flight"
+                color: (connected === true ? "green" : "gray")
+            }
+
+            content: ColumnLayout {
+                anchors.centerIn: parent
+                width: parent.width
+
+                Label {
+                    style: "headline"
+                    text: callsign
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.alignment: Qt.AlignVCenter
+                }
+                Label {
+                    style: "subheading"
+                    text: (connected === true ? "Connected" : "Not connected")
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.alignment: Qt.AlignVCenter
+                }
+            }
+
             interactive: true
 
             Layout.fillWidth: true
             Layout.fillHeight: false
-            Layout.preferredHeight:  units.dp(48)
+            Layout.preferredHeight:  units.dp(50)
 //            selected: currentIndex == index
             onClicked:{
-                currentAiPagePath = pagePath;
+//                currentAiPagePath = pagePath;
                 __otherView.currentIndex = -1;
             }
         }
@@ -103,9 +128,10 @@ ListModel{
     }
 
     // adds aircraft to controlled* or otherAiModel
-    function addAircraft (_model,_aircraft) {
+    function addAircraft (_model, _aircraft) {
         var modelObj = _aircraft.params;
         modelObj["callsign"] = _aircraft.callsign;
+        modelObj["connected"] = _aircraft.connected;
 
         // Got picture path by flight model
 //        modelObj["imagePath"] = _aircraft.vehicleInfo.image
@@ -113,11 +139,23 @@ ListModel{
         _model.append(modelObj);
     }
 
+    function updateAircraft(_model, _aircraft) {
+        var aiCallsigh = _aircraft.callsign;
+        var i = 0;
+        for (; i < _model.count; i += 1) {
+            var aircraft = _model.get(i)
+            if (aircraft.callsign === aiCallsigh) {
+                aircraft.connected = true;  // FIXME: use params object
+                break;
+            }
+        }
+    }
+
     function removeAircraft (_model,_aircraft) {
         var aiCallsigh = _aircraft.callsign;
         var i = 0;
         for (;i < _model.count; i+=1) {
-            if (_model.get(i).callsign == aiCallsigh) {
+            if (_model.get(i).callsign === aiCallsigh) {
                 _model.remove(i);
                 break;
             }

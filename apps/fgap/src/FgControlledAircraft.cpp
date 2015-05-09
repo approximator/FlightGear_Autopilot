@@ -13,12 +13,12 @@
 FgControlledAircraft::FgControlledAircraft(const QString &sign, QObject *parent) :
     FgAircraft(sign, parent)
 {
-    qDebug() << callsign() << " created.";
+    qDebug() << "FgControlledAircraft::" << callsign() << " created.";
 }
 
 FgControlledAircraft::~FgControlledAircraft()
 {
-    qDebug() << callsign() << " destroyed.";
+    qDebug() << "FgControlledAircraft::" << callsign() << " destroyed.";
 }
 
 void FgControlledAircraft::onFdmDataChanged(std::shared_ptr<FgTransport> transport)

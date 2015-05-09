@@ -18,12 +18,12 @@ FgAircraft::FgAircraft(const QString& sign, QObject *parent) :
     QObject(parent),
     m_Callsign(sign)
 {
-    qDebug() << callsign() << " created";
+    qDebug() << "FgAircraft::" << callsign() << " created";
 }
 
 FgAircraft::~FgAircraft()
 {
-    qDebug() << callsign() << " destroyed.";
+    qDebug() << "FgAircraft::" << callsign() << " destroyed.";
 }
 
 void FgAircraft::onFdmDataChanged(std::shared_ptr<FgTransport> transport)

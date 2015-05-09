@@ -23,6 +23,7 @@ class FgAircraft : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString callsign READ callsign)
+    Q_PROPERTY(bool connected READ connected)
     Q_PROPERTY(QJsonObject params READ getParams NOTIFY paramsChanged)
 
 public:
@@ -36,8 +37,10 @@ public:
     inline const QJsonObject getParams() const;
     inline qreal ailerons() const;
     inline qreal elevator() const;
+    inline bool connected() const;
 
     inline void setCallsign(const QString& newCallsign);
+    inline void setConnected(bool _connected);
 
 protected:
     QString m_Callsign   = "";
@@ -56,6 +59,7 @@ protected:
     qreal m_Ailerons = 0.0;
     qreal m_Elevator = 0.0;
     qreal m_Rudder   = 0.0;
+    bool m_Connected = false;
 
 signals:
     void paramsChanged();
@@ -100,10 +104,20 @@ qreal FgAircraft::elevator() const
     return m_Elevator;
 }
 
+bool FgAircraft::connected() const
+{
+    return m_Connected;
+}
+
 void FgAircraft::setCallsign(const QString &newCallsign)
 {
     qDebug() << m_Callsign << " -> " << newCallsign;
     m_Callsign = newCallsign;
+}
+
+void FgAircraft::setConnected(bool _connected)
+{
+    m_Connected = _connected;
 }
 
 #endif // FGAIRCRAFT_H

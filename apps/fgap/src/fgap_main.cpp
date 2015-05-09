@@ -25,6 +25,7 @@ int main(int argc, char *argv[])
     QQmlContext *context = engine.rootContext();
     context->setContextProperty("fg_controller", &fgController);
     engine.load(QUrl(QStringLiteral("qrc:qml/MainView.qml")));
+    fgController.init();
 
     return app.exec();
 }

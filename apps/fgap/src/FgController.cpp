@@ -15,12 +15,20 @@
 FgController::FgController(QObject *parent) :
     QObject(parent)
 {
-    auto aircraft = std::make_shared<FgControlledAircraft>("Not connected yet");
+
+}
+
+bool FgController::init()
+{
+    auto aircraft = std::make_shared<FgControlledAircraft>("App1");
     m_Transport = aircraft->transport();
     m_OurAircrafts[aircraft->callsign()] = aircraft;
 
-    //! @todo Connections!!
     connect(m_Transport.get(), &FgTransport::fgDataReceived, this, &FgController::onDataReceived);
+    connect(this, &FgController::fdmDataChanged, aircraft.get(), &FgControlledAircraft::onFdmDataChanged);
+    emit ourAircraftConnected(aircraft.get());
+
+    return true;
 }
 
 void FgController::updateAircraft(const QString & /* aircraftId */)
@@ -66,19 +74,20 @@ void FgController::updateOurAircraftsCount()
         qDebug() << "ERROR! Our callsign is empty!";
     }
 
-    auto aircraft = *m_OurAircrafts.begin();
-
-    if (aircraft->callsign() == "Not connected yet")
+    if (!m_OurAircrafts.contains(callsign))
     {
-        m_OurAircrafts.clear(); //! @fixme
-        aircraft->setCallsign(callsign);
-        emit ourAircraftConnected(aircraft.get());
-
-        connect(this, &FgController::fdmDataChanged, aircraft.get(), &FgControlledAircraft::onFdmDataChanged);
-        m_OurAircrafts[aircraft->callsign()] = aircraft; //! @fixme
-
-        qDebug() << "ourAircraftConnected";
+        qDebug() << "WARNING! There is no " << callsign << " in the list";
+        return;
     }
+
+    auto aircraft = m_OurAircrafts[callsign];
+    if (aircraft->connected())
+    {
+        return;
+    }
+
+    aircraft->setConnected(true);
+    emit aircraftUpdated(aircraft.get());
 }
 
 void FgController::updateOtherAircraftsCount()
@@ -106,6 +115,7 @@ void FgController::updateOtherAircraftsCount()
         }
 
         auto aircraft = std::make_shared<FgAircraft>(callsign);
+        aircraft->setConnected(true);
         //! @todo  aircraft->setIndex();
         m_OtherAircrafts[callsign] = aircraft;
         emit aircraftConnected(aircraft.get());
