@@ -6,3 +6,5 @@ FgAutopilot 0.1 FgAutopilot.qml
 
 AircraftUtils 0.1 js/aircraftUtils.js
 AutopilotUtils 0.1 js/autopilotUtils.js
+
+PictorialNavigation 0.1 Pointers/PictorialNavigation.qml
