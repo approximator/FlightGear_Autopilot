@@ -40,7 +40,7 @@ Window {
             }
             SpinBox {
                 id: course_line
-                value: 70
+                value: -70
                 minimumValue: -1000
                 maximumValue: 1000
                 onValueChanged: pictorial.setCourseLine(value)

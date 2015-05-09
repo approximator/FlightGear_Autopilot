@@ -46,8 +46,9 @@ Item {
                         function (){
                             var _xcat = mouseX - width/2 ;
                             var  _ycat = -(mouseY - width/2);
-                            var _angle = (Math.atan2( _xcat , _ycat ) * 180 / Math.PI) + 360;
-                            return Math.round(_angle);
+                            var _angle = (Math.atan2( _xcat , _ycat ) * 180 / Math.PI);
+                            //console.log(_angle)
+                            return _angle;
                         }
                         )
         }
