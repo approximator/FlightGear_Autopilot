@@ -1,18 +1,20 @@
 import QtQuick 2.2
+import QtQuick.Window 2.0
 import FGear 0.1
 import Material 0.1
-import Material.Components 0.1 as MGui
 
-MGui.MainWindow {
+Window {
 
     title: "Autopilot Test"
 
+    width: 800
+    height: 600
+
     View {
         anchors.fill: parent
-        anchors.margins: units.dp(20)
-        elevation: 1
+        anchors.margins: units.dp(50)
+        elevation: 2
 
-        FgAutopilot {}
+            FgAutopilot {}
     }
-
 }

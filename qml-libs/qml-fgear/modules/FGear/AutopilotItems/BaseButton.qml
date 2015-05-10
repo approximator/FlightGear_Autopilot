@@ -5,8 +5,9 @@ Button {
   anchors.fill: parent
   elevation: checked ? 1 : 2
   backgroundColor: elevation > 1 ? "white" : "darkgrey"
-  checkable: autopilotItem.checkable
-  text: autopilotItem.data
+  checkable: true
+  text: itemText
   enabled: true;
   onCheckedChanged: console.log(checked)
+  tooltip: desc
 }
