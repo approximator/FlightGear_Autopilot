@@ -2,7 +2,7 @@ import QtQuick 2.2
 import QtQuick.Layouts 1.1
 import Material 0.1
 import FGear 0.1
-//import FGear.AutopilotItems 0.1 as AI
+import FGear.AutopilotItems 0.1
 
 FocusScope {
     id: autopilot
@@ -21,7 +21,7 @@ FocusScope {
 
     }
 
-    property variant buttons: AutopilotUtils.createItems()
+    AutopilotModel { id: _autopilotModel }
 
     GridLayout {
         columns: 10
@@ -38,19 +38,18 @@ FocusScope {
 
         Repeater {
             id: _buttons
-            model: buttons
+            model: _autopilotModel
 
             Loader {
-                property var autopilotItem: buttons[index]
-                Layout.row: autopilotItem.row
-                Layout.rowSpan: autopilotItem.rowspan
-                Layout.column: autopilotItem.column
-                Layout.columnSpan: autopilotItem.columnspan
+                Layout.row: row
+                Layout.rowSpan: rowSpan
+                Layout.column: column
+                Layout.columnSpan: columnSpan
                 Layout.fillHeight: true
                 Layout.fillWidth: true
 
                 asynchronous: true // Check this later
-                source: autopilotItem.source;
+                source: itemSource;
             }
         }
     }
