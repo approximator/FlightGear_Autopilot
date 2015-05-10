@@ -1,9 +1,13 @@
 import os
 import sys
 import shutil
-import urllib2
 import zipfile
 import tempfile
+
+try:
+    import urllib.request as urllib2
+except ImportError:
+    import urllib2
 
 QML_MATERIAL_VERSION = '0.0.6'
 QML_EXTRAS_VERSION = '0.0.5'
@@ -17,12 +21,12 @@ class ModulesLoader:
 
     def download(self, url, download_dir, src_dir):
         target_file = os.path.join(download_dir, src_dir + '.zip')
-        print 'Downloading module from:', url
+        print('Downloading module from:', url)
 
         if os.path.exists(target_file):
-            print 'File', target_file, 'already exists.'
+            print('File', target_file, 'already exists.')
         else:
-            print 'Saving to: ', target_file
+            print('Saving to: ', target_file)
             f = urllib2.urlopen(url)
             data = f.read()
             with open(target_file, 'wb') as target_f:
@@ -33,23 +37,23 @@ class ModulesLoader:
             zip_dirname = z.namelist()[0]
             extract_to = os.path.join(download_dir, zip_dirname)
             rename_to = os.path.join(download_dir, src_dir)
-            print 'Extracting to ', extract_to
+            print('Extracting to ', extract_to)
             if os.path.exists(extract_to):
                 shutil.rmtree(extract_to)
             if os.path.exists(rename_to):
                 shutil.rmtree(rename_to)
             z.extractall(download_dir)
-            print 'Rename ', extract_to, ' -> ', rename_to
+            print('Rename ', extract_to, ' -> ', rename_to)
             os.rename(extract_to, rename_to)
 
     def deploy(self, module_dir, module_name):
-        print 'Deploy module', module_name
+        print('Deploy module', module_name)
         dest_dir = os.path.join(self.install_path, module_name)
         if os.path.exists(dest_dir):
             shutil.rmtree(dest_dir)   # WARNING: take care of this rmtree!
         m_dir = os.path.join(module_dir, 'modules')
         m_dir = os.path.join(m_dir, module_name)
-        print m_dir, ' -> ', dest_dir
+        print(m_dir, ' -> ', dest_dir)
         shutil.copytree(m_dir, dest_dir)
 
     def download_and_deploy(self, src_dir, module_name, url):
@@ -65,7 +69,7 @@ class ModulesLoader:
 
 if __name__ == '__main__':
     if len(sys.argv) < 3:
-        print 'Usage: \n       ', os.path.basename(__file__), ' <module_source_path> <install_path>'
+        print('Usage: \n       ', os.path.basename(__file__), ' <module_source_path> <install_path>')
         sys.exit(1)
 
     ml = ModulesLoader(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), sys.argv[1], sys.argv[2])

@@ -25,11 +25,12 @@ macx {
     BINDIST_SOURCE = "$$FGAP_INSTALL_PATH"
     BINDIST_INSTALLER_SOURCE = "$$BINDIST_SOURCE/*"
 
-    deployqt.commands = python -u $$PWD/scripts/deployqt.py -i \"$$BINDIST_SOURCE\" \"$(QMAKE)\"
+    message(Path: $$(PATH))
+    deployqt.commands = python -u \"$$PWD/scripts/deployqt.py\" -i \"$$BINDIST_SOURCE\" \"$(QMAKE)\"
     deployqt.depends = install
 }
 
-    deploy_ext_qml.commands = python $$PWD/scripts/load_qml_modules.py \"$$PWD/qml-libs\" \"$$FGAP_QML_MODULES_PATH\"
+    deploy_ext_qml.commands = python -u \"$$PWD/scripts/load_qml_modules.py\" \"$$PWD/qml-libs\" \"$$FGAP_QML_MODULES_PATH\"
     deploy_ext_qml.depends = deployqt
 
     deploy_all.commands = echo "Deploy finished"

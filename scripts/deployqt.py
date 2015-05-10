@@ -40,7 +40,7 @@ debug_build = False
 
 
 def usage():
-    print "Usage: %s <creator_install_dir> [qmake_path]" % os.path.basename(sys.argv[0])
+    print("Usage: %s <creator_install_dir> [qmake_path]" % os.path.basename(sys.argv[0]))
 
 
 def which(program):
@@ -90,7 +90,7 @@ def is_debug_build(install_dir):
 
 def op_failed(details=None):
     if details:
-        print details
+        print(details)
     if not ignoreErrors:
         print("Error: operation failed!")
         sys.exit(2)
@@ -104,7 +104,7 @@ def fix_rpaths_helper(chrpath_bin, install_dir, dirpath, filenames):
         fpath = os.path.join(dirpath, filename)
         relpath = os.path.relpath(install_dir+'/lib', dirpath)
         command = [chrpath_bin, '-r', '$ORIGIN/'+relpath, fpath]
-        print fpath, ':', command
+        print(fpath, ':', command)
         try:
             subprocess.check_call(command)
         except:
@@ -126,7 +126,7 @@ def check_unix_library_helper(dirpath, filename):
 
 
 def fix_rpaths(chrpath_bin, install_dir):
-    print "fixing rpaths..."
+    print("fixing rpaths...")
     for dirpath, dirnames, filenames in os.walk(os.path.join(install_dir, 'bin')):
         #TODO remove library_helper once all libs moved out of bin/ on linux
         filenames = [filename for filename in filenames if check_unix_binary_exec_helper(dirpath, filename) or check_unix_library_helper(dirpath, filename)]
@@ -153,12 +153,12 @@ def copy_ignore_patterns_helper(dir, filenames):
     else:
         wrong_dlls = filter(lambda filename: filename.endswith('.dll') and is_debug(os.path.join(dir, filename)), filenames)
 
-    filenames = wrong_dlls + filter(windows_debug_files_filter, filenames)
+    filenames = list(wrong_dlls) + list(filter(windows_debug_files_filter, filenames))
     return filenames
 
 
 def copy_qt_libs(install_dir, qt_libs_dir, qt_plugin_dir, qt_qml_dir, plugins, needed_libraries):
-    print "copying Qt libraries..."
+    print("copying Qt libraries...")
 
     if sys.platform.startswith('win'):
         libraries = glob(os.path.join(qt_libs_dir, '*.dll'))
@@ -180,7 +180,7 @@ def copy_qt_libs(install_dir, qt_libs_dir, qt_plugin_dir, qt_qml_dir, plugins, n
         if os.path.basename(library).split('.')[0] not in needed_libraries:
             continue
 
-        print library, '->', dest
+        print(library, '->', dest)
         if os.path.islink(library):
             linkto = os.readlink(library)
             try:
@@ -194,7 +194,7 @@ def copy_qt_libs(install_dir, qt_libs_dir, qt_plugin_dir, qt_qml_dir, plugins, n
     if sys.platform.startswith('win'):
         copy_ignore_func = copy_ignore_patterns_helper
 
-    print "Copying plugins:", plugins
+    print("Copying plugins:", plugins)
     for plugin in plugins:
         target = os.path.join(install_dir, 'bin', 'plugins', plugin)
         if os.path.exists(target):
@@ -204,7 +204,7 @@ def copy_qt_libs(install_dir, qt_libs_dir, qt_plugin_dir, qt_qml_dir, plugins, n
             shutil.copytree(pluginPath, target, ignore=copy_ignore_func, symlinks=True)
 
     if os.path.exists(qt_qml_dir):
-        print "Copying qt quick 2 imports"
+        print("Copying qt quick 2 imports")
         target = os.path.join(install_dir, 'bin', 'qml')
         if os.path.exists(target):
             shutil.rmtree(target)
@@ -212,7 +212,7 @@ def copy_qt_libs(install_dir, qt_libs_dir, qt_plugin_dir, qt_qml_dir, plugins, n
 
 
 def add_qt_conf(install_dir):
-    print "Creating qt.conf:"
+    print("Creating qt.conf:")
     f = open(install_dir + '/bin/qt.conf', 'w')
     f.write('[Paths]\n')
     f.write('Libraries=../lib\n')
@@ -233,10 +233,10 @@ def copy_libclang(install_dir, llvm_install_dir):
         libtarget = os.path.join(install_dir, 'lib')
     resourcesource = os.path.join(llvm_install_dir, 'lib', 'clang')
     resourcetarget = os.path.join(install_dir, 'share', 'cplusplus', 'clang')
-    print "copying libclang..."
-    print libsource, '->', libtarget
+    print("copying libclang...")
+    print(libsource, '->', libtarget)
     shutil.copy(libsource, libtarget)
-    print resourcesource, '->', resourcetarget
+    print(resourcesource, '->', resourcetarget)
     if os.path.exists(resourcetarget):
         shutil.rmtree(resourcetarget)
     shutil.copytree(resourcesource, resourcetarget, symlinks=True)
@@ -248,6 +248,7 @@ def readQmakeVar(qmake_bin, var):
 
 
 def main():
+    print("DeployQt")
     try:
         opts, args = getopt.gnu_getopt(sys.argv[1:], 'hi', ['help', 'ignore-errors'])
     except:
@@ -260,7 +261,7 @@ def main():
         if o in ('-i', '--ignore-errors'):
             global ignoreErrors
             ignoreErrors = True
-            print "Note: Ignoring all errors"
+            print("Note: Ignoring all errors")
 
     if len(args) < 1:
         usage()
@@ -274,13 +275,13 @@ def main():
     qmake_bin = which(qmake_bin)
 
     if qmake_bin is None:
-        print "Cannot find required binary 'qmake'."
+        print("Cannot find required binary 'qmake'.")
         sys.exit(2)
 
     if not sys.platform.startswith('win'):
         chrpath_bin = which('chrpath')
         if chrpath_bin is None:
-            print "Cannot find required binary 'chrpath'."
+            print("Cannot find required binary 'chrpath'.")
             sys.exit(2)
 
     QT_INSTALL_LIBS = readQmakeVar(qmake_bin, 'QT_INSTALL_LIBS')
@@ -289,9 +290,9 @@ def main():
     QT_INSTALL_QML = readQmakeVar(qmake_bin, 'QT_INSTALL_QML')
 
     plugins = ['accessible', 'codecs', 'designer', 'iconengines', 'imageformats', 'platformthemes', 'platforminputcontexts', 'platforms', 'printsupport', 'sqldrivers']
-    print 'QT_INSTALL_LIBS: ', QT_INSTALL_LIBS
-    print 'QT_INSTALL_BINS: ', QT_INSTALL_BINS
-    print 'QT_INSTALL_QML: ', QT_INSTALL_QML
+    print('QT_INSTALL_LIBS: ', QT_INSTALL_LIBS)
+    print('QT_INSTALL_BINS: ', QT_INSTALL_BINS)
+    print('QT_INSTALL_QML: ', QT_INSTALL_QML)
 
     if sys.platform.startswith('win'):
         global debug_build
@@ -325,7 +326,7 @@ def main():
 
 if __name__ == "__main__":
     if sys.platform == 'darwin':
-        print "Mac OS is not supported by this script, please use macqtdeploy!"
+        print("Mac OS is not supported by this script, please use macqtdeploy!")
         sys.exit(2)
     else:
         main()
