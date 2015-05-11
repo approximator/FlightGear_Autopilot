@@ -55,3 +55,25 @@ unix {
     RCC_DIR = $${OUT_PWD}/.rcc
     UI_DIR = $${OUT_PWD}/.uic
 }
+
+defineReplace(findPython) {  # todo: add Python3
+    PYTHON_EXE = python.exe
+    SEPARATOR = ;
+    unix:PYTHON_EXE = python
+    unix:SEPARATOR = :
+
+    PP = $$(PATH)
+    pathDirs = $$split(PP, $$SEPARATOR))
+    # Add some additional dirs to check for python
+    pathDirs += "C:/Python34" "C:/Python27" "C:/WINDOWS/system32" "C:/WINDOWS"
+    pathDirs += "C:/Program Files/Python27" "C:/Program Files/Python34"
+    for (pathDir, pathDirs) {
+        PYTHON_PATH = $$shell_path($${pathDir}/$$PYTHON_EXE)
+        message(Checking for: $$PYTHON_PATH)
+        exists($$PYTHON_PATH) {
+            message(Python found: $$PYTHON_PATH)
+            return($$PYTHON_PATH)
+        }
+    }
+    message(Python not found)
+}
