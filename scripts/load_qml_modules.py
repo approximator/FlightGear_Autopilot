@@ -9,8 +9,8 @@ try:
 except ImportError:
     import urllib2
 
-QML_MATERIAL_VERSION = '0.0.6'
-QML_EXTRAS_VERSION = '0.0.5'
+QML_MATERIAL_VERSION = '0.1'
+QML_EXTRAS_VERSION = '0.1'
 
 
 class ModulesLoader:

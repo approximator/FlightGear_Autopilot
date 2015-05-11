@@ -17,9 +17,8 @@ Project {
     }
 
     importPaths: [
-        "../modules",
-        "../../../../GitHub/qml-material/modules",
-        "../../../../GitHub/qml-extras/modules",
-        "../../../../qml-material-components/modules"
+        "../../modules",
+        "../../../../../GitHub/qml-material/modules",
+        "../../../../../GitHub/qml-extras/modules",
         ]
 }

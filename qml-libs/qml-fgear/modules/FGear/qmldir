@@ -1,5 +1,10 @@
 module FGear
-FgAircraftsView 0.1 FgAircraftsView.qml
+FgWindow 0.1 FgWindow.qml
 FgAiModel 0.1 FgAiModel.qml
-FgInfoHeader 0.1 FgInfoHeader.qml
 SettingsPage 0.1 SettingsPage.qml
+FgMenuModel 0.1 FgMenuModel.qml
+FgMenuItem 0.1 FgMenuItem.qml
+FgInitialPage 0.1 FgInitialPage.qml
+FgAircraftPage 0.1 FgAircraftPage.qml
+
+AircraftUtils 0.1 js/aircraftUtils.js

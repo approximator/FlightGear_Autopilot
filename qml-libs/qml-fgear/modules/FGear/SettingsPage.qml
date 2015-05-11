@@ -1,6 +1,5 @@
 import QtQuick 2.3
 import FGear 0.1
-import QtQuick 2.0
 import QtQuick.Layouts 1.1
 import Material 0.1
 import Material.ListItems 0.1 as ListItem
@@ -25,8 +24,8 @@ Page {
     ColumnLayout {
         anchors {
             fill: parent
-            topMargin: units.dp(16)
-            bottomMargin: units.dp(16)
+            topMargin: Units.dp(16)
+            bottomMargin: Units.dp(16)
         }
 
         View {
@@ -35,21 +34,21 @@ Page {
             anchors {
                 left: parent.left
                 right: parent.right
-                margins: units.dp(16)
+                margins: Units.dp(16)
             }
 
-            height: column.implicitHeight + units.dp(32)
+            height: column.implicitHeight + Units.dp(32)
 
             elevation: 1
-            radius: units.dp(2)
+            radius: Units.dp(2)
 
             ColumnLayout {
                 id: column
 
                 anchors {
                     fill: parent
-                    topMargin: units.dp(16)
-                    bottomMargin: units.dp(16)
+                    topMargin: Units.dp(16)
+                    bottomMargin: Units.dp(16)
                 }
 
                 Label {
@@ -58,7 +57,7 @@ Page {
                     anchors {
                         left: parent.left
                         right: parent.right
-                        margins: units.dp(16)
+                        margins: Units.dp(16)
                     }
 
                     style: "title"
@@ -67,7 +66,7 @@ Page {
 
                 Item {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: units.dp(8)
+                    Layout.preferredHeight: Units.dp(8)
                 }
 
                 ListItem.Standard {
@@ -84,7 +83,7 @@ Page {
                         Label {
                             style: "dialog"
                             text: "Executable:"
-                            Layout.preferredWidth: units.dp(100)
+                            Layout.preferredWidth: Units.dp(100)
                         }
                         TextField {
                             id: executableField
@@ -123,7 +122,7 @@ Page {
                         Label {
                             style: "dialog"
                             text: "Data dir:"
-                            Layout.preferredWidth: units.dp(100)
+                            Layout.preferredWidth: Units.dp(100)
                         }
                         TextField {
                             id: dataField
@@ -162,7 +161,7 @@ Page {
                         Label {
                             style: "dialog"
                             text: "Protocol file:"
-                            Layout.preferredWidth: units.dp(100)
+                            Layout.preferredWidth: Units.dp(100)
                         }
                         TextField {
                             Layout.fillWidth: true
@@ -196,21 +195,21 @@ Page {
             anchors {
                 left: parent.left
                 right: parent.right
-                margins: units.dp(16)
+                margins: Units.dp(16)
             }
 
-            height: column2.implicitHeight + units.dp(32)
+            height: column2.implicitHeight + Units.dp(32)
 
             elevation: 1
-            radius: units.dp(2)
+            radius: Units.dp(2)
 
             ColumnLayout {
                 id: column2
 
                 anchors {
                     fill: parent
-                    topMargin: units.dp(16)
-                    bottomMargin: units.dp(16)
+                    topMargin: Units.dp(16)
+                    bottomMargin: Units.dp(16)
                 }
 
                 Label {
@@ -219,7 +218,7 @@ Page {
                     anchors {
                         left: parent.left
                         right: parent.right
-                        margins: units.dp(16)
+                        margins: Units.dp(16)
                     }
 
                     style: "title"
