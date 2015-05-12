@@ -32,8 +32,8 @@ macx {
     BINDIST_INSTALLER_SOURCE = "$$BINDIST_SOURCE/*"
 
     deployqt.commands = $$PYTHON -u $$shell_path(\"$$PWD/scripts/deployqt.py\") \
-                                 -i $$shell_path(\"$$BINDIST_SOURCE\") $$shell_path(\"$(QMAKE)\") \
-                                 \"$$BUILD_TYPE\"
+                                    $$shell_path(\"$$BINDIST_SOURCE\") $$shell_path(\"$(QMAKE)\") \
+                                    \"$$BUILD_TYPE\"
     deployqt.depends = install
 }
 

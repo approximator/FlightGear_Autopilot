@@ -48,13 +48,19 @@ class ModulesLoader:
 
     def deploy(self, module_dir, module_name):
         print('Deploy module', module_name)
-        dest_dir = os.path.join(self.install_path, module_name)
-        if os.path.exists(dest_dir):
-            shutil.rmtree(dest_dir)   # WARNING: take care of this rmtree!
-        m_dir = os.path.join(module_dir, 'modules')
-        m_dir = os.path.join(m_dir, module_name)
-        print(m_dir, ' -> ', dest_dir)
-        shutil.copytree(m_dir, dest_dir)
+        copy_from = os.path.join(module_dir, 'modules')
+        self.copytree(os.path.join(module_dir, 'modules'), self.install_path)
+
+
+    def copytree(self, src, dest):
+        if os.path.isdir(src):
+            if not os.path.isdir(dest):
+                os.makedirs(dest)
+            for f in os.listdir(src):
+                self.copytree(os.path.join(src, f), os.path.join(dest, f))
+        else:
+            print('Copy:', src, '->', dest)
+            shutil.copyfile(src, dest)
 
     def download_and_deploy(self, src_dir, module_name, url):
         download_dir = tempfile.gettempdir()
