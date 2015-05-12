@@ -33,7 +33,7 @@ script:
   - XVFB_PID=$!
   - DISPLAY=:5 $TRAVIS_BUILD_DIR/bin/fgautopilot &
   - FGAP_PID=$!
-  - sleep 5
+  - sleep 15
   - SCREENSHOT_NAME=$(date +"%d-%m-%Y-%H-%M")
   - DISPLAY=:5 import -window root ${SCREENSHOT_NAME}.png
   - kill -15 $FGAP_PID
