@@ -16,6 +16,10 @@ BASENAME = $$(INSTALL_BASENAME)
 isEmpty(BASENAME): BASENAME = fg-autopilot-$${PLATFORM}-$${FILIGHTGEARAUTOPILOT_VERSION}
 
 PYTHON = $$findPython()
+BUILD_TYPE = Release
+CONFIG(debug, debug|release) {
+    BUILD_TYPE = Debug
+}
 
 macx {
     APPBUNDLE = "$$FGAP_BUNDLE_PATH"
@@ -28,16 +32,18 @@ macx {
     BINDIST_INSTALLER_SOURCE = "$$BINDIST_SOURCE/*"
 
     deployqt.commands = $$PYTHON -u $$shell_path(\"$$PWD/scripts/deployqt.py\") \
-                                 -i $$shell_path(\"$$BINDIST_SOURCE\") $$shell_path(\"$(QMAKE)\")
+                                 -i $$shell_path(\"$$BINDIST_SOURCE\") $$shell_path(\"$(QMAKE)\") \
+                                 \"$$BUILD_TYPE\"
     deployqt.depends = install
 }
 
-    deploy_ext_qml.commands = $$PYTHON -u $$shell_path(\"$$PWD/scripts/load_qml_modules.py\") \
-                                          $$shell_path(\"$$PWD/qml-libs\") $$shell_path(\"$$FGAP_QML_MODULES_PATH\")
-    deploy_ext_qml.depends = deployqt
 
-    deploy_all.commands = echo "Deploy finished"
-    deploy_all.depends = deploy_ext_qml
+deploy_ext_qml.commands = $$PYTHON -u $$shell_path(\"$$PWD/scripts/load_qml_modules.py\") \
+                                      $$shell_path(\"$$PWD/qml-libs\") $$shell_path(\"$$FGAP_QML_MODULES_PATH\")
+deploy_ext_qml.depends = deployqt
+
+deploy_all.commands = echo "Deploy finished"
+deploy_all.depends = deploy_ext_qml
 
 INSTALLER_ARCHIVE_FROM_ENV = $$(INSTALLER_ARCHIVE)
 isEmpty(INSTALLER_ARCHIVE_FROM_ENV) {
