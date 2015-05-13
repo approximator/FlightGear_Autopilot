@@ -17,7 +17,8 @@ SOURCES += $$PWD/src/fgap_main.cpp \
     $$PWD/src/FgGenericProtocol.cpp \
     $$PWD/src/FgController.cpp \
     $$PWD/src/FgAutopilot.cpp \
-    $$PWD/src/FgControlledAircraft.cpp
+    $$PWD/src/FgControlledAircraft.cpp \
+    $$PWD/src/FgFlightgear.cpp
 
 HEADERS  += \
     $$PWD/src/FgAircraft.h \
@@ -25,7 +26,8 @@ HEADERS  += \
     $$PWD/src/FgGenericProtocol.h \
     $$PWD/src/FgController.h \
     $$PWD/src/FgAutopilot.h \
-    $$PWD/src/FgControlledAircraft.h
+    $$PWD/src/FgControlledAircraft.h \
+    $$PWD/src/FgFlightgear.h
 INCLUDEPATH = $$PWD/src
 
 include(../../rpath.pri)
