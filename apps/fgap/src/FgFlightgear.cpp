@@ -4,7 +4,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created May 12, 2015
- * @date Modified May 12, 2015
+ * @date Modified May 14, 2015
  */
 
 #include "FgFlightgear.h"
@@ -18,9 +18,11 @@ FgFlightgear::FgFlightgear(QObject *parent) : QObject(parent)
 {
 #ifdef Q_OS_WIN
     m_ExeFile = "C:\\Program Files\\FlightGear\\bin\\win32\\fgfs.exe";
-    m_DataDir = "C:\\Program Files\\FlightGear\\data\\";
-    m_ProtocolFile = m_DataDir + "\\Protocol\\FgaProtocol.xml";
+    m_RootDir = "C:\\Program Files\\FlightGear\\data\\";
+    m_ProtocolFileName = "\\Protocol\\FgaProtocol.xml";
+    m_ProtocolFile = m_RootDir + m_ProtocolFileName;
 #endif
+
     checkPaths();
 }
 
@@ -30,7 +32,7 @@ bool FgFlightgear::checkPaths()
     if (!QFile::exists(m_ExeFile))
     {
         qDebug() << "Flightgear executable does not exist in default location (" << m_ExeFile << ")";
-        result = false;
+        return false;
     }
     qDebug() << "Checking for Flightgear...";
 
@@ -48,10 +50,37 @@ bool FgFlightgear::checkPaths()
         qDebug() << "ERROR: waitForFinished";
         return false;
     }
-    qDebug() << fgfs.readAll();
 
-    //! @todo check directories
+    // Read FlightGear output to the string
+    QString fgOutput(fgfs.readAll());
+    if (fgOutput.isEmpty())
+    {
+        qDebug() << "Flightgear output is empty";
+    }
 
+    // parse output to find Flightgear root directory
+
+    // auto fgVersionToken = "FlightGear version: ";
+    // auto fgHomeToken = "FG_HOME=";
+    auto fgRootToken = "FG_ROOT=";
+    for (auto &str : fgOutput.split('\n'))
+    {
+        if (str.startsWith(fgRootToken))
+        {
+            m_RootDir = str.mid(qstrlen(fgRootToken));
+        }
+    }
+
+    if (!QDir(m_RootDir).exists())
+    {
+        qDebug() << m_RootDir << " does not exist.";
+        result = false;
+    }
+
+    m_ProtocolFile = m_RootDir + m_ProtocolFileName;
+
+    qDebug() << "FG_ROOT = " << m_RootDir;
+    qDebug() << "Protocol file = " << m_ProtocolFile;
     return result;
 }
 

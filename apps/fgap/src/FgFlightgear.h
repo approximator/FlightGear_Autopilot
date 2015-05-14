@@ -6,7 +6,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created May 12, 2015
- * @date Modified May 12, 2015
+ * @date Modified May 14, 2015
  */
 
 #ifndef FGFLIGHTGEAR_H
@@ -25,8 +25,9 @@ public:
 
 private:
     QString m_ExeFile { "/usr/games/fgfs" };
-    QString m_DataDir { "/usr/share/games/flightgear" };
-    QString m_ProtocolFile { m_DataDir + "/Protocol/FgaProtocol.xml" };
+    QString m_RootDir { "/usr/share/games/flightgear" };
+    QString m_ProtocolFileName { "/Protocol/FgaProtocol.xml" };
+    QString m_ProtocolFile { m_RootDir +  m_ProtocolFileName };
 
 signals:
 
