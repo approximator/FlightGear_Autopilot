@@ -8,16 +8,16 @@ FocusScope {
     id: autopilot
 
     anchors.centerIn: parent
-    width: units.dp(800)
-    height: units.dp(250)
+    width: Units.dp(800)
+    height: Units.dp(250)
 
     Rectangle {
         anchors.fill: parent
         color: "gray"
         opacity: 0.8
-        radius: units.dp(5)
+        radius: Units.dp(5)
         border.color: Qt.darker(color)
-        border.width: units.dp(3)
+        border.width: Units.dp(3)
 
     }
 
@@ -26,13 +26,13 @@ FocusScope {
     GridLayout {
         columns: 10
         rows: 3
-        rowSpacing: units.dp(32)
-        columnSpacing: units.dp(32)
+        rowSpacing: Units.dp(32)
+        columnSpacing: Units.dp(32)
 
-        anchors.rightMargin: units.dp(20)
-        anchors.leftMargin: units.dp(20)
-        anchors.topMargin: units.dp(16)
-        anchors.bottomMargin: units.dp(16)
+        anchors.rightMargin: Units.dp(20)
+        anchors.leftMargin: Units.dp(20)
+        anchors.topMargin: Units.dp(16)
+        anchors.bottomMargin: Units.dp(16)
 
         anchors.fill: parent
 

@@ -9,7 +9,7 @@ Item {
     property int stepSize: 10
     property alias pressed: _mouseArea.pressed
 
-    anchors.margins: units.dp(16)
+    anchors.margins: Units.dp(16)
 
     View {
 
@@ -27,7 +27,7 @@ Item {
         transform: rotationTransform
 
         Rectangle {
-            width: units.dp(10)
+            width: Units.dp(10)
             height: width
             radius: width/2
             color: Qt.darker(parent.color)

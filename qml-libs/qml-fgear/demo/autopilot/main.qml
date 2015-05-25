@@ -12,7 +12,7 @@ Window {
 
     View {
         anchors.fill: parent
-        anchors.margins: units.dp(50)
+        anchors.margins: Units.dp(50)
         elevation: 2
 
             FgAutopilot {}

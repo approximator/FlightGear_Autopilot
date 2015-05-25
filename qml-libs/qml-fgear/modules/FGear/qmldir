@@ -7,6 +7,7 @@ FgMenuModel 0.1 FgMenuModel.qml
 FgMenuItem 0.1 FgMenuItem.qml
 FgInitialPage 0.1 FgInitialPage.qml
 FgAircraftPage 0.1 FgAircraftPage.qml
+FgAutopilot 0.1 FgAutopilot.qml
 
 AircraftUtils 0.1 js/aircraftUtils.js
 AutopilotUtils 0.1 js/autopilotUtils.js
