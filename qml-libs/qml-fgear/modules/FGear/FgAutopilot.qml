@@ -11,6 +11,16 @@ FocusScope {
     width: Units.dp(800)
     height: Units.dp(250)
 
+    property bool autopilotActivated: false
+    property string currentMode
+
+    signal buttonChecked (string btn_name, string mode, bool checked)
+
+    signal autopilotEngage (bool activate)
+    signal modeChanged (string mode)
+    signal altitudeChanged (int altitude)
+    signal vesticalSpeedChanged (int vspeed)
+
     Rectangle {
         anchors.fill: parent
         color: "gray"
@@ -51,6 +61,28 @@ FocusScope {
                 asynchronous: true // Check this later
                 source: itemSource;
             }
+        }
+    }
+
+    onButtonChecked: {
+
+        if (btn_name.indexOf("engage") != -1)
+        {
+            autopilotActivated = checked;
+            autopilotEngage(checked);
+        }
+        else if (btn_name.indexOf("mode") != -1)
+        {
+            modeChanged(mode);
+        }
+        else if (btn_name.indexOf("trim") != -1)
+        {
+            var sign = btn_name.indexOf("up") > 0 ? 1 : -1;
+            vesticalSpeedChanged(sign * 10);
+        }
+        else if (btn_name.indexOf("knobs") != -1)
+        {
+            altitudeChanged(altitude)
         }
     }
 }

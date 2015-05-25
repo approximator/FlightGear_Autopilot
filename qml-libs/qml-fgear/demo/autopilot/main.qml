@@ -15,6 +15,13 @@ Window {
         anchors.margins: Units.dp(50)
         elevation: 2
 
-            FgAutopilot {}
+            FgAutopilot {
+                id: fgautopilot
+                onAutopilotEngage: console.log("autopilot engage state,", activate)
+                onModeChanged: console.log("autopilot mode changed to,", mode)
+                onAltitudeChanged: console.log("altitude changed to,", altitude)
+                onVesticalSpeedChanged: console.log("vertical speed changed to,", vspeed)
+            }
+
     }
 }

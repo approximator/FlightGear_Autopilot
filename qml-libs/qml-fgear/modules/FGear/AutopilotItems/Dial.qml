@@ -10,6 +10,7 @@ Item {
     property alias pressed: _mouseArea.pressed
 
     anchors.margins: Units.dp(16)
+    onValueChanged: altitudeChanged(Math.round(value))
 
     View {
 
@@ -53,7 +54,6 @@ Item {
             rotationTransform.angle = Qt.binding(
                         function (){
 //                            if (!containsMouse) return 0;
-
                             var _xcat = mouseX - radius ;
                             var  _ycat = -(mouseY - radius);
                             var _angle = (Math.atan2( _xcat , _ycat ) * 180 / Math.PI) + 180;
