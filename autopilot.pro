@@ -52,9 +52,16 @@ isEmpty(INSTALLER_ARCHIVE_FROM_ENV) {
     INSTALLER_ARCHIVE = $$OUT_PWD/$$(INSTALLER_ARCHIVE)
 }
 
+DIST_ARCHIVE_FROM_ENV = $$(DIST_ARCHIVE)
+isEmpty(DIST_ARCHIVE_FROM_ENV) {
+    DIST_ARCHIVE_FROM_ENV = $$OUT_PWD/$${BASENAME}.7z
+} else {
+    DIST_ARCHIVE_FROM_ENV = $$OUT_PWD/$$(DIST_ARCHIVE)
+}
+
 linux {
     #bindist.depends = deploy_all
-    bindist.commands = 7z a -mx9 $$OUT_PWD/$${BASENAME}.7z \"$$BINDIST_SOURCE/bin\" \"$$BINDIST_SOURCE/lib\"
+    bindist.commands = 7z a -mx9 \"$$DIST_ARCHIVE_FROM_ENV\" \"$$BINDIST_SOURCE/bin\" \"$$BINDIST_SOURCE/lib\"
     QMAKE_EXTRA_TARGETS += bindist
 }
 

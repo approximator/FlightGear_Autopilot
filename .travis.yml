@@ -33,6 +33,7 @@ script:
   - make clean
   - make
   - make deploy_all
+  - export DIST_ARCHIVE=fg-autopilot-linux-x86_64-0.0.2.7z
   - make bindist
   - Xvfb :5 -screen 0 1280x1024x24 -fbdir $TRAVIS_BUILD_DIR &
   - XVFB_PID=$!
@@ -61,7 +62,7 @@ script:
   - sleep 5
   - echo "Uploading SCENE screenshot... ($SCENE_SCREENSHOT_NAME) "
   - bash ./scripts/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$SCENE_SCREENSHOT_NAME" "Example window"
-  - DIST_FILE=$PWD/$(ls fg-autopilot*7z)
+  - DIST_FILE=$PWD/$DIST_ARCHIVE
   - echo "Uploading dist file = $DIST_FILE"
   - bash ./scripts/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$DIST_FILE" "Dist linux"
 
