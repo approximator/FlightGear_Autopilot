@@ -25,54 +25,34 @@ before_script:
   - echo "Httpie version =  " && http --version
 
 script:
-  - pwd
-  - ls -lah
+  - "export COMMIT_MESSAGE=\"$(git log --format=%B --no-merges -n 1)\""
+  - export DIST_ARCHIVE=fg-autopilot-linux-x86_64.7z
+  - SCREENSHOT_NAME=$PWD/main_qml_$(date +"%d-%m-%Y-%H-%M").png
+  - SCENE_SCREENSHOT_NAME=$PWD/demo_scene_$(date +"%d-%m-%Y-%H-%M").png
+  - DIST_FILE=$PWD/$DIST_ARCHIVE
   - cd $TRAVIS_BUILD_DIR
   - pwd
   - qmake
   - make clean
   - make
   - make deploy_all
-  - export DIST_ARCHIVE=fg-autopilot-linux-x86_64-0.0.2.7z
   - make bindist
-  - Xvfb :5 -screen 0 1280x1024x24 -fbdir $TRAVIS_BUILD_DIR &
-  - XVFB_PID=$!
-  - DISPLAY=:5 $TRAVIS_BUILD_DIR/bin/fgautopilot &
-  - FGAP_PID=$!
-  - sleep 15
-  - SCREENSHOT_NAME=$PWD/main_qml_$(date +"%d-%m-%Y-%H-%M").png
-  - DISPLAY=:5 import -window root ${SCREENSHOT_NAME}
-  - kill -15 $FGAP_PID
-  - kill -15 $XVFB_PID
+  - bash ./scripts/take_screenshot.sh "$TRAVIS_BUILD_DIR/bin/fgautopilot" "${SCREENSHOT_NAME}"
   - sleep 5
-  - Xvfb :5 -screen 0 1280x1024x24 -fbdir $TRAVIS_BUILD_DIR &
-  - XVFB_PID=$!
-  - DISPLAY=:5 qmlscene $TRAVIS_BUILD_DIR/qml-libs/qml-fgear/demo/main.qml -I $TRAVIS_BUILD_DIR/bin/qml&
-  - SCENE_PID=$!
-  - sleep 10
-  - SCENE_SCREENSHOT_NAME=$PWD/demo_scene_$(date +"%d-%m-%Y-%H-%M").png
-  - DISPLAY=:5 import -window root ${SCENE_SCREENSHOT_NAME}
+  - bash ./scripts/take_screenshot.sh "qmlscene $TRAVIS_BUILD_DIR/qml-libs/qml-fgear/demo/fgap/main.qml -I $TRAVIS_BUILD_DIR/bin/qml" "${SCREENSHOT_NAME}"
   - ls -lah
-  - kill -15 $SCENE_PID
-  - kill -15 $XVFB_PID
-  - echo "Uploading screenshot... ($SCREENSHOT_NAME)"
-  - "export COMMIT_MESSAGE=\"$(git log --format=%B --no-merges -n 1)\""
-  - echo "Arti user = $ARTI_USER"
-  - bash ./scripts/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$SCREENSHOT_NAME" "Main window (qml)"
-  - sleep 5
-  - echo "Uploading SCENE screenshot... ($SCENE_SCREENSHOT_NAME) "
-  - bash ./scripts/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$SCENE_SCREENSHOT_NAME" "Example window"
-  - DIST_FILE=$PWD/$DIST_ARCHIVE
-  - echo "Uploading dist file = $DIST_FILE"
-  - bash ./scripts/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$DIST_FILE" "Dist linux"
+  - bash ./scripts/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$DIST_FILE" "Distributive linux"
+  - sleep 2
+  - bash ./scripts/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$SCENE_SCREENSHOT_NAME" "Demo window screenshot"
+  - sleep 2
+  - bash ./scripts/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$SCREENSHOT_NAME" "Main window screenshot (qml)"
 
 deploy:
   provider: releases
   api_key:
-    secure: Ipvu7YEsrxax0u+JbfqlHUmfga0Sjguj3ZjUWirkSFXRmyrBzhnB+5PXubctgHHK3GrvV3uO0mq6WzPZpeNxCMKb5ymE8u8eWAWS7epE6rWVMO8IN8JzNXzISWKLDgt0Pm4lhI/LRieBhYZlAVbf8IOvCTgJfuE9K10nvfsaU1s=
-  file_glob: true
+    secure: "Ipvu7YEsrxax0u+JbfqlHUmfga0Sjguj3ZjUWirkSFXRmyrBzhnB+5PXubctgHHK3GrvV3uO0mq6WzPZpeNxCMKb5ymE8u8eWAWS7epE6rWVMO8IN8JzNXzISWKLDgt0Pm4lhI/LRieBhYZlAVbf8IOvCTgJfuE9K10nvfsaU1s="
   file:
-    - ls "$TRAVIS_BUILD_DIR/fg-autopilot-*.7z"
-    - "${SCREENSHOT_NAME}.png"
+    - "${DIST_FILE}"
+    - "${SCREENSHOT_NAME}"
   on:
     tags: true
