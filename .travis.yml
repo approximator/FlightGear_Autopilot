@@ -7,6 +7,9 @@ env:
     - secure: "cvrIzqJ8FvKXzvB4Tp8Q9gbpFfLTGkVVndrAMA6Pj0trY13nlz6Z2lg9o1Mkcmw/73ndpDImB1IhoPCrgPJBOMYrv7bOKZZJ0D6qCyoIdqspTQX7wJm0WZPQ/SqoACZjpp536AvPJ6vUdZjg+Xj2I913U7SMtvAOrBEUfbMcTOs="
 
 before_install:
+  - "export DISPLAY=:99.0"
+  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x24"
+  - sleep 3
   - sudo add-apt-repository -y ppa:beineri/opt-qt532
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
   - sudo apt-get update
@@ -26,7 +29,7 @@ before_script:
 
 script:
   - "export COMMIT_MESSAGE=\"$(git log --format=%B --no-merges -n 1)\""
-  - export DIST_ARCHIVE=fg-autopilot-linux-x86_64.7z
+  - "export DIST_ARCHIVE=fg-autopilot-linux-x86_64.7z"
   - SCREENSHOT_NAME=$PWD/main_qml_$(date +"%d-%m-%Y-%H-%M").png
   - SCENE_SCREENSHOT_NAME=$PWD/demo_scene_$(date +"%d-%m-%Y-%H-%M").png
   - DIST_FILE=$PWD/$DIST_ARCHIVE
@@ -39,11 +42,9 @@ script:
   - make bindist
   - bash ./scripts/take_screenshot.sh "$TRAVIS_BUILD_DIR/bin/fgautopilot" "${SCREENSHOT_NAME}"
   - sleep 5
-  - bash ./scripts/take_screenshot.sh "qmlscene $TRAVIS_BUILD_DIR/qml-libs/qml-fgear/demo/fgap/main.qml -I $TRAVIS_BUILD_DIR/bin/qml" "${SCREENSHOT_NAME}"
-  - ls -lah
+  - "ls -lah"
   - bash ./scripts/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$DIST_FILE" "Distributive linux"
   - sleep 2
-  - bash ./scripts/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$SCENE_SCREENSHOT_NAME" "Demo window screenshot"
   - sleep 2
   - bash ./scripts/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$SCREENSHOT_NAME" "Main window screenshot (qml)"
 
