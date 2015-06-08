@@ -1,11 +1,10 @@
-include(autopilot.pri)
+include(main.pri)
 
-TEMPLATE  = subdirs
+TEMPLATE = subdirs
 CONFIG   += ordered
+SUBDIRS  = FlightController # Gui
 
-SUBDIRS = qml-libs apps
-
-DISTFILES += $$files(scripts/*.sh) $$files(scripts/*.py)
+DISTFILES += $$files($$SCRIPTS_DIR/*.sh) $$files($$SCRIPTS_DIR/*.py)
 
 macx: PLATFORM = "mac"
 else:win32: PLATFORM = "windows"
@@ -25,21 +24,22 @@ macx {
     APPBUNDLE = "$$FGAP_BUNDLE_PATH"
     BINDIST_SOURCE = "$$FGAP_BUNDLE_PATH"
     BINDIST_INSTALLER_SOURCE = $$BINDIST_SOURCE
-    deployqt.commands = $$PWD/scripts/deployqtHelper_mac.sh \"$${APPBUNDLE}\" \"$$[QT_INSTALL_QML]\"
+    deployqt.commands = $$SCRIPTS_DIR/deployqtHelper_mac.sh \"$${APPBUNDLE}\" \"$$[QT_INSTALL_QML]\"
 }
  else {
     BINDIST_SOURCE = "$$FGAP_INSTALL_PATH"
     BINDIST_INSTALLER_SOURCE = "$$BINDIST_SOURCE/*"
 
-    deployqt.commands = $$PYTHON -u $$shell_path(\"$$PWD/scripts/deployqt.py\") \
+message($$SCRIPTS_DIR)
+    deployqt.commands = $$PYTHON -u $$shell_path(\"$$SCRIPTS_DIR/deployqt.py\") \
                                     $$shell_path(\"$$BINDIST_SOURCE\") $$shell_path(\"$(QMAKE)\") \
                                     \"$$BUILD_TYPE\"
     deployqt.depends = install
 }
 
 
-deploy_ext_qml.commands = $$PYTHON -u $$shell_path(\"$$PWD/scripts/load_qml_modules.py\") \
-                                      $$shell_path(\"$$PWD/qml-libs\") $$shell_path(\"$$FGAP_QML_MODULES_PATH\")
+deploy_ext_qml.commands = $$PYTHON -u $$shell_path(\"$$SCRIPTS_DIR/load_qml_modules.py\") \
+                                      $$shell_path(\"$$ROOT_DIR/Gui/qml\") $$shell_path(\"$$FGAP_QML_MODULES_PATH\")
 deploy_ext_qml.depends = deployqt
 
 deploy_all.commands = echo "Deploy finished"
@@ -66,3 +66,4 @@ linux {
 }
 
 QMAKE_EXTRA_TARGETS += deployqt deploy_ext_qml deploy_all
+
