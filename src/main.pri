@@ -15,6 +15,7 @@ unix {
 }
 
 ROOT_DIR = $$PWD
+SCRIPTS_DIR = $$shell_path($$absolute_path(../scripts))
 FGAP_SOURCE_TREE = $$PWD
 
 isEmpty(FGAP_BUILD_TREE) {

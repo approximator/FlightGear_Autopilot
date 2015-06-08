@@ -33,20 +33,21 @@ script:
   - SCREENSHOT_NAME=$PWD/main_qml_$(date +"%d-%m-%Y-%H-%M").png
   - SCENE_SCREENSHOT_NAME=$PWD/demo_scene_$(date +"%d-%m-%Y-%H-%M").png
   - DIST_FILE=$PWD/$DIST_ARCHIVE
-  - cd $TRAVIS_BUILD_DIR
+  - SOURCES_DIR=$TRAVIS_BUILD_DIR/src
+  - cd $SOURCES_DIR
   - pwd
   - qmake
   - make clean
   - make
   - make deploy_all
   - make bindist
-  - bash ./scripts/take_screenshot.sh "$TRAVIS_BUILD_DIR/bin/fgautopilot" "${SCREENSHOT_NAME}"
+  - bash ../scripts/take_screenshot.sh "$TRAVIS_BUILD_DIR/bin/fgautopilot" "${SCREENSHOT_NAME}"
   - sleep 5
   - "ls -lah"
-  - bash ./scripts/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$DIST_FILE" "Distributive linux"
+  - bash ../scripts/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$DIST_FILE" "Distributive linux"
   - sleep 2
   - sleep 2
-  - bash ./scripts/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$SCREENSHOT_NAME" "Main window screenshot (qml)"
+  - bash ../scripts/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$SCREENSHOT_NAME" "Main window screenshot (qml)"
 
 deploy:
   provider: releases
