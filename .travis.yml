@@ -42,7 +42,7 @@ script:
   - make -j5
   - make deploy_all
   - make bindist
-  - bash $SCRIPTS_DIR/take_screenshot.sh "$TRAVIS_BUILD_DIR/bin/fgautopilot" "${SCREENSHOT_NAME}"
+  - bash $SCRIPTS_DIR/take_screenshot.sh "$SOURCES_DIR/bin/fgautopilot" "${SCREENSHOT_NAME}"
   - sleep 5
   - "ls -lah"
   - bash $SCRIPTS_DIR/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$DIST_FILE" "Distributive linux"

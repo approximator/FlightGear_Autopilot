@@ -8,7 +8,7 @@ sleep 2
 "$COMMAND" &
 COMMAND_PID=$!
 # wait
-sleep 20
+sleep 30
 
 # take screenshot
 import -window root "${SCREENSHOT_FILE}"

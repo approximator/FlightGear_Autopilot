@@ -30,9 +30,8 @@ HEADERS  += \
     $$PWD/FgFlightgear.h
 INCLUDEPATH = $$PWD
 
-#include(../../rpath.pri)
-
-include(../resources/resources.pri)
+include($$FGAP_SOURCE_TREE/rpath.pri)
+include($$FGAP_SOURCE_TREE/resources/resources.pri)
 
 # Default rules for deployment.
-# include(deployment.pri)
+include($$FGAP_SOURCE_TREE/deployment.pri)
