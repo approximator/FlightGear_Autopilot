@@ -1,7 +1,7 @@
 !isEmpty(FGAP_PRI_INCLUDED):error("autopilot.pri already included")
 FGAP_PRI_INCLUDED = 1
 
-FILIGHTGEARAUTOPILOT_VERSION = 0.0.2
+FILIGHTGEARAUTOPILOT_VERSION = 0.0.3
 CONFIG += c++11
 
 unix {
@@ -14,6 +14,7 @@ unix {
     QMAKE_CXXFLAGS += -isystem "$$[QT_INSTALL_HEADERS]/QtCore"
 }
 
+ROOT_DIR = $$PWD
 FGAP_SOURCE_TREE = $$PWD
 
 isEmpty(FGAP_BUILD_TREE) {
@@ -46,14 +47,14 @@ macx {
 CONFIG += depend_includepath
 
 unix {
-    CONFIG(debug, debug|release):OBJECTS_DIR = $${OUT_PWD}/.obj/debug-shared
-    CONFIG(release, debug|release):OBJECTS_DIR = $${OUT_PWD}/.obj/release-shared
+    CONFIG(debug, debug|release):OBJECTS_DIR = $${OUT_PWD}/obj/debug-shared
+    CONFIG(release, debug|release):OBJECTS_DIR = $${OUT_PWD}/obj/release-shared
 
-    CONFIG(debug, debug|release):MOC_DIR = $${OUT_PWD}/.moc/debug-shared
-    CONFIG(release, debug|release):MOC_DIR = $${OUT_PWD}/.moc/release-shared
+    CONFIG(debug, debug|release):MOC_DIR = $${OUT_PWD}/moc/debug-shared
+    CONFIG(release, debug|release):MOC_DIR = $${OUT_PWD}/moc/release-shared
 
-    RCC_DIR = $${OUT_PWD}/.rcc
-    UI_DIR = $${OUT_PWD}/.uic
+    RCC_DIR = $${OUT_PWD}/rcc
+    UI_DIR = $${OUT_PWD}/uic
 }
 
 defineReplace(findPython) {  # todo: add Python3
@@ -69,7 +70,6 @@ defineReplace(findPython) {  # todo: add Python3
     pathDirs += "C:/Program Files/Python27" "C:/Program Files/Python34"
     for (pathDir, pathDirs) {
         PYTHON_PATH = $$shell_path($${pathDir}/$$PYTHON_EXE)
-        message(Checking for: $$PYTHON_PATH)
         exists($$PYTHON_PATH) {
             message(Python found: $$PYTHON_PATH)
             return($$PYTHON_PATH)
