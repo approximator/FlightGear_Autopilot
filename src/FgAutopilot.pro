@@ -4,7 +4,7 @@ TEMPLATE = subdirs
 CONFIG   += ordered
 SUBDIRS  = FlightController # Gui
 
-DISTFILES += $$files($$ROOT_DIR/scripts/*.sh) $$files($$ROOT_DIR/scripts/*.py)
+DISTFILES += $$files($$SCRIPTS_DIR/*.sh) $$files($$SCRIPTS_DIR/*.py)
 
 macx: PLATFORM = "mac"
 else:win32: PLATFORM = "windows"
