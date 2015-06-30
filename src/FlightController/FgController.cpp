@@ -15,6 +15,7 @@
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <QCoreApplication>
 
 FgController::FgController(QObject *parent) :
     QObject(parent)
@@ -29,10 +30,12 @@ FgController::~FgController()
 
 bool FgController::init()
 {
-    QFile configFile("./config/fgapConfig.json");
+    // FIX: filename determining
+    QString configFileName = QCoreApplication::applicationDirPath() + "/config/fgapConfig.json";
+    QFile configFile(configFileName);
     if (!configFile.open(QIODevice::ReadOnly))
     {
-        qWarning("Couldn't open config file.");
+        qWarning("Couldn't open config file: %s",  configFileName.toStdString().c_str());
         return false;
     }
     QJsonDocument configData(QJsonDocument::fromJson(configFile.readAll()));
