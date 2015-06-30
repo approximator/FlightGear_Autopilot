@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 17, 2015
- * @date Modified May 12, 2015
+ * @date Modified Jun 30, 2015
  */
 
 #ifndef FGCONTROLLEDAIRCRAFT_H
@@ -23,6 +23,7 @@ class FgControlledAircraft : public FgAircraft
     Q_OBJECT
 public:
     explicit FgControlledAircraft(const QString& sign, QObject *parent = 0);
+    explicit FgControlledAircraft(const QJsonObject& config, QObject *parent = 0);
     ~FgControlledAircraft();
 
     inline std::shared_ptr<FgTransport> transport() const;
@@ -30,6 +31,8 @@ public:
     inline void setAilerons(qreal val);
     inline void setElevator(qreal val);
     inline void setRudder(qreal val);
+
+    bool setConfigFromJson(const QJsonObject& config);
 
 private:
     std::shared_ptr<FgTransport>  m_Transport  { std::make_shared<FgTransport>() };

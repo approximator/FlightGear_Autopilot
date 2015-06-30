@@ -1,0 +1,28 @@
+{
+    "aircrafts": [
+        {
+            "callsign": "Travis",
+            "flightgear": {
+                "exe_file": "/usr/games/fgfs",
+                "protocol_file": "/usr/share/games/flightgear/Protocol/FgaProtocol.xml",
+                "root_directory": "/usr/share/games/flightgear",
+                "run_parameters": {
+                    "airport": "KSFO",
+                    "runway": "10L"
+                }
+            }
+        },
+        {
+            "callsign": "Rover",
+            "flightgear": {
+                "exe_file": "/usr/games/fgfs",
+                "protocol_file": "/usr/share/games/flightgear/Protocol/FgaProtocol.xml",
+                "root_directory": "/usr/share/games/flightgear",
+                "run_parameters": {
+                    "airport": "KSFO",
+                    "runway": "10L"
+                }
+            }
+        }
+    ]
+}

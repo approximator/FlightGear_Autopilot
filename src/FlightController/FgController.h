@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified May 05, 2015
+ * @date Modified Jun 30, 2015
  */
 
 #ifndef FGCONTROLLER_H
@@ -25,6 +25,7 @@ class FgController : public QObject
     Q_OBJECT
 public:
     explicit FgController(QObject *parent = 0);
+    virtual ~FgController();
     bool init();
 
 private:

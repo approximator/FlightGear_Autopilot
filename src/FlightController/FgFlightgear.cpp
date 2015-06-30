@@ -4,7 +4,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created May 12, 2015
- * @date Modified May 14, 2015
+ * @date Modified Jun 30, 2015
  */
 
 #include "FgFlightgear.h"
@@ -12,9 +12,21 @@
 #include <QFile>
 #include <QDir>
 #include <QProcess>
+#include <QJsonArray>
 #include <QDebug>
 
 FgFlightgear::FgFlightgear(QObject *parent) : QObject(parent)
+{
+    init();
+}
+
+FgFlightgear::FgFlightgear(const QJsonObject &config, QObject *parent)
+{
+    setConfigFromJson(config);
+    init();
+}
+
+bool FgFlightgear::init()
 {
 #ifdef Q_OS_WIN
     m_ExeFile = "C:\\Program Files\\FlightGear\\bin\\win32\\fgfs.exe";
@@ -24,6 +36,7 @@ FgFlightgear::FgFlightgear(QObject *parent) : QObject(parent)
 #endif
 
     checkPaths();
+    return true;
 }
 
 bool FgFlightgear::checkPaths()
@@ -86,7 +99,24 @@ bool FgFlightgear::checkPaths()
 
 bool FgFlightgear::run()
 {
-    qDebug() << "Not implemented yet:    FgFlightgear::run()";
-    return false;
+    qDebug() << "Running Flightgear";
+    if (m_FlightgearProcess.state() != QProcess::NotRunning)
+    {
+        qDebug() << "Can't run Flightgear. It is already running.";
+        return false;
+    }
+
+    return true;
 }
+
+bool FgFlightgear::setConfigFromJson(const QJsonObject &config)
+{
+    for (auto parameter : config)
+    {
+        qDebug() << parameter.toString();
+    }
+
+    return true;
+}
+
 

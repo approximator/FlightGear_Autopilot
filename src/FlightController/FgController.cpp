@@ -6,11 +6,15 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified May 05, 2015
+ * @date Modified Jun 30, 2015
  */
 
 #include "FgController.h"
 #include "FgTransport.h"
+
+#include <QFile>
+#include <QJsonArray>
+#include <QJsonDocument>
 
 FgController::FgController(QObject *parent) :
     QObject(parent)
@@ -18,15 +22,33 @@ FgController::FgController(QObject *parent) :
 
 }
 
+FgController::~FgController()
+{
+//    saveConfig("./config/fgapConfig.json");
+}
+
 bool FgController::init()
 {
-    auto aircraft = std::make_shared<FgControlledAircraft>("App1");
-    m_Transport = aircraft->transport();
-    m_OurAircrafts[aircraft->callsign()] = aircraft;
+    QFile configFile("./config/fgapConfig.json");
+    if (!configFile.open(QIODevice::ReadOnly))
+    {
+        qWarning("Couldn't open config file.");
+        return false;
+    }
+    QJsonDocument configData(QJsonDocument::fromJson(configFile.readAll()));
+    QJsonObject configObj = configData.object();
+    QJsonArray aircrafts = configObj["aircrafts"].toArray();
 
+    for (auto parameter : aircrafts)
+    {
+        auto aircraft = std::make_shared<FgControlledAircraft>(parameter.toObject());
+        m_OurAircrafts.insert(aircraft->callsign(), aircraft);
+        connect(this, &FgController::fdmDataChanged, aircraft.get(), &FgControlledAircraft::onFdmDataChanged);
+        emit ourAircraftConnected(aircraft.get());
+    }
+
+    m_Transport = (*m_OurAircrafts.begin())->transport();
     connect(m_Transport.get(), &FgTransport::fgDataReceived, this, &FgController::onDataReceived);
-    connect(this, &FgController::fdmDataChanged, aircraft.get(), &FgControlledAircraft::onFdmDataChanged);
-    emit ourAircraftConnected(aircraft.get());
 
     return true;
 }
@@ -37,9 +59,6 @@ void FgController::updateAircraft(const QString & /* aircraftId */)
 
 void FgController::onDataReceived()
 {
-//    qDebug() << "On data received";
-    //! @todo fix for several controlled aircrafts
-    updateOurAircraftsCount();
     updateOtherAircraftsCount();
 
     emit fdmDataChanged(m_Transport);
@@ -56,38 +75,6 @@ void FgController::onDataReceived()
     auto aircraft = *m_OurAircrafts.begin();
     QString data = QString::number(aircraft->ailerons()) + '\t' + QString::number(aircraft->elevator()) + "\n";
     m_Transport->writeData(data);
-}
-
-void FgController::updateOurAircraftsCount()
-{
-    // currently we are dealing with one controlled aircraft
-    //! @todo Add multiple aircrafts handling
-    if (m_OurAircrafts.isEmpty())
-    {
-        return;
-    }
-
-    // add new aircraft to the list and emit signal
-    QString callsign = m_Transport->getString("/sim/multiplay/callsign");
-    if (callsign.isEmpty())
-    {
-        qDebug() << "ERROR! Our callsign is empty!";
-    }
-
-    if (!m_OurAircrafts.contains(callsign))
-    {
-        qDebug() << "WARNING! There is no " << callsign << " in the list";
-        return;
-    }
-
-    auto aircraft = m_OurAircrafts[callsign];
-    if (aircraft->connected())
-    {
-        return;
-    }
-
-    aircraft->setConnected(true);
-    emit aircraftUpdated(aircraft.get());
 }
 
 void FgController::updateOtherAircraftsCount()

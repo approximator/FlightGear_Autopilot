@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 ListModel {
 
-    ListElement {
+/*    ListElement {
         menuSection: "Aircrafts"
         name: "MyApp"
         menuIcon: "maps/flight"
@@ -18,6 +18,7 @@ ListModel {
         pagePath: "FgAircraftPage.qml"
         connected: false
     }
+*/
 
     ListElement {
         menuSection: "Other Aircrafts"

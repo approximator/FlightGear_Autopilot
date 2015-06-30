@@ -42,7 +42,8 @@ deploy_ext_qml.commands = $$PYTHON -u $$shell_path(\"$$SCRIPTS_DIR/load_qml_modu
                                       $$shell_path(\"$$ROOT_DIR/Gui/qml\") $$shell_path(\"$$FGAP_QML_MODULES_PATH\")
 deploy_ext_qml.depends = deployqt
 
-deploy_all.commands = echo "Deploy finished"
+
+deploy_all.commands = cp -rv $$shell_path(\"$$ROOT_DIR/../doc/config\") $$shell_path(\"$$FGAP_APP_PATH\")
 deploy_all.depends = deploy_ext_qml
 
 INSTALLER_ARCHIVE_FROM_ENV = $$(INSTALLER_ARCHIVE)
