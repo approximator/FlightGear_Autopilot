@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 17, 2015
- * @date Modified Jun 30, 2015
+ * @date Modified Jul 01, 2015
  */
 
 #ifndef FGCONTROLLEDAIRCRAFT_H
@@ -32,7 +32,11 @@ public:
     inline void setElevator(qreal val);
     inline void setRudder(qreal val);
 
+    QJsonObject configurationAsJson() const;
     bool setConfigFromJson(const QJsonObject& config);
+
+    void runFlightGear();
+    inline const FgFlightgear& flightgear() const;
 
 private:
     std::shared_ptr<FgTransport>  m_Transport  { std::make_shared<FgTransport>() };
@@ -64,6 +68,11 @@ void FgControlledAircraft::setElevator(qreal val)
 void FgControlledAircraft::setRudder(qreal val)
 {
     m_Rudder = val;
+}
+
+const FgFlightgear &FgControlledAircraft::flightgear() const
+{
+    return *m_Flightgear.get();
 }
 
 #endif // FGCONTROLLEDAIRCRAFT_H

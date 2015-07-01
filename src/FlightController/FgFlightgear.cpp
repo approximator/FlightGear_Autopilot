@@ -4,7 +4,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created May 12, 2015
- * @date Modified Jun 30, 2015
+ * @date Modified Jul 01, 2015
  */
 
 #include "FgFlightgear.h"
@@ -20,7 +20,7 @@ FgFlightgear::FgFlightgear(QObject *parent) : QObject(parent)
     init();
 }
 
-FgFlightgear::FgFlightgear(const QJsonObject &config, QObject *parent)
+FgFlightgear::FgFlightgear(const QJsonObject &config, QObject *parent) : QObject(parent)
 {
     setConfigFromJson(config);
     init();
@@ -28,13 +28,6 @@ FgFlightgear::FgFlightgear(const QJsonObject &config, QObject *parent)
 
 bool FgFlightgear::init()
 {
-#ifdef Q_OS_WIN
-    m_ExeFile = "C:\\Program Files\\FlightGear\\bin\\win32\\fgfs.exe";
-    m_RootDir = "C:\\Program Files\\FlightGear\\data\\";
-    m_ProtocolFileName = "\\Protocol\\FgaProtocol.xml";
-    m_ProtocolFile = m_RootDir + m_ProtocolFileName;
-#endif
-
     checkPaths();
     return true;
 }
@@ -102,19 +95,43 @@ bool FgFlightgear::run()
     qDebug() << "Running Flightgear";
     if (m_FlightgearProcess.state() != QProcess::NotRunning)
     {
-        qDebug() << "Can't run Flightgear. It is already running.";
+        qWarning() << "Can't run Flightgear. It is already running.";
         return false;
     }
+
+    QStringList arguments;
+    for (auto &param : m_RunParameters)
+        arguments << ("--" + param.first + (param.second.isEmpty() ? "" : ("=" + param.second)));
+    qDebug() << "Starting: " << m_ExeFile << arguments;
+    m_FlightgearProcess.start(m_ExeFile, arguments);
 
     return true;
 }
 
+QJsonObject FgFlightgear::configurationAsJson() const
+{
+    QJsonObject runParameters;
+    for (auto &param : m_RunParameters)
+        runParameters[param.first] = param.second;
+
+    QJsonObject config;
+    config["exe_file"] = m_ExeFile;
+    config["protocol_file"] = m_ProtocolFile;
+    config["root_directory"] = m_RootDir;
+    config["run_parameters"] = runParameters;
+    return config;
+}
+
 bool FgFlightgear::setConfigFromJson(const QJsonObject &config)
 {
-    for (auto parameter : config)
-    {
-        qDebug() << parameter.toString();
-    }
+    m_ExeFile = config["exe_file"].toString(m_ExeFile);
+    m_ProtocolFile = config["protocol_file"].toString(m_ProtocolFile);
+    m_RootDir = config["root_directory"].toString(m_RootDir);
+
+    m_RunParameters.clear();
+    QJsonObject runParams = config["run_parameters"].toObject();
+    for (auto &key : runParams.keys())
+        m_RunParameters.insert(QPair<QString, QString>(key, runParams[key].toString()));
 
     return true;
 }

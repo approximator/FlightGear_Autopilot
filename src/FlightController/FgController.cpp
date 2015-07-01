@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Jun 30, 2015
+ * @date Modified Jul 01, 2015
  */
 
 #include "FgController.h"
@@ -42,7 +42,7 @@ bool FgController::init()
     QJsonObject configObj = configData.object();
     QJsonArray aircrafts = configObj["aircrafts"].toArray();
 
-    for (auto parameter : aircrafts)
+    for (auto const &parameter : aircrafts)
     {
         auto aircraft = std::make_shared<FgControlledAircraft>(parameter.toObject());
         m_OurAircrafts.insert(aircraft->callsign(), aircraft);
@@ -52,6 +52,29 @@ bool FgController::init()
 
     m_Transport = (*m_OurAircrafts.begin())->transport();
     connect(m_Transport.get(), &FgTransport::fgDataReceived, this, &FgController::onDataReceived);
+
+//    (*m_OurAircrafts.begin())->runFlightGear();
+    return true;
+}
+
+bool FgController::saveConfig(const QString &filename)
+{
+    QFile saveFile(filename);
+
+    if (!saveFile.open(QIODevice::WriteOnly))
+    {
+        qWarning("Couldn't open save file.");
+        return false;
+    }
+
+    QJsonArray aircrafts;
+    for (auto &aircraft : m_OurAircrafts)
+        aircrafts.append(aircraft->configurationAsJson());
+
+    QJsonObject config;
+    config["aircrafts"] = aircrafts;
+    QJsonDocument saveDoc(config);
+    saveFile.write(saveDoc.toJson());
 
     return true;
 }

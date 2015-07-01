@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Jun 30, 2015
+ * @date Modified Jul 01, 2015
  */
 
 #ifndef FGCONTROLLER_H
@@ -27,6 +27,7 @@ public:
     explicit FgController(QObject *parent = 0);
     virtual ~FgController();
     bool init();
+    bool saveConfig(const QString& filename);
 
 private:
     std::shared_ptr<FgTransport> m_Transport { };

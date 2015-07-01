@@ -6,13 +6,15 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created May 12, 2015
- * @date Modified Jun 30, 2015
+ * @date Modified Jul 01, 2015
  */
 
 #ifndef FGFLIGHTGEAR_H
 #define FGFLIGHTGEAR_H
 
 #include <memory>
+#include <QSet>
+#include <QPair>
 #include <QObject>
 #include <QProcess>
 #include <QJsonObject>
@@ -28,18 +30,36 @@ public:
     bool checkPaths();
     bool run();
 
+    QJsonObject configurationAsJson() const;
     bool setConfigFromJson(const QJsonObject& config);
 
+    inline const QProcess& process() const;
+
 private:
+#ifdef Q_OS_WIN
+    QString m_ExeFile { "C:\\Program Files\\FlightGear\\bin\\win32\\fgfs.exe" };
+    QString m_RootDir { "C:\\Program Files\\FlightGear\\data\\" };
+    QString m_ProtocolFileName { "\\Protocol\\FgaProtocol.xml" };
+    QString m_ProtocolFile { m_RootDir + m_ProtocolFileName };
+#else
     QString m_ExeFile { "/usr/games/fgfs" };
     QString m_RootDir { "/usr/share/games/flightgear" };
     QString m_ProtocolFileName { "/Protocol/FgaProtocol.xml" };
     QString m_ProtocolFile { m_RootDir +  m_ProtocolFileName };
+#endif
+
+    QSet<QPair<QString, QString> > m_RunParameters { };
     QProcess m_FlightgearProcess {};
 
 signals:
 
 public slots:
 };
+
+//
+const QProcess &FgFlightgear::process() const
+{
+    return m_FlightgearProcess;
+}
 
 #endif // FGFLIGHTGEAR_H
