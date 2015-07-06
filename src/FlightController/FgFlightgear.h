@@ -12,6 +12,8 @@
 #ifndef FGFLIGHTGEAR_H
 #define FGFLIGHTGEAR_H
 
+#include "FgTransport.h"
+
 #include <memory>
 #include <QVector>
 #include <QPair>
@@ -34,8 +36,10 @@ public:
     bool setConfigFromJson(const QJsonObject& config);
 
     inline const QProcess& process() const;
-
+    inline std::shared_ptr<FgTransport> transport() const;
 private:
+    inline QString multiplayParams() const;
+
 #ifdef Q_OS_WIN
     QString m_ExeFile { "C:\\Program Files\\FlightGear\\bin\\win32\\fgfs.exe" };
     QString m_RootDir { "C:\\Program Files\\FlightGear\\data\\" };
@@ -48,18 +52,48 @@ private:
     QString m_ProtocolFile { m_RootDir +  m_ProtocolFileName };
 #endif
 
+    QString m_Airport    { "KSFO" };
+    QString m_Runway     { "10L" };
+    QString m_Aircraft   { "c172p" };
+    QString m_WindowSize { "800x600" };
+    QString m_TimeOfDay  { "morning" };
+    quint16 m_MultiplayPortIn   { 5000 };
+    int m_MultiplayFrequencyIn  { 10 };
+    QString m_MultiplayHostIn   { };
+    quint16 m_MultiplayPortOut  { 5000 };
+    int m_MultiplayFrequencyOut { 10 };
+    QString m_MultiplayHostOut  { };
     QVector<QPair<QString, QString> > m_RunParameters { };
     QProcess m_FlightgearProcess {};
+    std::shared_ptr<FgTransport> m_Transport { std::make_shared<FgTransport>() };
 
 signals:
 
 public slots:
+
+    friend class ControlledAircraftTest;
 };
 
 //
 const QProcess &FgFlightgear::process() const
 {
     return m_FlightgearProcess;
+}
+
+std::shared_ptr<FgTransport> FgFlightgear::transport() const
+{
+    return m_Transport;
+}
+
+QString FgFlightgear::multiplayParams() const
+{
+    return QString("--multiplay=out,%1,%2,%3 --multiplay=in,%4,%5,%6")
+            .arg(m_MultiplayFrequencyOut)
+            .arg(m_MultiplayHostOut)
+            .arg(m_MultiplayPortOut)
+            .arg(m_MultiplayFrequencyIn)
+            .arg(m_MultiplayHostIn)
+            .arg(m_MultiplayPortIn);
 }
 
 #endif // FGFLIGHTGEAR_H

@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 17, 2015
- * @date Modified Jul 01, 2015
+ * @date Modified Jul 05, 2015
  */
 
 #ifndef FGCONTROLLEDAIRCRAFT_H
@@ -39,7 +39,6 @@ public:
     inline const FgFlightgear& flightgear() const;
 
 private:
-    std::shared_ptr<FgTransport>  m_Transport  { std::make_shared<FgTransport>() };
     std::shared_ptr<FgAutopilot>  m_Autopilot  { std::make_shared<FgAutopilot>() };
     std::shared_ptr<FgFlightgear> m_Flightgear { std::make_shared<FgFlightgear>() };
 
@@ -52,7 +51,7 @@ public slots:
 //
 std::shared_ptr<FgTransport> FgControlledAircraft::transport() const
 {
-    return m_Transport;
+    return m_Flightgear->transport();
 }
 
 void FgControlledAircraft::setAilerons(qreal val)

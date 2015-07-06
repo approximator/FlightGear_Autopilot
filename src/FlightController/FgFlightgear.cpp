@@ -100,7 +100,9 @@ bool FgFlightgear::run()
     }
 
     QStringList arguments;
-    for (auto &param : m_RunParameters)
+    arguments << multiplayParams();
+    arguments << m_Transport->networkParams();
+    for (auto const &param : m_RunParameters)
         arguments << ("--" + param.first + (param.second.isEmpty() ? "" : ("=" + param.second)));
     qDebug() << "Starting: " << m_ExeFile << arguments;
     m_FlightgearProcess.start(m_ExeFile, arguments);
@@ -127,14 +129,37 @@ bool FgFlightgear::setConfigFromJson(const QJsonObject &config)
     m_ExeFile = config["exe_file"].toString(m_ExeFile);
     m_ProtocolFile = config["protocol_file"].toString(m_ProtocolFile);
     m_RootDir = config["root_directory"].toString(m_RootDir);
+    m_Airport = config["airport"].toString(m_Airport);
+    m_Runway = config["runway"].toString(m_Runway);
+    m_Aircraft = config["aircraft"].toString(m_Aircraft);
+    m_WindowSize = config["geometry"].toString(m_WindowSize);
+    m_TimeOfDay = config["timeofday"].toString(m_TimeOfDay);
+
+    QJsonObject transport = config["generic"].toObject();
+    if (!transport.empty())
+    {
+        m_Transport = std::make_shared<FgTransport>(transport);
+    }
+
+    QJsonObject multiplay_in = config["multiplay"].toObject()["in"].toObject();
+    if (!multiplay_in.empty())
+    {
+        m_MultiplayPortIn = multiplay_in["port"].toInt(m_MultiplayPortIn);
+        m_MultiplayFrequencyIn = multiplay_in["frequency"].toInt(m_MultiplayFrequencyIn);
+        m_MultiplayHostIn = multiplay_in["host"].toString(m_MultiplayHostIn);
+    }
+    QJsonObject multiplay_out = config["multiplay"].toObject()["out"].toObject();
+    if (!multiplay_in.empty())
+    {
+        m_MultiplayPortOut = multiplay_out["port"].toInt(m_MultiplayPortOut);
+        m_MultiplayFrequencyOut = multiplay_out["frequency"].toInt(m_MultiplayFrequencyOut);
+        m_MultiplayHostOut = multiplay_out["host"].toString(m_MultiplayHostOut);
+    }
 
     m_RunParameters.clear();
     QJsonObject runParams = config["run_parameters"].toObject();
     for (auto &key : runParams.keys())
-        m_RunParameters.push_back(QPair<QString, QString>(
-                                      key.startsWith("generic") ? "generic" : key,
-                                      runParams[key].toString())
-                                  );
+        m_RunParameters.push_back(QPair<QString, QString>(key, runParams[key].toString()));
 
     return true;
 }

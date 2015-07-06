@@ -13,15 +13,13 @@
 FgControlledAircraft::FgControlledAircraft(const QString &sign, QObject *parent) :
     FgAircraft(sign, parent)
 {
-    connect(m_Transport.get(), &FgTransport::fgDataReceived, this, &FgControlledAircraft::onFdmDataChanged);
+    connect(m_Flightgear->transport().get(), &FgTransport::fgDataReceived, this, &FgControlledAircraft::onFdmDataChanged);
 }
 
 FgControlledAircraft::FgControlledAircraft(const QJsonObject &config, QObject *parent):
     FgAircraft("(none)", parent)
 {
     setConfigFromJson(config);
-    // TODO: fix
-    connect(m_Transport.get(), &FgTransport::fgDataReceived, this, &FgControlledAircraft::onFdmDataChanged);
 }
 
 FgControlledAircraft::~FgControlledAircraft()
@@ -40,14 +38,10 @@ QJsonObject FgControlledAircraft::configurationAsJson() const
 bool FgControlledAircraft::setConfigFromJson(const QJsonObject &config)
 {
     m_Callsign = config["callsign"].toString(m_Callsign);
-
     QJsonObject flightgear = config["flightgear"].toObject();
     if (!flightgear.empty())
-    {
         m_Flightgear = std::make_shared<FgFlightgear>(flightgear);
-        m_Transport  = std::make_shared<FgTransport>(flightgear["port_in"].toInt(5556),
-                                                     flightgear["port_out"].toInt(5555));
-    }
+    connect(m_Flightgear->transport().get(), &FgTransport::fgDataReceived, this, &FgControlledAircraft::onFdmDataChanged);
     return true;
 }
 
@@ -58,7 +52,7 @@ void FgControlledAircraft::runFlightGear()
 
 void FgControlledAircraft::onFdmDataChanged()
 {
-    FgAircraft::onFdmDataChanged(*m_Transport.get());
+    FgAircraft::onFdmDataChanged(*m_Flightgear->transport().get());
     m_Autopilot->computeControl(this);
 }
 

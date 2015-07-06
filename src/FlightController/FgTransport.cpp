@@ -13,14 +13,36 @@
 
 #include <QDebug>
 
-FgTransport::FgTransport(quint16 _port_in, quint16 _port_out, QObject *parent) :
+FgTransport::FgTransport(const QJsonObject &config, QObject *parent) :
     QObject(parent)
 {
-    m_ListenPort = _port_out;
-    m_WritePort = _port_in;
-    m_Socket->bind(QHostAddress::Any, m_ListenPort);
+    if (!config.empty())
+    {
+        QJsonObject in = config["in"].toObject();
+        if (!in.empty())
+        {
+            m_WriteFrequency = in["frequency"].toInt(m_WriteFrequency);
+            m_WritePort = in["port"].toInt(m_WritePort);
+            m_WriteProtocol = in["protocol"].toString(m_WriteProtocol);
+            m_WriteGenericProtocol = in["protocol_file"].toString(m_WriteGenericProtocol);
+            QString host = in["host"].toString(m_WriteHost.toString());
+            m_WriteHost = QHostAddress(host.toLower() == "localhost" ? "127.0.0.1" : host);
+        }
+        QJsonObject out = config["out"].toObject();
+        if (!out.empty())
+        {
+            m_ListenFrequency = out["frequency"].toInt(m_ListenFrequency);
+            m_ListenPort = out["port"].toInt(m_ListenPort);
+            m_ListenProtocol = out["protocol"].toString(m_ListenProtocol);
+            m_ListenGenericProtocol = out["protocol_file"].toString(m_ListenGenericProtocol);
+            QString host = out["host"].toString(m_ListenHost.toString());
+            m_ListenHost = QHostAddress(host.toLower() == "localhost" ? "127.0.0.1" : host);
+        }
+    }
+
+    m_Socket->bind(m_ListenHost, m_ListenPort);
     connect(m_Socket.get(), &QUdpSocket::readyRead, this, &FgTransport::onSocketRead);
-    qDebug() << "FgTransport ready [" << m_Ip.toString() << ":" << m_ListenPort << "]" << "out: " << m_WritePort;
+    qDebug() << "FgTransport ready [" << m_ListenHost.toString() << ":" << m_ListenPort << "]" << "out: " << m_WritePort;
 }
 
 FgTransport::~FgTransport()
@@ -61,7 +83,7 @@ void FgTransport::onSocketRead()
 
 bool FgTransport::writeData(const QString &data)
 {
-    m_SocketOut->writeDatagram(data.toLocal8Bit(), m_Ip, m_WritePort);
+    m_SocketOut->writeDatagram(data.toLocal8Bit(), m_WriteHost, m_WritePort);
     return true;
 }
 
