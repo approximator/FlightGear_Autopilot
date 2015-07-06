@@ -40,6 +40,7 @@ private:
 
 private slots:
     void onDataReceived();
+    void onAircraftConnected();
 
 public slots:
     void updateAircraft(const QString &aircraftId);

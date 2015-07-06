@@ -6,14 +6,14 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created May 12, 2015
- * @date Modified Jul 01, 2015
+ * @date Modified Jul 05, 2015
  */
 
 #ifndef FGFLIGHTGEAR_H
 #define FGFLIGHTGEAR_H
 
 #include <memory>
-#include <QSet>
+#include <QVector>
 #include <QPair>
 #include <QObject>
 #include <QProcess>
@@ -48,7 +48,7 @@ private:
     QString m_ProtocolFile { m_RootDir +  m_ProtocolFileName };
 #endif
 
-    QSet<QPair<QString, QString> > m_RunParameters { };
+    QVector<QPair<QString, QString> > m_RunParameters { };
     QProcess m_FlightgearProcess {};
 
 signals:

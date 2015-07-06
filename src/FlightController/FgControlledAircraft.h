@@ -46,7 +46,7 @@ private:
 signals:
 
 public slots:
-    virtual void onFdmDataChanged(std::shared_ptr<FgTransport> transport);
+    virtual void onFdmDataChanged();
 };
 
 //

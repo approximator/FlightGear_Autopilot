@@ -22,7 +22,7 @@ class FgTransport : public QObject
 {
     Q_OBJECT
 public:
-    explicit FgTransport(QObject *parent = 0);
+    explicit FgTransport(quint16 _port_in = 5555, quint16 _port_out = 5556, QObject *parent = 0);
     ~FgTransport();
 
     inline QString getString(const QString& node, bool *exists = nullptr) const;
@@ -39,7 +39,8 @@ private:
     std::shared_ptr<FgGenericProtocol> m_Protocol { std::make_shared<FgGenericProtocol>() };
 
     QHostAddress m_Ip     { "127.0.0.1" };
-    quint16 m_Port        { 5556 };
+    quint16 m_ListenPort  { 5555 };
+    quint16 m_WritePort   { 5556 };
     QByteArray m_Buffer   { };
     QStringList m_FdmData { };
 

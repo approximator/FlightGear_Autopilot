@@ -46,7 +46,7 @@ bool FgController::init()
     {
         auto aircraft = std::make_shared<FgControlledAircraft>(parameter.toObject());
         m_OurAircrafts.insert(aircraft->callsign(), aircraft);
-        connect(this, &FgController::fdmDataChanged, aircraft.get(), &FgControlledAircraft::onFdmDataChanged);
+        connect(aircraft.get(), &FgControlledAircraft::onConnected, this, &FgController::onAircraftConnected);
         emit ourAircraftConnected(aircraft.get());
     }
 
@@ -101,6 +101,12 @@ void FgController::onDataReceived()
     auto aircraft = *m_OurAircrafts.begin();
     QString data = QString::number(aircraft->ailerons()) + '\t' + QString::number(aircraft->elevator()) + "\n";
     m_Transport->writeData(data);
+}
+
+void FgController::onAircraftConnected()
+{
+    FgAircraft *aircraft = static_cast<FgAircraft*>(sender());
+    qDebug() << "aircraft " << aircraft->callsign() << " connected";
 }
 
 void FgController::updateOtherAircraftsCount()

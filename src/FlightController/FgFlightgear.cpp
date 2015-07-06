@@ -4,7 +4,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created May 12, 2015
- * @date Modified Jul 01, 2015
+ * @date Modified Jul 05, 2015
  */
 
 #include "FgFlightgear.h"
@@ -131,7 +131,10 @@ bool FgFlightgear::setConfigFromJson(const QJsonObject &config)
     m_RunParameters.clear();
     QJsonObject runParams = config["run_parameters"].toObject();
     for (auto &key : runParams.keys())
-        m_RunParameters.insert(QPair<QString, QString>(key, runParams[key].toString()));
+        m_RunParameters.push_back(QPair<QString, QString>(
+                                      key.startsWith("generic") ? "generic" : key,
+                                      runParams[key].toString())
+                                  );
 
     return true;
 }

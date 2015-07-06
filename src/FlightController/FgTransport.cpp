@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified May 05, 2015
+ * @date Modified Jul 05, 2015
  */
 
 #include "FgTransport.h"
@@ -13,19 +13,18 @@
 
 #include <QDebug>
 
-FgTransport::FgTransport(QObject *parent) :
+FgTransport::FgTransport(quint16 _port_in, quint16 _port_out, QObject *parent) :
     QObject(parent)
 {
-    m_Socket->bind(QHostAddress::Any, 5555);
-
+    m_ListenPort = _port_out;
+    m_WritePort = _port_in;
+    m_Socket->bind(QHostAddress::Any, m_ListenPort);
     connect(m_Socket.get(), &QUdpSocket::readyRead, this, &FgTransport::onSocketRead);
-
-    qDebug() << "FgTransport ready [" << m_Ip.toString() << ":" << m_Port << "]";
+    qDebug() << "FgTransport ready [" << m_Ip.toString() << ":" << m_ListenPort << "]" << "out: " << m_WritePort;
 }
 
 FgTransport::~FgTransport()
 {
-    qDebug() << "FgTransport destroyed.";
 }
 
 void FgTransport::onSocketRead()
@@ -62,43 +61,7 @@ void FgTransport::onSocketRead()
 
 bool FgTransport::writeData(const QString &data)
 {
-//    qDebug() << "Write: " << data;
-    m_SocketOut->writeDatagram(data.toLocal8Bit(), m_Ip, m_Port);
+    m_SocketOut->writeDatagram(data.toLocal8Bit(), m_Ip, m_WritePort);
     return true;
 }
-
-/*
-
-# How to run multiplayer
-
-/usr/games/fgfs \
-  --airport=KSFO \
-  --runway=10L \
-  --aircraft=c172p \
-  --console \
-  --bpp=32 \
-  --disable-random-objects \
-  --disable-ai-models \
-  --disable-ai-traffic \
-  --disable-real-weather-fetch \
-  --geometry=1366x768 \
-  --timeofday=morning \
-  --enable-terrasync \
-  --enable-clouds3d \
-  --enable-horizon-effect \
-  --enable-enhanced-lighting \
-  --callsign=App1 \
-  --multiplay=out,10,mpserver02.flightgear.org,5000 \
-  --multiplay=in,10,,5000 \
-  --httpd=5050 \
-  --generic=socket,out,40,localhost,5555,udp,FgaProtocol \
-  --generic=socket,in,40,localhost,5555,udp,FgaProtocol
-
-  --prop:/engines/engine/running=true
-  --prop:/engines/engine/rpm=1000
-*/
-
-/* /usr/games/fgfs   --airport=KSFO   --runway=10L   --aircraft=c172p   --console   --bpp=32   --disable-random-objects   --disable-ai-models   --disable-ai-traffic   --disable-real-weather-fetch   --geometry=800x600   --timeofday=morning   --enable-terrasync   --enable-clouds3d   --enable-horizon-effect   --enable-enhanced-lighting   --callsign=App1   --multiplay=out,10,mpserver02.flightgear.org,5000   --multiplay=in,10,,5000   --httpd=5050   --generic=socket,out,40,localhost,5555,udp,FgaProtocol   --generic=socket,in,40,localhost,5556,udp,FgaProtocol --prop:/engines/engine/running=true --prop:/engines/engine/rpm=2000 --in-air --altitude=2000
-
-*/
 

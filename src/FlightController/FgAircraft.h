@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified May 05, 2015
+ * @date Modified Jul 05, 2015
  */
 
 #ifndef FGAIRCRAFT_H
@@ -63,9 +63,10 @@ protected:
 
 signals:
     void paramsChanged();
+    void onConnected();
 
 public slots:
-    void onFdmDataChanged(std::shared_ptr<FgTransport> transport);
+    virtual void onFdmDataChanged(const FgTransport &transport);
 };
 
 //

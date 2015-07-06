@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 17, 2015
- * @date Modified Jul 01, 2015
+ * @date Modified Jul 05, 2015
  */
 
 #include "FgControlledAircraft.h"
@@ -13,19 +13,19 @@
 FgControlledAircraft::FgControlledAircraft(const QString &sign, QObject *parent) :
     FgAircraft(sign, parent)
 {
-    qDebug() << "FgControlledAircraft::" << callsign() << " created.";
+    connect(m_Transport.get(), &FgTransport::fgDataReceived, this, &FgControlledAircraft::onFdmDataChanged);
 }
 
 FgControlledAircraft::FgControlledAircraft(const QJsonObject &config, QObject *parent):
     FgAircraft("(none)", parent)
 {
     setConfigFromJson(config);
-    qDebug() << "FgControlledAircraft::" << callsign() << " created.";
+    // TODO: fix
+    connect(m_Transport.get(), &FgTransport::fgDataReceived, this, &FgControlledAircraft::onFdmDataChanged);
 }
 
 FgControlledAircraft::~FgControlledAircraft()
 {
-    qDebug() << "FgControlledAircraft::" << callsign() << " destroyed.";
 }
 
 QJsonObject FgControlledAircraft::configurationAsJson() const
@@ -41,7 +41,13 @@ bool FgControlledAircraft::setConfigFromJson(const QJsonObject &config)
 {
     m_Callsign = config["callsign"].toString(m_Callsign);
 
-    m_Flightgear = std::make_shared<FgFlightgear>(config["flightgear"].toObject());
+    QJsonObject flightgear = config["flightgear"].toObject();
+    if (!flightgear.empty())
+    {
+        m_Flightgear = std::make_shared<FgFlightgear>(flightgear);
+        m_Transport  = std::make_shared<FgTransport>(flightgear["port_in"].toInt(5556),
+                                                     flightgear["port_out"].toInt(5555));
+    }
     return true;
 }
 
@@ -50,9 +56,9 @@ void FgControlledAircraft::runFlightGear()
     m_Flightgear->run();
 }
 
-void FgControlledAircraft::onFdmDataChanged(std::shared_ptr<FgTransport> transport)
+void FgControlledAircraft::onFdmDataChanged()
 {
-    FgAircraft::onFdmDataChanged(transport);
+    FgAircraft::onFdmDataChanged(*m_Transport.get());
     m_Autopilot->computeControl(this);
 }
 

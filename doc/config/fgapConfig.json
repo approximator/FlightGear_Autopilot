@@ -6,6 +6,8 @@
                 "exe_file": "/usr/games/fgfs",
                 "protocol_file": "/usr/share/games/flightgear/Protocol/FgaProtocol.xml",
                 "root_directory": "/usr/share/games/flightgear",
+                "port_in": "5556",
+                "port_out": "5555",
                 "run_parameters": {
                     "airport": "KSFO",
                     "runway": "10L",
@@ -24,8 +26,8 @@
                     "multiplay": "out,10,mpserver02.flightgear.org,5000",
                     "multiplay": "in,10,,5000",
                     "httpd": "5050",
-                    "generic": "socket,out,40,localhost,5555,udp,FgaProtocol",
-                    "generic": "socket,in,40,localhost,5556,udp,FgaProtocol",
+                    "generic_out": "socket,out,40,localhost,5555,udp,FgaProtocol",
+                    "generic_in": "socket,in,40,localhost,5556,udp,FgaProtocol",
                     "prop:/engines/engine/running": "true",
                     "prop:/engines/engine/rpm": "2000",
                     "altitude": "2000"
@@ -38,6 +40,8 @@
                 "exe_file": "/usr/games/fgfs",
                 "protocol_file": "/usr/share/games/flightgear/Protocol/FgaProtocol.xml",
                 "root_directory": "/usr/share/games/flightgear",
+                "port_in": "5557",
+                "port_out": "5558",
                 "run_parameters": {
                     "airport": "KSFO",
                     "runway": "10L",
@@ -55,9 +59,8 @@
                     "disable-enhanced-lighting": "",
                     "multiplay": "out,10,mpserver02.flightgear.org,5000",
                     "multiplay": "in,10,,5001",
-                    "httpd": "5050",
-                    "generic": "socket,out,40,localhost,5555,udp,FgaProtocol",
-                    "generic": "socket,in,40,localhost,5556,udp,FgaProtocol",
+                    "generic_out": "socket,out,40,localhost,5558,udp,FgaProtocol",
+                    "generic_in": "socket,in,40,localhost,5557,udp,FgaProtocol",
                     "prop:/engines/engine/running": "true",
                     "prop:/engines/engine/rpm": "2000",
                     "altitude": "2000"
