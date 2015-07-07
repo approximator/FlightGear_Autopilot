@@ -53,7 +53,7 @@ bool FgController::init()
     m_Transport = (*m_OurAircrafts.begin())->transport();
     connect(m_Transport.get(), &FgTransport::fgDataReceived, this, &FgController::onDataReceived);
 
-//    (*m_OurAircrafts.begin())->runFlightGear();
+//    m_OurAircrafts["Travis"]->runFlightGear();
     return true;
 }
 

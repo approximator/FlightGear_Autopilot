@@ -29,4 +29,5 @@ HEADERS += \
     ../../FlightController/FgAutopilot.h \
     ../../FlightController/FgFlightgear.h \
     ../../FlightController/FgGenericProtocol.h \
-    ../../FlightController/FgTransport.h
+    ../../FlightController/FgTransport.h \
+    tst_controlledaircrafttest.h

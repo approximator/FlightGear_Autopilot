@@ -37,10 +37,12 @@ QJsonObject FgControlledAircraft::configurationAsJson() const
 
 bool FgControlledAircraft::setConfigFromJson(const QJsonObject &config)
 {
-    m_Callsign = config["callsign"].toString(m_Callsign);
     QJsonObject flightgear = config["flightgear"].toObject();
     if (!flightgear.empty())
+    {
+        m_Callsign = flightgear["callsign"].toString(m_Callsign);
         m_Flightgear = std::make_shared<FgFlightgear>(flightgear);
+    }
     connect(m_Flightgear->transport().get(), &FgTransport::fgDataReceived, this, &FgControlledAircraft::onFdmDataChanged);
     return true;
 }

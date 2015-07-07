@@ -1,8 +1,8 @@
 {
     "aircrafts": [
         {
-            "callsign": "Travis",
             "flightgear": {
+                "callsign": "Travis",
                 "exe_file": "/usr/games/fgfs",
                 "protocol_file": "/usr/share/games/flightgear/Protocol/FgaProtocol.xml",
                 "root_directory": "/usr/share/games/flightgear",
@@ -29,7 +29,7 @@
                 },
                 "multiplay": {
                     "in": {
-                        "port": 5001,
+                        "port": 5000,
                         "frequency": 10,
                         "host": ""
                     },
@@ -40,6 +40,8 @@
                     }
                 },
                 "run_parameters": {
+                    "enable-hud": "",
+                    "vc": 150,
                     "offset-distance": "0.0112",
                     "bpp": "32",
                     "disable-random-objects": "",
@@ -51,15 +53,17 @@
                     "disable-horizon-effect": "",
                     "disable-enhanced-lighting": "",
                     "httpd": "5050",
-                    "prop:/engines/engine/running": "true",
-                    "prop:/engines/engine/rpm": "2000",
-                    "altitude": "2000"
+                     "prop:/engines/engine/running": "true",
+                     "prop:/engines/engine/rpm": "2000",
+                     "prop:/engines/engine/torque": "300",
+                     "prop:/velocities/airspeed-kt": "85",
+                     "altitude": "2000"
                 }
             }
         },
         {
-            "callsign": "Rover",
             "flightgear": {
+                "callsign": "Rover",
                 "exe_file": "/usr/games/fgfs",
                 "protocol_file": "/usr/share/games/flightgear/Protocol/FgaProtocol.xml",
                 "root_directory": "/usr/share/games/flightgear",

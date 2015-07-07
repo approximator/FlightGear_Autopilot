@@ -48,6 +48,7 @@ FgTransport::FgTransport(const QJsonObject &config, QObject *parent) :
 
 FgTransport::~FgTransport()
 {
+    qDebug() << "FgTransport destroyed";
 }
 
 void FgTransport::onSocketRead()

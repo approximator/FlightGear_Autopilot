@@ -121,6 +121,7 @@ QJsonObject FgFlightgear::configurationAsJson() const
 
 bool FgFlightgear::setConfigFromJson(const QJsonObject &config)
 {
+    m_Callsign = config["callsign"].toString(m_Callsign);
     m_ExeFile = config["exe_file"].toString(m_ExeFile);
     m_ProtocolFile = config["protocol_file"].toString(m_ProtocolFile);
     m_RootDir = config["root_directory"].toString(m_RootDir);
@@ -172,8 +173,8 @@ QString FgFlightgear::runParameters() const
     QString multiplay = multiplayParams();
     QString network = m_Transport->networkParams();
 
-    QString result = QString("--airport=%1 --runway=%2 --aircraft=%3 --geometry=%4 --timeofday=%5").
-            arg(m_Airport, m_Runway, m_Aircraft, m_WindowSize, m_TimeOfDay);
+    QString result = QString("--callsign=%1 --airport=%2 --runway=%3 --aircraft=%4 --geometry=%5 --timeofday=%6").
+            arg(m_Callsign, m_Airport, m_Runway, m_Aircraft, m_WindowSize, m_TimeOfDay);
     if (!additionalArguments.isEmpty())
         result.append(' ').append(additionalArguments);
     if (!multiplay.isEmpty())

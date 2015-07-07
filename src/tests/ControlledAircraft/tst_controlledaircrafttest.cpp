@@ -1,24 +1,6 @@
 
 #include "../../FlightController/FgControlledAircraft.h"
-
-#include <QtTest>
-
-class ControlledAircraftTest : public QObject
-{
-    Q_OBJECT
-
-public:
-    ControlledAircraftTest();
-
-private Q_SLOTS:
-    void initTestCase();
-    void cleanupTestCase();
-    void readConfig1();
-    void readConfig2();
-    void runParameters1();
-    void runParameters2();
-    void runParameters3();
-};
+#include "tst_controlledaircrafttest.h"
 
 ControlledAircraftTest::ControlledAircraftTest()
 {
@@ -41,8 +23,8 @@ void ControlledAircraftTest::readConfig1()
 {
     QString testJson = R"(
         {
-            "callsign": "Travis",
             "flightgear": {
+                "callsign": "Travis",
                 "exe_file": "/some/path/to/fgfs",
                 "protocol_file": "/some/path/to/flightgear/Protocol/FgaProtocol.xml",
                 "root_directory": "/some/path/to/share/games/flightgear",
@@ -124,8 +106,8 @@ void ControlledAircraftTest::readConfig2()
 {
     QString testJson = R"(
         {
-            "callsign": "Travis",
             "flightgear": {
+                "callsign": "Travis",
                 "exe_file": "/some/path/to/fgfs",
                 "protocol_file": "/some/path/to/flightgear/Protocol/FgaProtocol.xml",
                 "root_directory": "/some/path/to/share/games/flightgear",
@@ -192,8 +174,8 @@ void ControlledAircraftTest::runParameters1()
 {
     QString testJson = R"(
         {
-            "callsign": "Travis",
             "flightgear": {
+                "callsign": "Travis",
                 "exe_file": "/some/path/to/fgfs",
                 "protocol_file": "/some/path/to/flightgear/Protocol/FgaProtocol.xml",
                 "root_directory": "/some/path/to/share/games/flightgear",
@@ -262,7 +244,8 @@ void ControlledAircraftTest::runParameters1()
 
     QStringList params = aircrft.flightgear().runParameters().split(' ');
     QStringList expectedParams;
-    expectedParams << "--airport=airport_name"   << "--runway=runway_number"
+    expectedParams << "--callsign=Travis"
+                   << "--airport=airport_name"   << "--runway=runway_number"
                    << "--aircraft=some_aircraft" << "--geometry=1024x600"
                    << "--timeofday=morning"      << "--httpd=5050"
                    << "--altitude=2000"          << "--disable-terrasync"
@@ -290,8 +273,8 @@ void ControlledAircraftTest::runParameters2()
 {
     QString testJson = R"(
         {
-            "callsign": "Travis",
             "flightgear": {
+                "callsign": "Travis",
                 "exe_file": "/some/path/to/fgfs",
                 "protocol_file": "/some/path/to/flightgear/Protocol/FgaProtocol.xml",
                 "root_directory": "/some/path/to/share/games/flightgear",
@@ -348,7 +331,8 @@ void ControlledAircraftTest::runParameters2()
 
     QStringList params = aircrft.flightgear().runParameters().split(' ');
     QStringList expectedParams;
-    expectedParams << "--airport=airport_name"   << "--runway=runway_number"
+    expectedParams << "--callsign=Travis"
+                   << "--airport=airport_name"   << "--runway=runway_number"
                    << "--aircraft=some_aircraft" << "--geometry=1024x600"
                    << "--timeofday=morning"      << "--httpd=5050"
                    << "--altitude=2000"          << "--disable-terrasync"
@@ -374,8 +358,8 @@ void ControlledAircraftTest::runParameters3()
 {
     QString testJson = R"(
         {
-            "callsign": "Travis",
             "flightgear": {
+                "callsign": "Travis",
                 "exe_file": "/some/path/to/fgfs",
                 "protocol_file": "/some/path/to/flightgear/Protocol/FgaProtocol.xml",
                 "root_directory": "/some/path/to/share/games/flightgear",
@@ -416,7 +400,8 @@ void ControlledAircraftTest::runParameters3()
 
     QStringList params = aircrft.flightgear().runParameters().split(' ');
     QStringList expectedParams;
-    expectedParams << "--airport=airport_name"   << "--runway=runway_number"
+    expectedParams << "--callsign=Travis"
+                   << "--airport=airport_name"   << "--runway=runway_number"
                    << "--aircraft=some_aircraft" << "--geometry=1024x600"
                    << "--timeofday=morning"      << "--httpd=5050"
                    << "--altitude=2000"          << "--disable-terrasync"
@@ -435,4 +420,3 @@ void ControlledAircraftTest::runParameters3()
 
 QTEST_APPLESS_MAIN(ControlledAircraftTest)
 
-#include "tst_controlledaircrafttest.moc"

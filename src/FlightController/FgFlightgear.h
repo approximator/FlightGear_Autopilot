@@ -53,6 +53,7 @@ private:
     QString m_ProtocolFile { m_RootDir +  m_ProtocolFileName };
 #endif
 
+    QString m_Callsign   { "(none)" };
     QString m_Airport    { "KSFO" };
     QString m_Runway     { "10L" };
     QString m_Aircraft   { "c172p" };
