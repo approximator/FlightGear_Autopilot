@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jul 05, 2015
+ * @date Modified Jul 07, 2015
  */
 
 #ifndef FGPROTOCOL_H
@@ -40,18 +40,19 @@ private:
     std::shared_ptr<QUdpSocket> m_SocketOut       { std::make_shared<QUdpSocket>() };
     std::shared_ptr<FgGenericProtocol> m_Protocol { std::make_shared<FgGenericProtocol>() };
 
-    QHostAddress m_ListenHost { "127.0.0.1" };
-    quint16 m_ListenPort      { 5555 };
-    QString m_ListenProtocol  { "udp" };
-    QString m_ListenGenericProtocol{ "FgaProtocol" };
-    int m_ListenFrequency     { 40 };
-    QHostAddress m_WriteHost  { "127.0.0.1" };
-    quint16 m_WritePort       { 5556 };
-    QString m_WriteProtocol   { "udp" };
-    QString m_WriteGenericProtocol{ "FgaProtocol" };
-    int m_WriteFrequency      { 40 };
-    QByteArray m_Buffer       { };
-    QStringList m_FdmData     { };
+    bool         m_GenericEnabled       { false };
+    QHostAddress m_ListenHost           { "127.0.0.1" };
+    quint16      m_ListenPort           { 5555 };
+    QString      m_ListenProtocol       { "udp" };
+    QString      m_ListenGenericProtocol{ "FgaProtocol" };
+    int          m_ListenFrequency      { 40 };
+    QHostAddress m_WriteHost            { "127.0.0.1" };
+    quint16      m_WritePort            { 5556 };
+    QString      m_WriteProtocol        { "udp" };
+    QString      m_WriteGenericProtocol { "FgaProtocol" };
+    int          m_WriteFrequency       { 40 };
+    QByteArray   m_Buffer               { };
+    QStringList  m_FdmData              { };
 
 signals:
     void fgDataReceived();
@@ -103,6 +104,9 @@ std::shared_ptr<FgGenericProtocol> FgTransport::protocol() const
 
 QString FgTransport::networkParams() const
 {
+    if (!m_GenericEnabled)
+        return "";
+
     return QString("--generic=socket,out,%1,%2,%3,%4,%5 --generic=socket,in,%6,%7,%8,%9,%10")
             .arg(m_ListenFrequency)
             .arg(m_ListenHost.toString())

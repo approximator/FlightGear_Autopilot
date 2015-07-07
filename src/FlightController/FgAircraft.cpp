@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jul 05, 2015
+ * @date Modified Jul 07, 2015
  */
 
 #include "FgAircraft.h"
@@ -29,7 +29,6 @@ void FgAircraft::onFdmDataChanged(const FgTransport& transport)
     if (!connected())
     {
         m_Connected = true;
-        qDebug() << "Emit onConnected();";
         emit onConnected();
     }
 

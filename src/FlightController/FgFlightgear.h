@@ -6,7 +6,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created May 12, 2015
- * @date Modified Jul 05, 2015
+ * @date Modified Jul 07, 2015
  */
 
 #ifndef FGFLIGHTGEAR_H
@@ -34,6 +34,7 @@ public:
 
     QJsonObject configurationAsJson() const;
     bool setConfigFromJson(const QJsonObject& config);
+    QString runParameters() const;
 
     inline const QProcess& process() const;
     inline std::shared_ptr<FgTransport> transport() const;
@@ -57,11 +58,12 @@ private:
     QString m_Aircraft   { "c172p" };
     QString m_WindowSize { "800x600" };
     QString m_TimeOfDay  { "morning" };
-    quint16 m_MultiplayPortIn   { 5000 };
-    int m_MultiplayFrequencyIn  { 10 };
-    QString m_MultiplayHostIn   { };
-    quint16 m_MultiplayPortOut  { 5000 };
-    int m_MultiplayFrequencyOut { 10 };
+    bool    m_MultiplayEnabled      { false };
+    quint16 m_MultiplayPortIn       { 5000 };
+    int     m_MultiplayFrequencyIn  { 10 };
+    QString m_MultiplayHostIn       { };
+    quint16 m_MultiplayPortOut      { 5000 };
+    int     m_MultiplayFrequencyOut { 10 };
     QString m_MultiplayHostOut  { };
     QVector<QPair<QString, QString> > m_RunParameters { };
     QProcess m_FlightgearProcess {};
@@ -87,6 +89,9 @@ std::shared_ptr<FgTransport> FgFlightgear::transport() const
 
 QString FgFlightgear::multiplayParams() const
 {
+    if (!m_MultiplayEnabled)
+        return "";
+
     return QString("--multiplay=out,%1,%2,%3 --multiplay=in,%4,%5,%6")
             .arg(m_MultiplayFrequencyOut)
             .arg(m_MultiplayHostOut)

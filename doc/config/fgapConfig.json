@@ -9,7 +9,7 @@
                 "airport": "KSFO",
                 "runway": "10L",
                 "aircraft": "c172p",
-                "geometry": "800x600",
+                "geometry": "400x300",
                 "timeofday": "morning",
                 "generic": {
                     "in": {
@@ -40,6 +40,7 @@
                     }
                 },
                 "run_parameters": {
+                    "offset-distance": "0.0112",
                     "bpp": "32",
                     "disable-random-objects": "",
                     "disable-ai-models": "",

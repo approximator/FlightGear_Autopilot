@@ -4,7 +4,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created May 12, 2015
- * @date Modified Jul 05, 2015
+ * @date Modified Jul 07, 2015
  */
 
 #include "FgFlightgear.h"
@@ -99,13 +99,8 @@ bool FgFlightgear::run()
         return false;
     }
 
-    QStringList arguments;
-    arguments << multiplayParams();
-    arguments << m_Transport->networkParams();
-    for (auto const &param : m_RunParameters)
-        arguments << ("--" + param.first + (param.second.isEmpty() ? "" : ("=" + param.second)));
-    qDebug() << "Starting: " << m_ExeFile << arguments;
-    m_FlightgearProcess.start(m_ExeFile, arguments);
+    qDebug() << "Starting: " << m_ExeFile + ' ' + runParameters();
+    m_FlightgearProcess.start(m_ExeFile + ' ' + runParameters());
 
     return true;
 }
@@ -141,19 +136,23 @@ bool FgFlightgear::setConfigFromJson(const QJsonObject &config)
         m_Transport = std::make_shared<FgTransport>(transport);
     }
 
-    QJsonObject multiplay_in = config["multiplay"].toObject()["in"].toObject();
-    if (!multiplay_in.empty())
+    m_MultiplayEnabled = config["multiplay"].isObject();
+    if (m_MultiplayEnabled)
     {
-        m_MultiplayPortIn = multiplay_in["port"].toInt(m_MultiplayPortIn);
-        m_MultiplayFrequencyIn = multiplay_in["frequency"].toInt(m_MultiplayFrequencyIn);
-        m_MultiplayHostIn = multiplay_in["host"].toString(m_MultiplayHostIn);
-    }
-    QJsonObject multiplay_out = config["multiplay"].toObject()["out"].toObject();
-    if (!multiplay_in.empty())
-    {
-        m_MultiplayPortOut = multiplay_out["port"].toInt(m_MultiplayPortOut);
-        m_MultiplayFrequencyOut = multiplay_out["frequency"].toInt(m_MultiplayFrequencyOut);
-        m_MultiplayHostOut = multiplay_out["host"].toString(m_MultiplayHostOut);
+        QJsonObject multiplay_in = config["multiplay"].toObject()["in"].toObject();
+        if (!multiplay_in.empty())
+        {
+            m_MultiplayPortIn = multiplay_in["port"].toInt(m_MultiplayPortIn);
+            m_MultiplayFrequencyIn = multiplay_in["frequency"].toInt(m_MultiplayFrequencyIn);
+            m_MultiplayHostIn = multiplay_in["host"].toString(m_MultiplayHostIn);
+        }
+        QJsonObject multiplay_out = config["multiplay"].toObject()["out"].toObject();
+        if (!multiplay_in.empty())
+        {
+            m_MultiplayPortOut = multiplay_out["port"].toInt(m_MultiplayPortOut);
+            m_MultiplayFrequencyOut = multiplay_out["frequency"].toInt(m_MultiplayFrequencyOut);
+            m_MultiplayHostOut = multiplay_out["host"].toString(m_MultiplayHostOut);
+        }
     }
 
     m_RunParameters.clear();
@@ -162,6 +161,27 @@ bool FgFlightgear::setConfigFromJson(const QJsonObject &config)
         m_RunParameters.push_back(QPair<QString, QString>(key, runParams[key].toString()));
 
     return true;
+}
+
+QString FgFlightgear::runParameters() const
+{
+    QStringList args;
+    for (auto const &param : m_RunParameters)
+        args << ("--" + param.first + (param.second.isEmpty() ? "" : ("=" + param.second)));
+    QString additionalArguments = args.join(' ');
+    QString multiplay = multiplayParams();
+    QString network = m_Transport->networkParams();
+
+    QString result = QString("--airport=%1 --runway=%2 --aircraft=%3 --geometry=%4 --timeofday=%5").
+            arg(m_Airport, m_Runway, m_Aircraft, m_WindowSize, m_TimeOfDay);
+    if (!additionalArguments.isEmpty())
+        result.append(' ').append(additionalArguments);
+    if (!multiplay.isEmpty())
+        result.append(' ').append(multiplay);
+    if (!network.isEmpty())
+        result.append(' ').append(network);
+
+    return result;
 }
 
 

@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jul 05, 2015
+ * @date Modified Jul 07, 2015
  */
 
 #include "FgTransport.h"
@@ -18,6 +18,7 @@ FgTransport::FgTransport(const QJsonObject &config, QObject *parent) :
 {
     if (!config.empty())
     {
+        m_GenericEnabled = true;
         QJsonObject in = config["in"].toObject();
         if (!in.empty())
         {
