@@ -29,30 +29,30 @@
                 },
                 "multiplay": {
                     "in": {
-                        "port": 5001,
-                        "frequency": 10,
-                        "host": ""
-                    },
-                    "out": {
                         "port": 5000,
                         "frequency": 10,
-                        "host": "mpserver02.flightgear.org"
+                        "host": "127.0.0.1"
+                    },
+                    "out": {
+                        "port": 5001,
+                        "frequency": 10,
+                        "host": "127.0.0.1"
                     }
                 },
                 "run_parameters": {
-                    "enable-hud": "",
-                    "vc": 150,
-                    "offset-distance": "0.0112",
-                    "bpp": "32",
-                    "disable-random-objects": "",
-                    "disable-ai-models": "",
-                    "disable-ai-traffic": "",
-                    "disable-real-weather-fetch": "",
-                    "disable-terrasync": "",
-                    "disable-clouds3d": "",
-                    "disable-horizon-effect": "",
-                    "disable-enhanced-lighting": "",
-                    "httpd": "5050",
+                     "enable-hud": "",
+                     "vc": "150",
+                     "offset-distance": "0.0112",
+                     "bpp": "32",
+                     "disable-random-objects": "",
+                     "disable-ai-models": "",
+                     "disable-ai-traffic": "",
+                     "disable-real-weather-fetch": "",
+                     "disable-terrasync": "",
+                     "disable-clouds3d": "",
+                     "disable-horizon-effect": "",
+                     "disable-enhanced-lighting": "",
+                     "httpd": "5050",
                      "prop:/engines/engine/running": "true",
                      "prop:/engines/engine/rpm": "2000",
                      "prop:/engines/engine/torque": "300",
@@ -90,14 +90,14 @@
                 },
                 "multiplay": {
                     "in": {
-                        "port": 5002,
+                        "port": 5001,
                         "frequency": 10,
-                        "host": ""
+                        "host": "127.0.0.1"
                     },
                     "out": {
                         "port": 5000,
                         "frequency": 10,
-                        "host": "mpserver02.flightgear.org"
+                        "host": "127.0.0.1"
                     }
                 },
                 "run_parameters": {
