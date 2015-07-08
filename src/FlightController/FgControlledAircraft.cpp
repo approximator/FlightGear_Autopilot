@@ -55,8 +55,15 @@ void FgControlledAircraft::runFlightGear()
 void FgControlledAircraft::onFdmDataChanged()
 {
     FgAircraft::onFdmDataChanged(*m_Flightgear->transport().get());
+
+    if (!m_Autopilot->armed())
+        return;
+
     m_Autopilot->computeControl(this);
-    m_Flightgear->transport()->writeData(QString("%1\t%2\n").arg(ailerons()).arg(elevator()));
+    m_Flightgear->transport()->writeData(QString("%1\t%2\t%3\n")
+                                         .arg(ailerons())
+                                         .arg(elevator())
+                                         .arg(throttle()));
 //    qDebug() << callsign() << " : " << QString("%1\t%2\n").arg(ailerons()).arg(elevator());
 }
 

@@ -19,6 +19,9 @@ FgAutopilot::FgAutopilot(QObject *parent) :
 
 void FgAutopilot::computeControl(FgControlledAircraft* aircraft)
 {
+    if (!armed())
+        return;
+
     switch (m_Mode)
     {
     case FG_MODE_ALTITUDE_HOLD:
@@ -28,16 +31,29 @@ void FgAutopilot::computeControl(FgControlledAircraft* aircraft)
         holdAngles(aircraft);
         break;
     case FG_MODE_FOLLOW:
-        follow(aircraft);
+        follow(aircraft, m_toFollow);
         break;
     default:
         break;
     }
 }
 
-void FgAutopilot::holdAltitude(FgControlledAircraft * /* aircraft */)
+void FgAutopilot::holdAltitude(FgControlledAircraft * aircraft)
 {
+    qreal altitude = aircraft->altitude();
+    qreal altitudeError = altitude - m_DesiredAltitude;
+    qreal pitchOut = altitudeError * -0.2;
+//    if (pitchOut > 0)
 
+
+    // limit control outputs
+    if (qAbs(pitchOut) > 30)
+        pitchOut = (pitchOut / qAbs(pitchOut)) * 30;
+    m_DesiredPitch = pitchOut;
+
+//    qDebug() << "Altitude " << m_DesiredAltitude << "(" << altitude << ")";
+
+    holdAngles(aircraft);
 }
 
 void FgAutopilot::holdAngles(FgControlledAircraft * aircraft)
@@ -51,7 +67,7 @@ void FgAutopilot::holdAngles(FgControlledAircraft * aircraft)
     qreal rollError = roll - m_DesiredRoll;
 
     qreal pitchOut = pitchError * 0.03;
-    qreal rollOut = -1 * rollError * 0.01;
+    qreal rollOut = rollError * -0.02;
 
     // limit control outputs
     if (qAbs(pitchOut) > 0.6)
@@ -63,10 +79,20 @@ void FgAutopilot::holdAngles(FgControlledAircraft * aircraft)
     aircraft->setElevator(pitchOut);
     aircraft->setAilerons(rollOut);
 
-//    qDebug() << "Autopilot ready";
+//    qDebug() << "Pitch " << m_DesiredPitch << "(" << pitch << ")";
 }
 
-void FgAutopilot::follow(FgControlledAircraft * /* aircraft */)
+void FgAutopilot::follow(FgControlledAircraft * aircraft, FgAircraft *followAircraft)
 {
+    m_DesiredAltitude = followAircraft->altitude();
 
+//    qreal heading = aircraft->heading();
+//    qreal desiredHeading = followAircraft->heading();
+//    qreal desiredRoll = (heading - desiredHeading) * -0.5;
+
+//    if (qAbs(desiredRoll) > 40)
+//        desiredRoll = (desiredRoll / qAbs(desiredRoll)) * 40;
+    m_DesiredRoll = followAircraft->roll();
+
+    holdAltitude(aircraft);
 }

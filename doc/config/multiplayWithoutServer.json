@@ -55,8 +55,9 @@
                      "httpd": "5050",
                      "prop:/engines/engine/running": "true",
                      "prop:/engines/engine/rpm": "2000",
-                     "prop:/engines/engine/torque": "300",
-                     "prop:/velocities/airspeed-kt": "85",
+                     "prop:/controls/engines/engine/throttle": "0.8",
+                     "prop:/controls/flight/elevator": "0.0",
+                     "prop:/controls/flight/aileron": "0.0",
                      "altitude": "2000"
                 }
             }
@@ -101,6 +102,8 @@
                     }
                 },
                 "run_parameters": {
+                    "enable-hud": "",
+                    "vc": "150",
                     "bpp": "32",
                     "disable-random-objects": "",
                     "disable-ai-models": "",
@@ -112,7 +115,12 @@
                     "disable-enhanced-lighting": "",
                     "httpd": "5050",
                     "prop:/engines/engine/running": "true",
-                    "prop:/engines/engine/rpm": "2000",
+                    "prop:/engines/engine/rpm": "2500",
+                    "prop:/velocities/airspeed-kt": "85",
+                    "prop:/controls/engines/engine/throttle": "0.8",
+                    "prop:/controls/flight/elevator": "0.0",
+                    "prop:/controls/flight/aileron": "0.0",
+                    "prop:/controls/autoflight/autopilot/engage": "true",
                     "altitude": "2000"
                 }
             }

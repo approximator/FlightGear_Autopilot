@@ -34,9 +34,12 @@ public:
     inline qreal pitch() const;
     inline qreal roll() const;
     inline qreal yaw() const;
+    inline qreal altitude() const;
     inline const QJsonObject getParams() const;
     inline qreal ailerons() const;
     inline qreal elevator() const;
+    inline qreal throttle() const;
+    inline qreal heading() const;
     inline bool connected() const;
 
     inline void setCallsign(const QString& newCallsign);
@@ -59,6 +62,7 @@ protected:
     qreal m_Ailerons = 0.0;
     qreal m_Elevator = 0.0;
     qreal m_Rudder   = 0.0;
+    qreal m_Throttle = 0.9;
     bool m_Connected = false;
 
 signals:
@@ -90,6 +94,11 @@ qreal FgAircraft::yaw() const
     return m_Yaw;
 }
 
+qreal FgAircraft::altitude() const
+{
+    return m_Altitude;
+}
+
 const QJsonObject FgAircraft::getParams() const
 {
     return m_Params;
@@ -103,6 +112,16 @@ qreal FgAircraft::ailerons() const
 qreal FgAircraft::elevator() const
 {
     return m_Elevator;
+}
+
+qreal FgAircraft::throttle() const
+{
+    return m_Throttle;
+}
+
+qreal FgAircraft::heading() const
+{
+    return m_Heading;
 }
 
 bool FgAircraft::connected() const

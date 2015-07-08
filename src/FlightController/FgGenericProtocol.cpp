@@ -60,6 +60,7 @@ FgGenericProtocol::FgGenericProtocol(QObject *parent) :
     index = 0;
     ADD_PARAM("/controls/flight/aileron", Parameter::FLOAT);
     ADD_PARAM("/controls/flight/elevator", Parameter::FLOAT);
+    ADD_PARAM("/controls/engines/engine/throttle", Parameter::FLOAT);
 #undef ADD_PARAM
 
     writeXml("/usr/share/games/flightgear/Protocol/FgaProtocol.xml");

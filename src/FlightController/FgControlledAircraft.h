@@ -31,6 +31,8 @@ public:
     inline void setAilerons(qreal val);
     inline void setElevator(qreal val);
     inline void setRudder(qreal val);
+    inline FgAutopilot *autopilot();
+    inline void follow(FgAircraft *aircraft);
 
     QJsonObject configurationAsJson() const;
     bool setConfigFromJson(const QJsonObject& config);
@@ -67,6 +69,17 @@ void FgControlledAircraft::setElevator(qreal val)
 void FgControlledAircraft::setRudder(qreal val)
 {
     m_Rudder = val;
+}
+
+FgAutopilot *FgControlledAircraft::autopilot()
+{
+    return m_Autopilot.get();
+}
+
+void FgControlledAircraft::follow(FgAircraft *aircraft)
+{
+    m_Autopilot->setFollow(aircraft);
+    m_Autopilot->arm();
 }
 
 const FgFlightgear &FgControlledAircraft::flightgear() const
