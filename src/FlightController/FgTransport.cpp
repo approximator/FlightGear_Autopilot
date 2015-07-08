@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jul 07, 2015
+ * @date Modified Jul 08, 2015
  */
 
 #include "FgTransport.h"
@@ -48,7 +48,7 @@ FgTransport::FgTransport(const QJsonObject &config, QObject *parent) :
 
 FgTransport::~FgTransport()
 {
-    qDebug() << "FgTransport destroyed";
+    qDebug() << "FgTransport destroyed[" << m_ListenHost.toString() << ":" << m_ListenPort << "]" << "out: " << m_WritePort;
 }
 
 void FgTransport::onSocketRead()

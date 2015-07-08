@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jul 07, 2015
+ * @date Modified Jul 08, 2015
  */
 
 #ifndef FGPROTOCOL_H
@@ -23,7 +23,7 @@ class FgTransport : public QObject
 {
     Q_OBJECT
 public:
-    explicit FgTransport(const QJsonObject& config = QJsonObject(), QObject *parent = 0);
+    explicit FgTransport(const QJsonObject& config, QObject *parent = 0);
     ~FgTransport();
 
     inline QString getString(const QString& node, bool *exists = nullptr) const;

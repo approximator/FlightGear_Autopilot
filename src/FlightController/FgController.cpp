@@ -98,10 +98,6 @@ void FgController::onDataReceived()
         qDebug() << "Our aircraft is empty!";
         return;
     }
-
-    auto aircraft = *m_OurAircrafts.begin();
-    QString data = QString::number(aircraft->ailerons()) + '\t' + QString::number(aircraft->elevator()) + "\n";
-    m_Transport->writeData(data);
 }
 
 void FgController::onAircraftConnected()
