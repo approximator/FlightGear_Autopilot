@@ -18,7 +18,9 @@ SOURCES += $$ROOT_DIR/main.cpp \
     $$PWD/FgController.cpp \
     $$PWD/FgAutopilot.cpp \
     $$PWD/FgControlledAircraft.cpp \
-    $$PWD/FgFlightgear.cpp
+    $$PWD/FgFlightgear.cpp \
+    ../Gui/widgets/mainwindow.cpp \
+    ../Gui/widgets/aircraftslist.cpp
 
 HEADERS  += \
     $$PWD/FgAircraft.h \
@@ -27,11 +29,18 @@ HEADERS  += \
     $$PWD/FgController.h \
     $$PWD/FgAutopilot.h \
     $$PWD/FgControlledAircraft.h \
-    $$PWD/FgFlightgear.h
+    $$PWD/FgFlightgear.h \
+    ../Gui/widgets/mainwindow.h \
+    ../Gui/widgets/aircraftslist.h
+
 INCLUDEPATH = $$PWD
+INCLUDEPATH += $$shell_path($$absolute_path($$PWD/../Gui/widgets))
 
 include($$FGAP_SOURCE_TREE/rpath.pri)
 include($$FGAP_SOURCE_TREE/resources/resources.pri)
 
 # Default rules for deployment.
 include($$FGAP_SOURCE_TREE/deployment.pri)
+
+FORMS += \
+    ../Gui/widgets/mainwindow.ui

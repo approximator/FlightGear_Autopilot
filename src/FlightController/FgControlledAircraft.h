@@ -79,7 +79,7 @@ FgAutopilot *FgControlledAircraft::autopilot()
 void FgControlledAircraft::follow(FgAircraft *aircraft)
 {
     m_Autopilot->setFollow(aircraft);
-    m_Autopilot->arm();
+    m_Autopilot->engage();
 }
 
 const FgFlightgear &FgControlledAircraft::flightgear() const

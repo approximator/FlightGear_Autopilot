@@ -31,11 +31,13 @@ public:
     FgAutopilot(const FgAutopilot& other);
     FgAutopilot& operator=(const FgAutopilot& other);
 
-    inline void arm();
+    inline void engage(bool enable = true);
     inline void disarm();
     inline bool armed() const;
 
     inline void setFollow(FgAircraft *aircraft);
+    inline void anglesHold(qreal roll = 0.0, qreal pitch = 3.0);
+    inline void altitudeHold(qreal altitude = 2000);
 
     void computeControl(FgControlledAircraft *aircraft);
 
@@ -64,9 +66,9 @@ public slots:
 
 };
 
-void FgAutopilot::arm()
+void FgAutopilot::engage(bool enable)
 {
-    m_Armed = true;
+    m_Armed = enable;
 }
 
 void FgAutopilot::disarm()
@@ -83,6 +85,19 @@ void FgAutopilot::setFollow(FgAircraft *aircraft)
 {
     m_toFollow = aircraft;
     m_Mode = FG_MODE_FOLLOW;
+}
+
+void FgAutopilot::anglesHold(qreal roll, qreal pitch)
+{
+    m_DesiredRoll = roll;
+    m_DesiredPitch = pitch;
+    m_Mode = FG_MODE_ANGLES_HOLD;
+}
+
+void FgAutopilot::altitudeHold(qreal altitude)
+{
+    m_DesiredAltitude = altitude;
+    m_Mode = FG_MODE_ALTITUDE_HOLD;
 }
 
 #endif // FGAUTOPILOT_H

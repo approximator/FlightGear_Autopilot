@@ -58,6 +58,7 @@
                      "prop:/controls/engines/engine/throttle": "0.8",
                      "prop:/controls/flight/elevator": "0.0",
                      "prop:/controls/flight/aileron": "0.0",
+                     "prop:input/joysticks/js": "0",
                      "altitude": "2000"
                 }
             }
