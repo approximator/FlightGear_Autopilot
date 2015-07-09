@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jul 05, 2015
+ * @date Modified Jul 09, 2015
  */
 
 #ifndef FGAIRCRAFT_H
@@ -13,6 +13,7 @@
 
 #include <memory>
 #include <QObject>
+#include <QtMath>
 #include <QJsonObject>
 #include <QDebug>
 
@@ -35,6 +36,10 @@ public:
     inline qreal roll() const;
     inline qreal yaw() const;
     inline qreal altitude() const;
+    inline qreal x() const;
+    inline qreal y() const;
+    inline qreal z() const;
+
     inline const QJsonObject getParams() const;
     inline qreal ailerons() const;
     inline qreal elevator() const;
@@ -57,6 +62,9 @@ protected:
     qreal m_Latitude  = 0.0; // deg
     qreal m_Altitude  = 0.0; // ft
     qreal m_Heading   = 0.0; // deg
+    qreal m_X = 0.0;
+    qreal m_Y = 0.0;
+    qreal m_Z = 0.0;
 
     // controls
     qreal m_Ailerons = 0.0;
@@ -97,6 +105,21 @@ qreal FgAircraft::yaw() const
 qreal FgAircraft::altitude() const
 {
     return m_Altitude;
+}
+
+qreal FgAircraft::x() const
+{
+    return m_X;
+}
+
+qreal FgAircraft::y() const
+{
+    return m_Y;
+}
+
+qreal FgAircraft::z() const
+{
+    return m_Z;
 }
 
 const QJsonObject FgAircraft::getParams() const

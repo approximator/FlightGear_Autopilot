@@ -40,6 +40,13 @@ void FgAircraft::onFdmDataChanged(const FgTransport& transport)
     m_Altitude  = transport.getFloat("/position/altitude-ft");
     m_Heading   = transport.getFloat("/orientation/heading-deg");
 
+    qreal lat = qDegreesToRadians(m_Latitude);
+    qreal lon = qDegreesToRadians(m_Longitude);
+    qreal r = 6371000 + m_Altitude;
+    m_X = r * cos(lat) * cos(lon);
+    m_Y = r * cos(lat) * sin(lon);
+    m_Z = r * sin(lat);
+
 //    qDebug() << callsign() << ": p = " << m_Pitch << ", r = " << m_Roll << ", y = " << m_Yaw
 //             << ", lon = " << m_Longitude << ", lat = " << m_Latitude << ", alt = " << m_Altitude
 //             << ", head = " << m_Heading;

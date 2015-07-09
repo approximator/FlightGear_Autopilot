@@ -11,6 +11,7 @@
 #include "FgControlledAircraft.h"
 
 #include <QDebug>
+#include <QVector3D>
 
 FgAutopilot::FgAutopilot(QObject *parent) :
     QObject(parent)
@@ -85,13 +86,6 @@ void FgAutopilot::holdAngles(FgControlledAircraft * aircraft)
 void FgAutopilot::follow(FgControlledAircraft * aircraft, FgAircraft *followAircraft)
 {
     m_DesiredAltitude = followAircraft->altitude();
-
-//    qreal heading = aircraft->heading();
-//    qreal desiredHeading = followAircraft->heading();
-//    qreal desiredRoll = (heading - desiredHeading) * -0.5;
-
-//    if (qAbs(desiredRoll) > 40)
-//        desiredRoll = (desiredRoll / qAbs(desiredRoll)) * 40;
     m_DesiredRoll = followAircraft->roll();
 
     holdAltitude(aircraft);
