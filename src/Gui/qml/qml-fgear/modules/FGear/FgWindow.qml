@@ -21,8 +21,9 @@ ApplicationWindow {
     property QtObject fgController: null
     Connections{
         target: fgController
-        onAircraftConnected: addAircraft(aircraft, false)
-        onOurAircraftConnected: addAircraft(aircraft, true)
+        onAircraftAdded: addAircraft(aircraft, false)
+        onAircraftConnected: updateAircraft(aircraft, false)
+        onOurAircraftAdded: addAircraft(aircraft, true)
         onAircraftDisconnected: removeAircraft(aircraft)
         onAircraftUpdated: updateAircraft(aircraft)
     }

@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Jul 01, 2015
+ * @date Modified Jul 09, 2015
  */
 
 #ifndef FGCONTROLLER_H
@@ -46,8 +46,9 @@ public slots:
     void updateAircraft(const QString &aircraftId);
 
 signals:
+    void aircraftAdded(FgAircraft* aircraft);
+    void ourAircraftAdded(FgAircraft* aircraft);
     void aircraftConnected(FgAircraft* aircraft);
-    void ourAircraftConnected(FgAircraft* aircraft);
     void aircraftDisconnected(FgAircraft* aircraft);
     void aircraftUpdated(FgAircraft* aircraft);
 

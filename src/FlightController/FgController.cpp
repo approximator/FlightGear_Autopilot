@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Jul 08, 2015
+ * @date Modified Jul 09, 2015
  */
 
 #include "FgController.h"
@@ -47,7 +47,7 @@ bool FgController::init()
         auto aircraft = std::make_shared<FgControlledAircraft>(parameter.toObject());
         m_OurAircrafts.insert(aircraft->callsign(), aircraft);
         connect(aircraft.get(), &FgControlledAircraft::onConnected, this, &FgController::onAircraftConnected);
-        emit ourAircraftConnected(aircraft.get());
+        emit ourAircraftAdded(aircraft.get());
     }
 
     m_Transport = m_OurAircrafts["Travis"]->transport();
@@ -106,6 +106,7 @@ void FgController::onDataReceived()
 void FgController::onAircraftConnected()
 {
     FgAircraft *aircraft = static_cast<FgAircraft*>(sender());
+    emit aircraftConnected(aircraft);
     qDebug() << "aircraft " << aircraft->callsign() << " connected";
 }
 
@@ -137,8 +138,8 @@ void FgController::updateOtherAircraftsCount()
         aircraft->setConnected(true);
         //! @todo  aircraft->setIndex();
         m_OtherAircrafts[callsign] = aircraft;
-        emit aircraftConnected(aircraft.get());
-        qDebug() << "otherAircraftConnected";
+        emit aircraftAdded(aircraft.get());
+        qDebug() << "otherAircraftAdded";
     }
 
     // remove disconnected aircrafts from the list

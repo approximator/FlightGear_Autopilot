@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 14, 2015
- * @date Modified May 05, 2015
+ * @date Modified May 09, 2015
  */
 #ifndef FGAUTOPILOT_H
 #define FGAUTOPILOT_H
@@ -28,6 +28,8 @@ public:
     } AUTOPILOT_MODE;
 
     explicit FgAutopilot(QObject *parent = 0);
+    FgAutopilot(const FgAutopilot& other);
+    FgAutopilot& operator=(const FgAutopilot& other);
 
     inline void arm();
     inline void disarm();
