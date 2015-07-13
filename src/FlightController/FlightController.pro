@@ -10,6 +10,10 @@ TEMPLATE = app
 target.path = $$FGAP_INSTALL_PATH
 DEFINES += INSTALL_PREFIX=$$FGAP_INSTALL_PATH
 
+configs.path = $$shell_path("$$FGAP_APP_PATH/config")
+configs.files = $$files("$$CONFIGS_DIR/*.json")
+INSTALLS += configs
+
 SOURCES += $$ROOT_DIR/main.cpp \
     $$PWD/FgAircraft.cpp \
     $$PWD/FgTransport.cpp \
@@ -32,6 +36,9 @@ HEADERS  += \
     ../Gui/widgets/mainwindow.h \
     ../Gui/widgets/aircraftslist.h
 
+FORMS += \
+    ../Gui/widgets/mainwindow.ui
+
 INCLUDEPATH = $$PWD
 INCLUDEPATH += $$shell_path($$absolute_path($$PWD/../Gui/widgets))
 
@@ -40,6 +47,3 @@ include($$FGAP_SOURCE_TREE/resources/resources.pri)
 
 # Default rules for deployment.
 include($$FGAP_SOURCE_TREE/deployment.pri)
-
-FORMS += \
-    ../Gui/widgets/mainwindow.ui

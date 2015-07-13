@@ -14,10 +14,6 @@ unix {
     QMAKE_CXXFLAGS += -isystem "$$[QT_INSTALL_HEADERS]/QtCore"
 }
 
-ROOT_DIR = $$PWD
-SCRIPTS_DIR = $$shell_path($$absolute_path(../scripts))
-FGAP_SOURCE_TREE = $$PWD
-
 isEmpty(FGAP_BUILD_TREE) {
     sub_dir = $$_PRO_FILE_PWD_
     sub_dir ~= s,^$$re_escape($$PWD),,
@@ -25,6 +21,10 @@ isEmpty(FGAP_BUILD_TREE) {
     FGAP_BUILD_TREE ~= s,$$re_escape($$sub_dir)$,,
 }
 
+ROOT_DIR = $$PWD
+SCRIPTS_DIR = $$shell_path($$absolute_path(../scripts))
+CONFIGS_DIR = $$shell_path($$absolute_path($$ROOT_DIR/../doc/config/))
+FGAP_SOURCE_TREE = $$PWD
 FGAP_APP_PATH = $$FGAP_BUILD_TREE/bin
 
 macx {
