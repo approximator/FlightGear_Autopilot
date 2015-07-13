@@ -9,6 +9,10 @@ env:
     - secure: "C1Ai03PHHYwsJg4PXWAYheex75locrF94Fzm9esQ0NE3BaZl86Bw8hgmXFa0EKTd1Vl1vrKlqVXZg9hhPBUP4c5KyDHj5xYGWhEGLtoenLXYqCivERP5Tqq35OrFTWjWuohFvTwTMdUFbWl0r2QqZGjm/nRkQbDNWAABIPBq+4A="
     - secure: "afLxPzrM1+xjYyidIXnuAn4pimOegT5jXxQNsXXpT2Tj59odI6tL6CZuuH5/SC66E0VwcR5YnAnQ7p4OoQyysqjBApZ71fUZSTcD4r9rlOMhvRwL+6nWRPF3/WxsqWYeuHoMDit4QQR8a7WQINPnJg0ZzRjD0/bFN2j1v+vID5I="
     - secure: "cvrIzqJ8FvKXzvB4Tp8Q9gbpFfLTGkVVndrAMA6Pj0trY13nlz6Z2lg9o1Mkcmw/73ndpDImB1IhoPCrgPJBOMYrv7bOKZZJ0D6qCyoIdqspTQX7wJm0WZPQ/SqoACZjpp536AvPJ6vUdZjg+Xj2I913U7SMtvAOrBEUfbMcTOs="
+    - QMAKE_PARAMS="-r"
+  matrix:
+    - DEBUG=debug QMAKE_PARAMS="$QMAKE_PARAMS CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug"
+    - DEBUG=release
 
 addons:
   apt:
@@ -29,7 +33,6 @@ before_install:
   - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x24"
   - sleep 3
   - sudo add-apt-repository -y ppa:beineri/opt-qt541
-  - if [ "$CXX" == "clang++" ]; then export QMAKE_PARAMS="-r -spec linux-clang CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug"; fi
 
 install:
   - sudo apt-get update
@@ -40,19 +43,27 @@ install:
 
 before_script:
   - echo "Before script"
+
+  - if [ "$CXX" == "clang++" ]; then QMAKE_PARAMS="$QMAKE_PARAMS -spec linux-clang"; fi
+  - if [ "$CXX" == "g++" ]; then QMAKE_PARAMS="$QMAKE_PARAMS -spec linux-g++"; fi
+
+  - "export COMMIT_MESSAGE=\"$(git log --format=%B --no-merges -n 1)\""
+  - PLATFORM=$(date +"%d-%m-%Y-%H-%M")-linux-$CXX-$DEBUG-$(uname -p)
+  - "export DIST_ARCHIVE=fg-autopilot-$PLATFORM.7z"
+  - SCRIPTS_DIR=$TRAVIS_BUILD_DIR/scripts
+  - SOURCES_DIR=$TRAVIS_BUILD_DIR/src
+  - SCREENSHOT_NAME=$SOURCES_DIR/main_qml_$PLATFORM.png
+  - DIST_FILE=$SOURCES_DIR/$DIST_ARCHIVE
+
   - source /opt/qt54/bin/qt54-env.sh
   - echo "        Compiler = $(which $CXX)"
   - echo "Compiler version = $($CXX --version)"
   - echo "   Qmake version = $(qmake -v)"
   - echo "  Httpie version = $(http --version)"
+  - echo "    QMAKE_PARAMS = $QMAKE_PARAMS"
+  - echo "   TRAVIS_COMMIT = $TRAVIS_COMMIT"
 
 script:
-  - "export COMMIT_MESSAGE=\"$(git log --format=%B --no-merges -n 1)\""
-  - "export DIST_ARCHIVE=fg-autopilot-linux-x86_64.7z"
-  - SCRIPTS_DIR=$TRAVIS_BUILD_DIR/scripts
-  - SOURCES_DIR=$TRAVIS_BUILD_DIR/src
-  - SCREENSHOT_NAME=$SOURCES_DIR/main_qml_$(date +"%d-%m-%Y-%H-%M")_$CXX.png
-  - DIST_FILE=$SOURCES_DIR/$DIST_ARCHIVE
   - cd $SOURCES_DIR
   - pwd
   - qmake $QMAKE_PARAMS
@@ -63,7 +74,7 @@ script:
   - bash $SCRIPTS_DIR/take_screenshot.sh "$SOURCES_DIR/bin/fgautopilot" "${SCREENSHOT_NAME}"
   - sleep 5
   - "ls -lah"
-  - bash $SCRIPTS_DIR/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$DIST_FILE" "Distributive linux"
+  - bash $SCRIPTS_DIR/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$DIST_FILE" "Distributive linux-$CXX-$DEBUG-$(uname -p)"
   - sleep 2
   - sleep 2
-  - bash $SCRIPTS_DIR/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$SCREENSHOT_NAME" "Main window screenshot (qml)"
+  - bash $SCRIPTS_DIR/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$SCREENSHOT_NAME" "Main window (qml) linux-$CXX-$DEBUG-$(uname -p)"
