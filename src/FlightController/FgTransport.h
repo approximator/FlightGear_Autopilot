@@ -55,7 +55,7 @@ private:
     QStringList  m_FdmData              { };
 
 signals:
-    void fgDataReceived();
+    void fgDataReceived(const FgTransport &transport);
 
 private slots:
     void onSocketRead();

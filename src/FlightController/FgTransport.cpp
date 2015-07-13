@@ -79,7 +79,7 @@ void FgTransport::onSocketRead()
         m_FdmData = line.split("\t");
         m_Buffer.remove(0, newLineIndex + 1);
 
-        emit fgDataReceived();
+        emit fgDataReceived(*this);
     }
 }
 

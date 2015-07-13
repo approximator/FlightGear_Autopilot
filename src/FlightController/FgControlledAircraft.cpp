@@ -52,9 +52,9 @@ void FgControlledAircraft::runFlightGear()
     m_Flightgear->run();
 }
 
-void FgControlledAircraft::onFdmDataChanged()
+void FgControlledAircraft::onFdmDataChanged(const FgTransport &transport)
 {
-    FgAircraft::onFdmDataChanged(*m_Flightgear->transport().get());
+    FgAircraft::onFdmDataChanged(transport);
 
     if (!m_Autopilot->armed())
         return;
