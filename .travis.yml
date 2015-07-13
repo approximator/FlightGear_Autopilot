@@ -1,4 +1,8 @@
-language: c++
+language: cpp
+
+compiler:
+  - clang
+  - gcc
 
 env:
   global:
@@ -10,7 +14,6 @@ addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
-      - h-rayflood/llvm
     packages:
       - gcc-4.8
       - g++-4.8
@@ -26,6 +29,7 @@ before_install:
   - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x24"
   - sleep 3
   - sudo add-apt-repository -y ppa:beineri/opt-qt541
+  - if [ "$CXX" == "clang++" ]; then export QMAKE_PARAMS="-r -spec linux-clang CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug"; fi
 
 install:
   - sudo apt-get update
@@ -47,12 +51,11 @@ script:
   - "export DIST_ARCHIVE=fg-autopilot-linux-x86_64.7z"
   - SCRIPTS_DIR=$TRAVIS_BUILD_DIR/scripts
   - SOURCES_DIR=$TRAVIS_BUILD_DIR/src
-  - SCREENSHOT_NAME=$SOURCES_DIR/main_qml_$(date +"%d-%m-%Y-%H-%M").png
-  - SCENE_SCREENSHOT_NAME=$SOURCES_DIR/demo_scene_$(date +"%d-%m-%Y-%H-%M").png
+  - SCREENSHOT_NAME=$SOURCES_DIR/main_qml_$(date +"%d-%m-%Y-%H-%M")_$CXX.png
   - DIST_FILE=$SOURCES_DIR/$DIST_ARCHIVE
   - cd $SOURCES_DIR
   - pwd
-  - qmake
+  - qmake $QMAKE_PARAMS
   - make clean
   - make -j5
   - make deploy_all
