@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>874</width>
-    <height>518</height>
+    <width>1280</width>
+    <height>1024</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -97,8 +97,11 @@
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="0">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="AutopilotWidget" name="widget_Autopilot" native="true"/>
+          </item>
+          <item>
            <widget class="QToolButton" name="toolButton_AutopilotEngage">
             <property name="text">
              <string>Engage</string>
@@ -137,7 +140,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>874</width>
+     <width>1280</width>
      <height>30</height>
     </rect>
    </property>
@@ -149,6 +152,12 @@
    <class>AircraftsList</class>
    <extends>QListWidget</extends>
    <header>aircraftslist.h</header>
+  </customwidget>
+  <customwidget>
+   <class>AutopilotWidget</class>
+   <extends>QWidget</extends>
+   <header>autopilotwidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
