@@ -5,10 +5,12 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 14, 2015
- * @date Modified May 09, 2015
+ * @date Modified Jul 14, 2015
  */
 #ifndef FGAUTOPILOT_H
 #define FGAUTOPILOT_H
+
+#include "FgPid.h"
 
 #include <memory>
 #include <QObject>
@@ -44,13 +46,17 @@ public:
 private:
     AUTOPILOT_MODE m_Mode = FG_MODE_ALTITUDE_HOLD;
 
-    qreal m_DesiredPitch     = 3.0;    // deg
+    qreal m_DesiredPitch     = 0.0;    // deg
     qreal m_DesiredRoll      = 0.0;    // deg
     qreal m_DesiredYaw       = 0.0;    // deg
     qreal m_DesiredLongitude = 0.0;    // deg
     qreal m_DesiredLatitude  = 0.0;    // deg
     qreal m_DesiredAltitude  = 2000.0; // ft
     qreal m_DesiredHeading   = 0.0;    // deg
+
+    FgPid m_PitchPid    { 0.04, 0.0, 0.005};
+    FgPid m_RollPid     { 0.01, 0.1, 0.005};
+    FgPid m_AltitudePid { 0.03, 0.01, 0.005};
 
     FgAircraft *m_toFollow { nullptr };
 

@@ -54,7 +54,7 @@ bool FgController::init()
     connect(m_Transport.get(), &FgTransport::fgDataReceived, this, &FgController::onDataReceived);
 
 //    m_OurAircrafts["Travis"]->follow(m_OurAircrafts["Rover"].get());
-////    m_OurAircrafts["Travis"]->autopilot()->arm();
+//    m_OurAircrafts["Rover"]->autopilot()->engage();
 
 //    m_OurAircrafts["Travis"]->runFlightGear();
 //    m_OurAircrafts["Rover"]->runFlightGear();
