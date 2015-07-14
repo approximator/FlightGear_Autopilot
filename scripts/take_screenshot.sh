@@ -3,9 +3,10 @@
 COMMAND=$1
 SCREENSHOT_FILE=$2
 
+echo "Command = $COMMAND"
 sleep 2
 # run command
-"$COMMAND" &
+$COMMAND &
 COMMAND_PID=$!
 # wait
 sleep 30

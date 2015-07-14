@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jul 09, 2015
+ * @date Modified Jul 14, 2015
  */
 
 #include "FgController.h"
@@ -23,13 +23,12 @@ int main(int argc, char *argv[])
 
     QCommandLineParser parser;
     parser.addOptions({
-        {"oldstyle", QCoreApplication::translate("main", "Use old Widgets instead of QML")}
+        {"widgets", QCoreApplication::translate("main", "Use old Widgets instead of QML")}
     });
     parser.process(app);
 
-    if (parser.isSet("oldstyle"))
+    if (parser.isSet("widgets") || !QString(qgetenv("FGAP_USE_WIDGETS_UI")).isEmpty())
     {
-        qDebug() << "Oldstyle";
         MainWindow w;
         w.show();
         return app.exec();

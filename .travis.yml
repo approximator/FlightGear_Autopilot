@@ -53,6 +53,7 @@ before_script:
   - SCRIPTS_DIR=$TRAVIS_BUILD_DIR/scripts
   - SOURCES_DIR=$TRAVIS_BUILD_DIR/src
   - SCREENSHOT_NAME=$SOURCES_DIR/main_qml_$PLATFORM.png
+  - SCREENSHOT_WIDGETS_NAME=$SOURCES_DIR/main_widgets_$PLATFORM.png
   - DIST_FILE=$SOURCES_DIR/$DIST_ARCHIVE
 
   - source /opt/qt54/bin/qt54-env.sh
@@ -73,8 +74,12 @@ script:
   - make bindist
   - bash $SCRIPTS_DIR/take_screenshot.sh "$SOURCES_DIR/bin/fgautopilot" "${SCREENSHOT_NAME}"
   - sleep 5
+  - export FGAP_USE_WIDGETS_UI=1
+  - bash $SCRIPTS_DIR/take_screenshot.sh "$SOURCES_DIR/bin/fgautopilot" "${SCREENSHOT_WIDGETS_NAME}"
+  - sleep 5
   - "ls -lah"
   - bash $SCRIPTS_DIR/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$DIST_FILE" "Distributive linux-$CXX-$DEBUG-$(uname -p)"
   - sleep 2
-  - sleep 2
   - bash $SCRIPTS_DIR/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$SCREENSHOT_NAME" "Main window (qml) linux-$CXX-$DEBUG-$(uname -p)"
+  - sleep 2
+  - bash $SCRIPTS_DIR/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$SCREENSHOT_WIDGETS_NAME" "Main window (widgets) linux-$CXX-$DEBUG-$(uname -p)"
