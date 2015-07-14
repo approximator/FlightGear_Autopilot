@@ -24,7 +24,7 @@ AutopilotWidget::AutopilotWidget(QWidget *parent) : QWidget(parent)
 
     QQuickView *view = new QQuickView;
     QWidget *container = QWidget::createWindowContainer(view, this);
-    view->setSource(QUrl("qml/FGear/FgAutopilot.qml"));
+    view->setSource(QUrl(QCoreApplication::applicationDirPath() + "/qml/FGear/FgAutopilot.qml"));
     layout->addWidget(container);
     this->setLayout(layout);
 }
