@@ -23,6 +23,7 @@ SOURCES += $$ROOT_DIR/main.cpp \
     $$PWD/FgControlledAircraft.cpp \
     $$PWD/FgFlightgear.cpp \
     $$PWD/FgPid.cpp \
+    $$PWD/FgMath.cpp \
     $$ROOT_DIR/Gui/widgets/mainwindow.cpp \
     $$ROOT_DIR/Gui/widgets/aircraftslist.cpp \
     $$ROOT_DIR/Gui/widgets/autopilotwidget.cpp
@@ -36,6 +37,7 @@ HEADERS  += \
     $$PWD/FgControlledAircraft.h \
     $$PWD/FgFlightgear.h \
     $$PWD/FgPid.h \
+    $$PWD/FgMath.h \
     $$ROOT_DIR/Gui/widgets/mainwindow.h \
     $$ROOT_DIR/Gui/widgets/aircraftslist.h \
     $$ROOT_DIR/Gui/widgets/autopilotwidget.h
