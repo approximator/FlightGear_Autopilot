@@ -29,6 +29,7 @@ FgGenericProtocol::FgGenericProtocol(QObject *parent) :
     ADD_PARAM("/orientation/roll-deg", Parameter::FLOAT);
     ADD_PARAM("/orientation/yaw-deg", Parameter::FLOAT);
     ADD_PARAM("/position/altitude-ft", Parameter::INT);
+    ADD_PARAM("/position/altitude-agl-ft", Parameter::INT);
     ADD_PARAM("/position/latitude-deg", Parameter::FLOAT);
     ADD_PARAM("/position/longitude-deg", Parameter::FLOAT);
 
@@ -46,6 +47,7 @@ FgGenericProtocol::FgGenericProtocol(QObject *parent) :
         ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/orientation/roll-deg", Parameter::FLOAT);
         ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/orientation/yaw-deg", Parameter::FLOAT);
         ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/position/altitude-ft", Parameter::INT);
+        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/position/altitude-agl-ft", Parameter::INT);
         ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/position/latitude-deg", Parameter::FLOAT);
         ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/position/longitude-deg", Parameter::FLOAT);
     }

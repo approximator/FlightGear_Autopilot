@@ -38,6 +38,7 @@ void FgAircraft::onFdmDataChanged(const FgTransport& transport)
     m_Longitude = transport.getFloat("/position/longitude-deg");
     m_Latitude  = transport.getFloat("/position/latitude-deg");
     m_Altitude  = transport.getFloat("/position/altitude-ft");
+    m_GroundLevel = transport.getFloat("/position/altitude-agl-ft");
     m_Heading   = transport.getFloat("/orientation/heading-deg");
 
     qreal lat = qDegreesToRadians(m_Latitude);

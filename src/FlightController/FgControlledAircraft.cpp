@@ -5,10 +5,12 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 17, 2015
- * @date Modified Jul 08, 2015
+ * @date Modified Jul 15, 2015
  */
 
 #include "FgControlledAircraft.h"
+
+#include <fstream>
 
 FgControlledAircraft::FgControlledAircraft(const QString &sign, QObject *parent) :
     FgAircraft(sign, parent)
@@ -64,7 +66,11 @@ void FgControlledAircraft::onFdmDataChanged(const FgTransport &transport)
                                          .arg(ailerons())
                                          .arg(elevator())
                                          .arg(throttle()));
-//    qDebug() << callsign() << " : " << QString("%1\t%2\n").arg(ailerons()).arg(elevator());
+
+    std::ofstream f;
+    f.open("/tmp/fgap.log", std::ios_base::app);
+    f << m_Latitude << '\t' << m_Longitude << '\t' << m_Pitch << '\t' << m_Roll << '\t' <<
+         m_Altitude << '\t' << m_Heading << '\t' << m_Ailerons << '\t' << m_Elevator << '\n';
 }
 
 

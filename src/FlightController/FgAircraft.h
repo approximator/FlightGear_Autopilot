@@ -36,6 +36,7 @@ public:
     inline qreal roll() const;
     inline qreal yaw() const;
     inline qreal altitude() const;
+    inline qreal groundElev() const;
     inline qreal x() const;
     inline qreal y() const;
     inline qreal z() const;
@@ -61,6 +62,7 @@ protected:
     qreal m_Longitude = 0.0; // deg
     qreal m_Latitude  = 0.0; // deg
     qreal m_Altitude  = 0.0; // ft
+    qreal m_GroundLevel = 0.0; // ft
     qreal m_Heading   = 0.0; // deg
     qreal m_X = 0.0;
     qreal m_Y = 0.0;
@@ -105,6 +107,11 @@ qreal FgAircraft::yaw() const
 qreal FgAircraft::altitude() const
 {
     return m_Altitude;
+}
+
+qreal FgAircraft::groundElev() const
+{
+    return m_GroundLevel;
 }
 
 qreal FgAircraft::x() const

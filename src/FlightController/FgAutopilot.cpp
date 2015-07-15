@@ -17,6 +17,7 @@
 FgAutopilot::FgAutopilot(QObject *parent) :
     QObject(parent)
 {
+
 }
 
 void FgAutopilot::computeControl(FgControlledAircraft* aircraft)
@@ -42,10 +43,14 @@ void FgAutopilot::computeControl(FgControlledAircraft* aircraft)
 
 void FgAutopilot::holdAltitude(FgControlledAircraft * aircraft)
 {
-    qreal altitude = aircraft->altitude();
+    qreal altitude = aircraft->groundElev();
     qreal altitudeError = m_DesiredAltitude - altitude;
 
-    m_DesiredPitch = m_AltitudePid.update(altitudeError);
+    m_DesiredPitch = fgap::math::limit(m_AltitudePid.update(altitudeError), 20.0);
+//    m_DesiredRoll = m_HeadingPid.update(
+//                fgap::math::limit(m_DesiredHeading - aircraft->heading(), 35.0)
+//                );
+//    qDebug() << "Heading " << m_DesiredHeading << "(" << aircraft->heading() << ")";
     holdAngles(aircraft);
 }
 
@@ -58,11 +63,13 @@ void FgAutopilot::holdAngles(FgControlledAircraft * aircraft)
     qreal rollError = m_DesiredRoll - roll;
 
     // set controls
-    aircraft->setElevator(m_PitchPid.update(pitchError));
-    aircraft->setAilerons(m_RollPid.update(rollError));
+    aircraft->setElevator(fgap::math::limit(m_PitchPid.update(pitchError), 0.6));
+    aircraft->setAilerons(fgap::math::limit(m_RollPid.update(rollError), 0.6));
 
-    qDebug() << "Pitch " << m_DesiredPitch << "(" << pitch << ")";
-    qDebug() << "Roll " << m_DesiredRoll << "(" << roll << ")";
+
+//    qDebug() << "Pitch " << m_DesiredPitch << "(" << pitch << ")";
+//    qDebug() << "Roll " << m_DesiredRoll << "(" << roll << ")";
+//    qDebug() << "Elev " << m_DesiredAltitude << "(" << aircraft->groundElev() << ")";
 }
 
 void FgAutopilot::follow(FgControlledAircraft * aircraft, FgAircraft *followAircraft)
