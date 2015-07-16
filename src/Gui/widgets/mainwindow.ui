@@ -84,38 +84,24 @@
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="frame">
+        <widget class="AutopilotWidget" name="widget_Autopilot" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
-          <item>
-           <widget class="AutopilotWidget" name="widget_Autopilot" native="true"/>
-          </item>
-         </layout>
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+        <widget class="PictorialIndicatorWidget" name="widget_pictorialIndicator" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -144,6 +130,12 @@
    <class>AutopilotWidget</class>
    <extends>QWidget</extends>
    <header>autopilotwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PictorialIndicatorWidget</class>
+   <extends>QWidget</extends>
+   <header>pictorialindicatorwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

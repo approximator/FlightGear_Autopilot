@@ -8,8 +8,8 @@ FocusScope {
     id: autopilot
 
     anchors.centerIn: parent
-    width: Units.dp(800)
-    height: Units.dp(250)
+    width: parent.width
+    height: parent.width / 3
 
     property bool autopilotActivated: false
     property string currentMode
@@ -58,7 +58,7 @@ FocusScope {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
 
-                asynchronous: true // Check this later
+                asynchronous: false // Check this later
                 source: itemSource;
             }
         }

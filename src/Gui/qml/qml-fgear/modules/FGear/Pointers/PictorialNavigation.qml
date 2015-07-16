@@ -1,8 +1,11 @@
 import QtQuick 2.2
 
-
 Item {
     id: _pointer
+
+    anchors.centerIn: parent
+    width: Math.min(parent.width, parent.height)
+    height: width
 
     clip: true
 
