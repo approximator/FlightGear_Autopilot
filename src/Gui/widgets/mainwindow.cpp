@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     controller.init();
 
     connect(ui->pushButton_RunFlightgear, &QPushButton::clicked, this, &MainWindow::runFlightgear);
-    connect(ui->toolButton_AutopilotEngage, &QToolButton::toggled, this, &MainWindow::engageAutopilot);
+    connect(ui->widget_Autopilot, &AutopilotWidget::autopilotEngage, this, &MainWindow::engageAutopilot);
 }
 
 MainWindow::~MainWindow()

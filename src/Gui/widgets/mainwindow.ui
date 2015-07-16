@@ -101,19 +101,6 @@
           <item>
            <widget class="AutopilotWidget" name="widget_Autopilot" native="true"/>
           </item>
-          <item>
-           <widget class="QToolButton" name="toolButton_AutopilotEngage">
-            <property name="text">
-             <string>Engage</string>
-            </property>
-            <property name="checkable">
-             <bool>true</bool>
-            </property>
-            <property name="autoExclusive">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
          </layout>
         </widget>
        </item>
@@ -141,7 +128,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>30</height>
+     <height>31</height>
     </rect>
    </property>
   </widget>
