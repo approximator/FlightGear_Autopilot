@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jul 09, 2015
- * @date Modified Jul 09, 2015
+ * @date Modified Jul 16, 2015
  */
 
 #ifndef MAINWINDOW_H
@@ -36,8 +36,8 @@ private:
     FgController controller { };
 
 private slots:
-    void runFlightgear();
     void engageAutopilot(bool enable);
+    void updateView();
 };
 
 #endif // MAINWINDOW_H

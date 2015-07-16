@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jul 09, 2015
- * @date Modified Jul 09, 2015
+ * @date Modified Jul 16, 2015
  */
 
 #include "mainwindow.h"
@@ -16,12 +16,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
     connect(&controller, &FgController::ourAircraftAdded, ui->listWidget_ourAircrafts, &AircraftsList::addAircraft);
     controller.init();
-
-    connect(ui->pushButton_RunFlightgear, &QPushButton::clicked, this, &MainWindow::runFlightgear);
     connect(ui->widget_Autopilot, &AutopilotWidget::autopilotEngage, this, &MainWindow::engageAutopilot);
+    connect(ui->listWidget_ourAircrafts, &AircraftsList::aircraftSelected, this, &MainWindow::updateView);
 }
 
 MainWindow::~MainWindow()
@@ -29,12 +27,14 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::runFlightgear()
-{
-    static_cast<FgControlledAircraft*>(ui->listWidget_ourAircrafts->currentAircraft())->runFlightGear();
-}
-
 void MainWindow::engageAutopilot(bool enable)
 {
-    static_cast<FgControlledAircraft*>(ui->listWidget_ourAircrafts->currentAircraft())->autopilot()->engage(enable);
+    FgControlledAircraft* aircraft = static_cast<FgControlledAircraft*>(ui->listWidget_ourAircrafts->currentAircraft());
+    aircraft->autopilot()->engage(enable);
+}
+
+void MainWindow::updateView()
+{
+    FgControlledAircraft* aircraft = static_cast<FgControlledAircraft*>(ui->listWidget_ourAircrafts->currentAircraft());
+    ui->label_Callsign->setText(aircraft->callsign());
 }

@@ -25,7 +25,6 @@ AutopilotWidget::AutopilotWidget(QWidget *parent) : QWidget(parent)
     this->setLayout(layout);
 
     QObject *object = reinterpret_cast<QObject*>(view.rootObject());
-
     connect(object, SIGNAL(autopilotEngage(bool)), this, SLOT(onEngage(bool)));
 }
 

@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 17, 2015
- * @date Modified Jul 15, 2015
+ * @date Modified Jul 16, 2015
  */
 
 #include "FgControlledAircraft.h"
@@ -46,11 +46,14 @@ bool FgControlledAircraft::setConfigFromJson(const QJsonObject &config)
         m_Flightgear = std::make_shared<FgFlightgear>(flightgear);
     }
     connect(m_Flightgear->transport().get(), &FgTransport::fgDataReceived, this, &FgControlledAircraft::onFdmDataChanged);
+    connect(&m_Flightgear->process(), static_cast<void (QProcess::*)(int)>(&QProcess::finished), [this](int){ emit flightgearFinished(); });
+    connect(&m_Flightgear->process(), &QProcess::started , [this](){ emit flightgearStarted(); });
     return true;
 }
 
-void FgControlledAircraft::runFlightGear()
+void FgControlledAircraft::runFlightGear(bool run)
 {
+    Q_UNUSED(run);
     m_Flightgear->run();
 }
 

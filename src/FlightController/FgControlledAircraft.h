@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 17, 2015
- * @date Modified Jul 05, 2015
+ * @date Modified Jul 16, 2015
  */
 
 #ifndef FGCONTROLLEDAIRCRAFT_H
@@ -37,7 +37,7 @@ public:
     QJsonObject configurationAsJson() const;
     bool setConfigFromJson(const QJsonObject& config);
 
-    void runFlightGear();
+    void runFlightGear(bool run = true);
     inline const FgFlightgear& flightgear() const;
 
 private:
@@ -45,6 +45,8 @@ private:
     std::shared_ptr<FgFlightgear> m_Flightgear { std::make_shared<FgFlightgear>() };
 
 signals:
+    void flightgearStarted();
+    void flightgearFinished();
 
 public slots:
     virtual void onFdmDataChanged(const FgTransport& transport);

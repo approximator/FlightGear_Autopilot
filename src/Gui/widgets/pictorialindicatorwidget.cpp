@@ -16,7 +16,6 @@
 
 PictorialIndicatorWidget::PictorialIndicatorWidget(QWidget *parent) : QWidget(parent)
 {
-    qDebug() << "Parent = " << parent;
     view.setSource(QUrl(QCoreApplication::applicationDirPath() + "/qml/FGear/Pointers/PictorialNavigation.qml"));
 
     QWidget *container = QWidget::createWindowContainer(&view, this);
