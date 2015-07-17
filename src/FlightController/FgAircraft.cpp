@@ -26,12 +26,6 @@ FgAircraft::~FgAircraft()
 
 void FgAircraft::onFdmDataChanged(const FgTransport& transport)
 {
-    if (!connected())
-    {
-        m_Connected = true;
-        emit onConnected();
-    }
-
     m_Pitch     = transport.getFloat(PITCH);
     m_Roll      = transport.getFloat(ROLL);
     m_Yaw       = transport.getFloat(YAW);
@@ -53,6 +47,12 @@ void FgAircraft::onFdmDataChanged(const FgTransport& transport)
 //    qDebug() << callsign() << ": p = " << m_Pitch << ", r = " << m_Roll << ", y = " << m_Yaw
 //             << ", lon = " << m_Longitude << ", lat = " << m_Latitude << ", alt = " << m_Altitude
 //             << ", head = " << m_Heading;
+
+    if (!connected())
+    {
+        m_Connected = true;
+        emit onConnected();
+    }
 
     emit paramsChanged();
 }

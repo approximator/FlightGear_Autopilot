@@ -57,7 +57,7 @@ private:
     qreal m_DesiredHeading   = 150;    // deg
     qreal m_DesiredVerticalSpeed = -2.0;//
 
-    FgPid m_PitchPid    { 0.042, 0.00105, 0.0054};
+    FgPid m_PitchPid    { 0.03, 0.00105, 0.0054};
     FgPid m_RollPid     { 0.01, 0.001, 0.001};
     FgPid m_HeadingPid  { 0.04, 0.0, 0.0};
     FgPid m_VerticalSpeedPid { 0.05, 0.0, 0.01};

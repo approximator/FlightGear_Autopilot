@@ -15,7 +15,7 @@
 FgControlledAircraft::FgControlledAircraft(const QString &sign, QObject *parent) :
     FgAircraft(sign, parent)
 {
-    connect(m_Flightgear->transport().get(), &FgTransport::fgDataReceived, this, &FgControlledAircraft::onFdmDataChanged);
+    setConfigFromJson(QJsonObject());
 }
 
 FgControlledAircraft::FgControlledAircraft(const QJsonObject &config, QObject *parent):
@@ -48,6 +48,7 @@ bool FgControlledAircraft::setConfigFromJson(const QJsonObject &config)
     connect(m_Flightgear->transport().get(), &FgTransport::fgDataReceived, this, &FgControlledAircraft::onFdmDataChanged);
     connect(&m_Flightgear->process(), static_cast<void (QProcess::*)(int)>(&QProcess::finished), [this](int){ emit flightgearFinished(); });
     connect(&m_Flightgear->process(), &QProcess::started , [this](){ emit flightgearStarted(); });
+//    connect(this, &FgControlledAircraft::onConnected, [this](){ m_Autopilot->setDesiredHeading(heading()); });
     return true;
 }
 
@@ -65,9 +66,11 @@ void FgControlledAircraft::onFdmDataChanged(const FgTransport &transport)
         return;
 
     m_Autopilot->computeControl(this);
-    m_Flightgear->transport()->writeData(QString("%1\t%2\t%3\n")
+    m_Flightgear->transport()->writeData(QString("%1\t%2\t%3\t%4\n")
                                          .arg(ailerons())
                                          .arg(elevator())
+//                                         .arg(rudder())
+                                         .arg(rudder())
                                          .arg(throttle()));
 
     std::ofstream f;

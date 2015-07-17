@@ -46,6 +46,7 @@ public:
     inline const QJsonObject getParams() const;
     inline qreal ailerons() const;
     inline qreal elevator() const;
+    inline qreal   rudder() const;
     inline qreal throttle() const;
     inline qreal heading() const;
     inline bool connected() const;
@@ -156,6 +157,11 @@ qreal FgAircraft::ailerons() const
 qreal FgAircraft::elevator() const
 {
     return m_Elevator;
+}
+
+qreal FgAircraft::rudder() const
+{
+    return m_Rudder;
 }
 
 qreal FgAircraft::throttle() const

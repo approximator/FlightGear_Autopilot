@@ -53,13 +53,17 @@
                      "disable-horizon-effect": "",
                      "disable-enhanced-lighting": "",
                      "httpd": "5050",
+                     "altitude": "1500",
                      "prop:/engines/engine/running": "true",
                      "prop:/engines/engine/rpm": "2000",
                      "prop:/controls/engines/engine/throttle": "0.8",
                      "prop:/controls/flight/elevator": "0.0",
                      "prop:/controls/flight/aileron": "0.0",
-                     "prop:input/joysticks/js": "0",
-                     "altitude": "1500"
+                     "prop:/velocities/airspeed-kt": "85.0",
+                     "prop:/orientation/pitch-deg": "0.0",
+                     "prop:/orientation/roll-deg": "0.0",
+                     "prop:/orientation/roll-rate-degps": "0.0",
+                     "prop:/orientation/pitch-rate-degps": "0.0"
                 }
             }
         },

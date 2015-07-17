@@ -32,6 +32,7 @@ const QString LONGITUDE("/position/longitude-deg");
 
 const QString AILERONS("/controls/flight/aileron");
 const QString ELEVATOR("/controls/flight/elevator");
+const QString RUDDER("/controls/flight/rudder");
 const QString THROTTLE("/controls/engines/engine/throttle");
 
 

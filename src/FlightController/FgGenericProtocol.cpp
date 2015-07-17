@@ -64,6 +64,8 @@ FgGenericProtocol::FgGenericProtocol(QObject *parent) :
     index = 0;
     ADD_PARAM(AILERONS, Parameter::FLOAT);
     ADD_PARAM(ELEVATOR, Parameter::FLOAT);
+    ADD_PARAM(  RUDDER, Parameter::FLOAT);
+//    ADD_PARAM(   WHEEL, Parameter::FLOAT);
     ADD_PARAM(THROTTLE, Parameter::FLOAT);
 #undef ADD_PARAM
 
