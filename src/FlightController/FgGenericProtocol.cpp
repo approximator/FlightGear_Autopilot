@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified May 12, 2015
+ * @date Modified Jun 17, 2015
  */
 
 #include "FgGenericProtocol.h"
@@ -23,36 +23,38 @@ FgGenericProtocol::FgGenericProtocol(QObject *parent) :
 
 #define ADD_PARAM(node, type) m_InParameters.insert(node, Parameter(index++, type));
 
-    ADD_PARAM("/sim/multiplay/callsign", Parameter::STRING);
-    ADD_PARAM("/orientation/heading-deg", Parameter::FLOAT);
-    ADD_PARAM("/orientation/pitch-deg", Parameter::FLOAT);
-    ADD_PARAM("/orientation/roll-deg", Parameter::FLOAT);
-    ADD_PARAM("/orientation/yaw-deg", Parameter::FLOAT);
-    ADD_PARAM("/position/altitude-ft", Parameter::INT);
-    ADD_PARAM("/position/altitude-agl-ft", Parameter::INT);
-    ADD_PARAM("/position/latitude-deg", Parameter::FLOAT);
-    ADD_PARAM("/position/longitude-deg", Parameter::FLOAT);
+    ADD_PARAM(CALLSIGN, Parameter::STRING);
+    ADD_PARAM(HEADING, Parameter::FLOAT);
+    ADD_PARAM(PITCH, Parameter::FLOAT);
+    ADD_PARAM(ROLL, Parameter::FLOAT);
+    ADD_PARAM(YAW, Parameter::FLOAT);
+    ADD_PARAM(ALTITUDE, Parameter::FLOAT);
+    ADD_PARAM(ALTITUDE_AGL, Parameter::FLOAT);
+    ADD_PARAM(VERTICAL_SPEED, Parameter::FLOAT);
+    ADD_PARAM(AIRSPEED, Parameter::FLOAT);
+    ADD_PARAM(LATITUDE, Parameter::FLOAT);
+    ADD_PARAM(LONGITUDE, Parameter::FLOAT);
 
     // other pilots' parameters
     // firstly, get actual number of other pilots
-    ADD_PARAM("/ai/models/num-players", Parameter::INT);
-    ADD_PARAM("/ai/models/count", Parameter::INT);
+    ADD_PARAM(NUM_PLAYERS, Parameter::INT);
+    ADD_PARAM(MODELS_COUNT, Parameter::INT);
 
-    // then do 20 iterations to get at most 20 other aircrafts
-    for (int i = 0; i < 20; ++i)
-    {
-        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/callsign", Parameter::STRING);
-        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/orientation/heading-deg", Parameter::FLOAT);
-        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/orientation/pitch-deg", Parameter::FLOAT);
-        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/orientation/roll-deg", Parameter::FLOAT);
-        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/orientation/yaw-deg", Parameter::FLOAT);
-        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/position/altitude-ft", Parameter::INT);
-        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/position/altitude-agl-ft", Parameter::INT);
-        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/position/latitude-deg", Parameter::FLOAT);
-        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/position/longitude-deg", Parameter::FLOAT);
-    }
 
-//    /velocities/airspeed-kt
+
+    // TODO: fix this multiplayer stuff
+//    for (int i = 0; i < 20; ++i)
+//    {
+//        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/callsign", Parameter::STRING);
+//        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/orientation/heading-deg", Parameter::FLOAT);
+//        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/orientation/pitch-deg", Parameter::FLOAT);
+//        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/orientation/roll-deg", Parameter::FLOAT);
+//        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/orientation/yaw-deg", Parameter::FLOAT);
+//        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/position/altitude-ft", Parameter::INT);
+//        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/position/altitude-agl-ft", Parameter::INT);
+//        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/position/latitude-deg", Parameter::FLOAT);
+//        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/position/longitude-deg", Parameter::FLOAT);
+//    }
 
 #undef ADD_PARAM
 
@@ -60,9 +62,9 @@ FgGenericProtocol::FgGenericProtocol(QObject *parent) :
     // Parameteres to control
 #define ADD_PARAM(node, type) m_OutParameters.insert(node, Parameter(index++, type));
     index = 0;
-    ADD_PARAM("/controls/flight/aileron", Parameter::FLOAT);
-    ADD_PARAM("/controls/flight/elevator", Parameter::FLOAT);
-    ADD_PARAM("/controls/engines/engine/throttle", Parameter::FLOAT);
+    ADD_PARAM(AILERONS, Parameter::FLOAT);
+    ADD_PARAM(ELEVATOR, Parameter::FLOAT);
+    ADD_PARAM(THROTTLE, Parameter::FLOAT);
 #undef ADD_PARAM
 
     writeXml("/usr/share/games/flightgear/Protocol/FgaProtocol.xml");

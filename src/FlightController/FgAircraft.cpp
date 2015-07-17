@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jul 07, 2015
+ * @date Modified Jul 17, 2015
  */
 
 #include "FgAircraft.h"
@@ -32,14 +32,16 @@ void FgAircraft::onFdmDataChanged(const FgTransport& transport)
         emit onConnected();
     }
 
-    m_Pitch     = transport.getFloat("/orientation/pitch-deg");
-    m_Roll      = transport.getFloat("/orientation/roll-deg");
-    m_Yaw       = transport.getFloat("/orientation/yaw-deg");
-    m_Longitude = transport.getFloat("/position/longitude-deg");
-    m_Latitude  = transport.getFloat("/position/latitude-deg");
-    m_Altitude  = transport.getFloat("/position/altitude-ft");
-    m_GroundLevel = transport.getFloat("/position/altitude-agl-ft");
-    m_Heading   = transport.getFloat("/orientation/heading-deg");
+    m_Pitch     = transport.getFloat(PITCH);
+    m_Roll      = transport.getFloat(ROLL);
+    m_Yaw       = transport.getFloat(YAW);
+    m_Heading   = transport.getFloat(HEADING);
+    m_Longitude = transport.getFloat(LONGITUDE);
+    m_Latitude  = transport.getFloat(LATITUDE);
+    m_Altitude  = transport.getFloat(ALTITUDE);
+    m_Airspeed  = transport.getFloat(AIRSPEED);
+    m_GroundLevel   = transport.getFloat(ALTITUDE_AGL);
+    m_VerticalSpeed = transport.getFloat(VERTICAL_SPEED);
 
     qreal lat = qDegreesToRadians(m_Latitude);
     qreal lon = qDegreesToRadians(m_Longitude);

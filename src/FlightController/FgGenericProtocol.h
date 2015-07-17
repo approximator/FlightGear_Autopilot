@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified May 05, 2015
+ * @date Modified Jun 17, 2015
  */
 
 #ifndef FGGENERICPROTOCOL_H
@@ -14,6 +14,26 @@
 #include <QObject>
 #include <QHash>
 #include <QDebug>
+
+const QString NUM_PLAYERS("/ai/models/num-players");
+const QString MODELS_COUNT("/ai/models/count");
+
+const QString CALLSIGN("/sim/multiplay/callsign");
+const QString HEADING("/orientation/heading-deg");
+const QString PITCH("/orientation/pitch-deg");
+const QString ROLL("/orientation/roll-deg");
+const QString YAW("/orientation/yaw-deg");
+const QString ALTITUDE("/position/altitude-ft");
+const QString ALTITUDE_AGL("/position/altitude-agl-ft");
+const QString VERTICAL_SPEED("/velocities/vertical-speed-fps");
+const QString AIRSPEED("/velocities/airspeed-kt");
+const QString LATITUDE("/position/latitude-deg");
+const QString LONGITUDE("/position/longitude-deg");
+
+const QString AILERONS("/controls/flight/aileron");
+const QString ELEVATOR("/controls/flight/elevator");
+const QString THROTTLE("/controls/engines/engine/throttle");
+
 
 class FgGenericProtocol : public QObject
 {

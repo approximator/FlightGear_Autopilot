@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jul 09, 2015
+ * @date Modified Jul 17, 2015
  */
 
 #ifndef FGAIRCRAFT_H
@@ -36,6 +36,8 @@ public:
     inline qreal roll() const;
     inline qreal yaw() const;
     inline qreal altitude() const;
+    inline qreal verticalSpeed() const;
+    inline qreal airspeed() const;
     inline qreal groundElev() const;
     inline qreal x() const;
     inline qreal y() const;
@@ -62,6 +64,8 @@ protected:
     qreal m_Longitude = 0.0; // deg
     qreal m_Latitude  = 0.0; // deg
     qreal m_Altitude  = 0.0; // ft
+    qreal m_VerticalSpeed = 0.0;
+    qreal m_Airspeed = 0.0;
     qreal m_GroundLevel = 0.0; // ft
     qreal m_Heading   = 0.0; // deg
     qreal m_X = 0.0;
@@ -107,6 +111,16 @@ qreal FgAircraft::yaw() const
 qreal FgAircraft::altitude() const
 {
     return m_Altitude;
+}
+
+qreal FgAircraft::verticalSpeed() const
+{
+    return m_VerticalSpeed;
+}
+
+qreal FgAircraft::airspeed() const
+{
+    return m_Airspeed;
 }
 
 qreal FgAircraft::groundElev() const
