@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 14, 2015
- * @date Modified Jul 14, 2015
+ * @date Modified Jul 17, 2015
  */
 #ifndef FGAUTOPILOT_H
 #define FGAUTOPILOT_H
@@ -24,6 +24,7 @@ class FgAutopilot : public QObject
 public:
     typedef enum
     {
+        FG_MODE_VERTICAL_SPEED_HOLD,
         FG_MODE_ALTITUDE_HOLD,
         FG_MODE_ANGLES_HOLD,
         FG_MODE_FOLLOW
@@ -54,14 +55,16 @@ private:
     qreal m_DesiredLatitude  = 0.0;    // deg
     qreal m_DesiredAltitude  = 1000.0; // ft
     qreal m_DesiredHeading   = 150;    // deg
+    qreal m_DesiredVerticalSpeed = -2.0;//
 
     FgPid m_PitchPid    { 0.042, 0.00105, 0.0054};
     FgPid m_RollPid     { 0.01, 0.001, 0.001};
-    FgPid m_AltitudePid { 0.03, 0.0, 0.001};
     FgPid m_HeadingPid  { 0.04, 0.0, 0.0};
+    FgPid m_VerticalSpeedPid { 0.05, 0.0, 0.01};
 
     FgAircraft *m_toFollow { nullptr };
 
+    void holdVerticalSpeed(FgControlledAircraft* aircraft);
     void holdAltitude(FgControlledAircraft* aircraft);
     void holdAngles(FgControlledAircraft *aircraft);
     void follow(FgControlledAircraft* aircraft, FgAircraft *followAircraft);

@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 14, 2015
- * @date Modified Jul 14, 2015
+ * @date Modified Jul 17, 2015
  */
 
 #include "FgAutopilot.h"
@@ -27,6 +27,9 @@ void FgAutopilot::computeControl(FgControlledAircraft* aircraft)
 
     switch (m_Mode)
     {
+    case FG_MODE_VERTICAL_SPEED_HOLD:
+        holdVerticalSpeed(aircraft);
+        break;
     case FG_MODE_ALTITUDE_HOLD:
         holdAltitude(aircraft);
         break;
@@ -41,17 +44,21 @@ void FgAutopilot::computeControl(FgControlledAircraft* aircraft)
     }
 }
 
+void FgAutopilot::holdVerticalSpeed(FgControlledAircraft *aircraft)
+{
+    qreal vsError = m_DesiredVerticalSpeed - aircraft->verticalSpeed();
+    m_DesiredPitch = fgap::math::limit(m_VerticalSpeedPid.update(vsError), 20.0);
+    holdAngles(aircraft);
+
+//    qDebug("PITCH = %f / %f", aircraft->pitch(), m_DesiredPitch);
+//    qDebug("   VS = %f / %f", aircraft->verticalSpeed(), m_DesiredVerticalSpeed);
+}
+
 void FgAutopilot::holdAltitude(FgControlledAircraft * aircraft)
 {
-    qreal altitude = aircraft->groundElev();
-    qreal altitudeError = m_DesiredAltitude - altitude;
-
-    m_DesiredPitch = fgap::math::limit(m_AltitudePid.update(altitudeError), 20.0);
-//    m_DesiredRoll = m_HeadingPid.update(
-//                fgap::math::limit(m_DesiredHeading - aircraft->heading(), 35.0)
-//                );
-//    qDebug() << "Heading " << m_DesiredHeading << "(" << aircraft->heading() << ")";
-    holdAngles(aircraft);
+    qreal altitudeError = m_DesiredAltitude - aircraft->altitude();
+    m_DesiredVerticalSpeed = fgap::math::limit(altitudeError * 0.5, 25.0);
+    holdVerticalSpeed(aircraft);
 }
 
 void FgAutopilot::holdAngles(FgControlledAircraft * aircraft)

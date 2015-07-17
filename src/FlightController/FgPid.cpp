@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jul 14, 2015
- * @date Modified Jul 15, 2015
+ * @date Modified Jul 17, 2015
  */
 
 #include "FgPid.h"
@@ -61,6 +61,7 @@ void FgPid::reset()
 {
     _prev_error = 0;
     _int_error = 0;
+    _prev_d = NAN;
 }
 
 
