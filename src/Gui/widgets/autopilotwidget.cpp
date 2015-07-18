@@ -17,7 +17,7 @@
 AutopilotWidget::AutopilotWidget(QWidget *parent) : QWidget(parent)
 {
     qDebug() << "Parent = " << parent;
-    view.setSource(QUrl(QCoreApplication::applicationDirPath() + "/qml/FGear/FgAutopilot.qml"));
+    view.setSource(QUrl::fromLocalFile(FGAP_QML_RELATIVE_PATH "/FGear/FgAutopilot.qml"));
 
     QWidget *container = QWidget::createWindowContainer(&view, this);
     auto layout = new QVBoxLayout(this);

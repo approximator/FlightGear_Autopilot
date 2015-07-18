@@ -16,7 +16,7 @@
 
 PictorialIndicatorWidget::PictorialIndicatorWidget(QWidget *parent) : QWidget(parent)
 {
-    view.setSource(QUrl(QCoreApplication::applicationDirPath() + "/qml/FGear/Pointers/PictorialNavigation.qml"));
+    view.setSource(QUrl::fromLocalFile(FGAP_QML_RELATIVE_PATH "/FGear/Pointers/PictorialNavigation.qml"));
 
     QWidget *container = QWidget::createWindowContainer(&view, this);
     auto layout = new QVBoxLayout(this);
