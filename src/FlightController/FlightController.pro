@@ -10,9 +10,24 @@ TEMPLATE = app
 target.path = $$FGAP_INSTALL_PATH
 DEFINES += INSTALL_PREFIX=$$FGAP_INSTALL_PATH
 
-configs.path = $$shell_path("$$FGAP_APP_PATH/config")
+# define path to config files
+macx {
+
+CONFIG_PATH = $$relative_path($$FGAP_DATA_PATH/config, $$FGAP_BIN_PATH)
+configs.path = $$relative_path($$FGAP_DATA_PATH/config, $$FGAP_BUNDLE_PATH)
+configs.files = $$files("$$CONFIGS_DIR/*.json")
+QMAKE_BUNDLE_DATA += configs
+
+} else {
+
+CONFIG_PATH = $$relative_path($$FGAP_BIN_PATH/config, $$FGAP_BIN_PATH)
+configs.path = $$shell_path("$$FGAP_BIN_PATH/config")
 configs.files = $$files("$$CONFIGS_DIR/*.json")
 INSTALLS += configs
+
+}
+
+DEFINES += CONFIG_PATH=\\\"$$CONFIG_PATH\\\"
 
 SOURCES += $$ROOT_DIR/main.cpp \
     $$PWD/FgAircraft.cpp \
