@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Jul 09, 2015
+ * @date Modified Jul 20, 2015
  */
 
 #include "FgController.h"
@@ -30,8 +30,10 @@ FgController::~FgController()
 
 bool FgController::init()
 {
-    // FIX: filename determining
-    QString configFileName = CONFIG_PATH "/multiplayWithoutServer.json";
+    QString configFileName("%1/%2/%3");
+    configFileName = configFileName.arg(QCoreApplication::applicationDirPath(),
+                                        CONFIG_PATH,
+                                        "multiplayWithoutServer.json");
     QFile configFile(configFileName);
     if (!configFile.open(QIODevice::ReadOnly))
     {

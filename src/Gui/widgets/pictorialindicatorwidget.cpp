@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jul 16, 2015
- * @date Modified Jul 16, 2015
+ * @date Modified Jul 20, 2015
  */
 
 #include "pictorialindicatorwidget.h"
@@ -16,7 +16,11 @@
 
 PictorialIndicatorWidget::PictorialIndicatorWidget(QWidget *parent) : QWidget(parent)
 {
-    view.setSource(QUrl::fromLocalFile(FGAP_QML_RELATIVE_PATH "/FGear/Pointers/PictorialNavigation.qml"));
+    QString qmlFilename("%1/%2/%3");
+    qmlFilename = qmlFilename.arg(QCoreApplication::applicationDirPath(),
+                                  FGAP_QML_RELATIVE_PATH,
+                                  "FGear/Pointers/PictorialNavigation.qml");
+    view.setSource(QUrl::fromLocalFile(qmlFilename));
 
     QWidget *container = QWidget::createWindowContainer(&view, this);
     auto layout = new QVBoxLayout(this);
