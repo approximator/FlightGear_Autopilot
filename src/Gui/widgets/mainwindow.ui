@@ -21,7 +21,7 @@
        <enum>QLayout::SetMinimumSize</enum>
       </property>
       <item>
-       <widget class="AircraftsList" name="listWidget_ourAircrafts">
+       <widget class="QListView" name="listView_ourAircrafts">
         <property name="maximumSize">
          <size>
           <width>200</width>
@@ -107,7 +107,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>31</height>
+     <height>30</height>
     </rect>
    </property>
   </widget>

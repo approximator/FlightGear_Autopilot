@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Jul 09, 2015
+ * @date Modified Jul 20, 2015
  */
 
 #ifndef FGCONTROLLER_H
@@ -15,12 +15,12 @@
 #include "FgAircraft.h" //DO NOT REMOVE THIS (needed for transferring types in signals)!!!
 #include "FgControlledAircraft.h"
 
-#include <QObject>
-#include <QHash>
+#include <QAbstractListModel>
+#include <QList>
 
 class FgTransport;
 
-class FgController : public QObject
+class FgController : public QAbstractListModel
 {
     Q_OBJECT
 public:
@@ -29,10 +29,13 @@ public:
     bool init();
     bool saveConfig(const QString& filename);
 
+    int rowCount(const QModelIndex & parent = QModelIndex()) const;
+    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+
 private:
-    std::shared_ptr<FgTransport> m_Transport { };
-    QHash<QString, std::shared_ptr<FgControlledAircraft>> m_OurAircrafts { };
-    QHash<QString, std::shared_ptr<FgAircraft>> m_OtherAircrafts { };
+    std::shared_ptr<FgTransport>                 m_Transport { };
+    QList<std::shared_ptr<FgControlledAircraft>> m_OurAircrafts { };
+    QList<std::shared_ptr<FgAircraft>>           m_OtherAircrafts { };
     qint32 m_AircraftsCount { 0 };
 
     void updateOurAircraftsCount();

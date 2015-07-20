@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jul 09, 2015
- * @date Modified Jul 16, 2015
+ * @date Modified Jul 20, 2015
  */
 
 #ifndef MAINWINDOW_H
@@ -37,7 +37,7 @@ private:
 
 private slots:
     void engageAutopilot(bool enable);
-    void updateView();
+    void updateView(const QModelIndex &index);
 };
 
 #endif // MAINWINDOW_H

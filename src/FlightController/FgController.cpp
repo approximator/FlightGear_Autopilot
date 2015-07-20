@@ -18,7 +18,7 @@
 #include <QCoreApplication>
 
 FgController::FgController(QObject *parent) :
-    QObject(parent)
+    QAbstractListModel(parent)
 {
 
 }
@@ -47,12 +47,12 @@ bool FgController::init()
     for (auto const &parameter : aircrafts)
     {
         auto aircraft = std::make_shared<FgControlledAircraft>(parameter.toObject());
-        m_OurAircrafts.insert(aircraft->callsign(), aircraft);
+        m_OurAircrafts.append(aircraft);
         connect(aircraft.get(), &FgControlledAircraft::onConnected, this, &FgController::onAircraftConnected);
         emit ourAircraftAdded(aircraft.get());
     }
 
-    m_Transport = m_OurAircrafts["Travis"]->transport();
+    m_Transport = m_OurAircrafts[0]->transport();
     connect(m_Transport.get(), &FgTransport::fgDataReceived, this, &FgController::onDataReceived);
 
 //    m_OurAircrafts["Travis"]->follow(m_OurAircrafts["Rover"].get());
@@ -83,6 +83,28 @@ bool FgController::saveConfig(const QString &filename)
     saveFile.write(saveDoc.toJson());
 
     return true;
+}
+
+int FgController::rowCount(const QModelIndex &parent) const
+{
+    Q_UNUSED(parent);
+    qDebug("Row count");
+    return m_OurAircrafts.count();
+}
+
+QVariant FgController::data(const QModelIndex &index, int role) const
+{
+    qDebug("FgController::data. row = %d, role = %d", index.row(), role);
+    if (!index.isValid())
+        return QVariant();
+
+    if (index.row() >= m_OurAircrafts.size())
+        return QVariant();
+
+    if (role == Qt::DisplayRole)
+        return m_OurAircrafts[index.row()]->callsign();
+    else
+        return QVariant();
 }
 
 void FgController::updateAircraft(const QString & /* aircraftId */)
@@ -131,7 +153,9 @@ void FgController::updateOtherAircraftsCount()
         QString callsign = m_Transport->getString("/ai/models/multiplayer[" + QString::number(i) + "]/callsign");
         qDebug() << "callsign = " << callsign;
         callsigns.push_back(callsign);
-        if (m_OtherAircrafts.contains(callsigns.back()))
+        if (m_OtherAircrafts.end() !=
+                std::find_if(m_OtherAircrafts.begin(), m_OtherAircrafts.end(),
+                             [&callsign](std::shared_ptr<FgAircraft> a){ return a->callsign() == callsign;}))
         {
             continue;
         }
@@ -139,7 +163,7 @@ void FgController::updateOtherAircraftsCount()
         auto aircraft = std::make_shared<FgAircraft>(callsign);
         aircraft->setConnected(true);
         //! @todo  aircraft->setIndex();
-        m_OtherAircrafts[callsign] = aircraft;
+        m_OtherAircrafts.append(aircraft);
         emit aircraftAdded(aircraft.get());
         qDebug() << "otherAircraftAdded";
     }
