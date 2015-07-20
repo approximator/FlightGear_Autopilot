@@ -11,7 +11,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "FgController.h"
+#include "FgAircraftsModel.h"
 #include "aircraftslist.h"
 
 #include <QMainWindow>
@@ -33,7 +33,7 @@ public:
 private:
     Ui::MainWindow *ui;
 
-    FgController controller { };
+    FgAircraftsModel fgapModel { };
 
 private slots:
     void engageAutopilot(bool enable);

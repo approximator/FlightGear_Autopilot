@@ -16,8 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->listView_ourAircrafts->setModel(&controller);
-    controller.init();
+    ui->listView_ourAircrafts->setModel(&fgapModel);
+    fgapModel.init();
     connect(ui->widget_Autopilot, &AutopilotWidget::autopilotEngage, this, &MainWindow::engageAutopilot);
     connect(ui->listView_ourAircrafts, &QListView::activated, this, &MainWindow::updateView);
 }
@@ -36,5 +36,5 @@ void MainWindow::engageAutopilot(bool enable)
 
 void MainWindow::updateView(const QModelIndex &index)
 {
-    ui->label_Callsign->setText(controller.data(index).toString());
+    ui->label_Callsign->setText(fgapModel.data(index).toString());
 }

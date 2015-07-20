@@ -6,10 +6,10 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jul 14, 2015
+ * @date Modified Jul 20, 2015
  */
 
-#include "FgController.h"
+#include "FgAircraftsModel.h"
 #include "Gui/widgets/mainwindow.h"
 
 #include <QApplication>
@@ -34,11 +34,11 @@ int main(int argc, char *argv[])
         return app.exec();
     }
 
-    FgController fgController;
+    FgAircraftsModel fgModel;
     QQmlApplicationEngine engine;
     QQmlContext *context = engine.rootContext();
-    context->setContextProperty("fg_controller", &fgController);
+    context->setContextProperty("fg_controller", &fgModel);
     engine.load(QUrl(QStringLiteral("qrc:qml/MainView.qml")));
-    fgController.init();
+    fgModel.init();
     return app.exec();
 }

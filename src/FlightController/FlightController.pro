@@ -29,31 +29,32 @@ INSTALLS += configs
 
 DEFINES += CONFIG_PATH=\\\"$$CONFIG_PATH\\\"
 
-SOURCES += $$ROOT_DIR/main.cpp \
-    $$PWD/FgAircraft.cpp \
-    $$PWD/FgTransport.cpp \
-    $$PWD/FgGenericProtocol.cpp \
-    $$PWD/FgController.cpp \
-    $$PWD/FgAutopilot.cpp \
-    $$PWD/FgControlledAircraft.cpp \
-    $$PWD/FgFlightgear.cpp \
+SOURCES += \
     $$PWD/FgPid.cpp \
     $$PWD/FgMath.cpp \
+    $$ROOT_DIR/main.cpp \
+    $$PWD/FgAircraft.cpp \
+    $$PWD/FgTransport.cpp \
+    $$PWD/FgAutopilot.cpp \
+    $$PWD/FgFlightgear.cpp \
+    $$PWD/FgAircraftsModel.cpp \
+    $$PWD/FgGenericProtocol.cpp \
+    $$PWD/FgControlledAircraft.cpp \
     $$ROOT_DIR/Gui/widgets/mainwindow.cpp \
     $$ROOT_DIR/Gui/widgets/aircraftslist.cpp \
     $$ROOT_DIR/Gui/widgets/autopilotwidget.cpp \
     $$ROOT_DIR/Gui/widgets/pictorialindicatorwidget.cpp
 
 HEADERS  += \
-    $$PWD/FgAircraft.h \
-    $$PWD/FgTransport.h \
-    $$PWD/FgGenericProtocol.h \
-    $$PWD/FgController.h \
-    $$PWD/FgAutopilot.h \
-    $$PWD/FgControlledAircraft.h \
-    $$PWD/FgFlightgear.h \
     $$PWD/FgPid.h \
     $$PWD/FgMath.h \
+    $$PWD/FgAircraft.h \
+    $$PWD/FgTransport.h \
+    $$PWD/FgAutopilot.h \
+    $$PWD/FgFlightgear.h \
+    $$PWD/FgAircraftsModel.h \
+    $$PWD/FgGenericProtocol.h \
+    $$PWD/FgControlledAircraft.h \
     $$ROOT_DIR/Gui/widgets/mainwindow.h \
     $$ROOT_DIR/Gui/widgets/aircraftslist.h \
     $$ROOT_DIR/Gui/widgets/autopilotwidget.h \

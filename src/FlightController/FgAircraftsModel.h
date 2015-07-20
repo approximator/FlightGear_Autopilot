@@ -1,7 +1,7 @@
 /*!
- * @file FgController.cpp
+ * @file FgAircraftsModel.h
  *
- * @brief Controller
+ * @brief Aircrafts model
  *
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
@@ -20,12 +20,12 @@
 
 class FgTransport;
 
-class FgController : public QAbstractListModel
+class FgAircraftsModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    explicit FgController(QObject *parent = 0);
-    virtual ~FgController();
+    explicit FgAircraftsModel(QObject *parent = 0);
+    virtual ~FgAircraftsModel();
     bool init();
     bool saveConfig(const QString& filename);
 
