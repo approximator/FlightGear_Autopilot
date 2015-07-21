@@ -190,4 +190,5 @@ void FgAircraft::setConnected(bool _connected)
     m_Connected = _connected;
 }
 
+Q_DECLARE_METATYPE(FgAircraft *)
 #endif // FGAIRCRAFT_H

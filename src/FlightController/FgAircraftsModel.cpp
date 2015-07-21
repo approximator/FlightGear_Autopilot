@@ -21,6 +21,10 @@ FgAircraftsModel::FgAircraftsModel(QObject *parent) :
     QAbstractListModel(parent)
 {
     init();
+
+    m_Roles[Name] = "name";
+    m_Roles[Connected] = "connected";
+    m_Roles[Aircraft] = "aircraft";
 }
 
 FgAircraftsModel::~FgAircraftsModel()
@@ -112,6 +116,8 @@ QVariant FgAircraftsModel::data(const QModelIndex &index, int role) const
     case Connected:
         return m_OurAircrafts[index.row()]->connected();
         break;
+     case Aircraft:
+        return QVariant::fromValue(m_OurAircrafts[index.row()].get());
     default:
         return QVariant();
         break;
@@ -159,21 +165,8 @@ void FgAircraftsModel::onAircraftConnected()
 {
     FgAircraft *aircraft = static_cast<FgAircraft*>(sender());
 
-    int row = 0;
-    for (auto &a : m_OurAircrafts)
-        if (a->callsign() != aircraft->callsign())
-            ++row;
-        else
-            break;
-
-    // FIXME: fix fix fix
-    emit beginRemoveRows(QModelIndex(), 0, m_OurAircrafts.size()-1);
-    emit endRemoveRows();
-
-    emit beginInsertRows(QModelIndex(), 0, m_OurAircrafts.size()-1);
-    emit endInsertRows();
-
-    qDebug() << "aircraft " << m_OurAircrafts[row]->callsign() << " connected";
+    emit dataChanged(QModelIndex(), index(m_OurAircrafts.size()-1), {Connected});
+    qDebug() << "aircraft " << aircraft->callsign() << " connected";
 }
 
 void FgAircraftsModel::updateOtherAircraftsCount()

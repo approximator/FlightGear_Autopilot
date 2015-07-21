@@ -45,7 +45,6 @@ Page {
         clip: true
 
         delegate: FgMenuItem {
-            model: aircraftsModel
 //            visible: {
 //                if (menuList.onDrawer) {
 //                    return true;

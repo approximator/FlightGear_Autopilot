@@ -37,7 +37,7 @@ public:
     QJsonObject configurationAsJson() const;
     bool setConfigFromJson(const QJsonObject& config);
 
-    void runFlightGear(bool run = true);
+    Q_INVOKABLE void runFlightGear(bool run = true);
     inline const FgFlightgear& flightgear() const;
 
 private:

@@ -12,7 +12,6 @@
 #ifndef FGCONTROLLER_H
 #define FGCONTROLLER_H
 
-#include "FgAircraft.h" //DO NOT REMOVE THIS (needed for transferring types in signals)!!!
 #include "FgControlledAircraft.h"
 
 #include <QAbstractListModel>
@@ -26,7 +25,8 @@ class FgAircraftsModel : public QAbstractListModel
 public:
     enum Roles {
         Name = Qt::UserRole + 1,
-        Connected
+        Connected,
+        Aircraft
     };
 
     explicit FgAircraftsModel(QObject *parent = 0);
