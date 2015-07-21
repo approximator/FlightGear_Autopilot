@@ -165,21 +165,8 @@ void FgAircraftsModel::onAircraftConnected()
 {
     FgAircraft *aircraft = static_cast<FgAircraft*>(sender());
 
-    int row = 0;
-    for (auto &a : m_OurAircrafts)
-        if (a->callsign() != aircraft->callsign())
-            ++row;
-        else
-            break;
-
-    // FIXME: fix fix fix
-    emit beginRemoveRows(QModelIndex(), 0, m_OurAircrafts.size()-1);
-    emit endRemoveRows();
-
-    emit beginInsertRows(QModelIndex(), 0, m_OurAircrafts.size()-1);
-    emit endInsertRows();
-
-    qDebug() << "aircraft " << m_OurAircrafts[row]->callsign() << " connected";
+    emit dataChanged(QModelIndex(), index(m_OurAircrafts.size()-1), {Connected});
+    qDebug() << "aircraft " << aircraft->callsign() << " connected";
 }
 
 void FgAircraftsModel::updateOtherAircraftsCount()
