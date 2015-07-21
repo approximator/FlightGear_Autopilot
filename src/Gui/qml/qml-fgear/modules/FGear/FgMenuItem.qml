@@ -4,6 +4,8 @@ import Material 0.1
 import Material.ListItems 0.1 as ListItem
 
 ListItem.Subtitled {
+    property variant model
+
     height: visible ? (maximumLineCount == 2 ? Units.dp(72) : Units.dp(88)) : 0
     text: name
 
@@ -16,6 +18,12 @@ ListItem.Subtitled {
 
     subText: (connected === true ? "Connected" : "Not connected")
     interactive: true
+
+    secondaryItem: Button {
+        anchors.centerIn: parent
+        text: "Run"
+        onClicked: model.runFlightgear(index)
+    }
 
 //    Component.onCompleted: console.log(name, " | Connected", connected)
 }

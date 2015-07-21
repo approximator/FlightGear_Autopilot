@@ -125,6 +125,11 @@ QString FgAircraftsModel::get(int index) const
     return m_OurAircrafts.at(index)->callsign();
 }
 
+void FgAircraftsModel::runFlightgear(int index) const
+{
+    m_OurAircrafts[index]->runFlightGear();
+}
+
 QHash<int, QByteArray> FgAircraftsModel::roleNames() const
 {
     return m_Roles;

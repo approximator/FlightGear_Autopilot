@@ -38,6 +38,7 @@ public:
     QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
 
     Q_INVOKABLE QString get(int index) const;
+    Q_INVOKABLE void runFlightgear(int index) const;
 
 protected:
     virtual QHash<int, QByteArray> roleNames() const override;
