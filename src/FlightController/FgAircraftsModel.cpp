@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Jul 20, 2015
+ * @date Modified Jul 21, 2015
  */
 
 #include "FgAircraftsModel.h"
@@ -20,7 +20,7 @@
 FgAircraftsModel::FgAircraftsModel(QObject *parent) :
     QAbstractListModel(parent)
 {
-
+    init();
 }
 
 FgAircraftsModel::~FgAircraftsModel()
@@ -47,9 +47,10 @@ bool FgAircraftsModel::init()
     for (auto const &parameter : aircrafts)
     {
         auto aircraft = std::make_shared<FgControlledAircraft>(parameter.toObject());
+        emit beginInsertRows(QModelIndex(), m_OurAircrafts.count(), m_OurAircrafts.count());
         m_OurAircrafts.append(aircraft);
         connect(aircraft.get(), &FgControlledAircraft::onConnected, this, &FgAircraftsModel::onAircraftConnected);
-        emit ourAircraftAdded(aircraft.get());
+        emit endInsertRows();
     }
 
     m_Transport = m_OurAircrafts[0]->transport();
@@ -58,7 +59,8 @@ bool FgAircraftsModel::init()
 //    m_OurAircrafts["Travis"]->follow(m_OurAircrafts["Rover"].get());
 //    m_OurAircrafts["Rover"]->autopilot()->engage();
 
-//    m_OurAircrafts["Travis"]->runFlightGear();
+//    m_OurAircrafts[0]->runFlightGear();
+//    m_OurAircrafts[0]->autopilot()->engage();
 //    m_OurAircrafts["Rover"]->runFlightGear();
     return true;
 }
@@ -101,10 +103,31 @@ QVariant FgAircraftsModel::data(const QModelIndex &index, int role) const
     if (index.row() >= m_OurAircrafts.size())
         return QVariant();
 
-    if (role == Qt::DisplayRole)
+    switch (role)
+    {
+    case Name:
+    case Qt::DisplayRole:
         return m_OurAircrafts[index.row()]->callsign();
-    else
+        break;
+    case Connected:
+        m_OurAircrafts[index.row()]->connected();
+        break;
+    default:
         return QVariant();
+        break;
+    }
+
+    return QVariant();
+}
+
+QString FgAircraftsModel::get(int index) const
+{
+    return m_OurAircrafts.at(index)->callsign();
+}
+
+QHash<int, QByteArray> FgAircraftsModel::roleNames() const
+{
+    return m_Roles;
 }
 
 void FgAircraftsModel::updateAircraft(const QString & /* aircraftId */)
@@ -130,8 +153,17 @@ void FgAircraftsModel::onDataReceived()
 void FgAircraftsModel::onAircraftConnected()
 {
     FgAircraft *aircraft = static_cast<FgAircraft*>(sender());
-    emit aircraftConnected(aircraft);
-    qDebug() << "aircraft " << aircraft->callsign() << " connected";
+
+    int row = 0;
+    for (auto &a : m_OurAircrafts)
+        if (a->callsign() != aircraft->callsign())
+            ++row;
+        else
+            break;
+
+    emit dataChanged(index(0,0), index(row, 0));
+
+    qDebug() << "aircraft " << m_OurAircrafts[row]->callsign() << " connected";
 }
 
 void FgAircraftsModel::updateOtherAircraftsCount()
