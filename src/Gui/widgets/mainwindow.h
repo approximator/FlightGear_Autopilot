@@ -5,13 +5,13 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jul 09, 2015
- * @date Modified Jul 16, 2015
+ * @date Modified Jul 20, 2015
  */
 
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "FgController.h"
+#include "FgAircraftsModel.h"
 #include "aircraftslist.h"
 
 #include <QMainWindow>
@@ -33,11 +33,11 @@ public:
 private:
     Ui::MainWindow *ui;
 
-    FgController controller { };
+    FgAircraftsModel fgapModel { };
 
 private slots:
     void engageAutopilot(bool enable);
-    void updateView();
+    void updateView(const QModelIndex &index);
 };
 
 #endif // MAINWINDOW_H

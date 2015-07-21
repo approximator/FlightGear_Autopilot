@@ -5,9 +5,9 @@ import Material.ListItems 0.1 as ListItem
 Page {
     id: page
 
-    property ListModel menuModel;
-    property string selectedComponent: menuModel.get(0).pagePath
-    property var sections: getModelSections("menuSection")
+    property QtObject aircraftsModel;
+    property string selectedComponent: aircraftsModel.get(0)
+    property var sections: ["Aircrafts"]
 
     title: "Aircrafts control"
 
@@ -41,38 +41,38 @@ Page {
         parent: (navDrawer && navDrawer.enabled) ?
                     navDrawer.drawerView : tabView.currentItem.sidebarView
 
-        model: menuModel
+        model: aircraftsModel
         clip: true
 
         delegate: FgMenuItem {
-            visible: {
-                if (menuList.onDrawer) {
-                    return true;
-                } else {
-                    return (menuSection == menuList.currentTab);
-                }
-            }
-            enabled: visible
-            text: name
+//            visible: {
+//                if (menuList.onDrawer) {
+//                    return true;
+//                } else {
+//                    return (menuSection == menuList.currentTab);
+//                }
+//            }
+
             selected: ListView.isCurrentItem
-            onClicked: {
-                reloadPage(pagePath);
+//            onClicked: {
+//                reloadPage(pagePath);
 
-                if (menuList.onDrawer) {
-                    navDrawer.close();
-                }
+//                if (menuList.onDrawer) {
+//                    navDrawer.close();
+//                }
 
-                menuList.currentIndex = index;
-            }
-        }
-        section {
-            property: onDrawer ? "menuSection" : ""
-            criteria: ViewSection.FullString
-            delegate: ListItem.Subheader {
-                text: section
-            }
+//                menuList.currentIndex = index;
+//            }
         }
     }
+//        section {
+//            property: onDrawer ? "menuSection" : ""
+//            criteria: ViewSection.FullString
+//            delegate: ListItem.Subheader {
+//                text: section
+//            }
+//        }
+
 
     NavigationDrawer {
         id: navDrawer
@@ -132,27 +132,27 @@ Page {
         }
     }
 
-    function getModelSections (propertyName) {
-        var i;
-        var _sections = {};
-        var _itemSection;
+//    function getModelSections (propertyName) {
+//        var i;
+//        var _sections = {};
+//        var _itemSection;
 
-        if (menuModel === undefined) {
-            return ([]);
-        }
+//        if (aircraftsModel === undefined) {
+//            return ([]);
+//        }
 
-        for (i = 0; i < menuModel.count; i+=1) {
-            _itemSection = menuModel.get(i)[propertyName];
+//        for (i = 0; i < aircraftsModel.count; i+=1) {
+//            _itemSection = aircraftsModel.get(i)[propertyName];
 
-            if (_itemSection in _sections) {
-                continue;
-            }
-            _sections[_itemSection] = true;
-        }
-        return (Object.keys(_sections));
-    }
-    function reloadPage (_pagePath) {
-        selectedComponent = ""; // It is for page reloading
-        selectedComponent = _pagePath;
-    }
+//            if (_itemSection in _sections) {
+//                continue;
+//            }
+//            _sections[_itemSection] = true;
+//        }
+//        return (Object.keys(_sections));
+//    }
+//    function reloadPage (_pagePath) {
+//        selectedComponent = ""; // It is for page reloading
+//        selectedComponent = _pagePath;
+//    }
 }

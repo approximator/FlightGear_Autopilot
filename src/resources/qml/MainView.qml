@@ -4,6 +4,4 @@ import FGear 0.1
 
 FgWindow {
     id: fgview
-
-    fgController: fg_controller
 }

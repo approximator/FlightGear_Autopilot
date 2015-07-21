@@ -1,15 +1,15 @@
 /*!
- * @file FgController.cpp
+ * @file FgAircraftsModel.cpp
  *
- * @brief Controller
+ * @brief Aircrafts model
  *
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Jul 20, 2015
+ * @date Modified Jul 21, 2015
  */
 
-#include "FgController.h"
+#include "FgAircraftsModel.h"
 #include "FgTransport.h"
 
 #include <QFile>
@@ -17,18 +17,18 @@
 #include <QJsonDocument>
 #include <QCoreApplication>
 
-FgController::FgController(QObject *parent) :
-    QObject(parent)
+FgAircraftsModel::FgAircraftsModel(QObject *parent) :
+    QAbstractListModel(parent)
 {
-
+    init();
 }
 
-FgController::~FgController()
+FgAircraftsModel::~FgAircraftsModel()
 {
 //    saveConfig("./config/fgapConfig.json");
 }
 
-bool FgController::init()
+bool FgAircraftsModel::init()
 {
     QString configFileName("%1/%2/%3");
     configFileName = configFileName.arg(QCoreApplication::applicationDirPath(),
@@ -47,23 +47,25 @@ bool FgController::init()
     for (auto const &parameter : aircrafts)
     {
         auto aircraft = std::make_shared<FgControlledAircraft>(parameter.toObject());
-        m_OurAircrafts.insert(aircraft->callsign(), aircraft);
-        connect(aircraft.get(), &FgControlledAircraft::onConnected, this, &FgController::onAircraftConnected);
-        emit ourAircraftAdded(aircraft.get());
+        emit beginInsertRows(QModelIndex(), m_OurAircrafts.count(), m_OurAircrafts.count());
+        m_OurAircrafts.append(aircraft);
+        connect(aircraft.get(), &FgControlledAircraft::onConnected, this, &FgAircraftsModel::onAircraftConnected);
+        emit endInsertRows();
     }
 
-    m_Transport = m_OurAircrafts["Travis"]->transport();
-    connect(m_Transport.get(), &FgTransport::fgDataReceived, this, &FgController::onDataReceived);
+    m_Transport = m_OurAircrafts[0]->transport();
+    connect(m_Transport.get(), &FgTransport::fgDataReceived, this, &FgAircraftsModel::onDataReceived);
 
 //    m_OurAircrafts["Travis"]->follow(m_OurAircrafts["Rover"].get());
 //    m_OurAircrafts["Rover"]->autopilot()->engage();
 
-//    m_OurAircrafts["Travis"]->runFlightGear();
+//    m_OurAircrafts[0]->runFlightGear();
+//    m_OurAircrafts[0]->autopilot()->engage();
 //    m_OurAircrafts["Rover"]->runFlightGear();
     return true;
 }
 
-bool FgController::saveConfig(const QString &filename)
+bool FgAircraftsModel::saveConfig(const QString &filename)
 {
     QFile saveFile(filename);
 
@@ -85,11 +87,54 @@ bool FgController::saveConfig(const QString &filename)
     return true;
 }
 
-void FgController::updateAircraft(const QString & /* aircraftId */)
+int FgAircraftsModel::rowCount(const QModelIndex &parent) const
+{
+    Q_UNUSED(parent);
+    qDebug("Row count");
+    return m_OurAircrafts.count();
+}
+
+QVariant FgAircraftsModel::data(const QModelIndex &index, int role) const
+{
+    qDebug("FgController::data. row = %d, role = %d", index.row(), role);
+    if (!index.isValid())
+        return QVariant();
+
+    if (index.row() >= m_OurAircrafts.size())
+        return QVariant();
+
+    switch (role)
+    {
+    case Name:
+    case Qt::DisplayRole:
+        return m_OurAircrafts[index.row()]->callsign();
+        break;
+    case Connected:
+        m_OurAircrafts[index.row()]->connected();
+        break;
+    default:
+        return QVariant();
+        break;
+    }
+
+    return QVariant();
+}
+
+QString FgAircraftsModel::get(int index) const
+{
+    return m_OurAircrafts.at(index)->callsign();
+}
+
+QHash<int, QByteArray> FgAircraftsModel::roleNames() const
+{
+    return m_Roles;
+}
+
+void FgAircraftsModel::updateAircraft(const QString & /* aircraftId */)
 {
 }
 
-void FgController::onDataReceived()
+void FgAircraftsModel::onDataReceived()
 {
     updateOtherAircraftsCount();
 
@@ -105,14 +150,23 @@ void FgController::onDataReceived()
     }
 }
 
-void FgController::onAircraftConnected()
+void FgAircraftsModel::onAircraftConnected()
 {
     FgAircraft *aircraft = static_cast<FgAircraft*>(sender());
-    emit aircraftConnected(aircraft);
-    qDebug() << "aircraft " << aircraft->callsign() << " connected";
+
+    int row = 0;
+    for (auto &a : m_OurAircrafts)
+        if (a->callsign() != aircraft->callsign())
+            ++row;
+        else
+            break;
+
+    emit dataChanged(index(0,0), index(row, 0));
+
+    qDebug() << "aircraft " << m_OurAircrafts[row]->callsign() << " connected";
 }
 
-void FgController::updateOtherAircraftsCount()
+void FgAircraftsModel::updateOtherAircraftsCount()
 {
     qint32 count = m_Transport->getInt("/ai/models/num-players");
 
@@ -131,7 +185,9 @@ void FgController::updateOtherAircraftsCount()
         QString callsign = m_Transport->getString("/ai/models/multiplayer[" + QString::number(i) + "]/callsign");
         qDebug() << "callsign = " << callsign;
         callsigns.push_back(callsign);
-        if (m_OtherAircrafts.contains(callsigns.back()))
+        if (m_OtherAircrafts.end() !=
+                std::find_if(m_OtherAircrafts.begin(), m_OtherAircrafts.end(),
+                             [&callsign](std::shared_ptr<FgAircraft> a){ return a->callsign() == callsign;}))
         {
             continue;
         }
@@ -139,7 +195,7 @@ void FgController::updateOtherAircraftsCount()
         auto aircraft = std::make_shared<FgAircraft>(callsign);
         aircraft->setConnected(true);
         //! @todo  aircraft->setIndex();
-        m_OtherAircrafts[callsign] = aircraft;
+        m_OtherAircrafts.append(aircraft);
         emit aircraftAdded(aircraft.get());
         qDebug() << "otherAircraftAdded";
     }

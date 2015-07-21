@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jul 09, 2015
- * @date Modified Jul 16, 2015
+ * @date Modified Jul 20, 2015
  */
 
 #include "mainwindow.h"
@@ -16,10 +16,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    connect(&controller, &FgController::ourAircraftAdded, ui->listWidget_ourAircrafts, &AircraftsList::addAircraft);
-    controller.init();
+    ui->listView_ourAircrafts->setModel(&fgapModel);
+    fgapModel.init();
     connect(ui->widget_Autopilot, &AutopilotWidget::autopilotEngage, this, &MainWindow::engageAutopilot);
-    connect(ui->listWidget_ourAircrafts, &AircraftsList::aircraftSelected, this, &MainWindow::updateView);
+    connect(ui->listView_ourAircrafts, &QListView::activated, this, &MainWindow::updateView);
 }
 
 MainWindow::~MainWindow()
@@ -29,12 +29,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::engageAutopilot(bool enable)
 {
-    FgControlledAircraft* aircraft = static_cast<FgControlledAircraft*>(ui->listWidget_ourAircrafts->currentAircraft());
-    aircraft->autopilot()->engage(enable);
+    Q_UNUSED(enable);
+//    FgControlledAircraft* aircraft = static_cast<FgControlledAircraft*>(ui->listWidget_ourAircrafts->currentAircraft());
+//    aircraft->autopilot()->engage(enable);
 }
 
-void MainWindow::updateView()
+void MainWindow::updateView(const QModelIndex &index)
 {
-    FgControlledAircraft* aircraft = static_cast<FgControlledAircraft*>(ui->listWidget_ourAircrafts->currentAircraft());
-    ui->label_Callsign->setText(aircraft->callsign());
+    ui->label_Callsign->setText(fgapModel.data(index).toString());
 }

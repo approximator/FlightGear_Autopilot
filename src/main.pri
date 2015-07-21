@@ -12,6 +12,7 @@ unix {
     QMAKE_CXXFLAGS += -isystem "$$[QT_INSTALL_HEADERS]" -isystem "$$[QT_INSTALL_HEADERS]/QtWidgets"
     QMAKE_CXXFLAGS += -isystem "$$[QT_INSTALL_HEADERS]/QtXml" -isystem "$$[QT_INSTALL_HEADERS]/QtGui"
     QMAKE_CXXFLAGS += -isystem "$$[QT_INSTALL_HEADERS]/QtCore"
+    QMAKE_CXXFLAGS += -isystem "$$[QT_INSTALL_HEADERS]/QtQml"
 }
 
 isEmpty(FGAP_BUILD_TREE) {

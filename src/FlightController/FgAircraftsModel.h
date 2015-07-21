@@ -1,12 +1,12 @@
 /*!
- * @file FgController.cpp
+ * @file FgAircraftsModel.h
  *
- * @brief Controller
+ * @brief Aircrafts model
  *
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Jul 09, 2015
+ * @date Modified Jul 21, 2015
  */
 
 #ifndef FGCONTROLLER_H
@@ -15,25 +15,43 @@
 #include "FgAircraft.h" //DO NOT REMOVE THIS (needed for transferring types in signals)!!!
 #include "FgControlledAircraft.h"
 
-#include <QObject>
-#include <QHash>
+#include <QAbstractListModel>
+#include <QList>
 
 class FgTransport;
 
-class FgController : public QObject
+class FgAircraftsModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    explicit FgController(QObject *parent = 0);
-    virtual ~FgController();
+    enum Roles {
+        Name = Qt::UserRole + 1,
+        Connected
+    };
+
+    explicit FgAircraftsModel(QObject *parent = 0);
+    virtual ~FgAircraftsModel();
     bool init();
     bool saveConfig(const QString& filename);
 
+    int rowCount(const QModelIndex & parent = QModelIndex()) const;
+    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+
+    Q_INVOKABLE QString get(int index) const;
+
+protected:
+    virtual QHash<int, QByteArray> roleNames() const override;
+
 private:
-    std::shared_ptr<FgTransport> m_Transport { };
-    QHash<QString, std::shared_ptr<FgControlledAircraft>> m_OurAircrafts { };
-    QHash<QString, std::shared_ptr<FgAircraft>> m_OtherAircrafts { };
+    std::shared_ptr<FgTransport>                 m_Transport { };
+    QList<std::shared_ptr<FgControlledAircraft>> m_OurAircrafts { };
+    QList<std::shared_ptr<FgAircraft>>           m_OtherAircrafts { };
     qint32 m_AircraftsCount { 0 };
+
+    QHash<int, QByteArray> m_Roles {
+        { Roles::Name     , "name"     },
+        { Roles::Connected, "connected"}
+    };
 
     void updateOurAircraftsCount();
     void updateOtherAircraftsCount();

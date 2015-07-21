@@ -1,5 +1,6 @@
 import QtQuick 2.2
 import Material 0.1
+import fgap 1.0
 
 ApplicationWindow {
     id: fgap
@@ -18,58 +19,48 @@ ApplicationWindow {
         tabHighlightColor: "white"
     }
 
-    property QtObject fgController: null
-    Connections{
-        target: fgController
-        onAircraftAdded: addAircraft(aircraft, false)
-        onAircraftConnected: updateAircraft(aircraft, false)
-        onOurAircraftAdded: addAircraft(aircraft, true)
-        onAircraftDisconnected: removeAircraft(aircraft)
-        onAircraftUpdated: updateAircraft(aircraft)
-    }
-
-    FgMenuModel {
-        id: menuModel
+    FgAircraftsModel {
+        id: fgapModel
     }
 
     FgInitialPage {
         id: startpage
-        menuModel: menuModel
+        aircraftsModel: fgapModel
     }
 
     initialPage: startpage
 
     // adds aircraft to controlled* or otherAiModel
-    function addAircraft (_aircraft, _our) {
-        var modelObj = _aircraft.params;
-        modelObj["menuSection"] = _our ? "Aircrafts" : "Other Aircrafts";
-        modelObj["name"] = _aircraft.callsign;
-        modelObj["connected"] = _aircraft.connected;
-        modelObj["pagePath"] = "FgAircraftPage.qml"; //Fixme: get appropriate page
-        modelObj["menuIcon"]  = "maps/flight";
-        menuModel.append(modelObj);
-    }
+//    function addAircraft (_aircraft, _our) {
+//        var modelObj = _aircraft.params;
+//        modelObj["menuSection"] = _our ? "Aircrafts" : "Other Aircrafts";
+//        modelObj["name"] = _aircraft.callsign;
+//        modelObj["connected"] = _aircraft.connected;
+//        modelObj["pagePath"] = "FgAircraftPage.qml"; //Fixme: get appropriate page
+//        modelObj["menuIcon"]  = "maps/flight";
+//        menuModel.append(modelObj);
+//    }
 
-    function updateAircraft(_aircraft) {
-        var aiCallsign = _aircraft.callsign;
-        var i = 0;
-        for (; i < menuModel.count; i += 1) {
-            var aircraft = menuModel.get(i)
-            if (aircraft.name === aiCallsign) {
-                aircraft.connected = true;  // FIXME: use params object
-                break;
-            }
-        }
-    }
+//    function updateAircraft(_aircraft) {
+//        var aiCallsign = _aircraft.callsign;
+//        var i = 0;
+//        for (; i < menuModel.count; i += 1) {
+//            var aircraft = menuModel.get(i)
+//            if (aircraft.name === aiCallsign) {
+//                aircraft.connected = true;  // FIXME: use params object
+//                break;
+//            }
+//        }
+//    }
 
-    function removeAircraft (aircraft) {
-        var aiCallsign = _aircraft.callsign;
-        var i = 0;
-        for (;i < menuModel.count; i+=1) {
-            if (menuModel.get(i).name === aiCallsign) {
-                menuModel.remove(i);
-                break;
-            }
-        }
-    }
+//    function removeAircraft (aircraft) {
+//        var aiCallsign = _aircraft.callsign;
+//        var i = 0;
+//        for (;i < menuModel.count; i+=1) {
+//            if (menuModel.get(i).name === aiCallsign) {
+//                menuModel.remove(i);
+//                break;
+//            }
+//        }
+//    }
 }
