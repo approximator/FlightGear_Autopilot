@@ -21,6 +21,10 @@ FgAircraftsModel::FgAircraftsModel(QObject *parent) :
     QAbstractListModel(parent)
 {
     init();
+
+    m_Roles[Name] = "name";
+    m_Roles[Connected] = "connected";
+    m_Roles[Aircraft] = "aircraft";
 }
 
 FgAircraftsModel::~FgAircraftsModel()
@@ -112,6 +116,8 @@ QVariant FgAircraftsModel::data(const QModelIndex &index, int role) const
     case Connected:
         return m_OurAircrafts[index.row()]->connected();
         break;
+     case Aircraft:
+        return QVariant::fromValue(m_OurAircrafts[index.row()].get());
     default:
         return QVariant();
         break;

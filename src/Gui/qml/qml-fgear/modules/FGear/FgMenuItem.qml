@@ -4,7 +4,6 @@ import Material 0.1
 import Material.ListItems 0.1 as ListItem
 
 ListItem.Subtitled {
-    signal runFlightgear(int index)
 
     height: visible ? (maximumLineCount == 2 ? Units.dp(72) : Units.dp(88)) : 0
     text: name
@@ -22,7 +21,7 @@ ListItem.Subtitled {
     secondaryItem: Button {
         anchors.centerIn: parent
         text: "Run"
-        onClicked: runFlightgear(index)
+        onClicked: aircraft.runFlightGear()
     }
 
 //    Component.onCompleted: console.log(name, " | Connected", connected)

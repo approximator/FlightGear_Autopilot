@@ -45,7 +45,6 @@ Page {
         clip: true
 
         delegate: FgMenuItem {
-            onRunFlightgear: aircraftsModel.runFlightgear(index)
 //            visible: {
 //                if (menuList.onDrawer) {
 //                    return true;
