@@ -110,7 +110,7 @@ QVariant FgAircraftsModel::data(const QModelIndex &index, int role) const
         return m_OurAircrafts[index.row()]->callsign();
         break;
     case Connected:
-        m_OurAircrafts[index.row()]->connected();
+        return m_OurAircrafts[index.row()]->connected();
         break;
     default:
         return QVariant();
@@ -161,7 +161,12 @@ void FgAircraftsModel::onAircraftConnected()
         else
             break;
 
-    emit dataChanged(index(0,0), index(row, 0));
+    // FIXME: fix fix fix
+    emit beginRemoveRows(QModelIndex(), 0, m_OurAircrafts.size()-1);
+    emit endRemoveRows();
+
+    emit beginInsertRows(QModelIndex(), 0, m_OurAircrafts.size()-1);
+    emit endInsertRows();
 
     qDebug() << "aircraft " << m_OurAircrafts[row]->callsign() << " connected";
 }

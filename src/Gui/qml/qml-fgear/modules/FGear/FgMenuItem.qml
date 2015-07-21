@@ -16,4 +16,6 @@ ListItem.Subtitled {
 
     subText: (connected === true ? "Connected" : "Not connected")
     interactive: true
+
+//    Component.onCompleted: console.log(name, " | Connected", connected)
 }
