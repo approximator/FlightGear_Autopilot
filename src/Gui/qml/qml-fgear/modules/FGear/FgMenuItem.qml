@@ -23,6 +23,4 @@ ListItem.Subtitled {
         text: "Run"
         onClicked: aircraft.runFlightGear()
     }
-
-//    Component.onCompleted: console.log(name, " | Connected", connected)
 }

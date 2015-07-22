@@ -7,7 +7,7 @@ Button {
   backgroundColor: elevation > 1 ? "white" : "darkgrey"
   checkable: true
   text: itemText
-  enabled: name === "autopilot_engage" ? true : (autopilotActivated)
+  enabled: name === "autopilot_engage" ? true : (engaged)
   onCheckedChanged: buttonChecked(name, itemText, checked)
   tooltip: desc
 }

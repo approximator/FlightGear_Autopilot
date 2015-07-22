@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Jul 21, 2015
+ * @date Modified Jul 22, 2015
  */
 
 #include "FgAircraftsModel.h"
@@ -21,10 +21,6 @@ FgAircraftsModel::FgAircraftsModel(QObject *parent) :
     QAbstractListModel(parent)
 {
     init();
-
-    m_Roles[Name] = "name";
-    m_Roles[Connected] = "connected";
-    m_Roles[Aircraft] = "aircraft";
 }
 
 FgAircraftsModel::~FgAircraftsModel()
@@ -94,13 +90,12 @@ bool FgAircraftsModel::saveConfig(const QString &filename)
 int FgAircraftsModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    qDebug("Row count");
     return m_OurAircrafts.count();
 }
 
 QVariant FgAircraftsModel::data(const QModelIndex &index, int role) const
 {
-    qDebug("FgController::data. row = %d, role = %d", index.row(), role);
+//    qDebug("FgAircraftsModel::data. row = %d, role = %s", index.row(), m_Roles[role].toStdString().c_str());
     if (!index.isValid())
         return QVariant();
 

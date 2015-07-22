@@ -9,9 +9,9 @@ FocusScope {
 
     anchors.centerIn: parent
     width: parent.width
-    height: parent.width / 3
+    height: width / 3
 
-    property bool autopilotActivated: false
+    property bool engaged: false
     property string currentMode
 
     signal buttonChecked (string btn_name, string mode, bool checked)
@@ -28,7 +28,6 @@ FocusScope {
         radius: Units.dp(5)
         border.color: Qt.darker(color)
         border.width: Units.dp(3)
-
     }
 
     AutopilotModel { id: _autopilotModel }
@@ -65,10 +64,9 @@ FocusScope {
     }
 
     onButtonChecked: {
-
         if (btn_name.indexOf("engage") != -1)
         {
-            autopilotActivated = checked;
+            engaged = checked;
             autopilotEngage(checked);
         }
         else if (btn_name.indexOf("mode") != -1)

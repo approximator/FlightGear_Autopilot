@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Jul 21, 2015
+ * @date Modified Jul 22, 2015
  */
 
 #ifndef FGCONTROLLER_H
@@ -51,7 +51,8 @@ private:
 
     QHash<int, QByteArray> m_Roles {
         { Roles::Name     , "name"     },
-        { Roles::Connected, "connected"}
+        { Roles::Connected, "connected"},
+        { Roles::Aircraft , "aircraft" }
     };
 
     void updateOurAircraftsCount();

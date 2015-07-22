@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 14, 2015
- * @date Modified Jul 17, 2015
+ * @date Modified Jul 22, 2015
  */
 #ifndef FGAUTOPILOT_H
 #define FGAUTOPILOT_H
@@ -34,9 +34,9 @@ public:
     FgAutopilot(const FgAutopilot& other);
     FgAutopilot& operator=(const FgAutopilot& other);
 
-    inline void engage(bool enable = true);
-    inline void disarm();
-    inline bool armed() const;
+    Q_INVOKABLE inline void engage(bool enable = true);
+    Q_INVOKABLE inline void disengage();
+    inline bool engaged() const;
 
     inline void setFollow(FgAircraft *aircraft);
     inline void anglesHold(qreal roll = 0.0, qreal pitch = 3.0);
@@ -46,7 +46,7 @@ public:
 
 private:
     AUTOPILOT_MODE m_Mode = FG_MODE_ALTITUDE_HOLD;
-    bool m_Armed { false };
+    bool m_Engaged { false };
 
     qreal m_DesiredPitch     = -8.0;   // deg
     qreal m_DesiredRoll      = 0.0;    // deg
@@ -77,17 +77,18 @@ public slots:
 
 void FgAutopilot::engage(bool enable)
 {
-    m_Armed = enable;
+    m_Engaged = enable;
+    qDebug("Autopilot engage = %d", enable);
 }
 
-void FgAutopilot::disarm()
+void FgAutopilot::disengage()
 {
-    m_Armed = false;
+    m_Engaged = false;
 }
 
-bool FgAutopilot::armed() const
+bool FgAutopilot::engaged() const
 {
-    return m_Armed;
+    return m_Engaged;
 }
 
 void FgAutopilot::setFollow(FgAircraft *aircraft)
@@ -108,5 +109,7 @@ void FgAutopilot::altitudeHold(qreal altitude)
     m_DesiredAltitude = altitude;
     m_Mode = FG_MODE_ALTITUDE_HOLD;
 }
+
+Q_DECLARE_METATYPE(FgAutopilot *)
 
 #endif // FGAUTOPILOT_H

@@ -29,38 +29,4 @@ ApplicationWindow {
     }
 
     initialPage: startpage
-
-    // adds aircraft to controlled* or otherAiModel
-//    function addAircraft (_aircraft, _our) {
-//        var modelObj = _aircraft.params;
-//        modelObj["menuSection"] = _our ? "Aircrafts" : "Other Aircrafts";
-//        modelObj["name"] = _aircraft.callsign;
-//        modelObj["connected"] = _aircraft.connected;
-//        modelObj["pagePath"] = "FgAircraftPage.qml"; //Fixme: get appropriate page
-//        modelObj["menuIcon"]  = "maps/flight";
-//        menuModel.append(modelObj);
-//    }
-
-//    function updateAircraft(_aircraft) {
-//        var aiCallsign = _aircraft.callsign;
-//        var i = 0;
-//        for (; i < menuModel.count; i += 1) {
-//            var aircraft = menuModel.get(i)
-//            if (aircraft.name === aiCallsign) {
-//                aircraft.connected = true;  // FIXME: use params object
-//                break;
-//            }
-//        }
-//    }
-
-//    function removeAircraft (aircraft) {
-//        var aiCallsign = _aircraft.callsign;
-//        var i = 0;
-//        for (;i < menuModel.count; i+=1) {
-//            if (menuModel.get(i).name === aiCallsign) {
-//                menuModel.remove(i);
-//                break;
-//            }
-//        }
-//    }
 }
