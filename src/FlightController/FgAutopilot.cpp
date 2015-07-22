@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 14, 2015
- * @date Modified Jul 17, 2015
+ * @date Modified Jul 22, 2015
  */
 
 #include "FgAutopilot.h"
@@ -22,7 +22,7 @@ FgAutopilot::FgAutopilot(QObject *parent) :
 
 void FgAutopilot::computeControl(FgControlledAircraft* aircraft)
 {
-    if (!armed())
+    if (!engaged())
         return;
 
     switch (m_Mode)
@@ -72,7 +72,6 @@ void FgAutopilot::holdAngles(FgControlledAircraft * aircraft)
     // set controls
     aircraft->setElevator(fgap::math::limit(m_PitchPid.update(pitchError), 0.6));
     aircraft->setAilerons(fgap::math::limit(m_RollPid.update(rollError), 0.6));
-
 
 //    qDebug() << "Pitch " << m_DesiredPitch << "(" << pitch << ")";
 //    qDebug() << "Roll " << m_DesiredRoll << "(" << roll << ")";

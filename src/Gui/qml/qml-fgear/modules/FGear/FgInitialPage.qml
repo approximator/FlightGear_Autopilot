@@ -8,6 +8,7 @@ Page {
     property QtObject aircraftsModel;
     property string selectedComponent: aircraftsModel.get(0)
     property var sections: ["Aircrafts"]
+    property var fgAircraft: null
 
     title: "Aircrafts control"
 
@@ -54,15 +55,15 @@ Page {
 //            }
 
             selected: ListView.isCurrentItem
-//            onClicked: {
-//                reloadPage(pagePath);
-
-//                if (menuList.onDrawer) {
-//                    navDrawer.close();
-//                }
-
-//                menuList.currentIndex = index;
-//            }
+            onClicked: {
+                menuList.currentIndex = index;
+                fgAircraft = aircraft;
+            }
+            Component.onCompleted: {
+                if (index === 0) {
+                    fgAircraft = aircraft;
+                }
+            }
         }
     }
 //        section {
@@ -107,27 +108,16 @@ Page {
                 expanded: !navDrawer.enabled
             }
 
-            Flickable {
-                id: flickable
-                anchors {
-                    left: _sidebar.right
-                    right: parent.right
-                    top: parent.top
-                    bottom: parent.bottom
-                }
-                clip: true
-                contentHeight: Math.max(itemLoader.implicitHeight + 40, height)
-                Loader {
-                    id: itemLoader
-                    anchors.fill: parent
+                FgAircraftPage {
+                    anchors {
+                        top: parent.top
+                        bottom: parent.bottom
+                        right: parent.right
+                        left: _sidebar.right
+                    }
 
-                    asynchronous: true
-                    // selectedComponent will always be valid, as it defaults to the first component
-                    source: Qt.resolvedUrl(page.selectedComponent)
+                    aircraft: fgAircraft
                 }
-            }
-            Scrollbar {
-                flickableItem: flickable
             }
         }
     }
@@ -151,8 +141,4 @@ Page {
 //        }
 //        return (Object.keys(_sections));
 //    }
-//    function reloadPage (_pagePath) {
-//        selectedComponent = ""; // It is for page reloading
-//        selectedComponent = _pagePath;
-//    }
-}
+//}
