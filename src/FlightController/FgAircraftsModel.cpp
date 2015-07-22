@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Jul 21, 2015
+ * @date Modified Jul 22, 2015
  */
 
 #include "FgAircraftsModel.h"
@@ -90,13 +90,12 @@ bool FgAircraftsModel::saveConfig(const QString &filename)
 int FgAircraftsModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    qDebug("Row count");
     return m_OurAircrafts.count();
 }
 
 QVariant FgAircraftsModel::data(const QModelIndex &index, int role) const
 {
-    qDebug("FgController::data. row = %d, role = %d", index.row(), role);
+//    qDebug("FgAircraftsModel::data. row = %d, role = %s", index.row(), m_Roles[role].toStdString().c_str());
     if (!index.isValid())
         return QVariant();
 
@@ -112,6 +111,8 @@ QVariant FgAircraftsModel::data(const QModelIndex &index, int role) const
     case Connected:
         return m_OurAircrafts[index.row()]->connected();
         break;
+     case Aircraft:
+        return QVariant::fromValue(m_OurAircrafts[index.row()].get());
     default:
         return QVariant();
         break;
@@ -159,21 +160,8 @@ void FgAircraftsModel::onAircraftConnected()
 {
     FgAircraft *aircraft = static_cast<FgAircraft*>(sender());
 
-    int row = 0;
-    for (auto &a : m_OurAircrafts)
-        if (a->callsign() != aircraft->callsign())
-            ++row;
-        else
-            break;
-
-    // FIXME: fix fix fix
-    emit beginRemoveRows(QModelIndex(), 0, m_OurAircrafts.size()-1);
-    emit endRemoveRows();
-
-    emit beginInsertRows(QModelIndex(), 0, m_OurAircrafts.size()-1);
-    emit endInsertRows();
-
-    qDebug() << "aircraft " << m_OurAircrafts[row]->callsign() << " connected";
+    emit dataChanged(QModelIndex(), index(m_OurAircrafts.size()-1), {Connected});
+    qDebug() << "aircraft " << aircraft->callsign() << " connected";
 }
 
 void FgAircraftsModel::updateOtherAircraftsCount()

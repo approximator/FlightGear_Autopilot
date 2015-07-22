@@ -6,13 +6,12 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Jul 21, 2015
+ * @date Modified Jul 22, 2015
  */
 
 #ifndef FGCONTROLLER_H
 #define FGCONTROLLER_H
 
-#include "FgAircraft.h" //DO NOT REMOVE THIS (needed for transferring types in signals)!!!
 #include "FgControlledAircraft.h"
 
 #include <QAbstractListModel>
@@ -26,7 +25,8 @@ class FgAircraftsModel : public QAbstractListModel
 public:
     enum Roles {
         Name = Qt::UserRole + 1,
-        Connected
+        Connected,
+        Aircraft
     };
 
     explicit FgAircraftsModel(QObject *parent = 0);
@@ -51,7 +51,8 @@ private:
 
     QHash<int, QByteArray> m_Roles {
         { Roles::Name     , "name"     },
-        { Roles::Connected, "connected"}
+        { Roles::Connected, "connected"},
+        { Roles::Aircraft , "aircraft" }
     };
 
     void updateOurAircraftsCount();

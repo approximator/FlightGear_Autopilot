@@ -39,11 +39,7 @@ SOURCES += \
     $$PWD/FgFlightgear.cpp \
     $$PWD/FgAircraftsModel.cpp \
     $$PWD/FgGenericProtocol.cpp \
-    $$PWD/FgControlledAircraft.cpp \
-    $$ROOT_DIR/Gui/widgets/mainwindow.cpp \
-    $$ROOT_DIR/Gui/widgets/aircraftslist.cpp \
-    $$ROOT_DIR/Gui/widgets/autopilotwidget.cpp \
-    $$ROOT_DIR/Gui/widgets/pictorialindicatorwidget.cpp
+    $$PWD/FgControlledAircraft.cpp
 
 HEADERS  += \
     $$PWD/FgPid.h \
@@ -54,17 +50,9 @@ HEADERS  += \
     $$PWD/FgFlightgear.h \
     $$PWD/FgAircraftsModel.h \
     $$PWD/FgGenericProtocol.h \
-    $$PWD/FgControlledAircraft.h \
-    $$ROOT_DIR/Gui/widgets/mainwindow.h \
-    $$ROOT_DIR/Gui/widgets/aircraftslist.h \
-    $$ROOT_DIR/Gui/widgets/autopilotwidget.h \
-    $$ROOT_DIR/Gui/widgets/pictorialindicatorwidget.h
-
-FORMS += \
-    $$ROOT_DIR/Gui/widgets/mainwindow.ui
+    $$PWD/FgControlledAircraft.h
 
 INCLUDEPATH = $$PWD
-INCLUDEPATH += $$shell_path($$ROOT_DIR/Gui/widgets)
 
 include($$FGAP_SOURCE_TREE/rpath.pri)
 include($$FGAP_SOURCE_TREE/resources/resources.pri)

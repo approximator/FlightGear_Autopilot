@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 17, 2015
- * @date Modified Jul 16, 2015
+ * @date Modified Jul 22, 2015
  */
 
 #include "FgControlledAircraft.h"
@@ -58,11 +58,17 @@ void FgControlledAircraft::runFlightGear(bool run)
     m_Flightgear->run();
 }
 
+void FgControlledAircraft::autopilotEngage(bool engage)
+{
+    qDebug("%s engage", callsign().toStdString().c_str());
+    m_Autopilot->engage(engage);
+}
+
 void FgControlledAircraft::onFdmDataChanged(const FgTransport &transport)
 {
     FgAircraft::onFdmDataChanged(transport);
 
-    if (!m_Autopilot->armed())
+    if (!m_Autopilot->engaged())
         return;
 
     m_Autopilot->computeControl(this);
