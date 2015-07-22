@@ -6,15 +6,10 @@ Page {
     id: page
 
     property QtObject aircraftsModel;
-    property string selectedComponent: aircraftsModel.get(0)
-    property var sections: ["Aircrafts"]
+    property variant sections: ["Aircrafts"]
     property var fgAircraft: null
 
     title: "Aircrafts control"
-
-    tabs: navDrawer.enabled ? [] : sections
-
-    actionBar.maxActionCount: navDrawer.enabled ? 3 : 4
 
     actions: [
         Action {
@@ -30,66 +25,6 @@ Page {
         }
     ]
 
-    backAction: navDrawer.action
-
-    ListView {
-        id: menuList
-
-        property bool onDrawer: parent === navDrawer.drawerView
-        property string currentTab: onDrawer ? "" : sections[page.selectedTab]
-
-        anchors.fill: parent
-        parent: (navDrawer && navDrawer.enabled) ?
-                    navDrawer.drawerView : tabView.currentItem.sidebarView
-
-        model: aircraftsModel
-        clip: true
-
-        delegate: FgMenuItem {
-//            visible: {
-//                if (menuList.onDrawer) {
-//                    return true;
-//                } else {
-//                    return (menuSection == menuList.currentTab);
-//                }
-//            }
-
-            selected: ListView.isCurrentItem
-            onClicked: {
-                menuList.currentIndex = index;
-                fgAircraft = aircraft;
-            }
-            Component.onCompleted: {
-                if (index === 0) {
-                    fgAircraft = aircraft;
-                }
-            }
-        }
-    }
-//        section {
-//            property: onDrawer ? "menuSection" : ""
-//            criteria: ViewSection.FullString
-//            delegate: ListItem.Subheader {
-//                text: section
-//            }
-//        }
-
-
-    NavigationDrawer {
-        id: navDrawer
-
-        property alias drawerView: drawerFlickable
-
-        enabled: page.width < Units.dp(500)
-
-        Flickable {
-            id: drawerFlickable
-            anchors.fill: parent
-
-            contentHeight: Math.max(menuList.implicitHeight, height)
-        }
-    }
-
     TabView {
         id: tabView
         anchors.fill: parent
@@ -103,9 +38,37 @@ Page {
             property alias sidebarView: _sidebar
             clip: true
 
+            /*Right side menu*/
             Sidebar {
                 id: _sidebar
-                expanded: !navDrawer.enabled
+                expanded: true
+                autoFlick: false
+
+                ListView {
+                    id: menuList
+                    height: childrenRect.height
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                        top: parent.top
+                    }
+
+                    model: aircraftsModel
+                    clip: true
+
+                    delegate: FgMenuItem {
+                        selected: ListView.isCurrentItem
+                        onClicked: {
+                            menuList.currentIndex = index;
+                            fgAircraft = aircraft;
+                        }
+                        Component.onCompleted: {
+                            if (index === 0) {
+                                fgAircraft = aircraft;
+                            }
+                        }
+                    }
+                }
             }
 
                 FgAircraftPage {
@@ -121,24 +84,3 @@ Page {
             }
         }
     }
-
-//    function getModelSections (propertyName) {
-//        var i;
-//        var _sections = {};
-//        var _itemSection;
-
-//        if (aircraftsModel === undefined) {
-//            return ([]);
-//        }
-
-//        for (i = 0; i < aircraftsModel.count; i+=1) {
-//            _itemSection = aircraftsModel.get(i)[propertyName];
-
-//            if (_itemSection in _sections) {
-//                continue;
-//            }
-//            _sections[_itemSection] = true;
-//        }
-//        return (Object.keys(_sections));
-//    }
-//}
