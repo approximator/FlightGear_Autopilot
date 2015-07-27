@@ -1,11 +1,11 @@
 import QtQuick 2.2
 import Material 0.1
 import fgap 1.0
+import Material.Components 0.1 as MGui
 
-ApplicationWindow {
+MGui.MainWindow {
     id: fgap
 
-    visible: true
     title: "Flight Gear Autopilot"
 
     width: 1280
@@ -13,8 +13,8 @@ ApplicationWindow {
 
 
     theme {
-        primaryColor: Palette.colors["blue"]["500"]
-        primaryDarkColor: Palette.colors["blue"]["700"]
+        primaryColor: Palette.colors["blue"]["400"]
+        primaryDarkColor: Palette.colors["blue"]["600"]
         accentColor: Palette.colors["teal"]["500"]
         tabHighlightColor: "white"
     }
@@ -23,9 +23,10 @@ ApplicationWindow {
         id: fgapModel
     }
 
-    FgInitialPage {
+    FgAircraftsControlPage {
         id: startpage
-        aircraftsModel: fgapModel
+        model: fgapModel
+        backAction: leftSidebar.backAction
     }
 
     initialPage: startpage

@@ -5,22 +5,23 @@ import Material.ListItems 0.1 as ListItem
 
 ListItem.Subtitled {
 
-    height: visible ? (maximumLineCount == 2 ? Units.dp(72) : Units.dp(88)) : 0
+    height: Units.dp(72)
     text: name
 
-    action: Icon {
+    property bool infoEnabled: false
+
+    signal fgInfoClicked()
+
+    //iconName: "maps/flight"
+    secondaryItem: IconButton {
         anchors.centerIn: parent
-        name: "maps/flight"
+        enabled: infoEnabled
+        iconName: "maps/flight"
         color: (connected === true ? "green" : "gray")
         size: Units.dp(32)
+        onClicked: fgInfoClicked()
     }
 
     subText: (connected === true ? "Connected" : "Not connected")
     interactive: true
-
-    secondaryItem: Button {
-        anchors.centerIn: parent
-        text: "Run"
-        onClicked: aircraft.runFlightGear()
-    }
 }

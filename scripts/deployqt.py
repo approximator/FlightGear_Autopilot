@@ -128,7 +128,7 @@ class QtDeployer():
 
         self.needed_libraries = [
             'Qt5Core', 'Qt5Widgets', 'Qt5Gui', 'Qt5Qml', 'Qt5Quick', 'Qt5Network',
-            'Qt5DBus', 'Qt5Svg', 'icudata', 'icui18n', 'icuuc'
+            'Qt5DBus', 'Qt5Svg', 'Qt5XcbQpa', 'icudata', 'icui18n', 'icuuc'
         ]
 
         if sys.platform.startswith('win'):
