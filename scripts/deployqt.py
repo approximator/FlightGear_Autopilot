@@ -3,7 +3,6 @@ import os
 import sys
 import getopt
 import subprocess
-import re
 import shutil
 from glob import glob
 
@@ -47,22 +46,41 @@ class QtDeployer():
 
     def change_rpath(self, filename):
         directory = os.path.dirname(filename)
-        relpath = os.path.relpath(self.install_dir + '/lib', directory)
+        relpath = os.path.relpath(directory, self.install_dir + '/lib')
         command = [self.chrpath, '-r', '$ORIGIN/' + relpath, filename]
-        print(command)
         try:
             subprocess.check_call(command)
         except:
             print('Failed to change rpath')
 
+    def get_dependencies(self, file_name, dependencies):
+        try:
+            p = subprocess.Popen([file_name], stdout=subprocess.PIPE,
+                                 env=dict(os.environ.copy(), LD_TRACE_LOADED_OBJECTS='1'))
+            deps, err = p.communicate()
+        except OSError:
+            return
+
+        for lib in deps.split('\n'):
+            lib_name = ''
+            lib_dir = ''
+            lib_name_and_dir = lib.split('=>')
+            if len(lib_name_and_dir) > 1:
+                lib_name = lib_name_and_dir[0].strip()
+                lib_dir = lib_name_and_dir[1].strip()
+                lib_dir = lib_dir[0:lib_dir.find('(')].strip()
+            if lib_name and lib_dir:
+                self.get_dependencies(lib_dir, dependencies)
+                dependencies[lib_name] = lib_dir
+
     def copy_libs(self):
         print("copying Qt libraries...")
 
         lib_ext = '*.so.*'
-        dest = os.path.normpath(os.path.join(self.install_dir, 'lib/'))
+        dest = os.path.normpath(os.path.join(self.install_dir, 'lib'))
         if sys.platform.startswith('win'):
             lib_ext = '*.dll'
-            dest = os.path.normpath(os.path.join(self.install_dir, 'bin/'))
+            dest = os.path.normpath(os.path.join(self.install_dir, '..'))
             self.qt_libs_dir = self.qt_bin_dir
 
         for needed_lib in self.needed_libraries:
@@ -76,7 +94,7 @@ class QtDeployer():
                         if debug_lib:
                             continue
 
-                print('Copy: ', lib, '->', dest)
+#                print('Copy: ', lib, '->', dest)
                 if os.path.islink(lib):
                     linkto = os.readlink(lib)
                     try:
@@ -92,7 +110,7 @@ class QtDeployer():
 
         print('Copying plugins:', self.plugins)
         for plugin in self.plugins:
-            target = os.path.join(self.install_dir, 'bin', 'plugins', plugin)
+            target = os.path.join(self.install_dir, 'plugins', plugin)
             if os.path.exists(target):
                 shutil.rmtree(target)
             pluginPath = os.path.join(self.qt_plugins_dir, plugin)
@@ -101,17 +119,17 @@ class QtDeployer():
 
         if os.path.exists(self.qt_qml_dir):
             print('Copying qt quick 2 imports')
-            target = os.path.join(self.install_dir, 'bin', 'qml')
+            target = os.path.join(self.install_dir, 'qml')
             if os.path.exists(target):
                 shutil.rmtree(target)
             self.copytree(self.qt_qml_dir, target, symlinks=True)
 
     def copy_libclang(self, install_dir, llvm_install_dir):
         libsource = os.path.join(llvm_install_dir, 'lib', 'libclang.so')
-        libtarget = os.path.join(install_dir, 'lib')
+        libtarget = os.path.join(install_dir, '/lib')
         if sys.platform.startswith("win"):
-            libsource = os.path.join(llvm_install_dir, 'bin', 'libclang.dll')
-            libtarget = os.path.join(install_dir, 'bin')
+            libsource = os.path.join(llvm_install_dir, '..', 'libclang.dll')
+            libtarget = os.path.join(install_dir, '..')
         resourcesource = os.path.join(llvm_install_dir, 'lib', 'clang')
         resourcetarget = os.path.join(install_dir, 'share', 'cplusplus', 'clang')
         print("copying libclang...")
@@ -141,19 +159,6 @@ class QtDeployer():
         if 'LLVM_INSTALL_DIR' in os.environ:
             self.copy_libclang(self.install_dir, os.environ["LLVM_INSTALL_DIR"])
 
-        self.write_qt_conf()
-
-    def write_qt_conf(self):
-        fileName = os.path.join(os.path.normpath(self.install_dir), os.path.normpath('bin/qt.conf'))
-        print('Writing qt.conf:', fileName)
-        f = open(fileName, 'w')
-        f.write('[Paths]\n')
-        f.write('Libraries=../lib\n')
-        f.write('Plugins=plugins\n')
-        f.write('Imports=imports\n')
-        f.write('Qml2Imports=qml\n')
-        f.close()
-
     def copytree(self, src, dst, symlinks=False, ignore=None):
         if not os.path.exists(dst):
             os.makedirs(dst)
@@ -164,9 +169,10 @@ class QtDeployer():
                 self.copytree(s, d, symlinks, ignore)
             else:
                 shutil.copy2(s, d)
-                print('Copy:', s, '->', d)
+#                print('Copy:', s, '->', d)
                 if not sys.platform.startswith('win') and os.access(d, os.X_OK):
                     self.change_rpath(d)
+
 
 if __name__ == "__main__":
     if sys.platform == 'darwin':

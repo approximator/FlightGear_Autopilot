@@ -2,7 +2,7 @@ include(main.pri)
 
 TEMPLATE = subdirs
 CONFIG   += ordered
-SUBDIRS  = FlightController # Gui
+SUBDIRS  = FlightController
 
 DISTFILES += $$files($$SCRIPTS_DIR/*.sh) $$files($$SCRIPTS_DIR/*.py)
 DISTFILES += $$files($$CONFIGS_DIR/*.json)
@@ -11,13 +11,8 @@ DISTFILES += $$files($$ROOT_DIR/Gui/qml/qml-fgear/modules/FGear/AutopilotItems/*
 DISTFILES += $$files($$ROOT_DIR/Gui/qml/qml-fgear/modules/FGear/Pointers/*.qml)
 DISTFILES += $$ROOT_DIR/../.travis.yml
 
-macx: PLATFORM = "mac"
-else:win32: PLATFORM = "windows"
-else:linux-*: PLATFORM = "linux-$$QT_ARCH"
-else: PLATFORM = "unknown"
-
 BASENAME = $$(INSTALL_BASENAME)
-isEmpty(BASENAME): BASENAME = fg-autopilot-$${PLATFORM}-$${FILIGHTGEARAUTOPILOT_VERSION}
+isEmpty(BASENAME): BASENAME = $$FGAP_APP_TARGET
 
 PYTHON = $$findPython()
 BUILD_TYPE = Release
@@ -27,44 +22,47 @@ CONFIG(debug, debug|release) {
 
 macx {
     APPBUNDLE = "$$FGAP_BUNDLE_PATH"
-    BINDIST_SOURCE = "$$FGAP_BUNDLE_PATH"
-    BINDIST_INSTALLER_SOURCE = $$BINDIST_SOURCE
     deployqt.commands = $$SCRIPTS_DIR/deployqtHelper_mac.sh \"$${APPBUNDLE}\" \"$$[QT_INSTALL_QML]\"
 }
 else {
-    BINDIST_SOURCE = "$$FGAP_INSTALL_PATH"
-    BINDIST_INSTALLER_SOURCE = "$$BINDIST_SOURCE/*"
-
     deployqt.commands = $$PYTHON -u $$shell_path(\"$$SCRIPTS_DIR/deployqt.py\") \
-                                    $$shell_path(\"$$BINDIST_SOURCE\") $$shell_path(\"$(QMAKE)\") \
+                                    $$FGAP_AUX_DIR $$shell_path(\"$(QMAKE)\") \
                                     \"$$BUILD_TYPE\"
     deployqt.depends = install
 }
 
 
 deploy_ext_qml.commands = $$PYTHON -u $$shell_path(\"$$SCRIPTS_DIR/load_qml_modules.py\") \
-                                      $$shell_path(\"$$ROOT_DIR/Gui/qml\") $$shell_path(\"$$FGAP_QML_MODULES_PATH\")
+                                      $$shell_path(\"$$ROOT_DIR/Gui/qml\") \
+                                      \"$$FGAP_INSTALL_QML_MODULES_PATH\"
 deploy_ext_qml.depends = deployqt
 
 deploy_all.depends = deploy_ext_qml
 
+QT_CONFIG_CONTENT = [Paths] \
+        Libraries=$$relative_path($$FGAP_INSTALL_LIBRARY_PATH, $$FGAP_INSTALL_PATH) \
+        Plugins=$$relative_path($$FGAP_AUX_DIR/plugins, $$FGAP_INSTALL_PATH) \
+        Imports=$$relative_path($$FGAP_AUX_DIR/imports, $$FGAP_INSTALL_PATH) \
+        Qml2Imports=$$relative_path($$FGAP_AUX_DIR/qml, $$FGAP_INSTALL_PATH)
+
+write_file($$FGAP_INSTALL_PATH/qt.conf, QT_CONFIG_CONTENT)
+
 INSTALLER_ARCHIVE_FROM_ENV = $$(INSTALLER_ARCHIVE)
 isEmpty(INSTALLER_ARCHIVE_FROM_ENV) {
-    INSTALLER_ARCHIVE = $$OUT_PWD/$${BASENAME}-installer-archive.7z
+    INSTALLER_ARCHIVE = $$OUT_PWD/$${BASENAME}.7z
 } else {
     INSTALLER_ARCHIVE = $$OUT_PWD/$$(INSTALLER_ARCHIVE)
 }
 
 DIST_ARCHIVE_FROM_ENV = $$(DIST_ARCHIVE)
 isEmpty(DIST_ARCHIVE_FROM_ENV) {
-    DIST_ARCHIVE_FROM_ENV = $$OUT_PWD/$${BASENAME}.7z
+    DIST_ARCHIVE_FROM_ENV = $$shell_path($$OUT_PWD/$${BASENAME}.7z)
 } else {
-    DIST_ARCHIVE_FROM_ENV = $$OUT_PWD/$$(DIST_ARCHIVE)
+    DIST_ARCHIVE_FROM_ENV = $$shell_path($$OUT_PWD/$$(DIST_ARCHIVE))
 }
 
 linux {
-    #bindist.depends = deploy_all
-    bindist.commands = 7z a -mx9 \"$$DIST_ARCHIVE_FROM_ENV\" \"$$BINDIST_SOURCE/bin\" \"$$BINDIST_SOURCE/lib\"
+    bindist.commands = 7z a -mx9 \"$$DIST_ARCHIVE_FROM_ENV\" \"$$FGAP_INSTALL_PATH../\"
     QMAKE_EXTRA_TARGETS += bindist
 }
 
