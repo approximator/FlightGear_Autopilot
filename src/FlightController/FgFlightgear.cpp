@@ -4,16 +4,17 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created May 12, 2015
- * @date Modified Jul 07, 2015
+ * @date Modified Jul 30, 2015
  */
 
+#include "log.h"
 #include "FgFlightgear.h"
 
-#include <QFile>
 #include <QDir>
+#include <QFile>
 #include <QProcess>
 #include <QJsonArray>
-#include <QDebug>
+#include <QStandardPaths>
 
 FgFlightgear::FgFlightgear(QObject *parent) : QObject(parent)
 {
@@ -35,34 +36,32 @@ bool FgFlightgear::init()
 bool FgFlightgear::checkPaths()
 {
     bool result = true;
+
+    LOG(INFO) << "Checking for Flightgear...";
     if (!QFile::exists(m_ExeFile))
     {
-        qDebug() << "Flightgear executable does not exist in default location (" << m_ExeFile << ")";
+        LOG(ERROR) << "Flightgear executable does not exist in default location (" << m_ExeFile.toStdString() << ")";
         return false;
     }
-    qDebug() << "Checking for Flightgear...";
 
     QProcess fgfs;
     fgfs.setProcessChannelMode(QProcess::MergedChannels);
     fgfs.start(m_ExeFile, QStringList() << "--version");
     if (!fgfs.waitForStarted())
     {
-        qDebug() << "Can't start " << m_ExeFile;
+        LOG(ERROR) << "Can't start " << m_ExeFile.toStdString();
         return false;
     }
 
     if (!fgfs.waitForFinished())
     {
-        qDebug() << "ERROR: waitForFinished";
+        LOG(ERROR) << "ERROR: waitForFinished";
         return false;
     }
 
     // Read FlightGear output to the string
     QString fgOutput(fgfs.readAll());
-    if (fgOutput.isEmpty())
-    {
-        qDebug() << "Flightgear output is empty";
-    }
+    LOG_IF(ERROR, fgOutput.isEmpty()) << "Flightgear output is empty";
 
     // parse output to find Flightgear root directory
 
@@ -79,27 +78,27 @@ bool FgFlightgear::checkPaths()
 
     if (!QDir(m_RootDir).exists())
     {
-        qDebug() << m_RootDir << " does not exist.";
+        LOG(ERROR) << m_RootDir.toStdString() << " does not exist.";
         result = false;
     }
 
     m_ProtocolFile = m_RootDir + m_ProtocolFileName;
 
-    qDebug() << "FG_ROOT = " << m_RootDir;
-    qDebug() << "Protocol file = " << m_ProtocolFile;
+    LOG(INFO) << "FG_ROOT = " << m_RootDir.toStdString();
+    LOG(INFO) << "Protocol file = " << m_ProtocolFile.toStdString();
     return result;
 }
 
 bool FgFlightgear::run()
 {
-    qDebug() << "Running Flightgear";
+    LOG(INFO) << "Running Flightgear";
     if (m_FlightgearProcess.state() != QProcess::NotRunning)
     {
-        qWarning() << "Can't run Flightgear. It is already running.";
+        LOG(ERROR) << "Can't run Flightgear. It is already running.";
         return false;
     }
 
-    qDebug() << "Starting: " << m_ExeFile + ' ' + runParameters();
+    LOG(INFO) << "Starting: " << m_ExeFile.toStdString() + ' ' + runParameters().toStdString();
     m_FlightgearProcess.start(m_ExeFile + ' ' + runParameters());
 
     return true;

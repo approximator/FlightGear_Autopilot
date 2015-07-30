@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 14, 2015
- * @date Modified Jul 22, 2015
+ * @date Modified Jul 30, 2015
  */
 #ifndef FGAUTOPILOT_H
 #define FGAUTOPILOT_H
@@ -78,7 +78,6 @@ public slots:
 void FgAutopilot::engage(bool enable)
 {
     m_Engaged = enable;
-    qDebug("Autopilot engage = %d", enable);
 }
 
 void FgAutopilot::disengage()

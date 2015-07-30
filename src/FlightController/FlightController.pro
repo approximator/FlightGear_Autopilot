@@ -9,6 +9,7 @@ TEMPLATE = app
 
 target.path = $$FGAP_INSTALL_PATH
 DEFINES += INSTALL_PREFIX=$$FGAP_INSTALL_PATH
+LIBS += -lglog
 
 # define path to config files
 macx {
@@ -42,6 +43,7 @@ SOURCES += \
     $$PWD/FgControlledAircraft.cpp
 
 HEADERS  += \
+    $$PWD/log.h \
     $$PWD/FgPid.h \
     $$PWD/FgMath.h \
     $$PWD/FgAircraft.h \

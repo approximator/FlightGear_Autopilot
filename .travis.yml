@@ -27,6 +27,7 @@ addons:
       - imagemagick
       - p7zip-full
       - python-pip
+      - libgoogle-glog-dev
 
 before_install:
   - "export DISPLAY=:99.0"

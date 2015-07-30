@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 17, 2015
- * @date Modified Jul 22, 2015
+ * @date Modified Jul 30, 2015
  */
 
 #include "FgControlledAircraft.h"
@@ -60,7 +60,6 @@ void FgControlledAircraft::runFlightGear(bool run)
 
 void FgControlledAircraft::autopilotEngage(bool engage)
 {
-    qDebug("%s engage", callsign().toStdString().c_str());
     m_Autopilot->engage(engage);
 }
 

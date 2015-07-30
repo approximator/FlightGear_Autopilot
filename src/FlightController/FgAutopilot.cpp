@@ -5,13 +5,13 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 14, 2015
- * @date Modified Jul 22, 2015
+ * @date Modified Jul 30, 2015
  */
 
+#include "log.h"
 #include "FgAutopilot.h"
 #include "FgControlledAircraft.h"
 
-#include <QDebug>
 #include <QVector3D>
 
 FgAutopilot::FgAutopilot(QObject *parent) :
@@ -49,9 +49,6 @@ void FgAutopilot::holdVerticalSpeed(FgControlledAircraft *aircraft)
     qreal vsError = m_DesiredVerticalSpeed - aircraft->verticalSpeed();
     m_DesiredPitch = fgap::math::limit(m_VerticalSpeedPid.update(vsError), 20.0);
     holdAngles(aircraft);
-
-//    qDebug("PITCH = %f / %f", aircraft->pitch(), m_DesiredPitch);
-//    qDebug("   VS = %f / %f", aircraft->verticalSpeed(), m_DesiredVerticalSpeed);
 }
 
 void FgAutopilot::holdAltitude(FgControlledAircraft * aircraft)
@@ -72,10 +69,6 @@ void FgAutopilot::holdAngles(FgControlledAircraft * aircraft)
     // set controls
     aircraft->setElevator(fgap::math::limit(m_PitchPid.update(pitchError), 0.6));
     aircraft->setAilerons(fgap::math::limit(m_RollPid.update(rollError), 0.6));
-
-//    qDebug() << "Pitch " << m_DesiredPitch << "(" << pitch << ")";
-//    qDebug() << "Roll " << m_DesiredRoll << "(" << roll << ")";
-//    qDebug() << "Elev " << m_DesiredAltitude << "(" << aircraft->groundElev() << ")";
 }
 
 void FgAutopilot::follow(FgControlledAircraft * aircraft, FgAircraft *followAircraft)

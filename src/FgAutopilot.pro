@@ -9,6 +9,7 @@ DISTFILES += $$files($$CONFIGS_DIR/*.json)
 DISTFILES += $$files($$ROOT_DIR/Gui/qml/qml-fgear/modules/FGear/*.qml)
 DISTFILES += $$files($$ROOT_DIR/Gui/qml/qml-fgear/modules/FGear/AutopilotItems/*.qml)
 DISTFILES += $$files($$ROOT_DIR/Gui/qml/qml-fgear/modules/FGear/Pointers/*.qml)
+DISTFILES += $$ROOT_DIR/../.travis.yml
 
 macx: PLATFORM = "mac"
 else:win32: PLATFORM = "windows"

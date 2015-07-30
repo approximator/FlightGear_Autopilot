@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jun 17, 2015
+ * @date Modified Jun 30, 2015
  */
 
 #ifndef FGGENERICPROTOCOL_H
@@ -13,7 +13,6 @@
 
 #include <QObject>
 #include <QHash>
-#include <QDebug>
 
 const QString NUM_PLAYERS("/ai/models/num-players");
 const QString MODELS_COUNT("/ai/models/count");
@@ -77,7 +76,6 @@ public slots:
 // Inline functions
 int FgGenericProtocol::getParamIndex(const QString& node) const
 {
-//    qDebug() << "getParamIndex for node = " << node;
     return m_InParameters.value(node, Parameter(-1, Parameter::INT)).index;
 }
 

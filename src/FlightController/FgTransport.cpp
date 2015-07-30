@@ -5,13 +5,12 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jul 08, 2015
+ * @date Modified Jul 30, 2015
  */
 
+#include "log.h"
 #include "FgTransport.h"
 #include "FgGenericProtocol.h"
-
-#include <QDebug>
 
 FgTransport::FgTransport(const QJsonObject &config, QObject *parent) :
     QObject(parent)
@@ -43,12 +42,12 @@ FgTransport::FgTransport(const QJsonObject &config, QObject *parent) :
 
     m_Socket->bind(m_ListenHost, m_ListenPort);
     connect(m_Socket.get(), &QUdpSocket::readyRead, this, &FgTransport::onSocketRead);
-    qDebug() << "FgTransport ready [" << m_ListenHost.toString() << ":" << m_ListenPort << "]" << "out: " << m_WritePort;
+    LOG(INFO) << "FgTransport ready [" << m_ListenHost.toString().toStdString() << ":" << m_ListenPort << "]" << "out: " << m_WritePort;
 }
 
 FgTransport::~FgTransport()
 {
-    qDebug() << "FgTransport destroyed[" << m_ListenHost.toString() << ":" << m_ListenPort << "]" << "out: " << m_WritePort;
+    LOG(INFO) << "FgTransport destroyed[" << m_ListenHost.toString().toStdString() << ":" << m_ListenPort << "]" << "out: " << m_WritePort;
 }
 
 void FgTransport::onSocketRead()

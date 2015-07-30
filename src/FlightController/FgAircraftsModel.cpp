@@ -6,11 +6,12 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Jul 22, 2015
+ * @date Modified Jul 30, 2015
  */
 
-#include "FgAircraftsModel.h"
+#include "log.h"
 #include "FgTransport.h"
+#include "FgAircraftsModel.h"
 
 #include <QFile>
 #include <QJsonArray>
@@ -37,7 +38,7 @@ bool FgAircraftsModel::init()
     QFile configFile(configFileName);
     if (!configFile.open(QIODevice::ReadOnly))
     {
-        qWarning("Couldn't open config file: %s",  configFileName.toStdString().c_str());
+        LOG(ERROR) << "Couldn't open config file: " <<  configFileName.toStdString();
         return false;
     }
     QJsonDocument configData(QJsonDocument::fromJson(configFile.readAll()));
@@ -71,7 +72,7 @@ bool FgAircraftsModel::saveConfig(const QString &filename)
 
     if (!saveFile.open(QIODevice::WriteOnly))
     {
-        qWarning("Couldn't open save file.");
+        LOG(ERROR) << "Couldn't open save file.";
         return false;
     }
 
@@ -95,7 +96,7 @@ int FgAircraftsModel::rowCount(const QModelIndex &parent) const
 
 QVariant FgAircraftsModel::data(const QModelIndex &index, int role) const
 {
-//    qDebug("FgAircraftsModel::data. row = %d, role = %s", index.row(), m_Roles[role].toStdString().c_str());
+//    LOG("FgAircraftsModel::data. row = %d, role = %s", index.row(), m_Roles[role].toStdString().c_str());
     if (!index.isValid())
         return QVariant();
 
@@ -151,7 +152,7 @@ void FgAircraftsModel::onDataReceived()
 
     if (m_OurAircrafts.isEmpty())
     {
-        qDebug() << "Our aircraft is empty!";
+        LOG(ERROR) << "Our aircraft is empty!";
         return;
     }
 }
@@ -161,7 +162,7 @@ void FgAircraftsModel::onAircraftConnected()
     FgAircraft *aircraft = static_cast<FgAircraft*>(sender());
 
     emit dataChanged(QModelIndex(), index(m_OurAircrafts.size()-1), {Connected});
-    qDebug() << "aircraft " << aircraft->callsign() << " connected";
+    LOG(INFO) << "aircraft " << aircraft->callsign().toStdString() << " connected";
 }
 
 void FgAircraftsModel::updateOtherAircraftsCount()
@@ -181,7 +182,7 @@ void FgAircraftsModel::updateOtherAircraftsCount()
     for (int i = 0; i < count; ++i)
     {
         QString callsign = m_Transport->getString("/ai/models/multiplayer[" + QString::number(i) + "]/callsign");
-        qDebug() << "callsign = " << callsign;
+        LOG(INFO) << "callsign = " << callsign.toStdString();
         callsigns.push_back(callsign);
         if (m_OtherAircrafts.end() !=
                 std::find_if(m_OtherAircrafts.begin(), m_OtherAircrafts.end(),
@@ -195,7 +196,7 @@ void FgAircraftsModel::updateOtherAircraftsCount()
         //! @todo  aircraft->setIndex();
         m_OtherAircrafts.append(aircraft);
         emit aircraftAdded(aircraft.get());
-        qDebug() << "otherAircraftAdded";
+        LOG(INFO) << "otherAircraftAdded";
     }
 
     // remove disconnected aircrafts from the list
@@ -205,7 +206,7 @@ void FgAircraftsModel::updateOtherAircraftsCount()
         if (!callsigns.contains((*it)->callsign()))
         {
             emit aircraftDisconnected((*it).get());
-            qDebug() << "aircraftDisconnected";
+            LOG(INFO) << "aircraftDisconnected";
 
             it = m_OtherAircrafts.erase(it);
         }

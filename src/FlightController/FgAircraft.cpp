@@ -5,14 +5,13 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jul 17, 2015
+ * @date Modified Jul 30, 2015
  */
 
+#include "FgMath.h"
 #include "FgAircraft.h"
 #include "FgTransport.h"
 #include "FgAutopilot.h"
-
-#include <QDebug>
 
 FgAircraft::FgAircraft(const QString& sign, QObject *parent) :
     QObject(parent),
@@ -44,7 +43,7 @@ void FgAircraft::onFdmDataChanged(const FgTransport& transport)
     m_Y = r * cos(lat) * sin(lon);
     m_Z = r * sin(lat);
 
-//    qDebug() << callsign() << ": p = " << m_Pitch << ", r = " << m_Roll << ", y = " << m_Yaw
+//    LOG(INFO) << callsign() << ": p = " << m_Pitch << ", r = " << m_Roll << ", y = " << m_Yaw
 //             << ", lon = " << m_Longitude << ", lat = " << m_Latitude << ", alt = " << m_Altitude
 //             << ", head = " << m_Heading;
 

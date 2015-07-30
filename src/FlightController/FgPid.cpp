@@ -5,12 +5,11 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jul 14, 2015
- * @date Modified Jul 17, 2015
+ * @date Modified Jul 30, 2015
  */
 
+#include "log.h"
 #include "FgPid.h"
-
-#include <QDebug>
 
 FgPid::FgPid(double initial_kp, double initial_kd, double initial_ki, double initial_int_max):
     _kp(initial_kp),
@@ -36,7 +35,7 @@ double FgPid::update(double error)
     i = _int_error;
 
     // differentiation
-    if (isnan(_prev_d))
+    if (std::isnan(_prev_d))
     {
         d = 0;
         _prev_d = 0;
@@ -44,7 +43,7 @@ double FgPid::update(double error)
     else
         d = (error - _prev_error) / _dt;
 
-    double RC = 1 / (2 * M_PI * _filter);
+    double RC = 1 / (2 * 3.14 * _filter);
     d = _prev_d + ((_dt / (RC + _dt)) * (d - _prev_d));
 
     _prev_d = d;
@@ -53,7 +52,7 @@ double FgPid::update(double error)
 
     _control = p + i + d;
 
-//    qDebug() << "Error = " << error << "Control = " << _control << "(i = " << i << ")";
+//    LOG(INFO) << "Error = " << error << "Control = " << _control << "(i = " << i << ")";
     return _control;
 }
 

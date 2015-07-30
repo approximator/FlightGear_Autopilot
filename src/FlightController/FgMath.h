@@ -5,13 +5,14 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jul 15, 2015
- * @date Modified Jul 15, 2015
+ * @date Modified Jul 30, 2015
  */
 
 #ifndef FGMATH
 #define FGMATH
 
 #include <cmath>
+#include <QtMath>
 
 namespace fgap
 {

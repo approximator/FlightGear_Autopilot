@@ -6,7 +6,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created May 12, 2015
- * @date Modified Jul 08, 2015
+ * @date Modified Jul 30, 2015
  */
 
 #ifndef FGFLIGHTGEAR_H
@@ -15,8 +15,8 @@
 #include "FgTransport.h"
 
 #include <memory>
-#include <QVector>
 #include <QPair>
+#include <QVector>
 #include <QObject>
 #include <QProcess>
 #include <QJsonObject>
@@ -65,10 +65,10 @@ private:
     QString m_MultiplayHostIn       { };
     quint16 m_MultiplayPortOut      { 5000 };
     int     m_MultiplayFrequencyOut { 10 };
-    QString m_MultiplayHostOut  { };
+    QString m_MultiplayHostOut      { };
+    QProcess m_FlightgearProcess    { };
+    std::shared_ptr<FgTransport>      m_Transport     { };
     QVector<QPair<QString, QString> > m_RunParameters { };
-    QProcess m_FlightgearProcess {};
-    std::shared_ptr<FgTransport> m_Transport { };
 
 signals:
 

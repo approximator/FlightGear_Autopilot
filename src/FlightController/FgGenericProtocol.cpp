@@ -5,15 +5,16 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jun 17, 2015
+ * @date Modified Jun 30, 2015
  */
 
+#include "log.h"
 #include "FgGenericProtocol.h"
 
-#include <QXmlStreamWriter>
+#include <QMap>
 #include <QPair>
 #include <QFile>
-#include <QDebug>
+#include <QXmlStreamWriter>
 
 FgGenericProtocol::FgGenericProtocol(QObject *parent) :
     QObject(parent)
@@ -74,7 +75,7 @@ FgGenericProtocol::FgGenericProtocol(QObject *parent) :
 
 FgGenericProtocol::~FgGenericProtocol()
 {
-    qDebug() << "FgGenericProtocol detroyed.";
+    LOG(INFO) << "FgGenericProtocol detroyed.";
 }
 
 bool FgGenericProtocol::writeXml(const QString &fileName)
@@ -101,7 +102,7 @@ bool FgGenericProtocol::writeXml(const QString &fileName)
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
-        qDebug() << "Can't open file for writing (" << fileName << ")";
+        LOG(ERROR) << "Can't open file for writing (" << fileName.toStdString() << ")";
         return false;
     }
 
@@ -153,7 +154,7 @@ bool FgGenericProtocol::writeXml(const QString &fileName)
     stream.writeEndDocument();
     file.close();
 
-    qDebug() << "Protocol has been written";
+    LOG(INFO) << "Protocol has been written";
     return true;
 }
 

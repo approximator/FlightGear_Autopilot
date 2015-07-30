@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jul 17, 2015
+ * @date Modified Jul 30, 2015
  */
 
 #ifndef FGAIRCRAFT_H
@@ -13,9 +13,7 @@
 
 #include <memory>
 #include <QObject>
-#include <QtMath>
 #include <QJsonObject>
-#include <QDebug>
 
 class FgTransport;
 class FgAutopilot;
@@ -66,9 +64,9 @@ protected:
     qreal m_Latitude  = 0.0; // deg
     qreal m_Altitude  = 0.0; // ft
     qreal m_VerticalSpeed = 0.0;
-    qreal m_Airspeed = 0.0;
-    qreal m_GroundLevel = 0.0; // ft
-    qreal m_Heading   = 0.0; // deg
+    qreal m_Airspeed      = 0.0;
+    qreal m_GroundLevel   = 0.0; // ft
+    qreal m_Heading       = 0.0; // deg
     qreal m_X = 0.0;
     qreal m_Y = 0.0;
     qreal m_Z = 0.0;
@@ -181,7 +179,6 @@ bool FgAircraft::connected() const
 
 void FgAircraft::setCallsign(const QString &newCallsign)
 {
-    qDebug() << m_Callsign << " -> " << newCallsign;
     m_Callsign = newCallsign;
 }
 
