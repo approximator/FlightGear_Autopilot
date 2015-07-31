@@ -4,9 +4,10 @@ QT += widgets gui qml quick network xml svg
 QTPLUGIN += qsvg
 
 TARGET = $$FGAP_APP_TARGET
+DESTDIR = $$FGAP_INSTALL_PATH
 TEMPLATE = app
 
-target.path = $$FGAP_INSTALL_PATH
+target.path = $$FGAP_BUILD_TREE
 DEFINES += INSTALL_PREFIX=$$FGAP_INSTALL_PATH
 
 LIBPATH += $$shell_path($$THIRD_PARTY_DIR/lib)

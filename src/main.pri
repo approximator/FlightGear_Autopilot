@@ -4,17 +4,6 @@ FGAP_PRI_INCLUDED = 1
 FGAP_VERSION = 0.0.3
 CONFIG += c++11
 
-unix {
-    # enable additional warnings
-    QMAKE_CXXFLAGS += -Wall -Wextra -pedantic -Weffc++ -Wold-style-cast
-
-    # get rid of Qt related warnings
-    QMAKE_CXXFLAGS += -isystem "$$[QT_INSTALL_HEADERS]" -isystem "$$[QT_INSTALL_HEADERS]/QtWidgets"
-    QMAKE_CXXFLAGS += -isystem "$$[QT_INSTALL_HEADERS]/QtXml" -isystem "$$[QT_INSTALL_HEADERS]/QtGui"
-    QMAKE_CXXFLAGS += -isystem "$$[QT_INSTALL_HEADERS]/QtCore"
-    QMAKE_CXXFLAGS += -isystem "$$[QT_INSTALL_HEADERS]/QtQml"
-}
-
 isEmpty(FGAP_BUILD_TREE) {
     sub_dir = $$_PRO_FILE_PWD_
     sub_dir ~= s,^$$re_escape($$PWD),,
@@ -74,6 +63,18 @@ DEFINES += FGAP_QML_RELATIVE_PATH=\\\"$$FGAP_QML_RELATIVE_PATH\\\"
 DEFINES += CONFIG_PATH=\\\"$$CONFIG_PATH\\\"
 
 CONFIG += depend_includepath
+
+unix {
+    # enable additional warnings
+    QMAKE_CXXFLAGS += -Wall -Wextra -pedantic -Weffc++ -Wold-style-cast
+
+    # get rid of Qt related warnings
+    QMAKE_CXXFLAGS += -isystem "$$[QT_INSTALL_HEADERS]" -isystem "$$[QT_INSTALL_HEADERS]/QtWidgets"
+    QMAKE_CXXFLAGS += -isystem "$$[QT_INSTALL_HEADERS]/QtXml" -isystem "$$[QT_INSTALL_HEADERS]/QtGui"
+    QMAKE_CXXFLAGS += -isystem "$$[QT_INSTALL_HEADERS]/QtCore"
+    QMAKE_CXXFLAGS += -isystem "$$[QT_INSTALL_HEADERS]/QtQml"
+    QMAKE_CXXFLAGS += -isystem "$$THIRD_PARTY_DIR/include"
+}
 
 defineReplace(findPython) {  # todo: add Python3
     PYTHON_EXE = python.exe
