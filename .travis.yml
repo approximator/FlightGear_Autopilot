@@ -38,7 +38,7 @@ install:
   - sudo apt-get update
   - sudo pip install --upgrade pip setuptools
   - sudo pip install --upgrade httpie
-  - sudo apt-get -y install qt54-meta-full libgoogle-glog-dev
+  - sudo apt-get -y install qt54-meta-full
   - if [ "$CXX" = "g++" ]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90; fi
 
 before_script:

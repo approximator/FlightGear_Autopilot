@@ -8,7 +8,10 @@ TEMPLATE = app
 
 target.path = $$FGAP_INSTALL_PATH
 DEFINES += INSTALL_PREFIX=$$FGAP_INSTALL_PATH
+
+LIBPATH += $$shell_path($$THIRD_PARTY_DIR/lib)
 LIBS += -lglog
+LIBS += -lgflags
 
 SOURCES += \
     $$PWD/FgPid.cpp \
@@ -34,7 +37,8 @@ HEADERS  += \
     $$PWD/FgGenericProtocol.h \
     $$PWD/FgControlledAircraft.h
 
-INCLUDEPATH = $$PWD
+INCLUDEPATH += $$shell_path($$PWD)
+INCLUDEPATH += $$shell_path($$THIRD_PARTY_DIR/include)
 
 include($$FGAP_SOURCE_TREE/rpath.pri)
 include($$FGAP_SOURCE_TREE/resources/resources.pri)

@@ -62,7 +62,7 @@ isEmpty(DIST_ARCHIVE_FROM_ENV) {
 }
 
 linux {
-    bindist.commands = 7z a -mx9 \"$$DIST_ARCHIVE_FROM_ENV\" \"$$FGAP_INSTALL_PATH../\"
+    bindist.commands = 7z a -mx9 \"$$DIST_ARCHIVE_FROM_ENV\" \"$$FGAP_INSTALL_PATH\"
     QMAKE_EXTRA_TARGETS += bindist
 }
 
