@@ -6,7 +6,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created May 12, 2015
- * @date Modified Jul 30, 2015
+ * @date Modified Aug 01, 2015
  */
 
 #ifndef FGFLIGHTGEAR_H
@@ -17,20 +17,21 @@
 #include <memory>
 #include <QPair>
 #include <QVector>
-#include <QObject>
+#include <QFuture>
 #include <QProcess>
 #include <QJsonObject>
+#include <QFutureWatcher>
 
 class FgFlightgear : public QObject
 {
     Q_OBJECT
 public:
-    explicit FgFlightgear(QObject *parent = 0);
     explicit FgFlightgear(const QJsonObject& config, QObject *parent = 0);
+    ~FgFlightgear();
 
-    bool init();
     bool checkPaths();
     bool run();
+    Q_INVOKABLE bool ready() const;
 
     QJsonObject configurationAsJson() const;
     bool setConfigFromJson(const QJsonObject& config);
@@ -53,6 +54,9 @@ private:
     QString m_ProtocolFile { m_RootDir +  m_ProtocolFileName };
 #endif
 
+    QFuture<bool>        m_InitFuture        { };
+    QFutureWatcher<bool> m_InitFutureWatcher { };
+    bool    m_Ready      { false };
     QString m_Callsign   { "(none)" };
     QString m_Airport    { "KSFO" };
     QString m_Runway     { "10L" };
@@ -71,13 +75,21 @@ private:
     QVector<QPair<QString, QString> > m_RunParameters { };
 
 signals:
+    /*!
+     * @brief readyChanged
+     * Emits when init thread finishes his work
+     */
+    void readyChanged(bool);
 
 public slots:
+    bool init();
+
+    void initFinished();
 
     friend class ControlledAircraftTest;
 };
 
-//
+
 const QProcess &FgFlightgear::process() const
 {
     return m_FlightgearProcess;

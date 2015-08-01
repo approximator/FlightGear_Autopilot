@@ -5,12 +5,13 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 17, 2015
- * @date Modified Jul 22, 2015
+ * @date Modified Aug 01, 2015
  */
 
 #ifndef FGCONTROLLEDAIRCRAFT_H
 #define FGCONTROLLEDAIRCRAFT_H
 
+#include "log.h"
 #include "FgAircraft.h"
 #include "FgTransport.h"
 #include "FgAutopilot.h"
@@ -22,9 +23,8 @@ class FgControlledAircraft : public FgAircraft
 {
     Q_OBJECT
     Q_PROPERTY(bool autopilotEngaged READ autopilotEngaged)
-    Q_PROPERTY(FgAutopilot *autopilot READ autopilot)
+    Q_PROPERTY(bool flightgearReady READ flightgearReady NOTIFY flightgearReadyChanged)
 public:
-    explicit FgControlledAircraft(const QString& sign, QObject *parent = 0);
     explicit FgControlledAircraft(const QJsonObject& config, QObject *parent = 0);
     ~FgControlledAircraft();
 
@@ -34,7 +34,8 @@ public:
     inline void setAilerons(qreal val);
     inline void setElevator(qreal val);
     inline void setRudder(qreal val);
-    inline FgAutopilot *autopilot();
+    inline FgAutopilot *autopilot() const;
+    inline bool flightgearReady() const;
     inline void follow(FgAircraft *aircraft);
 
     QJsonObject configurationAsJson() const;
@@ -46,11 +47,12 @@ public:
 
 private:
     std::shared_ptr<FgAutopilot>  m_Autopilot  { std::make_shared<FgAutopilot>() };
-    std::shared_ptr<FgFlightgear> m_Flightgear { std::make_shared<FgFlightgear>() };
+    std::shared_ptr<FgFlightgear> m_Flightgear { };
 
 signals:
     void flightgearStarted();
     void flightgearFinished();
+    void flightgearReadyChanged(bool);
 
 public slots:
     virtual void onFdmDataChanged(const FgTransport& transport);
@@ -82,9 +84,17 @@ void FgControlledAircraft::setRudder(qreal val)
     m_Rudder = val;
 }
 
-FgAutopilot *FgControlledAircraft::autopilot()
+FgAutopilot *FgControlledAircraft::autopilot() const
 {
+    LOG(INFO) << "Returning autopilot";
+    LOG_IF(FATAL, m_Autopilot.get()) << "Returning null";
     return m_Autopilot.get();
+}
+
+bool FgControlledAircraft::flightgearReady() const
+{
+    LOG(INFO) << "Return ready = " << m_Flightgear->ready();
+    return m_Flightgear->ready();
 }
 
 void FgControlledAircraft::follow(FgAircraft *aircraft)

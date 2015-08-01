@@ -35,7 +35,7 @@ Page {
         expanded: false
         ActionBar {
             id: _actionBar
-            title: "Page Settings"
+            title: fgAircraft.callsign
             backgroundColor: Qt.darker(theme.primaryColor)
 
             actions: [
@@ -56,6 +56,7 @@ Page {
         Button {
             text: "Run"
             elevation: 1
+            enabled: fgAircraft.flightgearReady
             onClicked: fgAircraft.runFlightGear()
         }
     }

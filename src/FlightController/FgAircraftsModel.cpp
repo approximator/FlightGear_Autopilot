@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Jul 30, 2015
+ * @date Modified Aug 01, 2015
  */
 
 #include "log.h"
@@ -31,10 +31,13 @@ FgAircraftsModel::~FgAircraftsModel()
 
 bool FgAircraftsModel::init()
 {
+    LOG(INFO) << "Init FgAircraftsModel";
     QString configFileName("%1/%2/%3");
     configFileName = configFileName.arg(QCoreApplication::applicationDirPath(),
                                         CONFIG_PATH,
                                         "multiplayWithoutServer.json");
+
+    LOG(INFO) << "Reading config " << configFileName.toStdString();
     QFile configFile(configFileName);
     if (!configFile.open(QIODevice::ReadOnly))
     {
@@ -107,10 +110,10 @@ QVariant FgAircraftsModel::data(const QModelIndex &index, int role) const
     {
     case Name:
     case Qt::DisplayRole:
-        return m_OurAircrafts[index.row()]->callsign();
+        return QVariant::fromValue(m_OurAircrafts[index.row()]->callsign());
         break;
     case Connected:
-        return m_OurAircrafts[index.row()]->connected();
+        return QVariant::fromValue(m_OurAircrafts[index.row()]->connected());
         break;
      case Aircraft:
         return QVariant::fromValue(m_OurAircrafts[index.row()].get());

@@ -17,7 +17,12 @@
 FgAutopilot::FgAutopilot(QObject *parent) :
     QObject(parent)
 {
+    LOG(INFO) << "Autopilot created";
+}
 
+bool FgAutopilot::engaged()
+{
+    return m_Engaged;
 }
 
 void FgAutopilot::computeControl(FgControlledAircraft* aircraft)

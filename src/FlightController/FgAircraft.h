@@ -21,7 +21,7 @@ class FgAutopilot;
 class FgAircraft : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString callsign READ callsign)
+    Q_PROPERTY(QString callsign READ callsign NOTIFY callsignChanged)
     Q_PROPERTY(bool connected READ connected)
     Q_PROPERTY(QJsonObject params READ getParams NOTIFY paramsChanged)
 
@@ -81,6 +81,7 @@ protected:
 signals:
     void paramsChanged();
     void onConnected();
+    void callsignChanged();
 
 public slots:
     virtual void onFdmDataChanged(const FgTransport &transport);
@@ -180,6 +181,7 @@ bool FgAircraft::connected() const
 void FgAircraft::setCallsign(const QString &newCallsign)
 {
     m_Callsign = newCallsign;
+    emit callsignChanged();
 }
 
 void FgAircraft::setConnected(bool _connected)

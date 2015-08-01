@@ -36,7 +36,7 @@ public:
 
     Q_INVOKABLE inline void engage(bool enable = true);
     Q_INVOKABLE inline void disengage();
-    inline bool engaged() const;
+    Q_INVOKABLE bool engaged();
 
     inline void setFollow(FgAircraft *aircraft);
     inline void anglesHold(qreal roll = 0.0, qreal pitch = 3.0);
@@ -83,11 +83,6 @@ void FgAutopilot::engage(bool enable)
 void FgAutopilot::disengage()
 {
     m_Engaged = false;
-}
-
-bool FgAutopilot::engaged() const
-{
-    return m_Engaged;
 }
 
 void FgAutopilot::setFollow(FgAircraft *aircraft)

@@ -5,18 +5,14 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 17, 2015
- * @date Modified Jul 30, 2015
+ * @date Modified Aug 01, 2015
  */
 
+#include "log.h"
 #include "FgControlledAircraft.h"
 
 #include <fstream>
-
-FgControlledAircraft::FgControlledAircraft(const QString &sign, QObject *parent) :
-    FgAircraft(sign, parent)
-{
-    setConfigFromJson(QJsonObject());
-}
+#include <assert.h>
 
 FgControlledAircraft::FgControlledAircraft(const QJsonObject &config, QObject *parent):
     FgAircraft("(none)", parent)
@@ -48,7 +44,9 @@ bool FgControlledAircraft::setConfigFromJson(const QJsonObject &config)
     connect(m_Flightgear->transport().get(), &FgTransport::fgDataReceived, this, &FgControlledAircraft::onFdmDataChanged);
     connect(&m_Flightgear->process(), static_cast<void (QProcess::*)(int)>(&QProcess::finished), [this](int){ emit flightgearFinished(); });
     connect(&m_Flightgear->process(), &QProcess::started , [this](){ emit flightgearStarted(); });
-//    connect(this, &FgControlledAircraft::onConnected, [this](){ m_Autopilot->setDesiredHeading(heading()); });
+    connect(m_Flightgear.get(), &FgFlightgear::readyChanged,
+            [this](bool ready){ emit flightgearReadyChanged(ready); });
+    //    connect(this, &FgControlledAircraft::onConnected, [this](){ m_Autopilot->setDesiredHeading(heading()); });
     return true;
 }
 
@@ -60,11 +58,13 @@ void FgControlledAircraft::runFlightGear(bool run)
 
 void FgControlledAircraft::autopilotEngage(bool engage)
 {
+    assert(m_Autopilot);
     m_Autopilot->engage(engage);
 }
 
 void FgControlledAircraft::onFdmDataChanged(const FgTransport &transport)
 {
+    assert(m_Autopilot);
     FgAircraft::onFdmDataChanged(transport);
 
     if (!m_Autopilot->engaged())

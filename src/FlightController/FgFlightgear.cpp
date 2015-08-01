@@ -4,7 +4,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created May 12, 2015
- * @date Modified Jul 30, 2015
+ * @date Modified Aug 01, 2015
  */
 
 #include "log.h"
@@ -15,11 +15,7 @@
 #include <QProcess>
 #include <QJsonArray>
 #include <QStandardPaths>
-
-FgFlightgear::FgFlightgear(QObject *parent) : QObject(parent)
-{
-    init();
-}
+#include <QtConcurrent/QtConcurrent>
 
 FgFlightgear::FgFlightgear(const QJsonObject &config, QObject *parent) : QObject(parent)
 {
@@ -27,17 +23,33 @@ FgFlightgear::FgFlightgear(const QJsonObject &config, QObject *parent) : QObject
     init();
 }
 
+FgFlightgear::~FgFlightgear()
+{
+//    m_InitFuture.waitForFinished();
+    m_InitFuture.cancel();
+}
+
 bool FgFlightgear::init()
 {
-    checkPaths();
+    LOG(INFO) << "Flightgear init";
+    connect(&m_InitFutureWatcher, SIGNAL(finished()), this, SLOT(initFinished()));
+    m_InitFuture = QtConcurrent::run(this, &FgFlightgear::checkPaths);
+    m_InitFutureWatcher.setFuture(m_InitFuture);
     return true;
+}
+
+void FgFlightgear::initFinished()
+{
+    LOG(INFO) << "Init finished";
+    m_Ready = m_InitFuture.result();
+    emit readyChanged(m_Ready);
 }
 
 bool FgFlightgear::checkPaths()
 {
     bool result = true;
 
-    LOG(INFO) << "Checking for Flightgear...";
+    LOG(INFO) << "Checking for Flightgear..." << QThread::currentThread();
     if (!QFile::exists(m_ExeFile))
     {
         LOG(ERROR) << "Flightgear executable does not exist in default location (" << m_ExeFile.toStdString() << ")";
@@ -102,6 +114,11 @@ bool FgFlightgear::run()
     m_FlightgearProcess.start(m_ExeFile + ' ' + runParameters());
 
     return true;
+}
+
+bool FgFlightgear::ready() const
+{
+    return m_Ready;
 }
 
 QJsonObject FgFlightgear::configurationAsJson() const
