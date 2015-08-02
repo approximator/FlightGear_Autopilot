@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jun 30, 2015
+ * @date Modified Aug 03, 2015
  */
 
 #ifndef FGGENERICPROTOCOL_H
@@ -49,11 +49,13 @@ public:
             STRING
         } ;
 
-        inline Parameter(int idx, ParamType t);
+        inline Parameter(int idx, const QString& _name, ParamType t);
+        inline bool operator<(const Parameter& other) const;
         inline const QString typeStr() const;
         inline const QString formatStr() const;
 
         int index;
+        QString name;
         ParamType type;
     };
 
@@ -76,14 +78,20 @@ public slots:
 // Inline functions
 int FgGenericProtocol::getParamIndex(const QString& node) const
 {
-    return m_InParameters.value(node, Parameter(-1, Parameter::INT)).index;
+    return m_InParameters.value(node, Parameter(-1, "none", Parameter::INT)).index;
 }
 
-FgGenericProtocol::Parameter::Parameter(int idx, ParamType t):
+FgGenericProtocol::Parameter::Parameter(int idx, const QString &_name, ParamType t):
     index(idx),
+    name(_name),
     type(t)
 {
 
+}
+
+bool FgGenericProtocol::Parameter::operator<(const FgGenericProtocol::Parameter &other) const
+{
+    return this->index < other.index;
 }
 
 const QString FgGenericProtocol::Parameter::typeStr() const

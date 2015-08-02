@@ -4,7 +4,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created May 12, 2015
- * @date Modified Aug 01, 2015
+ * @date Modified Aug 03, 2015
  */
 
 #include "log.h"
@@ -95,6 +95,8 @@ bool FgFlightgear::checkPaths()
     }
 
     m_ProtocolFile = m_RootDir + m_ProtocolFileName;
+
+    m_Transport->protocol()->writeXml(m_ProtocolFile);
 
     LOG(INFO) << "FG_ROOT = " << m_RootDir.toStdString();
     LOG(INFO) << "Protocol file = " << m_ProtocolFile.toStdString();

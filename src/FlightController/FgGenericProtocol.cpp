@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jun 30, 2015
+ * @date Modified Aug 03, 2015
  */
 
 #include "log.h"
@@ -22,7 +22,7 @@ FgGenericProtocol::FgGenericProtocol(QObject *parent) :
     // Parameters of instance that we control
     int index = 0;
 
-#define ADD_PARAM(node, type) m_InParameters.insert(node, Parameter(index++, type));
+#define ADD_PARAM(node, type) m_InParameters.insert(node, Parameter(index++, node, type));
 
     ADD_PARAM(CALLSIGN, Parameter::STRING);
     ADD_PARAM(HEADING, Parameter::FLOAT);
@@ -61,7 +61,7 @@ FgGenericProtocol::FgGenericProtocol(QObject *parent) :
 
 
     // Parameteres to control
-#define ADD_PARAM(node, type) m_OutParameters.insert(node, Parameter(index++, type));
+#define ADD_PARAM(node, type) m_OutParameters.insert(node, Parameter(index++, node, type));
     index = 0;
     ADD_PARAM(AILERONS, Parameter::FLOAT);
     ADD_PARAM(ELEVATOR, Parameter::FLOAT);
@@ -69,8 +69,6 @@ FgGenericProtocol::FgGenericProtocol(QObject *parent) :
 //    ADD_PARAM(   WHEEL, Parameter::FLOAT);
     ADD_PARAM(THROTTLE, Parameter::FLOAT);
 #undef ADD_PARAM
-
-    writeXml("/usr/share/games/flightgear/Protocol/FgaProtocol.xml");
 }
 
 FgGenericProtocol::~FgGenericProtocol()
@@ -80,25 +78,6 @@ FgGenericProtocol::~FgGenericProtocol()
 
 bool FgGenericProtocol::writeXml(const QString &fileName)
 {
-    QMap<int, QPair<QString, const Parameter*> > inParamsList;
-    QMap<int, QPair<QString, const Parameter*> > outParamsList;
-
-    { // copy parameters to QMap to get them sorted
-        auto param = m_InParameters.constBegin();
-        auto paramEnd = m_InParameters.constEnd();
-        for (; param != paramEnd; ++param)
-        {
-            inParamsList.insert(param.value().index, qMakePair(param.key(), &param.value()));
-        }
-
-        param = m_OutParameters.constBegin();
-        paramEnd = m_OutParameters.constEnd();
-        for (; param != paramEnd; ++param)
-        {
-            outParamsList.insert(param.value().index, qMakePair(param.key(), &param.value()));
-        }
-    }
-
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
@@ -106,10 +85,23 @@ bool FgGenericProtocol::writeXml(const QString &fileName)
         return false;
     }
 
+    auto writeParameters = [](QXmlStreamWriter& stream, const QHash<QString, Parameter>& params) {
+        std::vector<Parameter> temp;
+        std::copy(std::begin(params), std::end(params), std::back_inserter(temp));
+        std::sort(std::begin(temp), std::end(temp));
+        std::for_each(std::begin(temp), std::end(temp), [&stream](const Parameter& param){
+            stream.writeStartElement("chunk");
+            stream.writeTextElement("name", param.name);
+            stream.writeTextElement("node", param.name);
+            stream.writeTextElement("type", param.typeStr());
+            stream.writeTextElement("format", param.formatStr());
+            stream.writeEndElement(); // chunk
+        });
+    };
+
     QXmlStreamWriter stream(&file);
     stream.setAutoFormatting(true);
     stream.writeStartDocument();
-
     stream.writeStartElement("PropertyList");
     stream.writeStartElement("generic");
 
@@ -117,44 +109,22 @@ bool FgGenericProtocol::writeXml(const QString &fileName)
     stream.writeStartElement("output");
     stream.writeTextElement("line_separator", "newline");
     stream.writeTextElement("var_separator", "tab");
-
-    auto param = inParamsList.constBegin();
-    auto paramEnd = inParamsList.constEnd();
-    for (; param != paramEnd; ++param)
-    {
-        stream.writeStartElement("chunk");
-        stream.writeTextElement("name", param.value().first);
-        stream.writeTextElement("node", param.value().first);
-        stream.writeTextElement("type", param.value().second->typeStr());
-        stream.writeTextElement("format", param.value().second->formatStr());
-        stream.writeEndElement(); // chunk
-    }
+    writeParameters(stream, m_InParameters);
     stream.writeEndElement(); // output
 
     // input section
     stream.writeStartElement("input");
     stream.writeTextElement("line_separator", "newline");
     stream.writeTextElement("var_separator", "tab");
-    param = outParamsList.constBegin();
-    paramEnd = outParamsList.constEnd();
-    for (; param != paramEnd; ++param)
-    {
-        stream.writeStartElement("chunk");
-        stream.writeTextElement("name", param.value().first);
-        stream.writeTextElement("node", param.value().first);
-        stream.writeTextElement("type", param.value().second->typeStr());
-        stream.writeTextElement("format", param.value().second->formatStr());
-        stream.writeEndElement(); // chunk
-    }
+    writeParameters(stream, m_OutParameters);
     stream.writeEndElement(); // input
 
     stream.writeEndElement(); // generic
     stream.writeEndElement(); // PropertyList
-
     stream.writeEndDocument();
     file.close();
 
-    LOG(INFO) << "Protocol has been written";
+    LOG(INFO) << "Protocol has been written to " << fileName.toStdString();
     return true;
 }
 
