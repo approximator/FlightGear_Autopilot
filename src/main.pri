@@ -13,8 +13,6 @@ isEmpty(FGAP_BUILD_TREE) {
 }
 
 ROOT_DIR = $$shell_path($$PWD)
-THIRD_PARTY_DIR = $$shell_path($$absolute_path(../third_party/linux-x86-64))
-win32:THIRD_PARTY_DIR = $$shell_path($$absolute_path(../third_party/windows-i686-mingw))
 SCRIPTS_DIR = $$shell_path($$absolute_path(../scripts))
 CONFIGS_DIR = $$shell_path($$absolute_path($$ROOT_DIR/../doc/config/))
 FGAP_SOURCE_TREE = $$shell_path($$PWD)

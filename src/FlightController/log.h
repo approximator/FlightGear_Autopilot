@@ -11,7 +11,7 @@
 #ifndef FG_LOG
 #define FG_LOG
 
-#include <glog/logging.h>
+#include <QDebug>
 
 #endif // FG_LOG
 

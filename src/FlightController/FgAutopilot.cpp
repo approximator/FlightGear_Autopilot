@@ -17,7 +17,7 @@
 FgAutopilot::FgAutopilot(QObject *parent) :
     QObject(parent)
 {
-    LOG(INFO) << "Autopilot created";
+    qDebug() << "Autopilot created";
 }
 
 bool FgAutopilot::engaged()

@@ -42,12 +42,12 @@ FgTransport::FgTransport(const QJsonObject &config, QObject *parent) :
 
     m_Socket->bind(m_ListenHost, m_ListenPort);
     connect(m_Socket.get(), &QUdpSocket::readyRead, this, &FgTransport::onSocketRead);
-    LOG(INFO) << "FgTransport ready [" << m_ListenHost.toString().toStdString() << ":" << m_ListenPort << "]" << "out: " << m_WritePort;
+    qDebug() << "FgTransport ready [" << m_ListenHost.toString() << ":" << m_ListenPort << "]" << "out: " << m_WritePort;
 }
 
 FgTransport::~FgTransport()
 {
-    LOG(INFO) << "FgTransport destroyed[" << m_ListenHost.toString().toStdString() << ":" << m_ListenPort << "]" << "out: " << m_WritePort;
+    qDebug() << "FgTransport destroyed[" << m_ListenHost.toString() << ":" << m_ListenPort << "]" << "out: " << m_WritePort;
 }
 
 void FgTransport::onSocketRead()

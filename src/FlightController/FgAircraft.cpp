@@ -43,7 +43,7 @@ void FgAircraft::onFdmDataChanged(const FgTransport& transport)
     m_Y = r * cos(lat) * sin(lon);
     m_Z = r * sin(lat);
 
-//    LOG(INFO) << callsign() << ": p = " << m_Pitch << ", r = " << m_Roll << ", y = " << m_Yaw
+//    qDebug() << callsign() << ": p = " << m_Pitch << ", r = " << m_Roll << ", y = " << m_Yaw
 //             << ", lon = " << m_Longitude << ", lat = " << m_Latitude << ", alt = " << m_Altitude
 //             << ", head = " << m_Heading;
 

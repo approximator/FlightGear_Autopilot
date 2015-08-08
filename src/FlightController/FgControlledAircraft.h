@@ -86,14 +86,13 @@ void FgControlledAircraft::setRudder(qreal val)
 
 FgAutopilot *FgControlledAircraft::autopilot() const
 {
-    LOG(INFO) << "Returning autopilot";
-    LOG_IF(FATAL, m_Autopilot.get()) << "Returning null";
+    qDebug() << "Returning autopilot";
     return m_Autopilot.get();
 }
 
 bool FgControlledAircraft::flightgearReady() const
 {
-    LOG(INFO) << "Return ready = " << m_Flightgear->ready();
+    qDebug() << "Return ready = " << m_Flightgear->ready();
     return m_Flightgear->ready();
 }
 

@@ -29,6 +29,14 @@ else {
                                     $$FGAP_AUX_DIR $$shell_path(\"$(QMAKE)\") \
                                     \"$$BUILD_TYPE\"
     deployqt.depends = install
+
+
+QT_CONFIG_CONTENT = [Paths] \
+        Libraries=$$relative_path($$FGAP_INSTALL_LIBRARY_PATH, $$FGAP_INSTALL_PATH) \
+        Plugins=$$relative_path($$FGAP_AUX_DIR/plugins, $$FGAP_INSTALL_PATH) \
+        Imports=$$relative_path($$FGAP_AUX_DIR/imports, $$FGAP_INSTALL_PATH) \
+        Qml2Imports=$$relative_path($$FGAP_AUX_DIR/qml, $$FGAP_INSTALL_PATH)
+       write_file($$FGAP_INSTALL_PATH/qt.conf, QT_CONFIG_CONTENT)
 }
 
 
@@ -38,14 +46,6 @@ deploy_ext_qml.commands = $$PYTHON -u $$shell_path(\"$$SCRIPTS_DIR/load_qml_modu
 deploy_ext_qml.depends = deployqt
 
 deploy_all.depends = deploy_ext_qml
-
-QT_CONFIG_CONTENT = [Paths] \
-        Libraries=$$relative_path($$FGAP_INSTALL_LIBRARY_PATH, $$FGAP_INSTALL_PATH) \
-        Plugins=$$relative_path($$FGAP_AUX_DIR/plugins, $$FGAP_INSTALL_PATH) \
-        Imports=$$relative_path($$FGAP_AUX_DIR/imports, $$FGAP_INSTALL_PATH) \
-        Qml2Imports=$$relative_path($$FGAP_AUX_DIR/qml, $$FGAP_INSTALL_PATH)
-
-write_file($$FGAP_INSTALL_PATH/qt.conf, QT_CONFIG_CONTENT)
 
 INSTALLER_ARCHIVE_FROM_ENV = $$(INSTALLER_ARCHIVE)
 isEmpty(INSTALLER_ARCHIVE_FROM_ENV) {

@@ -52,7 +52,7 @@ double FgPid::update(double error)
 
     _control = p + i + d;
 
-//    LOG(INFO) << "Error = " << error << "Control = " << _control << "(i = " << i << ")";
+//    qDebug() << "Error = " << error << "Control = " << _control << "(i = " << i << ")";
     return _control;
 }
 

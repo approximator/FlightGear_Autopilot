@@ -10,10 +10,6 @@ TEMPLATE = app
 target.path = $$FGAP_BUILD_TREE
 DEFINES += INSTALL_PREFIX=$$FGAP_INSTALL_PATH
 
-LIBPATH += $$shell_path($$THIRD_PARTY_DIR/lib)
-LIBS += -lglog
-LIBS += -lgflags
-
 SOURCES += \
     $$PWD/FgPid.cpp \
     $$PWD/FgMath.cpp \
