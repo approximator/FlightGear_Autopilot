@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jul 14, 2015
- * @date Modified Jul 30, 2015
+ * @date Modified Aug 12, 2015
  */
 
 #include "log.h"
@@ -30,7 +30,7 @@ double FgPid::update(double error)
     p = _kp * error;
 
     // integration
-    _int_error += _ki * error * _dt;
+    _int_error += _ki * fgap::math::rungeKutta(_dt, error);
     _int_error = fgap::math::limit(_int_error, _int_max);
     i = _int_error;
 

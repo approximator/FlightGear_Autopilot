@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jul 30, 2015
+ * @date Modified Aug 12, 2015
  */
 
 #ifndef FGAIRCRAFT_H
@@ -33,6 +33,7 @@ public:
     inline qreal pitch() const;
     inline qreal roll() const;
     inline qreal yaw() const;
+    inline qreal yawRate() const;
     inline qreal altitude() const;
     inline qreal verticalSpeed() const;
     inline qreal airspeed() const;
@@ -60,6 +61,7 @@ protected:
     qreal m_Pitch     = 0.0; // deg
     qreal m_Roll      = 0.0; // deg
     qreal m_Yaw       = 0.0; // deg
+    qreal m_YawRate   = 0.0; // degps
     qreal m_Longitude = 0.0; // deg
     qreal m_Latitude  = 0.0; // deg
     qreal m_Altitude  = 0.0; // ft
@@ -106,6 +108,11 @@ qreal FgAircraft::roll() const
 qreal FgAircraft::yaw() const
 {
     return m_Yaw;
+}
+
+qreal FgAircraft::yawRate() const
+{
+    return m_YawRate;
 }
 
 qreal FgAircraft::altitude() const

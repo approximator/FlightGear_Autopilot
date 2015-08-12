@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 14, 2015
- * @date Modified Jul 30, 2015
+ * @date Modified Aug 12, 2015
  */
 
 #include "log.h"
@@ -32,6 +32,12 @@ void FgAutopilot::computeControl(FgControlledAircraft* aircraft)
 
     switch (m_Mode)
     {
+    case FG_MODE_YAW_RATE_HOLD:
+        holdYawRate(aircraft);
+        break;
+    case FG_MODE_HEADING_HOLD:
+        holdHeading(aircraft);
+        break;
     case FG_MODE_VERTICAL_SPEED_HOLD:
         holdVerticalSpeed(aircraft);
         break;
@@ -49,10 +55,23 @@ void FgAutopilot::computeControl(FgControlledAircraft* aircraft)
     }
 }
 
+void FgAutopilot::holdYawRate(FgControlledAircraft *aircraft)
+{
+    m_DesiredRoll = fgap::math::limit(m_YawRatePid.update(m_DesiredYawRate-aircraft->yawRate()), 20.0);
+    holdAltitude(aircraft);
+}
+
+void FgAutopilot::holdHeading(FgControlledAircraft *aircraft)
+{
+    m_DesiredYawRate = fgap::math::limit(m_DesiredHeading-aircraft->heading() * 1.5, 50.0);
+    holdYawRate(aircraft);
+}
+
 void FgAutopilot::holdVerticalSpeed(FgControlledAircraft *aircraft)
 {
     qreal vsError = m_DesiredVerticalSpeed - aircraft->verticalSpeed();
     m_DesiredPitch = fgap::math::limit(m_VerticalSpeedPid.update(vsError), 20.0);
+
     holdAngles(aircraft);
 }
 

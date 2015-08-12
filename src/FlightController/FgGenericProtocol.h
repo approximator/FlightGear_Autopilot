@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Aug 03, 2015
+ * @date Modified Aug 12, 2015
  */
 
 #ifndef FGGENERICPROTOCOL_H
@@ -22,6 +22,7 @@ const QString HEADING("/orientation/heading-deg");
 const QString PITCH("/orientation/pitch-deg");
 const QString ROLL("/orientation/roll-deg");
 const QString YAW("/orientation/yaw-deg");
+const QString YAW_RATE("/orientation/yaw-rate-degps");
 const QString ALTITUDE("/position/altitude-ft");
 const QString ALTITUDE_AGL("/position/altitude-agl-ft");
 const QString VERTICAL_SPEED("/velocities/vertical-speed-fps");

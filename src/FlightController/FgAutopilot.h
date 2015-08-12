@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 14, 2015
- * @date Modified Jul 30, 2015
+ * @date Modified Aug 12, 2015
  */
 #ifndef FGAUTOPILOT_H
 #define FGAUTOPILOT_H
@@ -24,6 +24,8 @@ class FgAutopilot : public QObject
 public:
     typedef enum
     {
+        FG_MODE_YAW_RATE_HOLD,
+        FG_MODE_HEADING_HOLD,
         FG_MODE_VERTICAL_SPEED_HOLD,
         FG_MODE_ALTITUDE_HOLD,
         FG_MODE_ANGLES_HOLD,
@@ -45,25 +47,29 @@ public:
     void computeControl(FgControlledAircraft *aircraft);
 
 private:
-    AUTOPILOT_MODE m_Mode = FG_MODE_ALTITUDE_HOLD;
+
+    AUTOPILOT_MODE m_Mode = FG_MODE_HEADING_HOLD;
     bool m_Engaged { false };
 
-    qreal m_DesiredPitch     = -8.0;   // deg
+    qreal m_DesiredPitch     = 0.0;    // deg
     qreal m_DesiredRoll      = 0.0;    // deg
     qreal m_DesiredYaw       = 0.0;    // deg
+    qreal m_DesiredYawRate   = 0.0;    // deg
     qreal m_DesiredLongitude = 0.0;    // deg
     qreal m_DesiredLatitude  = 0.0;    // deg
-    qreal m_DesiredAltitude  = 1000.0; // ft
-    qreal m_DesiredHeading   = 150;    // deg
+    qreal m_DesiredAltitude  = 2000.0; // ft
+    qreal m_DesiredHeading   = 50;     // deg
     qreal m_DesiredVerticalSpeed = -2.0;//
 
-    FgPid m_PitchPid    { 0.03, 0.00105, 0.0054};
+    FgPid m_PitchPid    { 0.015, 0.001, 0.005};
     FgPid m_RollPid     { 0.01, 0.001, 0.001};
-    FgPid m_HeadingPid  { 0.04, 0.0, 0.0};
+    FgPid m_YawRatePid  { 0.5, 0.001, 0.0};
     FgPid m_VerticalSpeedPid { 0.05, 0.0, 0.01};
 
     FgAircraft *m_toFollow { nullptr };
 
+    void holdYawRate(FgControlledAircraft* aircraft);
+    void holdHeading(FgControlledAircraft* aircraft);
     void holdVerticalSpeed(FgControlledAircraft* aircraft);
     void holdAltitude(FgControlledAircraft* aircraft);
     void holdAngles(FgControlledAircraft *aircraft);

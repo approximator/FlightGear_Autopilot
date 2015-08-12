@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Aug 03, 2015
+ * @date Modified Aug 12, 2015
  */
 
 #include "log.h"
@@ -29,6 +29,7 @@ FgGenericProtocol::FgGenericProtocol(QObject *parent) :
     ADD_PARAM(PITCH, Parameter::FLOAT);
     ADD_PARAM(ROLL, Parameter::FLOAT);
     ADD_PARAM(YAW, Parameter::FLOAT);
+    ADD_PARAM(YAW_RATE, Parameter::FLOAT);
     ADD_PARAM(ALTITUDE, Parameter::FLOAT);
     ADD_PARAM(ALTITUDE_AGL, Parameter::FLOAT);
     ADD_PARAM(VERTICAL_SPEED, Parameter::FLOAT);

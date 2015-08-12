@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jul 14, 2015
- * @date Modified Jul 15, 2015
+ * @date Modified Aug 12, 2015
  */
 
 #ifndef FGPID_H
@@ -16,7 +16,7 @@
 class FgPid
 {
 public:
-    FgPid(double initial_kp, double initial_kd, double initial_ki, double initial_int_max = 10);
+    FgPid(double initial_kp, double initial_kd, double initial_ki, double initial_int_max = 5);
     double update(double error);
     void reset();
 
@@ -26,7 +26,7 @@ private:
     double _ki = 0.0;
     double _dt = 1;
 
-    double _int_max = 10;
+    double _int_max = 5;
 
     double _prev_error = 0;
     double _prev_d = NAN;

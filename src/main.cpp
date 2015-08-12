@@ -15,6 +15,7 @@
 #include <QtQml>
 #include <QTextCodec>
 #include <QApplication>
+#include <iostream>
 
 void logMessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& message)
 {
@@ -39,6 +40,8 @@ void logMessageHandler(QtMsgType type, const QMessageLogContext& context, const 
     outFile.open(QIODevice::WriteOnly | QIODevice::Append);
     QTextStream ts(&outFile);
     ts << txt << endl;
+
+    std::cout << txt.toStdString() << std::endl;
 }
 
 int main(int argc, char *argv[])
