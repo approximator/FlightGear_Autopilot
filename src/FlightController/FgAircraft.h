@@ -42,6 +42,9 @@ public:
     inline qreal y() const;
     inline qreal z() const;
 
+    inline qreal deltaTime() const;
+    inline qreal elapsedTime() const;
+
     inline const QJsonObject getParams() const;
     inline qreal ailerons() const;
     inline qreal elevator() const;
@@ -72,6 +75,9 @@ protected:
     qreal m_X = 0.0;
     qreal m_Y = 0.0;
     qreal m_Z = 0.0;
+
+    qreal m_DeltaTime   = 0.0; // sec
+    qreal m_ElapsedTime = 0.0; // sec
 
     // controls
     qreal m_Ailerons = 0.0;
@@ -148,6 +154,16 @@ qreal FgAircraft::y() const
 qreal FgAircraft::z() const
 {
     return m_Z;
+}
+
+qreal FgAircraft::deltaTime() const
+{
+    return m_DeltaTime;
+}
+
+qreal FgAircraft::elapsedTime() const
+{
+    return m_ElapsedTime;
 }
 
 const QJsonObject FgAircraft::getParams() const

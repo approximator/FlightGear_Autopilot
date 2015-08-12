@@ -30,6 +30,9 @@ const QString AIRSPEED("/velocities/airspeed-kt");
 const QString LATITUDE("/position/latitude-deg");
 const QString LONGITUDE("/position/longitude-deg");
 
+const QString ELAPSED_TIME("/sim/time/elapsed-sec");
+const QString DELTA_TIME("/sim/time/delta-sec");
+
 const QString AILERONS("/controls/flight/aileron");
 const QString ELEVATOR("/controls/flight/elevator");
 const QString RUDDER("/controls/flight/rudder");

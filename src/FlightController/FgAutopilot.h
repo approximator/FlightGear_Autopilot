@@ -59,12 +59,12 @@ private:
     qreal m_DesiredLatitude  = 0.0;    // deg
     qreal m_DesiredAltitude  = 2000.0; // ft
     qreal m_DesiredHeading   = 50;     // deg
-    qreal m_DesiredVerticalSpeed = -2.0;//
+    qreal m_DesiredVerticalSpeed = 1.0;//
 
-    FgPid m_PitchPid    { 0.015, 0.001, 0.005};
-    FgPid m_RollPid     { 0.01, 0.001, 0.001};
-    FgPid m_YawRatePid  { 0.5, 0.001, 0.0};
-    FgPid m_VerticalSpeedPid { 0.05, 0.0, 0.01};
+    FgPid m_PitchPid    { 0.02, 0.007, 0.001};
+    FgPid m_RollPid     { 0.01, 0.006, 0.001};
+    FgPid m_YawRatePid  { 0.8 , 0.5  , 0.002, 22};
+    FgPid m_VerticalSpeedPid { 0.25, 0.045, 0.001, 10};
 
     FgAircraft *m_toFollow { nullptr };
 

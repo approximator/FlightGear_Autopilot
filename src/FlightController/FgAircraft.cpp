@@ -37,6 +37,9 @@ void FgAircraft::onFdmDataChanged(const FgTransport& transport)
     m_GroundLevel   = transport.getFloat(ALTITUDE_AGL);
     m_VerticalSpeed = transport.getFloat(VERTICAL_SPEED);
 
+    m_ElapsedTime = transport.getFloat(ELAPSED_TIME);
+    m_DeltaTime = transport.getFloat(DELTA_TIME);
+
     qreal lat = qDegreesToRadians(m_Latitude);
     qreal lon = qDegreesToRadians(m_Longitude);
     qreal r = 6371000 + m_Altitude;

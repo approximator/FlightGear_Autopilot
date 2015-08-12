@@ -37,6 +37,9 @@ FgGenericProtocol::FgGenericProtocol(QObject *parent) :
     ADD_PARAM(LATITUDE, Parameter::FLOAT);
     ADD_PARAM(LONGITUDE, Parameter::FLOAT);
 
+    ADD_PARAM(DELTA_TIME, Parameter::FLOAT);
+    ADD_PARAM(ELAPSED_TIME, Parameter::FLOAT);
+
     // other pilots' parameters
     // firstly, get actual number of other pilots
     ADD_PARAM(NUM_PLAYERS, Parameter::INT);
