@@ -1,6 +1,6 @@
 include(../main.pri)
 
-QT += widgets gui qml quick network xml svg
+QT += qml quick network xml svg
 QTPLUGIN += qsvg
 
 TARGET = $$FGAP_APP_TARGET

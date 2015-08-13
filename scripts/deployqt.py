@@ -122,7 +122,9 @@ class QtDeployer():
             target = os.path.join(self.install_dir, 'qml')
             if os.path.exists(target):
                 shutil.rmtree(target)
-            self.copytree(self.qt_qml_dir, target, symlinks=True)
+
+            for lib in filter(lambda x: os.path.basename(x) in self.needed_qml, glob(self.qt_qml_dir+'/*')):
+                self.copytree(lib,os.path.join(target, os.path.basename(lib)), symlinks=True)
 
     def copy_libclang(self, install_dir, llvm_install_dir):
         libsource = os.path.join(llvm_install_dir, 'lib', 'libclang.so')
@@ -141,13 +143,15 @@ class QtDeployer():
         self.copytree(resourcesource, resourcetarget, symlinks=True)
 
     def deploy(self):
-        self.plugins = ['accessible', 'codecs', 'designer', 'iconengines', 'imageformats', 'platformthemes',
-                        'platforminputcontexts', 'platforms', 'printsupport', 'sqldrivers']
+        self.plugins = ['iconengines', 'imageformats', 'platformthemes',
+                        'platforminputcontexts', 'platforms']
 
         self.needed_libraries = [
             'Qt5Core', 'Qt5Widgets', 'Qt5Gui', 'Qt5Qml', 'Qt5Quick', 'Qt5Network',
             'Qt5DBus', 'Qt5Svg', 'Qt5XcbQpa', 'icudata', 'icui18n', 'icuuc'
         ]
+
+        self.needed_qml = ["QtQuick", "QtQuick.2", "QtGraphicalEffects"]
 
         if sys.platform.startswith('win'):
             self.needed_libraries.extend(['libgcc_s_dw2-1', 'libwinpthread-1', 'libstdc++-6', 'icuin53', 'icuuc53', 'icudt53'])
