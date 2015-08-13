@@ -51,10 +51,11 @@ private:
     qreal m_DesiredHeading   = 50;     // deg
     qreal m_DesiredVerticalSpeed = 1.0;//
 
-    FgPid m_PitchPid    { 0.02, 0.007, 0.001};
-    FgPid m_RollPid     { 0.01, 0.006, 0.001};
-    FgPid m_YawRatePid  { 0.8 , 0.5  , 0.002, 22};
-    FgPid m_VerticalSpeedPid { 0.25, 0.045, 0.001, 10};
+    //                          kp         ki        kd    max_ouput  max_int
+    FgPid m_PitchPid         { 0.02  ,   0.007 ,   0.001,  0.6    ,   10.0   };
+    FgPid m_RollPid          { 0.01  ,   0.006 ,   0.001,  0.6    ,   10.0   };
+    FgPid m_YawRatePid       { 0.8   ,   0.5   ,   0.002,  35.0   ,   22.0   };
+    FgPid m_VerticalSpeedPid { 0.25  ,   0.045 ,   0.001,  20.0   ,   10.0   };
 
     FgAircraft *m_toFollow { nullptr };
 

@@ -49,7 +49,7 @@ void FgAutopilot::computeControl()
 void FgAutopilot::holdYawRate()
 {
     const qreal yawRateError = m_DesiredYawRate - m_Aircraft->yawRate();
-    m_DesiredRoll = fgap::math::limit(m_YawRatePid.update(yawRateError, m_Aircraft->deltaTime()), 35.0);
+    m_DesiredRoll = m_YawRatePid.update(yawRateError, m_Aircraft->deltaTime());
     holdAltitude();
 }
 
@@ -62,7 +62,7 @@ void FgAutopilot::holdHeading()
 void FgAutopilot::holdVerticalSpeed()
 {
     const qreal vsError = m_DesiredVerticalSpeed - m_Aircraft->verticalSpeed();
-    m_DesiredPitch = fgap::math::limit(m_VerticalSpeedPid.update(vsError, m_Aircraft->deltaTime()), 20.0);
+    m_DesiredPitch = m_VerticalSpeedPid.update(vsError, m_Aircraft->deltaTime());
 
     holdAngles();
 
@@ -86,8 +86,8 @@ void FgAutopilot::holdAngles()
     qreal rollError = m_DesiredRoll - roll;
 
     // set controls
-    m_Aircraft->setElevator(fgap::math::limit(m_PitchPid.update(pitchError, m_Aircraft->deltaTime()), 0.6));
-    m_Aircraft->setAilerons(fgap::math::limit(m_RollPid.update(rollError, m_Aircraft->deltaTime()), 0.6));
+    m_Aircraft->setElevator(m_PitchPid.update(pitchError, m_Aircraft->deltaTime()));
+    m_Aircraft->setAilerons( m_RollPid.update(rollError , m_Aircraft->deltaTime()));
 
 //    qDebug() << "Elapsed time = " << m_Aircraft->elapsedTime();
 //    qDebug() << "  Delta time = " << m_Aircraft->deltaTime();

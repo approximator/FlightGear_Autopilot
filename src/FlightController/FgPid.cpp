@@ -5,16 +5,17 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jul 14, 2015
- * @date Modified Aug 12, 2015
+ * @date Modified Aug 14, 2015
  */
 
 #include "log.h"
 #include "FgPid.h"
 
-FgPid::FgPid(double initial_kp, double initial_ki, double initial_kd, double initial_int_max):
+FgPid::FgPid(double initial_kp, double initial_ki, double initial_kd, double max_output, double initial_int_max):
     _kp(initial_kp),
     _ki(initial_ki),
     _kd(initial_kd),
+    _max_output(max_output),
     _int_max(initial_int_max)
 {
 
@@ -22,6 +23,8 @@ FgPid::FgPid(double initial_kp, double initial_ki, double initial_kd, double ini
 
 double FgPid::update(double error, double dt)
 {
+    using fgap::math::limit;
+    using fgap::math::rungeKutta;
     double p;
     double i;
     double d;
@@ -30,8 +33,8 @@ double FgPid::update(double error, double dt)
     p = _kp * error;
 
     // integration
-    _int_error += _ki * fgap::math::rungeKutta(dt, error);
-    _int_error =  fgap::math::limit(_int_error, _int_max);
+    _int_error += limit(_ki * rungeKutta(dt, error),
+                        _int_max);
     i = _int_error;
 
     // differentiation
@@ -53,7 +56,8 @@ double FgPid::update(double error, double dt)
     _control = p + i + d;
 
 //    qDebug() << "p = " << p << "\ti = " << i << "\td = " << d;
-    return _control;
+
+    return limit(_control, _max_output);
 }
 
 void FgPid::reset()
