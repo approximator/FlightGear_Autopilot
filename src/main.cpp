@@ -35,11 +35,17 @@ void logMessageHandler(QtMsgType type, const QMessageLogContext& context, const 
     case QtFatalMsg:
         txt = QString("Fatal: %1").arg(message);
         abort();
+    default:
+    // for Qt 5.5 it will be 'case QtInfoMsg:'
+        txt = QString("Info: %1").arg(message);
+        break;
     }
-    QFile outFile("log");
-    outFile.open(QIODevice::WriteOnly | QIODevice::Append);
-    QTextStream ts(&outFile);
-    ts << txt << endl;
+
+/*FIXME to determine right location of this file!!!*/
+//    QFile outFile("log");
+//    outFile.open(QIODevice::WriteOnly | QIODevice::Append);
+//    QTextStream ts(&outFile);
+//    ts << txt << endl;
 
     std::cout << txt.toStdString() << std::endl;
 }
@@ -50,7 +56,15 @@ int main(int argc, char *argv[])
 
     qInstallMessageHandler(logMessageHandler);
     qmlRegisterType<FgAircraftsModel>("fgap", 1, 0, "FgAircraftsModel");
+
     QQmlApplicationEngine engine;
+#ifdef CONFIG_PATH
+    QString qmlFilesPath = QString("%1/%2").arg(
+                QCoreApplication::applicationDirPath(),
+                FGAP_QML_MODULES_PATH);
+    engine.addImportPath(qmlFilesPath);
+#endif
+
     engine.load(QUrl(QStringLiteral("qrc:qml/MainView.qml")));
 
     return app.exec();
