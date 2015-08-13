@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 14, 2015
- * @date Modified Aug 12, 2015
+ * @date Modified Aug 14, 2015
  */
 #ifndef FGAUTOPILOT_H
 #define FGAUTOPILOT_H
@@ -22,17 +22,7 @@ class FgAutopilot : public QObject
 {
     Q_OBJECT
 public:
-    typedef enum
-    {
-        FG_MODE_YAW_RATE_HOLD,
-        FG_MODE_HEADING_HOLD,
-        FG_MODE_VERTICAL_SPEED_HOLD,
-        FG_MODE_ALTITUDE_HOLD,
-        FG_MODE_ANGLES_HOLD,
-        FG_MODE_FOLLOW
-    } AUTOPILOT_MODE;
-
-    explicit FgAutopilot(QObject *parent = 0);
+    explicit FgAutopilot(FgControlledAircraft* aircraft, QObject *parent = 0);
     FgAutopilot(const FgAutopilot& other);
     FgAutopilot& operator=(const FgAutopilot& other);
 
@@ -44,11 +34,11 @@ public:
     inline void anglesHold(qreal roll = 0.0, qreal pitch = 3.0);
     inline void altitudeHold(qreal altitude = 2000);
 
-    void computeControl(FgControlledAircraft *aircraft);
+    void computeControl();
 
 private:
-
-    AUTOPILOT_MODE m_Mode = FG_MODE_HEADING_HOLD;
+    FgControlledAircraft* m_Aircraft = nullptr;
+    std::function<void()>  m_ControlFunc = [this](){ holdHeading(); };
     bool m_Engaged { false };
 
     qreal m_DesiredPitch     = 0.0;    // deg
@@ -68,12 +58,12 @@ private:
 
     FgAircraft *m_toFollow { nullptr };
 
-    void holdYawRate(FgControlledAircraft* aircraft);
-    void holdHeading(FgControlledAircraft* aircraft);
-    void holdVerticalSpeed(FgControlledAircraft* aircraft);
-    void holdAltitude(FgControlledAircraft* aircraft);
-    void holdAngles(FgControlledAircraft *aircraft);
-    void follow(FgControlledAircraft* aircraft, FgAircraft *followAircraft);
+    void holdYawRate();
+    void holdHeading();
+    void holdVerticalSpeed();
+    void holdAltitude();
+    void holdAngles();
+    void follow(FgAircraft *followAircraft);
 
 signals:
 
@@ -94,20 +84,20 @@ void FgAutopilot::disengage()
 void FgAutopilot::setFollow(FgAircraft *aircraft)
 {
     m_toFollow = aircraft;
-    m_Mode = FG_MODE_FOLLOW;
+    m_ControlFunc = [this](){ follow(m_toFollow); };
 }
 
 void FgAutopilot::anglesHold(qreal roll, qreal pitch)
 {
     m_DesiredRoll = roll;
     m_DesiredPitch = pitch;
-    m_Mode = FG_MODE_ANGLES_HOLD;
+    m_ControlFunc = [this](){ holdAngles(); };
 }
 
 void FgAutopilot::altitudeHold(qreal altitude)
 {
     m_DesiredAltitude = altitude;
-    m_Mode = FG_MODE_ALTITUDE_HOLD;
+    m_ControlFunc = [this](){ holdAltitude(); };
 }
 
 Q_DECLARE_METATYPE(FgAutopilot *)

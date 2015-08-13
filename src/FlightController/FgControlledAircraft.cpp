@@ -5,13 +5,12 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 17, 2015
- * @date Modified Aug 01, 2015
+ * @date Modified Aug 14, 2015
  */
 
 #include "log.h"
 #include "FgControlledAircraft.h"
 
-#include <fstream>
 #include <assert.h>
 
 FgControlledAircraft::FgControlledAircraft(const QJsonObject &config, QObject *parent):
@@ -70,18 +69,13 @@ void FgControlledAircraft::onFdmDataChanged(const FgTransport &transport)
     if (!m_Autopilot->engaged())
         return;
 
-    m_Autopilot->computeControl(this);
+    m_Autopilot->computeControl();
     m_Flightgear->transport()->writeData(QString("%1\t%2\t%3\t%4\n")
                                          .arg(ailerons())
                                          .arg(elevator())
 //                                         .arg(rudder())
                                          .arg(rudder())
                                          .arg(throttle()));
-
-    std::ofstream f;
-    f.open("/tmp/fgap.log", std::ios_base::app);
-    f << m_Latitude << '\t' << m_Longitude << '\t' << m_Pitch << '\t' << m_Roll << '\t' <<
-         m_Altitude << '\t' << m_Heading << '\t' << m_Ailerons << '\t' << m_Elevator << '\n';
 }
 
 

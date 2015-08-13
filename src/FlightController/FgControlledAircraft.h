@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 17, 2015
- * @date Modified Aug 01, 2015
+ * @date Modified Aug 14, 2015
  */
 
 #ifndef FGCONTROLLEDAIRCRAFT_H
@@ -46,7 +46,7 @@ public:
     inline const FgFlightgear& flightgear() const;
 
 private:
-    std::shared_ptr<FgAutopilot>  m_Autopilot  { std::make_shared<FgAutopilot>() };
+    std::shared_ptr<FgAutopilot>  m_Autopilot  { std::make_shared<FgAutopilot>(this) };
     std::shared_ptr<FgFlightgear> m_Flightgear { };
 
 signals:
