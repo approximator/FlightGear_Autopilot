@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Aug 12, 2015
+ * @date Modified Aug 14, 2015
  */
 
 #ifndef FGAIRCRAFT_H
@@ -24,6 +24,8 @@ class FgAircraft : public QObject
     Q_PROPERTY(QString callsign READ callsign NOTIFY callsignChanged)
     Q_PROPERTY(bool connected READ connected)
     Q_PROPERTY(QJsonObject params READ getParams NOTIFY paramsChanged)
+    Q_PROPERTY(qreal x READ x)
+    Q_PROPERTY(qreal y READ y)
 
 public:
     explicit FgAircraft(const QString& sign, QObject *parent = 0);
