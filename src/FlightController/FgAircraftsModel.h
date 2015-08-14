@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Jul 22, 2015
+ * @date Modified Aug 14, 2015
  */
 
 #ifndef FGCONTROLLER_H
@@ -34,10 +34,10 @@ public:
     bool init();
     bool saveConfig(const QString& filename);
 
-    int rowCount(const QModelIndex & parent = QModelIndex()) const;
-    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+    Q_INVOKABLE int rowCount(const QModelIndex & parent = QModelIndex()) const;
+    Q_INVOKABLE QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
 
-    Q_INVOKABLE QString get(int index) const;
+    Q_INVOKABLE FgControlledAircraft* get(int index) const;
     Q_INVOKABLE void runFlightgear(int index) const;
 
 protected:

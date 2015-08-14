@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Aug 01, 2015
+ * @date Modified Aug 14, 2015
  */
 
 #include "log.h"
@@ -125,9 +125,9 @@ QVariant FgAircraftsModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-QString FgAircraftsModel::get(int index) const
+FgControlledAircraft* FgAircraftsModel::get(int index) const
 {
-    return m_OurAircrafts.at(index)->callsign();
+    return m_OurAircrafts.at(index).get();
 }
 
 void FgAircraftsModel::runFlightgear(int index) const
