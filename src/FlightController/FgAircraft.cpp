@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Aug 12, 2015
+ * @date Modified Aug 14, 2015
  */
 
 #include "FgMath.h"
@@ -38,16 +38,14 @@ void FgAircraft::onFdmDataChanged(const FgTransport& transport)
     m_VerticalSpeed = transport.getFloat(VERTICAL_SPEED);
 
     m_ElapsedTime = transport.getFloat(ELAPSED_TIME);
-    m_DeltaTime = transport.getFloat(DELTA_TIME);
+    m_DeltaTime   = transport.getFloat(DELTA_TIME);
 
-    qreal lat = qDegreesToRadians(m_Latitude);
-    qreal lon = qDegreesToRadians(m_Longitude);
-    qreal r = 6371000 + m_Altitude;
-    m_X = r * cos(lat) * cos(lon);
-    m_Y = r * cos(lat) * sin(lon);
-    m_Z = r * sin(lat);
+    const qreal lat = qDegreesToRadians(m_Latitude);
+    const qreal lon = qDegreesToRadians(m_Longitude);
 
-//    qDebug() << callsign() << ": p = " << m_Pitch << ", r = " << m_Roll << ", y = " << m_Yaw
+    std::tie(m_X, m_Y, m_Z) = fgap::math::wgsToEcef(lat, lon, m_Altitude);
+
+//    qDebug() << callsign() << ": x = " << m_X << ", y = " << m_Y << ", z = " << m_Z
 //             << ", lon = " << m_Longitude << ", lat = " << m_Latitude << ", alt = " << m_Altitude
 //             << ", head = " << m_Heading;
 
