@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<FgAircraftsModel>("fgap", 1, 0, "FgAircraftsModel");
 
     QQmlApplicationEngine engine;
-#ifdef CONFIG_PATH
+#ifdef FGAP_QML_MODULES_PATH
     QString qmlFilesPath = QString("%1/%2").arg(
                 QCoreApplication::applicationDirPath(),
                 FGAP_QML_MODULES_PATH);
