@@ -17,8 +17,8 @@ Page {
             iconName: "awesome/chain"
             name: "Preferences"
             hoverAnimation: true
-            enabled: false
-            //onTriggered: //TODO: push App settings page
+            enabled: true
+            onTriggered: pageStack.push(Qt.resolvedUrl("FgMap.qml"), { airmodel: menuList.model })
         },
         Action {
             iconName: "action/settings"

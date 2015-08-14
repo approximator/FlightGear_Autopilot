@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jul 30, 2015
+ * @date Modified Aug 14, 2015
  */
 
 #include "FgAircraftsModel.h"
