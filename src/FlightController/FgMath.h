@@ -12,6 +12,7 @@
 #define FGMATH
 
 #include <cmath>
+#include <tuple>
 #include <QtMath>
 
 namespace fgap
@@ -19,7 +20,6 @@ namespace fgap
 
 namespace math
 {
-
 
 
 template <typename T>
@@ -48,6 +48,32 @@ inline qreal rungeKutta(const qreal h, const qreal val)
     const qreal k4 = h * val + k3;
     const qreal d = (k1 + 2 * k2 + 2 * k3 + k4) / 6;
     return d;
+}
+
+
+//https://microem.ru/files/2012/08/GPS.G1-X-00006.pdf
+//https://github.com/diydrones/ardupilot/blob/11625031990317bcf1cbf4903c0726ce6b264beb/libraries/AP_Math/AP_Math.h
+// Semi-major axis of the Earth, in meters.
+#define WGS84_A 6378137.0
+//Inverse flattening of the Earth
+#define WGS84_IF 298.257223563
+// The flattening of the Earth
+#define WGS84_F (1/WGS84_IF)
+// Semi-minor axis of the Earth in meters
+#define WGS84_B (WGS84_A*(1-WGS84_F))
+// Eccentricity of the Earth
+#define WGS84_E (sqrt(2*WGS84_F - WGS84_F*WGS84_F))
+
+inline std::tuple<double, double, double> wgsToEcef(const double& lat, const double& lon, const double& h)
+{
+    const double d = WGS84_E * sin(lat);
+    const double N = WGS84_A / sqrt(1. - d*d);
+
+    double x = (N + h) * cos(lat) * cos(lon);
+    double y = (N + h) * cos(lat) * sin(lon);
+    double z = ((1 - WGS84_E*WGS84_E)*N + h) * sin(lat);
+
+    return std::make_tuple(x, y, z);
 }
 
 } // namespace math
