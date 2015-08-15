@@ -38,18 +38,19 @@ Page {
             title: fgAircraft.callsign
             backgroundColor: Qt.darker(theme.primaryColor)
 
-            actions: [
-                Action {
-                    iconName: "action/info"
-                    name: "Info"
-                    onTriggered: notify("Info Action")
-                },
-                Action {
-                    iconName: "content/clear"
-                    name: "Close page settings"
-                    onTriggered: rightSidebar.expanded = false
-                }
-            ]
+//          See comment:  https://github.com/approximator/FlightGear_Autopilot/commit/a8468be8cd42ca3073a07ce82ee5381aaebeea67#diff-69e9115982880fa7ccd3df88eada8cc4R41
+//            actions: [
+//                Action {
+//                    iconName: "action/info"
+//                    name: "Info"
+//                    onTriggered: notify("Info Action")
+//                },
+//                Action {
+//                    iconName: "content/clear"
+//                    name: "Close page settings"
+//                    onTriggered: rightSidebar.expanded = false
+//                }
+//            ]
 
         }
 
