@@ -1,44 +1,15 @@
 import qbs
 import qbs.FileInfo
 
-Application {
-
-    property int v_major: 0
-    property int v_minor: 0
-    property int v_release: 3
-    property string fgap_version: v_major + '.' + v_minor + '.' + v_release
-    property string app_name: "FlightGear Autopilot"
-    property string app_short_name: "fgautopilot"
-
-    //Only for systems without bundle
-     property path fgapInstallDir: qbs.targetOS.contains("osx") ? app_name + ".app/Contents" : app_name
-    /*By default 'destinationDirectory' :
-    *      Linux/Win -> product.buildDirectory/
-    *      OS X -> product.buildDirectory/$$(fgapAppTarget).app/
-    */
-    property path fgapInstallRoot: destinationDirectory
-    qbs.installRoot: fgapInstallRoot /* If you want to change global installation dir*/
-
-    property path fgapAppTarget: qbs.targetOS.contains("osx") ? app_name : app_short_name
-    property path fgapDataPath: qbs.targetOS.contains("osx")
-                                   ? "Resources"
-                                   : "data"
-
-    property path fgapBinDir: qbs.targetOS.contains("osx")
-                                  ? "MacOS"
-                                  : "bin"
-    property path fgapQmlInstallDir: FileInfo.joinPaths(fgapDataPath, "qml")
-    property path fgapConfigSourceRoot: FileInfo.joinPaths(project.sourceDirectory, "../doc/config/")
-    property path fgapConfigInstallDir: FileInfo.joinPaths(fgapDataPath, "config")
+Product {
+    type: "application" // no Mac app bundle
 
     property stringList generalDefines: [
-        'FGAP_QML_MODULES_PATH="' + FileInfo.relativePath (fgapBinDir, fgapQmlInstallDir) + '"',
-        'CONFIG_PATH="' + FileInfo.relativePath (fgapBinDir, fgapConfigInstallDir) + '"'
+        'FGAP_QML_MODULES_PATH="' + FileInfo.relativePath (project.fgapBinDir, project.fgapQmlInstallDir) + '"',
+        'CONFIG_PATH="' + FileInfo.relativePath (project.fgapBinDir, project.fgapConfigInstallDir) + '"'
     ]
 
     property stringList generalCppFlags: []
-
-    property string installDir
 
     Depends { name: "cpp" }
     cpp.defines: generalDefines.concat()
@@ -63,26 +34,18 @@ Application {
     Depends { name: "Qt.core" }
 
     Group {
-        condition: !qbs.targetOS.contains("osx")
-        fileTagsFilter: product.type
-        qbs.installPrefix: fgapInstallDir
+        fileTagsFilter: "application"
+        qbs.installPrefix: project.fgapInstallDir
         qbs.install: true
-        qbs.installDir: fgapBinDir
+        qbs.installDir: project.fgapBinDir
     }
 
     /* Install Fgap JSON configs*/
     Group {
         fileTagsFilter: ["jsonConfigs"]
-        qbs.installPrefix: fgapInstallDir
+        qbs.installPrefix: project.fgapInstallDir
         qbs.install: true
-        qbs.installDir: fgapConfigInstallDir
+        qbs.installDir: project.fgapConfigInstallDir
     }
 
-    /* Install Fgap QML modules*/
-    Group {
-        fileTagsFilter: ["qmlModules"]
-        qbs.installPrefix: fgapInstallDir
-        qbs.install: true
-        qbs.installDir: fgapQmlInstallDir
-    }
 }
