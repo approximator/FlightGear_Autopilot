@@ -1,18 +1,19 @@
 import qbs
 
 FgapApplication {
+    name: project.app_short_name
     targetName: fgapAppTarget
-    //consoleApplication: qbs.debugInformation
+//    Depends { name: "qml_fgear" }
+//    Depends { name: "qml_material" }
+//    Depends { name: "qml_material_components" }
 
-    property string pathToQmlModules: project.sourceDirectory + "../../../GitHub/"
     Depends { name: "cpp" }
     cpp.includePaths: [ "./"]
-    cpp.rpaths: qbs.targetOS.contains("osx") ? ["@executable_path/../lib"]
-                                             : ["$ORIGIN/../lib"]
+    cpp.rpaths: qbs.targetOS.contains("osx")
+            ? ["@executable_path/../lib"]
+            : ["$ORIGIN/../lib"]
 
-    Depends { name: "Qt"; submodules: ["widgets", "qml", "quick", "gui", "network", "xml", "svg"] }
-    //https://wiki.qt.io/Qbs_Quick_Reference
-
+    Depends { name: "Qt"; submodules: [ "qml", "quick", "network", "xml", "svg"] }
 
     Group {
         name: "Sources"
@@ -36,31 +37,7 @@ FgapApplication {
     Group {
         name: "jsonConfigs"
         fileTags: ["jsonConfigs"]
-        prefix: fgapConfigSourceRoot
+        prefix: project.fgapConfigSourceRoot
         files: "*.json"
-    }
-
-    /* Fgap QML modules*/
-    Group {
-        name: "fgapQml"
-        fileTags: ["qmlModules"]
-        prefix: "../Gui/qml/"
-        files: ["qml-fgear/modules/FGear"]
-    }
-
-    /* Material QML modules*/
-    Group {
-        name: "materialQml"
-        fileTags: ["qmlModules"]
-        prefix: pathToQmlModules + "qml-material/modules/"
-        files: ["Material", "QtQuick"]
-    }
-
-    /* Material QML modules additional*/
-    Group {
-        name: "materialComponentsQml"
-        fileTags: ["qmlModules"]
-        prefix: pathToQmlModules + "qml-material-components/modules/"
-        files: ["Material"]
     }
 }
