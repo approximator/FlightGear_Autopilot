@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Aug 14, 2015
+ * @date Modified Aug 17, 2015
  */
 
 #ifndef FGAIRCRAFT_H
@@ -26,6 +26,9 @@ class FgAircraft : public QObject
     Q_PROPERTY(QJsonObject params READ getParams NOTIFY paramsChanged)
     Q_PROPERTY(qreal x READ x NOTIFY xChanged)
     Q_PROPERTY(qreal y READ y NOTIFY yChanged)
+    Q_PROPERTY(qreal lat READ latitude NOTIFY latChanged)
+    Q_PROPERTY(qreal lon READ longitude NOTIFY lonChanged)
+    Q_PROPERTY(qreal heading READ heading NOTIFY headingChanged)
 
 public:
     explicit FgAircraft(const QString& sign, QObject *parent = 0);
@@ -36,10 +39,13 @@ public:
     inline qreal roll() const;
     inline qreal yaw() const;
     inline qreal yawRate() const;
+    inline qreal heading() const;
     inline qreal altitude() const;
     inline qreal verticalSpeed() const;
     inline qreal airspeed() const;
     inline qreal groundElev() const;
+    inline qreal latitude() const;
+    inline qreal longitude() const;
     inline qreal x() const;
     inline qreal y() const;
     inline qreal z() const;
@@ -52,7 +58,6 @@ public:
     inline qreal elevator() const;
     inline qreal   rudder() const;
     inline qreal throttle() const;
-    inline qreal heading() const;
     inline bool connected() const;
 
     inline void setCallsign(const QString& newCallsign);
@@ -95,6 +100,9 @@ signals:
 
     void xChanged();
     void yChanged();
+    void latChanged();
+    void lonChanged();
+    void headingChanged();
 
 public slots:
     virtual void onFdmDataChanged(const FgTransport &transport);
@@ -144,6 +152,16 @@ qreal FgAircraft::airspeed() const
 qreal FgAircraft::groundElev() const
 {
     return m_GroundLevel;
+}
+
+qreal FgAircraft::latitude() const
+{
+    return m_Latitude;
+}
+
+qreal FgAircraft::longitude() const
+{
+    return m_Longitude;
 }
 
 qreal FgAircraft::x() const
