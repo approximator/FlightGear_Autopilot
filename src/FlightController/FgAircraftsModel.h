@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Aug 14, 2015
+ * @date Modified Aug 18, 2015
  */
 
 #ifndef FGCONTROLLER_H
@@ -14,8 +14,8 @@
 
 #include "FgControlledAircraft.h"
 
-#include <QAbstractListModel>
 #include <QList>
+#include <QAbstractListModel>
 
 class FgTransport;
 
@@ -46,7 +46,7 @@ protected:
 private:
     std::shared_ptr<FgTransport>                 m_Transport { };
     QList<std::shared_ptr<FgControlledAircraft>> m_OurAircrafts { };
-    QList<std::shared_ptr<FgAircraft>>           m_OtherAircrafts { };
+    // QList<std::shared_ptr<FgAircraft>>           m_OtherAircrafts { };
     qint32 m_AircraftsCount { 0 };
 
     QHash<int, QByteArray> m_Roles {

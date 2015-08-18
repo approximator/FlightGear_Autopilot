@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Aug 14, 2015
+ * @date Modified Aug 18, 2015
  */
 
 #include "FgMath.h"
@@ -21,6 +21,7 @@ FgAircraft::FgAircraft(const QString& sign, QObject *parent) :
 
 FgAircraft::~FgAircraft()
 {
+    qDebug() << callsign() << ": I am destroying";
 }
 
 void FgAircraft::onFdmDataChanged(const FgTransport& transport)

@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Aug 14, 2015
+ * @date Modified Aug 18, 2015
  */
 
 #include "log.h"
@@ -50,7 +50,7 @@ bool FgAircraftsModel::init()
 
     for (auto const &parameter : aircrafts)
     {
-        auto aircraft = std::make_shared<FgControlledAircraft>(parameter.toObject());
+        auto aircraft = std::make_shared<FgControlledAircraft>(parameter.toObject(), this);
         emit beginInsertRows(QModelIndex(), m_OurAircrafts.count(), m_OurAircrafts.count());
         m_OurAircrafts.append(aircraft);
         connect(aircraft.get(), &FgControlledAircraft::onConnected, this, &FgAircraftsModel::onAircraftConnected);
@@ -103,7 +103,7 @@ QVariant FgAircraftsModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    if (index.row() >= m_OurAircrafts.size())
+    if (index.row() < 0 || index.row() >= m_OurAircrafts.size())
         return QVariant();
 
     switch (role)
@@ -127,6 +127,11 @@ QVariant FgAircraftsModel::data(const QModelIndex &index, int role) const
 
 FgControlledAircraft* FgAircraftsModel::get(int index) const
 {
+    if (index < 0 || index > m_OurAircrafts.length())
+    {
+        qWarning() << "Requested invalid index: " << index;
+        return 0;
+    }
     return m_OurAircrafts.at(index).get();
 }
 
@@ -146,8 +151,6 @@ void FgAircraftsModel::updateAircraft(const QString & /* aircraftId */)
 
 void FgAircraftsModel::onDataReceived()
 {
-    updateOtherAircraftsCount();
-
     emit fdmDataChanged(m_Transport);
 
     //eleron
@@ -168,54 +171,4 @@ void FgAircraftsModel::onAircraftConnected()
     qDebug() << "aircraft " << aircraft->callsign() << " connected";
 }
 
-void FgAircraftsModel::updateOtherAircraftsCount()
-{
-    qint32 count = m_Transport->getInt("/ai/models/num-players");
 
-    if (m_AircraftsCount == count)
-    {
-        // assume that aircrafts remain the same
-        return;
-    }
-
-    m_AircraftsCount = count;
-
-    // get all aircrafts and add new ones to the list
-    QList<QString> callsigns;
-    for (int i = 0; i < count; ++i)
-    {
-        QString callsign = m_Transport->getString("/ai/models/multiplayer[" + QString::number(i) + "]/callsign");
-        qDebug() << "callsign = " << callsign;
-        callsigns.push_back(callsign);
-        if (m_OtherAircrafts.end() !=
-                std::find_if(m_OtherAircrafts.begin(), m_OtherAircrafts.end(),
-                             [&callsign](std::shared_ptr<FgAircraft> a){ return a->callsign() == callsign;}))
-        {
-            continue;
-        }
-
-        auto aircraft = std::make_shared<FgAircraft>(callsign);
-        aircraft->setConnected(true);
-        //! @todo  aircraft->setIndex();
-        m_OtherAircrafts.append(aircraft);
-        emit aircraftAdded(aircraft.get());
-        qDebug() << "otherAircraftAdded";
-    }
-
-    // remove disconnected aircrafts from the list
-    auto it = m_OtherAircrafts.begin();
-    while (it != m_OtherAircrafts.end())
-    {
-        if (!callsigns.contains((*it)->callsign()))
-        {
-            emit aircraftDisconnected((*it).get());
-            qDebug() << "aircraftDisconnected";
-
-            it = m_OtherAircrafts.erase(it);
-        }
-        else
-        {
-            ++it;
-        }
-    }
-}
