@@ -24,49 +24,51 @@ Page {
             iconName: "action/settings"
             name: "Page Settings"
             hoverAnimation: true
-            onTriggered: rightSidebar.expanded = !rightSidebar.expanded
+            onTriggered: rightSidebar.showing = !rightSidebar.showing
         }
     ]
 
-    rightSidebar: _rightSidebar
-    Sidebar {
-        id: _rightSidebar
-        property alias actionBar: _actionBar
-        expanded: false
-        ActionBar {
-            id: _actionBar
-            title: fgAircraft.callsign
-            backgroundColor: Qt.darker(theme.primaryColor)
+    rightSidebar: PageSidebar {
+        width: Units.dp(250)
+        showing: false
+        actionBar.title: fgAircraft.callsign
+        actionBar.backgroundColor: Qt.darker(theme.primaryColor)
 
-//          See comment:  https://github.com/approximator/FlightGear_Autopilot/commit/a8468be8cd42ca3073a07ce82ee5381aaebeea67#diff-69e9115982880fa7ccd3df88eada8cc4R41
-//            actions: [
-//                Action {
-//                    iconName: "action/info"
-//                    name: "Info"
-//                    onTriggered: notify("Info Action")
-//                },
-//                Action {
-//                    iconName: "content/clear"
-//                    name: "Close page settings"
-//                    onTriggered: rightSidebar.expanded = false
-//                }
-//            ]
+        actions: [
+            Action {
+                iconName: "action/info"
+                name: "Info"
+                onTriggered: notify("Info Action")
+            },
+            Action {
+                iconName: "content/clear"
+                name: "Close page settings"
+                onTriggered: rightSidebar.showing = false
+            }
+        ]
 
-        }
-
-        Button {
+        sidebar: Button {
             text: "Run"
             elevation: 1
             enabled: fgAircraft.flightgearReady
             onClicked: fgAircraft.runFlightGear()
         }
     }
+
     /*Left side menu*/
+    Sidebar {
+        id: _sidebar
+        header: "Aircrafts menu"
+        width: Units.dp(350)
+        backgroundColor: Palette.colors["grey"]["200"]
+        contents: menuList
+    }
+
     ListView {
         id: menuList
 
-        anchors.fill: parent
-
+        width: _sidebar.width
+        height: childrenRect.height
         highlight: Item {
             Rectangle {
                 color: theme.accentColor
@@ -100,7 +102,7 @@ Page {
                 }
 
                 infoEnabled: ListView.isCurrentItem
-                onFgInfoClicked: rightSidebar.expanded = !rightSidebar.expanded
+                onFgInfoClicked: rightSidebar.showing = !rightSidebar.showing
                 Component.onCompleted: {
                     if (index === 0) {
                         aircraftsPage.fgAircraft = aircraft;
@@ -111,7 +113,12 @@ Page {
     }
 
     FgAircraftPage {
-        anchors.fill: parent
+        anchors {
+            left: _sidebar.right
+            right: parent.right
+            top: parent.top
+            bottom: parent.bottom
+        }
         aircraft: fgAircraft
     }
 

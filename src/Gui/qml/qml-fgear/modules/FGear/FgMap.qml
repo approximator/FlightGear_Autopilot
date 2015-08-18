@@ -24,6 +24,9 @@ Page {
         }
     ]
 
+
+    rightSidebar: PageSidebar{ /* Needed to fix icons overlay bug */}
+
     Canvas {
         id: canvas
         anchors.fill: parent
