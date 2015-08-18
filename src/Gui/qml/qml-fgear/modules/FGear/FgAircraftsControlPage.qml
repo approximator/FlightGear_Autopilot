@@ -14,8 +14,8 @@ Page {
 
     actions: [
         Action {
-            iconName: "awesome/chain"
-            name: "Preferences"
+            iconName: "maps/map"
+            name: "Aircrafts map"
             hoverAnimation: true
             enabled: true
             onTriggered: pageStack.push(Qt.resolvedUrl("FgMap.qml"), { airmodel: menuList.model })
