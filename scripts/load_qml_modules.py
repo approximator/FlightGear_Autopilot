@@ -9,16 +9,14 @@ try:
 except ImportError:
     import urllib2
 
-QML_MATERIAL_VERSION = '0.1'
-QML_EXTRAS_VERSION = '0.1'
-
-
 class ModulesLoader:
     def __init__(self, sources_path, install_path):
         self.sources_path = sources_path
         self.install_path = install_path
 
     def download(self, url, download_dir, src_dir):
+        if not os.path.exists(download_dir):
+            os.makedirs(download_dir)
         target_file = os.path.join(download_dir, src_dir + '.zip')
         print('Downloading module from:', url)
 
@@ -60,14 +58,12 @@ class ModulesLoader:
             shutil.copyfile(src, dest)
 
     def download_and_deploy(self, src_dir, module_name, url):
-        download_dir = tempfile.gettempdir()
+        download_dir = os.path.join(tempfile.gettempdir(), 'fgap_downloads')
         self.download(url, download_dir, src_dir)
         self.deploy(os.path.join(download_dir, src_dir), module_name)
 
     def run(self):
-        self.download_and_deploy('qml-material', 'Material', 'https://github.com/papyros/qml-material/archive/v' + QML_MATERIAL_VERSION + '.zip')
-        self.download_and_deploy('qml-extras', 'Material/Extras', 'https://github.com/papyros/qml-extras/archive/v' + QML_EXTRAS_VERSION + '.zip')
-        self.download_and_deploy('qml-material-components', 'Material/Components', 'https://github.com/AndreyShelest/qml-material-components/archive/master.zip')
+        self.download_and_deploy('qml-material', 'Material', 'https://github.com/papyros/qml-material/archive/develop.zip')
         self.deploy(os.path.join(self.sources_path, 'qml-fgear'), 'FGear')
 
 if __name__ == '__main__':
