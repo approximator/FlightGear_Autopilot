@@ -24,20 +24,20 @@ void logMessageHandler(QtMsgType type, const QMessageLogContext& context, const 
     QString txt;
     switch (type) {
     case QtDebugMsg:
-        txt = QString("Debug: %1").arg(message);
+        txt = QString("%1Debug: %2").arg(LOG_COLOR_GREEN).arg(message);
         break;
     case QtWarningMsg:
-        txt = QString("Warning: %1").arg(message);
+        txt = QString("%1Warning: %2").arg(LOG_COLOR_CYAN).arg(message);
         break;
     case QtCriticalMsg:
-        txt = QString("Critical: %1").arg(message);
+        txt = QString("%1Critical: %2").arg(LOG_COLOR_PURPLE).arg(message);
         break;
     case QtFatalMsg:
-        txt = QString("Fatal: %1").arg(message);
+        txt = QString("%1Fatal: %2").arg(LOG_COLOR_RED).arg(message);
         abort();
     default:
     // for Qt 5.5 it will be 'case QtInfoMsg:'
-        txt = QString("Info: %1").arg(message);
+        txt = QString("%1Info: %2").arg(LOG_COLOR_RESET).arg(message);
         break;
     }
 
