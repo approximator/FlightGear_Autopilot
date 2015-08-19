@@ -3,7 +3,7 @@ import Material 0.1
 
 Page {
     property QtObject airmodel: null
-    property string iconName: "flight.svg"
+    property string iconName: "flight_pic/flight_orange.svg"
 
     title: "Air map"
 
@@ -44,14 +44,16 @@ Page {
             ctx.fillStyle = "yellow";
             var x = userDefinedOffsets[0] % gridSize
             var y = userDefinedOffsets[1] % gridSize
-            for (; x < width; x += gridSize, y += gridSize) {
+            for (; x < width; x += gridSize) {
                 ctx.moveTo(x, 0)
                 ctx.lineTo(x, height)
+                var txtX = x / scale + centerOffsets[0] - userDefinedOffsets[0] / scale
+                ctx.fillText(txtX.toFixed(4), x, 10);
+            }
+            for (; y < height; y += gridSize) {
                 ctx.moveTo(0, y)
                 ctx.lineTo(width, y)
-                var txtX = x / scale + centerOffsets[0] - userDefinedOffsets[0] / scale
                 var txtY = y / scale + centerOffsets[1] - userDefinedOffsets[1] / scale
-                ctx.fillText(txtX.toFixed(4), x, 10);
                 ctx.fillText(txtY.toFixed(4), 5, y);
             }
             ctx.strokeStyle = "green"
