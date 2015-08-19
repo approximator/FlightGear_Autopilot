@@ -15,6 +15,7 @@ Page {
             enabled: true
             onTriggered: {
                 canvas.centerOffsets = getCenterOffset(getAircraftsFromModel(airmodel))
+                canvas.userDefinedOffsets = [0, 0]
             }
         }
     ]
@@ -27,13 +28,13 @@ Page {
 
         property var centerOffsets: [0, 0]
         property var userDefinedOffsets: [0, 0]
-        property int gridSize: 100
         property real scale: 10000
+        property int gridSize: scale / 100
 
         onPaint: {
             var aircrafts = getAircraftsFromModel(airmodel)
-            var radius = 3
             var ctx = getContext("2d")
+            var im = ctx.createImageData(iconName);
 
             ctx.fillStyle = '#222222';
             ctx.fillRect(0, 0, width, height)
@@ -47,13 +48,15 @@ Page {
             for (; x < width; x += gridSize) {
                 ctx.moveTo(x, 0)
                 ctx.lineTo(x, height)
-                var txtX = x / scale + centerOffsets[0] - userDefinedOffsets[0] / scale
-                ctx.fillText(txtX.toFixed(4), x, 10);
+                var txtX = centerOffsets[0] + (x - userDefinedOffsets[0] - width / 2) / scale
+                if (gridSize > 70 || (x / gridSize) % 2 == 0) {
+                    ctx.fillText(txtX.toFixed(4), x - 10, 15);
+                }
             }
             for (; y < height; y += gridSize) {
                 ctx.moveTo(0, y)
                 ctx.lineTo(width, y)
-                var txtY = y / scale + centerOffsets[1] - userDefinedOffsets[1] / scale
+                var txtY = centerOffsets[1] + (height - (y - userDefinedOffsets[1]) - height / 2) / scale
                 ctx.fillText(txtY.toFixed(4), 5, y);
             }
             ctx.strokeStyle = "green"
@@ -67,8 +70,10 @@ Page {
                 var y = (aircraft.lat - centerOffsets[1]) * scale - userDefinedOffsets[1] + height / 2
 
                 ctx.translate(x, height - y)
+                ctx.fillText(aircraft.lat.toFixed(4), 10, -10);
+                ctx.fillText(aircraft.lon.toFixed(4), 10, 1);
                 ctx.rotate(aircraft.heading * Math.PI / 180.0)
-                ctx.drawImage(iconName, 0, 0)
+                ctx.drawImage(im, -im.width/2, -im.height/2)
 
                 // console.log("center ", centerOffsets[0], centerOffsets[1])
                 // console.log("Paint ", aircraft.callsign, x, y)
@@ -80,6 +85,8 @@ Page {
         MouseArea {
             property int prevX: 0
             property int prevY: 0
+            property int prevXOffset: 0
+            property int prevYOffset: 0
 
             anchors.fill: parent
             hoverEnabled: false
@@ -87,37 +94,31 @@ Page {
             onPressed: {
                 prevX = mouse.x
                 prevY = mouse.y
+                prevXOffset = canvas.userDefinedOffsets[0]
+                prevYOffset = canvas.userDefinedOffsets[1]
             }
 
             onPositionChanged: {
-                canvas.userDefinedOffsets[0] = mouse.x - prevX
-                canvas.userDefinedOffsets[1] = mouse.y - prevY
+                canvas.userDefinedOffsets[0] = prevXOffset + mouse.x - prevX
+                canvas.userDefinedOffsets[1] = prevYOffset + mouse.y - prevY
                 canvas.requestPaint();
             }
         }
 
-        ActionButton {
-            id: buttonZoomOut
+        Slider {
             anchors {
                 right: parent.right
                 bottom: parent.bottom
                 margins: Units.dp(32)
             }
-            iconName: "action/zoom_out"
-            onClicked: {
-                canvas.scale += 10
-            }
-        }
-
-        ActionButton {
-            anchors {
-                right: parent.right
-                bottom: buttonZoomOut.top
-                margins: Units.dp(32)
-            }
-            iconName: "action/zoom_in"
-            onClicked: {
-                canvas.scale -= 10
+            value: 100
+            focus: true
+            numericValueLabel: true
+            stepSize: 1
+            minimumValue: 50
+            maximumValue: 200
+            onValueChanged: {
+                canvas.scale = value * 100
             }
         }
 
