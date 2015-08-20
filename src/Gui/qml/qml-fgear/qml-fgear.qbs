@@ -6,8 +6,7 @@ FgapQmlModule {
     sourceFiles: [
         "*qml*",
         "AutopilotItems/*qml*",
-        "flight_pic/*.jpg",
-        "flight_pic/*.png",
+        "flight_pic/*",
         "js/*.js",
         "Pointers/*.qml",
         "Pointers/pictorial_navigation_indicator/*.png"
