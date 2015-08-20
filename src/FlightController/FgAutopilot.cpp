@@ -101,8 +101,13 @@ void FgAutopilot::holdAngles()
 
 void FgAutopilot::follow(FgAircraft *followAircraft)
 {
-    m_DesiredAltitude = followAircraft->altitude();
-    m_DesiredRoll = followAircraft->roll();
+    auto posDiffLat = followAircraft->latitude() - m_Aircraft->latitude();
+    auto posDiffLon = followAircraft->longitude() - m_Aircraft->longitude();
+    m_DesiredHeading = qRadiansToDegrees(std::atan(posDiffLon / posDiffLat)) - 90;
+    if (m_DesiredHeading < 0)
+        m_DesiredHeading += 360;
 
-    holdAltitude();
+    qDebug() << "Desired heading = " << m_DesiredHeading;
+
+    holdHeading();
 }
