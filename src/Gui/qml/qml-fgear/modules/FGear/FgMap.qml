@@ -31,10 +31,15 @@ Page {
         property real scale: 10000
         property int gridSize: scale / 100
 
+        Image {
+            id: _flightImage
+            source: iconName
+            visible: false
+        }
         onPaint: {
             var aircrafts = getAircraftsFromModel(airmodel)
             var ctx = getContext("2d")
-            var im = ctx.createImageData(iconName);
+            var im = _flightImage;
 
             ctx.fillStyle = '#222222';
             ctx.fillRect(0, 0, width, height)
