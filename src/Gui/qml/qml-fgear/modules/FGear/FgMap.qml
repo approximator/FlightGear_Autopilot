@@ -49,7 +49,7 @@ Page {
                 ctx.moveTo(x, 0)
                 ctx.lineTo(x, height)
                 var txtX = centerOffsets[0] + (x - userDefinedOffsets[0] - width / 2) / scale
-                if (gridSize > 70 || (x / gridSize) % 2 == 0) {
+                if (gridSize > 70 || Math.floor(x / gridSize) % 2 == 0) {
                     ctx.fillText(txtX.toFixed(4), x - 10, 15);
                 }
             }

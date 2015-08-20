@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 14, 2015
- * @date Modified Aug 14, 2015
+ * @date Modified Aug 20, 2015
  */
 #ifndef FGAUTOPILOT_H
 #define FGAUTOPILOT_H
@@ -48,7 +48,7 @@ private:
     qreal m_DesiredLongitude = 0.0;    // deg
     qreal m_DesiredLatitude  = 0.0;    // deg
     qreal m_DesiredAltitude  = 2000.0; // ft
-    qreal m_DesiredHeading   = 50;     // deg
+    qreal m_DesiredHeading   = 45;     // deg
     qreal m_DesiredVerticalSpeed = 1.0;//
 
     //                          kp         ki        kd    max_ouput  max_int

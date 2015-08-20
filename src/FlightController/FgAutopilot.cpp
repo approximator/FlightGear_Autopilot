@@ -5,14 +5,12 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 14, 2015
- * @date Modified Aug 14, 2015
+ * @date Modified Aug 20, 2015
  */
 
 #include "log.h"
 #include "FgAutopilot.h"
 #include "FgControlledAircraft.h"
-
-#include <QVector3D>
 
 FgAutopilot::FgAutopilot(FgControlledAircraft *aircraft, QObject *parent) :
     QObject(parent)
@@ -55,7 +53,12 @@ void FgAutopilot::holdYawRate()
 
 void FgAutopilot::holdHeading()
 {
-    m_DesiredYawRate = fgap::math::limit(m_DesiredHeading-m_Aircraft->heading() * 1, 5.0);
+    qreal headingError = m_DesiredHeading - m_Aircraft->heading();
+    qreal invertedHeadingError = 360 - headingError;
+    if (invertedHeadingError < headingError)
+        headingError = -invertedHeadingError;
+
+    m_DesiredYawRate = fgap::math::limit(headingError * 1, 5.0);
     holdYawRate();
 }
 
