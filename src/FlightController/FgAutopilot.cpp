@@ -54,9 +54,18 @@ void FgAutopilot::holdYawRate()
 void FgAutopilot::holdHeading()
 {
     qreal headingError = m_DesiredHeading - m_Aircraft->heading();
-    qreal invertedHeadingError = 360 - headingError;
-    if (invertedHeadingError < headingError)
-        headingError = -invertedHeadingError;
+    qreal invertedHeadingError = 360 - std::fabs(headingError);
+
+
+    qDebug() << "m_DesiredHeading = " << m_DesiredHeading;
+    qDebug() << "       heading() = " << m_Aircraft->heading();
+    qDebug() << "              he = " << headingError;
+    qDebug() << "              ie = " << invertedHeadingError;
+
+    if (invertedHeadingError < std::fabs(headingError))
+        headingError = invertedHeadingError;
+
+    qDebug() << "HE = " << headingError;
 
     m_DesiredYawRate = fgap::math::limit(headingError * 1, 5.0);
     holdYawRate();
@@ -102,7 +111,42 @@ void FgAutopilot::holdAngles()
 void FgAutopilot::follow(FgAircraft *followAircraft)
 {
     m_DesiredAltitude = followAircraft->altitude();
-    m_DesiredRoll = followAircraft->roll();
 
-    holdAltitude();
+    qreal lat1 = m_Aircraft->latitude();
+    qreal lon1 = m_Aircraft->longitude();
+    qreal lat2 = followAircraft->latitude();
+    qreal lon2 = followAircraft->longitude();
+
+    // http://mathforum.org/library/drmath/view/55417.html
+    qreal  y = std::sin(lon2-lon1) * std::cos(lat2);
+    qreal  x = std::cos(lat1) * std::sin(lat2) -
+               std::sin(lat1) * std::cos(lat2) * std::cos(lon2-lon1);
+    if (y > 0)
+    {
+        if (x > 0)
+            m_DesiredHeading = qRadiansToDegrees(std::atan(y / x));
+        else if (x < 0)
+            m_DesiredHeading = 180 - qRadiansToDegrees(std::atan(-y / x));
+        else // (x == 0)
+            m_DesiredHeading = 90;
+    }
+    else if (y < 0)
+    {
+        if (x > 0)
+            m_DesiredHeading = 360 - qRadiansToDegrees(std::atan(-y / x));
+        else if (x < 0)
+            m_DesiredHeading = 180 + qRadiansToDegrees(std::atan(y / x));
+        else
+            m_DesiredHeading = 270;
+    }
+    else // (y == 0)
+    {
+        if (x > 0)
+            m_DesiredHeading = 0;
+        else if (x < 0)
+            m_DesiredHeading = 180;
+        // if (x == 0) then [the 2 points are the same]
+    }
+
+    holdHeading();
 }
