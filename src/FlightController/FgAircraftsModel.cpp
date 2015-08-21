@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Aug 18, 2015
+ * @date Modified Aug 20, 2015
  */
 
 #include "log.h"
@@ -60,12 +60,10 @@ bool FgAircraftsModel::init()
     m_Transport = m_OurAircrafts[0]->transport();
     connect(m_Transport.get(), &FgTransport::fgDataReceived, this, &FgAircraftsModel::onDataReceived);
 
-//    m_OurAircrafts["Travis"]->follow(m_OurAircrafts["Rover"].get());
-//    m_OurAircrafts["Rover"]->autopilot()->engage();
-
 //    m_OurAircrafts[0]->runFlightGear();
 //    m_OurAircrafts[0]->autopilot()->engage();
-//    m_OurAircrafts["Rover"]->runFlightGear();
+//    m_OurAircrafts[1]->autopilot()->engage();
+//    m_OurAircrafts[0]->autopilot()->setFollow(m_OurAircrafts[1].get());
     return true;
 }
 

@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 14, 2015
- * @date Modified Aug 20, 2015
+ * @date Modified Aug 21, 2015
  */
 
 #include "log.h"
@@ -53,10 +53,9 @@ void FgAutopilot::holdYawRate()
 
 void FgAutopilot::holdHeading()
 {
-    qreal headingError = m_DesiredHeading - m_Aircraft->heading();
-    qreal invertedHeadingError = 360 - headingError;
-    if (invertedHeadingError < headingError)
-        headingError = -invertedHeadingError;
+    qreal headingError = fgap::math::headingOffset(m_Aircraft->heading(), m_DesiredHeading);
+
+    qDebug() << "HE = " << headingError;
 
     m_DesiredYawRate = fgap::math::limit(headingError * 1, 5.0);
     holdYawRate();
@@ -102,7 +101,12 @@ void FgAutopilot::holdAngles()
 void FgAutopilot::follow(FgAircraft *followAircraft)
 {
     m_DesiredAltitude = followAircraft->altitude();
-    m_DesiredRoll = followAircraft->roll();
 
-    holdAltitude();
+    m_DesiredHeading = fgap::math::headingTo(
+                m_Aircraft->latitude(),
+                m_Aircraft->longitude(),
+                followAircraft->latitude(),
+                followAircraft->longitude());
+
+    holdHeading();
 }
