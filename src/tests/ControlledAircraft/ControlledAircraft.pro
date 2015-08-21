@@ -20,6 +20,8 @@ SOURCES += tst_controlledaircrafttest.cpp \
     ../../FlightController/FgAutopilot.cpp \
     ../../FlightController/FgFlightgear.cpp \
     ../../FlightController/FgGenericProtocol.cpp \
+    ../../FlightController/FgPid.cpp \
+    ../../FlightController/FgMath.cpp \
     ../../FlightController/FgTransport.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
@@ -29,5 +31,7 @@ HEADERS += \
     ../../FlightController/FgAutopilot.h \
     ../../FlightController/FgFlightgear.h \
     ../../FlightController/FgGenericProtocol.h \
+    ../../FlightController/FgPid.h \
+    ../../FlightController/FgMath.h \
     ../../FlightController/FgTransport.h \
     tst_controlledaircrafttest.h
