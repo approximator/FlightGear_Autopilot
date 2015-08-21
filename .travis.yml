@@ -31,14 +31,14 @@ before_install:
   - "export DISPLAY=:99.0"
   - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x24"
   - sleep 3
-  - sudo add-apt-repository -y ppa:beineri/opt-qt541
+  - sudo add-apt-repository -y ppa:beineri/opt-qt55
   - sudo add-apt-repository -y ppa:staticfloat/julia-deps
 
 install:
   - sudo apt-get update
   - sudo pip install --upgrade pip setuptools
   - sudo pip install --upgrade httpie
-  - sudo apt-get -y install qt54-meta-full patchelf
+  - sudo apt-get -y install qt55-meta-full patchelf
   - if [ "$CXX" = "g++" ]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90; fi
 
 before_script:
@@ -47,7 +47,7 @@ before_script:
   - if [ "$CXX" == "clang++" ]; then QMAKE_PARAMS="$QMAKE_PARAMS -spec linux-clang"; fi
   - if [ "$CXX" == "g++" ]; then QMAKE_PARAMS="$QMAKE_PARAMS -spec linux-g++"; fi
 
-  - "export COMMIT_MESSAGE=\"$(git log --format=%B --no-merges -n 1)\""
+  - "export COMMIT_MESSAGE=\"$(git log --format=%B -n 1)\""
   - PLATFORM=$(date +"%d-%m-%Y-%H-%M")-linux-$CXX-$DEBUG-$(uname -p)
   - "export DIST_ARCHIVE=fg-autopilot-$PLATFORM.7z"
   - SCRIPTS_DIR=$TRAVIS_BUILD_DIR/scripts
@@ -55,7 +55,7 @@ before_script:
   - SCREENSHOT_NAME=$SOURCES_DIR/main_qml_$PLATFORM.png
   - DIST_FILE=$SOURCES_DIR/$DIST_ARCHIVE
 
-  - source /opt/qt54/bin/qt54-env.sh
+  - source /opt/qt55/bin/qt55-env.sh
   - echo "        Compiler = $(which $CXX)"
   - echo "Compiler version = $($CXX --version)"
   - echo "   Qmake version = $(qmake -v)"
@@ -74,6 +74,6 @@ script:
   - bash $SCRIPTS_DIR/take_screenshot.sh "$SOURCES_DIR/fgautopilot-0.0.3/fgautopilot" "${SCREENSHOT_NAME}"
   - sleep 5
   - "ls -lah"
-  - bash $SCRIPTS_DIR/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$DIST_FILE" "Distributive linux-$CXX-$DEBUG-$(uname -p)"
+  - bash $SCRIPTS_DIR/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE $TRAVIS_COMMIT" "$DIST_FILE" "Distributive linux-$CXX-$DEBUG-$(uname -p)"
   - sleep 2
-  - bash $SCRIPTS_DIR/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$SCREENSHOT_NAME" "Main window (qml) linux-$CXX-$DEBUG-$(uname -p)"
+  - bash $SCRIPTS_DIR/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE $TRAVIS_COMMIT" "$SCREENSHOT_NAME" "Main window (qml) linux-$CXX-$DEBUG-$(uname -p)"
