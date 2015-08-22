@@ -33,8 +33,9 @@ macx {
 } else {
     FGAP_APP_TARGET                 = fgautopilot
     FGAP_INSTALL_PATH               = $$shell_path($$FGAP_BUILD_TREE/$$FGAP_APP_TARGET-$$FGAP_VERSION)
-    FGAP_AUX_DIR                    = $$shell_path($$FGAP_INSTALL_PATH/files)
+    FGAP_AUX_DIR                    = $$shell_path($$FGAP_INSTALL_PATH/data)
     FGAP_INSTALL_LIBRARY_PATH       = $$shell_path($$FGAP_AUX_DIR/lib)
+    FGAP_INSTALL_PLUGINS_DIR        = $$shell_path($$FGAP_AUX_DIR/plugins)
     FGAP_INSTALL_QML_MODULES_PATH   = $$shell_path($$FGAP_AUX_DIR/qml)
 
     configs.path = $$shell_path("$$FGAP_AUX_DIR/config")
@@ -44,6 +45,7 @@ macx {
 }
 
 FGAP_QML_RELATIVE_PATH = $$relative_path($$FGAP_INSTALL_QML_MODULES_PATH, $$FGAP_INSTALL_PATH)
+FGAP_PLUGINS_RELATIVE_PATH = $$relative_path($$FGAP_INSTALL_PLUGINS_DIR, $$FGAP_INSTALL_PATH)
 
 #message(ROOT_DIR                      = $$ROOT_DIR)
 #message(SCRIPTS_DIR                   = $$SCRIPTS_DIR)
@@ -58,6 +60,8 @@ FGAP_QML_RELATIVE_PATH = $$relative_path($$FGAP_INSTALL_QML_MODULES_PATH, $$FGAP
 
 
 DEFINES += FGAP_QML_RELATIVE_PATH=\\\"$$FGAP_QML_RELATIVE_PATH\\\"
+DEFINES += FGAP_QML_MODULES_PATH=\\\"$$FGAP_QML_RELATIVE_PATH\\\"
+DEFINES += FGAP_PLUGINS_PATH=\\\"$$FGAP_PLUGINS_RELATIVE_PATH\\\"
 DEFINES += CONFIG_PATH=\\\"$$CONFIG_PATH\\\"
 
 CONFIG += depend_includepath
