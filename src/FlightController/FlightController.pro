@@ -35,11 +35,8 @@ HEADERS  += \
     $$PWD/FgControlledAircraft.h
 
 INCLUDEPATH += $$shell_path($$PWD)
-INCLUDEPATH += $$shell_path($$THIRD_PARTY_DIR/include)
 
-include($$FGAP_SOURCE_TREE/rpath.pri)
 include($$FGAP_SOURCE_TREE/resources/resources.pri)
-
 # Default rules for deployment.
 include($$FGAP_SOURCE_TREE/deployment.pri)
 
