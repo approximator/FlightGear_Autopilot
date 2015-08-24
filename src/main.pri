@@ -13,8 +13,9 @@ isEmpty(FGAP_BUILD_TREE) {
 }
 
 ROOT_DIR = $$shell_path($$PWD)
-SCRIPTS_DIR = $$shell_path($$absolute_path(../scripts))
-CONFIGS_DIR = $$shell_path($$absolute_path($$ROOT_DIR/../doc/config/))
+SCRIPTS_DIR = $$shell_path($$absolute_path($$ROOT_DIR/../scripts))
+CONFIGS_DIR = $$shell_path($$absolute_path($$ROOT_DIR/../doc/config))
+QML_FGEAR   = $$shell_path($$absolute_path($$ROOT_DIR/Gui/qml/qml-fgear/modules))
 FGAP_SOURCE_TREE = $$shell_path($$PWD)
 
 macx {
@@ -33,8 +34,9 @@ macx {
 } else {
     FGAP_APP_TARGET                 = fgautopilot
     FGAP_INSTALL_PATH               = $$shell_path($$FGAP_BUILD_TREE/$$FGAP_APP_TARGET-$$FGAP_VERSION)
-    FGAP_AUX_DIR                    = $$shell_path($$FGAP_INSTALL_PATH/files)
+    FGAP_AUX_DIR                    = $$shell_path($$FGAP_INSTALL_PATH/data)
     FGAP_INSTALL_LIBRARY_PATH       = $$shell_path($$FGAP_AUX_DIR/lib)
+    FGAP_INSTALL_PLUGINS_DIR        = $$shell_path($$FGAP_AUX_DIR/plugins)
     FGAP_INSTALL_QML_MODULES_PATH   = $$shell_path($$FGAP_AUX_DIR/qml)
 
     configs.path = $$shell_path("$$FGAP_AUX_DIR/config")
@@ -43,21 +45,17 @@ macx {
     CONFIG_PATH = $$relative_path($$FGAP_AUX_DIR/config, $$FGAP_INSTALL_PATH)
 }
 
-FGAP_QML_RELATIVE_PATH = $$relative_path($$FGAP_INSTALL_QML_MODULES_PATH, $$FGAP_INSTALL_PATH)
+qml_fgear.path  = $$FGAP_INSTALL_QML_MODULES_PATH
+qml_fgear.files = $$QML_FGEAR/*
+INSTALLS += qml_fgear
 
-#message(ROOT_DIR                      = $$ROOT_DIR)
-#message(SCRIPTS_DIR                   = $$SCRIPTS_DIR)
-#message(CONFIGS_DIR                   = $$CONFIGS_DIR)
-#message(FGAP_SOURCE_TREE              = $$FGAP_SOURCE_TREE)
-#message(FGAP_APP_TARGET               = $$FGAP_APP_TARGET)
-#message(FGAP_INSTALL_PATH             = $$FGAP_INSTALL_PATH)
-#message(FGAP_INSTALL_LIBRARY_PATH     = $$FGAP_INSTALL_LIBRARY_PATH)
-#message(FGAP_INSTALL_QML_MODULES_PATH = $$FGAP_INSTALL_QML_MODULES_PATH)
-#message(FGAP_QML_RELATIVE_PATH        = $$FGAP_QML_RELATIVE_PATH)
-#message(CONFIG_PATH                   = $$CONFIG_PATH)
+FGAP_QML_RELATIVE_PATH = $$relative_path($$FGAP_INSTALL_QML_MODULES_PATH, $$FGAP_INSTALL_PATH)
+FGAP_PLUGINS_RELATIVE_PATH = $$relative_path($$FGAP_INSTALL_PLUGINS_DIR, $$FGAP_INSTALL_PATH)
 
 
 DEFINES += FGAP_QML_RELATIVE_PATH=\\\"$$FGAP_QML_RELATIVE_PATH\\\"
+DEFINES += FGAP_QML_MODULES_PATH=\\\"$$FGAP_QML_RELATIVE_PATH\\\"
+DEFINES += FGAP_PLUGINS_PATH=\\\"$$FGAP_PLUGINS_RELATIVE_PATH\\\"
 DEFINES += CONFIG_PATH=\\\"$$CONFIG_PATH\\\"
 
 CONFIG += depend_includepath

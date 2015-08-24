@@ -10,8 +10,7 @@ except ImportError:
     import urllib2
 
 class ModulesLoader:
-    def __init__(self, sources_path, install_path):
-        self.sources_path = sources_path
+    def __init__(self, install_path):
         self.install_path = install_path
 
     def download(self, url, download_dir, src_dir):
@@ -64,12 +63,11 @@ class ModulesLoader:
 
     def run(self):
         self.download_and_deploy('qml-material', 'Material', 'https://github.com/papyros/qml-material/archive/develop.zip')
-        self.deploy(os.path.join(self.sources_path, 'qml-fgear'), 'FGear')
 
 if __name__ == '__main__':
-    if len(sys.argv) < 3:
-        print('Usage: \n       ', os.path.basename(__file__), ' <module_source_path> <install_path>')
+    if len(sys.argv) < 2:
+        print('Usage: \n       ', os.path.basename(__file__), '<install_path>')
         sys.exit(1)
 
-    ml = ModulesLoader(sys.argv[1], sys.argv[2])
+    ml = ModulesLoader(sys.argv[1])
     ml.run()

@@ -1,7 +1,7 @@
 include(main.pri)
 
 TEMPLATE = subdirs
-CONFIG   += ordered
+CONFIG  += ordered
 SUBDIRS  = FlightController
 
 DISTFILES += $$files($$SCRIPTS_DIR/*.sh) $$files($$SCRIPTS_DIR/*.py)
@@ -25,46 +25,20 @@ macx {
     deployqt.commands = $$SCRIPTS_DIR/deployqtHelper_mac.sh \"$${APPBUNDLE}\" \"$$[QT_INSTALL_QML]\"
 }
 else {
-    deployqt.commands = $$PYTHON -u $$shell_path(\"$$SCRIPTS_DIR/deployqt.py\") \
-                                    $$FGAP_AUX_DIR $$shell_path(\"$(QMAKE)\") \
+    deployqt.commands = $$PYTHON -u $$shell_path(\"$$SCRIPTS_DIR/deployqt.py\")             \
+                                    $$shell_path(\"$$FGAP_INSTALL_PATH/$$FGAP_APP_TARGET\") \
+                                    $$FGAP_INSTALL_PATH         \
+                                    $$FGAP_AUX_DIR              \
+                                    $$FGAP_INSTALL_LIBRARY_PATH \
+                                    $$shell_path(\"$(QMAKE)\")  \
                                     \"$$BUILD_TYPE\"
     deployqt.depends = install
-
-
-QT_CONFIG_CONTENT = [Paths] \
-        Libraries=$$relative_path($$FGAP_INSTALL_LIBRARY_PATH, $$FGAP_INSTALL_PATH) \
-        Plugins=$$relative_path($$FGAP_AUX_DIR/plugins, $$FGAP_INSTALL_PATH) \
-        Imports=$$relative_path($$FGAP_AUX_DIR/imports, $$FGAP_INSTALL_PATH) \
-        Qml2Imports=$$relative_path($$FGAP_AUX_DIR/qml, $$FGAP_INSTALL_PATH)
-       write_file($$FGAP_INSTALL_PATH/qt.conf, QT_CONFIG_CONTENT)
 }
-
 
 deploy_ext_qml.commands = $$PYTHON -u $$shell_path(\"$$SCRIPTS_DIR/load_qml_modules.py\") \
-                                      $$shell_path(\"$$ROOT_DIR/Gui/qml\") \
                                       \"$$FGAP_INSTALL_QML_MODULES_PATH\"
-deploy_ext_qml.depends = deployqt
-
-deploy_all.depends = deploy_ext_qml
-
-INSTALLER_ARCHIVE_FROM_ENV = $$(INSTALLER_ARCHIVE)
-isEmpty(INSTALLER_ARCHIVE_FROM_ENV) {
-    INSTALLER_ARCHIVE = $$OUT_PWD/$${BASENAME}.7z
-} else {
-    INSTALLER_ARCHIVE = $$OUT_PWD/$$(INSTALLER_ARCHIVE)
-}
-
-DIST_ARCHIVE_FROM_ENV = $$(DIST_ARCHIVE)
-isEmpty(DIST_ARCHIVE_FROM_ENV) {
-    DIST_ARCHIVE_FROM_ENV = $$shell_path($$OUT_PWD/$${BASENAME}.7z)
-} else {
-    DIST_ARCHIVE_FROM_ENV = $$shell_path($$OUT_PWD/$$(DIST_ARCHIVE))
-}
-
-linux {
-    bindist.commands = 7z a -mx9 \"$$DIST_ARCHIVE_FROM_ENV\" \"$$FGAP_INSTALL_PATH\"
-    QMAKE_EXTRA_TARGETS += bindist
-}
+deploy_ext_qml.depends = install
+deploy_all.depends = deployqt deploy_ext_qml
 
 QMAKE_EXTRA_TARGETS += deployqt deploy_ext_qml deploy_all
 

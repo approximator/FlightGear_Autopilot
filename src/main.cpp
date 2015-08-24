@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Aug 14, 2015
+ * @date Modified Aug 22, 2015
  */
 
 #include "FgAircraftsModel.h"
@@ -52,19 +52,20 @@ void logMessageHandler(QtMsgType type, const QMessageLogContext& context, const 
 
 int main(int argc, char *argv[])
 {
+    QString pluginsPaths = QString("%1/%2").arg(
+                QFileInfo(argv[0]).dir().path(),
+                FGAP_PLUGINS_PATH);
+    QCoreApplication::addLibraryPath(pluginsPaths);
+
     QApplication app(argc, argv);
-
     qInstallMessageHandler(logMessageHandler);
-    qmlRegisterType<FgAircraftsModel>("fgap", 1, 0, "FgAircraftsModel");
 
+    qmlRegisterType<FgAircraftsModel>("fgap", 1, 0, "FgAircraftsModel");
     QQmlApplicationEngine engine;
-#ifdef FGAP_QML_MODULES_PATH
     QString qmlFilesPath = QString("%1/%2").arg(
                 QCoreApplication::applicationDirPath(),
                 FGAP_QML_MODULES_PATH);
     engine.addImportPath(qmlFilesPath);
-#endif
-
     engine.load(QUrl(QStringLiteral("qrc:qml/MainView.qml")));
 
     return app.exec();
