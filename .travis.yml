@@ -19,8 +19,6 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - gcc-4.8
-      - g++-4.8
       - clang
       - xvfb
       - imagemagick
@@ -38,8 +36,9 @@ install:
   - sudo apt-get update
   - sudo pip install --upgrade pip setuptools
   - sudo pip install --upgrade httpie
+  - if [ "$CXX" = "g++" ]; then sudo apt-get -y install g++-4.9; fi
+  - if [ "$CXX" = "g++" ]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 90; fi
   - sudo apt-get -y install qt54-meta-full patchelf
-  - if [ "$CXX" = "g++" ]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90; fi
 
 before_script:
   - echo "Before script"
@@ -47,7 +46,7 @@ before_script:
   - if [ "$CXX" == "clang++" ]; then QMAKE_PARAMS="$QMAKE_PARAMS -spec linux-clang"; fi
   - if [ "$CXX" == "g++" ]; then QMAKE_PARAMS="$QMAKE_PARAMS -spec linux-g++"; fi
 
-  - "export COMMIT_MESSAGE=\"$(git log --format=%B --no-merges -n 1)\""
+  - "export COMMIT_MESSAGE=\"$(git log --format=%B -n 1)\""
   - PLATFORM=$(date +"%d-%m-%Y-%H-%M")-linux-$CXX-$DEBUG-$(uname -p)
   - "export DIST_ARCHIVE=fg-autopilot-$PLATFORM.7z"
   - SCRIPTS_DIR=$TRAVIS_BUILD_DIR/scripts
@@ -70,10 +69,10 @@ script:
   - make clean
   - make -j5
   - make deploy_all
-  - 7z a -mx9 "$DIST_FILE" "$SOURCES_DIR/fgautopilot-0.0.3"
+  - 7z a -mx9 "$DIST_FILE" "$SOURCES_DIR/fgautopilot-0.0.3" &>> ./7z.log
   - bash $SCRIPTS_DIR/take_screenshot.sh "$SOURCES_DIR/fgautopilot-0.0.3/fgautopilot" "${SCREENSHOT_NAME}"
   - sleep 5
   - "ls -lah"
-  - bash $SCRIPTS_DIR/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$DIST_FILE" "Distributive linux-$CXX-$DEBUG-$(uname -p)"
+  - bash $SCRIPTS_DIR/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE $TRAVIS_COMMIT" "$DIST_FILE" "Distributive linux-$CXX-$DEBUG-$(uname -p)"
   - sleep 2
-  - bash $SCRIPTS_DIR/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE" "$SCREENSHOT_NAME" "Main window (qml) linux-$CXX-$DEBUG-$(uname -p)"
+  - bash $SCRIPTS_DIR/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE $TRAVIS_COMMIT" "$SCREENSHOT_NAME" "Main window (qml) linux-$CXX-$DEBUG-$(uname -p)"
