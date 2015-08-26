@@ -1,6 +1,7 @@
 import QtQuick 2.2
 import Material 0.1
-import fgap 1.0
+import fgap.settings 1.0
+import fgap.aircraftsmodel 1.0
 
 
 ApplicationWindow {
@@ -20,7 +21,7 @@ ApplicationWindow {
         tabHighlightColor: "white"
     }
 
-    FgAircraftsModel {
+    AircraftsModel {
         id: fgapModel
     }
 
@@ -30,4 +31,11 @@ ApplicationWindow {
     }
 
     initialPage: startpage
+
+    Settings {
+        property alias x: fgap.x
+        property alias y: fgap.y
+        property alias width: fgap.width
+        property alias height: fgap.height
+    }
 }

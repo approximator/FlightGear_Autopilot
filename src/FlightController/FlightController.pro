@@ -20,7 +20,8 @@ SOURCES += \
     $$PWD/FgFlightgear.cpp \
     $$PWD/FgAircraftsModel.cpp \
     $$PWD/FgGenericProtocol.cpp \
-    $$PWD/FgControlledAircraft.cpp
+    $$PWD/FgControlledAircraft.cpp \
+    $$PWD/FgSettings/FgSettings.cpp
 
 HEADERS  += \
     $$PWD/log.h \
@@ -32,7 +33,8 @@ HEADERS  += \
     $$PWD/FgFlightgear.h \
     $$PWD/FgAircraftsModel.h \
     $$PWD/FgGenericProtocol.h \
-    $$PWD/FgControlledAircraft.h
+    $$PWD/FgControlledAircraft.h \
+    $$PWD/FgSettings/FgSettings.h
 
 INCLUDEPATH += $$shell_path($$PWD)
 

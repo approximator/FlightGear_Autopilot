@@ -14,6 +14,13 @@ Page {
 
     actions: [
         Action {
+            iconName: "content/add"
+            name: "Add aircraft"
+            hoverAnimation: true
+            enabled: true
+//            onTriggered: pageStack.push(Qt.resolvedUrl("FgMap.qml"), { airmodel: menuList.model })
+        },
+        Action {
             iconName: "maps/map"
             name: "Aircrafts map"
             hoverAnimation: true

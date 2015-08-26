@@ -6,15 +6,17 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Aug 22, 2015
+ * @date Modified Aug 26, 2015
  */
 
-#include "FgAircraftsModel.h"
 #include "log.h"
+#include "FgAircraftsModel.h"
+#include "FgSettings/FgSettings.h"
 
 #include <QtQml>
 #include <QTextCodec>
 #include <QApplication>
+
 #include <iostream>
 
 void logMessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& message)
@@ -58,9 +60,14 @@ int main(int argc, char *argv[])
     QCoreApplication::addLibraryPath(pluginsPaths);
 
     QApplication app(argc, argv);
+    app.setOrganizationName("FlightgearAutopilot");
+    app.setApplicationName("Flightgear_autopilot");
+    QSettings::setDefaultFormat(QSettings::IniFormat);
+
     qInstallMessageHandler(logMessageHandler);
 
-    qmlRegisterType<FgAircraftsModel>("fgap", 1, 0, "FgAircraftsModel");
+    qmlRegisterType<FgAircraftsModel>("fgap.aircraftsmodel", 1, 0, "AircraftsModel");
+    qmlRegisterType<FgSettings>("fgap.settings", 1, 0, "Settings");
     QQmlApplicationEngine engine;
     QString qmlFilesPath = QString("%1/%2").arg(
                 QCoreApplication::applicationDirPath(),
