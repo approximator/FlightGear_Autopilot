@@ -14,6 +14,13 @@ Page {
 
     actions: [
         Action {
+            iconName: "content/add"
+            name: "Add aircraft"
+            hoverAnimation: true
+            enabled: true
+            onTriggered: menuList.model.addAircraft()
+        },
+        Action {
             iconName: "maps/map"
             name: "Aircrafts map"
             hoverAnimation: true
