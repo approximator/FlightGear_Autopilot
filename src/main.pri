@@ -29,7 +29,7 @@ macx {
     FGAP_QML_MODULES_PATH           = $$FGAP_DATA_PATH/qml
     CONFIG_PATH = $$relative_path($$FGAP_DATA_PATH/config, $$FGAP_BIN_PATH)
     configs.path = $$relative_path($$FGAP_DATA_PATH/config, $$FGAP_BUNDLE_PATH)
-    configs.files = $$files("$$CONFIGS_DIR/*.json")
+    configs.files = $$files("$$CONFIGS_DIR/*")
     QMAKE_BUNDLE_DATA += configs
 } else {
     FGAP_APP_TARGET                 = fgautopilot
@@ -40,7 +40,7 @@ macx {
     FGAP_INSTALL_QML_MODULES_PATH   = $$shell_path($$FGAP_AUX_DIR/qml)
 
     configs.path = $$shell_path("$$FGAP_AUX_DIR/config")
-    configs.files = $$files("$$CONFIGS_DIR/*.json")
+    configs.files = $$files("$$CONFIGS_DIR/*")
     INSTALLS += configs
     CONFIG_PATH = $$relative_path($$FGAP_AUX_DIR/config, $$FGAP_INSTALL_PATH)
 }

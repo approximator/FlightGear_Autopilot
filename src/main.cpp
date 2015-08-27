@@ -1,57 +1,24 @@
 /*!
- * @file FgAircraft.cpp
+ * @file main.cpp
  *
- * @brief Aircraft abstraction of FlightGear's aircrafts
+ * @brief FGAP entry point
  *
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Aug 22, 2015
+ * @date Modified Aug 27, 2015
  */
 
-#include "FgAircraftsModel.h"
 #include "log.h"
+#include "FgAircraftsModel.h"
 
 #include <QtQml>
 #include <QTextCodec>
 #include <QApplication>
-#include <iostream>
-
-void logMessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& message)
-{
-    Q_UNUSED(context);
-
-    QString txt;
-    switch (type) {
-    case QtDebugMsg:
-        txt = QString("%1Debug: %2").arg(LOG_COLOR_GREEN).arg(message);
-        break;
-    case QtWarningMsg:
-        txt = QString("%1Warning: %2").arg(LOG_COLOR_CYAN).arg(message);
-        break;
-    case QtCriticalMsg:
-        txt = QString("%1Critical: %2").arg(LOG_COLOR_PURPLE).arg(message);
-        break;
-    case QtFatalMsg:
-        txt = QString("%1Fatal: %2").arg(LOG_COLOR_RED).arg(message);
-        abort();
-    default:
-    // for Qt 5.5 it will be 'case QtInfoMsg:'
-        txt = QString("%1Info: %2").arg(LOG_COLOR_RESET).arg(message);
-        break;
-    }
-
-/*FIXME to determine right location of this file!!!*/
-//    QFile outFile("log");
-//    outFile.open(QIODevice::WriteOnly | QIODevice::Append);
-//    QTextStream ts(&outFile);
-//    ts << txt << endl;
-
-    std::cout << txt.toStdString() << std::endl;
-}
 
 int main(int argc, char *argv[])
 {
+    // Add path to search for Qt plugins
     QString pluginsPaths = QString("%1/%2").arg(
                 QFileInfo(argv[0]).dir().path(),
                 FGAP_PLUGINS_PATH);
@@ -60,6 +27,25 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     qInstallMessageHandler(logMessageHandler);
 
+    // Set up settings
+    app.setOrganizationName("FlightgearAutopilot");
+    app.setApplicationName("Flightgear_autopilot");
+    QSettings::setDefaultFormat(QSettings::IniFormat);
+
+    { // Copy default setting if settings file does not exist
+        QSettings settings;
+        if (!QFile::exists(settings.fileName()))
+        {
+            QString configFileName("%1/%2/%3");
+            configFileName = configFileName.arg(QCoreApplication::applicationDirPath(), CONFIG_PATH,
+                                                "DefaultSettings.ini");
+            qDebug() << "Copying default settings to " << settings.fileName();
+            if (!QFile::copy(configFileName, settings.fileName()))
+                qWarning() << "Could not copy default settings to " << settings.fileName();
+        }
+    }
+
+    // Setup QML
     qmlRegisterType<FgAircraftsModel>("fgap", 1, 0, "FgAircraftsModel");
     QQmlApplicationEngine engine;
     QString qmlFilesPath = QString("%1/%2").arg(

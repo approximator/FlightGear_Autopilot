@@ -6,7 +6,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created May 12, 2015
- * @date Modified Aug 01, 2015
+ * @date Modified Aug 27, 2015
  */
 
 #ifndef FGFLIGHTGEAR_H
@@ -14,27 +14,27 @@
 
 #include "FgTransport.h"
 
-#include <memory>
 #include <QPair>
-#include <QVector>
 #include <QFuture>
 #include <QProcess>
-#include <QJsonObject>
+#include <QSettings>
 #include <QFutureWatcher>
+
+#include <memory>
 
 class FgFlightgear : public QObject
 {
     Q_OBJECT
 public:
-    explicit FgFlightgear(const QJsonObject& config, QObject *parent = 0);
+    explicit FgFlightgear(QObject *parent = 0);
     ~FgFlightgear();
 
     bool checkPaths();
     bool run();
     Q_INVOKABLE bool ready() const;
 
-    QJsonObject configurationAsJson() const;
-    bool setConfigFromJson(const QJsonObject& config);
+    bool setConfig(QSettings& settings);
+    bool saveConfig(QSettings& settings);
     QString runParameters() const;
 
     inline const QProcess& process() const;

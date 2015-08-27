@@ -32,13 +32,16 @@ public:
     explicit FgAircraftsModel(QObject *parent = 0);
     virtual ~FgAircraftsModel();
     bool init();
-    bool saveConfig(const QString& filename);
+    bool saveConfig();
 
     Q_INVOKABLE int rowCount(const QModelIndex & parent = QModelIndex()) const;
     Q_INVOKABLE QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
 
     Q_INVOKABLE FgControlledAircraft* get(int index) const;
     Q_INVOKABLE void runFlightgear(int index) const;
+
+    Q_INVOKABLE bool addAircraft();
+    Q_INVOKABLE bool addAircraft(QSettings &settings);
 
 protected:
     virtual QHash<int, QByteArray> roleNames() const override;

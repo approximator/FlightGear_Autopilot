@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jul 08, 2015
+ * @date Modified Aug 27, 2015
  */
 
 #ifndef FGPROTOCOL_H
@@ -13,18 +13,22 @@
 
 #include "FgGenericProtocol.h"
 
-#include <memory>
 #include <QObject>
+#include <QSettings>
 #include <QUdpSocket>
-#include <QJsonObject>
 #include <QHostAddress>
+
+#include <memory>
 
 class FgTransport : public QObject
 {
     Q_OBJECT
 public:
-    explicit FgTransport(const QJsonObject& config, QObject *parent = 0);
+    explicit FgTransport(QObject *parent = 0);
     ~FgTransport();
+
+    bool setConfig(QSettings& settings);
+    bool saveConfig(QSettings& settings);
 
     inline QString getString(const QString& node, bool *exists = nullptr) const;
     inline qreal getFloat(const QString& node, bool *exists = nullptr) const;

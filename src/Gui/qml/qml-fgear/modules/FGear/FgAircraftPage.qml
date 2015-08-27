@@ -26,7 +26,9 @@ Rectangle {
         id: autopilot
         Layout.alignment: Qt.AlignTop
         onAutopilotEngage: {
-            aircraft.autopilotEngage(activate)
+            if (aircraft) {
+                aircraft.autopilotEngage(activate)
+            }
         }
     }
 

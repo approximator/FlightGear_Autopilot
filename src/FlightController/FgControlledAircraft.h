@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 17, 2015
- * @date Modified Aug 14, 2015
+ * @date Modified Aug 27, 2015
  */
 
 #ifndef FGCONTROLLEDAIRCRAFT_H
@@ -17,6 +17,8 @@
 #include "FgAutopilot.h"
 #include "FgFlightgear.h"
 
+#include <QSettings>
+
 #include <memory>
 
 class FgControlledAircraft : public FgAircraft
@@ -25,7 +27,7 @@ class FgControlledAircraft : public FgAircraft
     Q_PROPERTY(bool autopilotEngaged READ autopilotEngaged)
     Q_PROPERTY(bool flightgearReady READ flightgearReady NOTIFY flightgearReadyChanged)
 public:
-    explicit FgControlledAircraft(const QJsonObject& config, QObject *parent = 0);
+    explicit FgControlledAircraft(QObject *parent = 0);
     ~FgControlledAircraft();
 
     inline std::shared_ptr<FgTransport> transport() const;
@@ -38,8 +40,8 @@ public:
     inline bool flightgearReady() const;
     inline void follow(FgAircraft *aircraft);
 
-    QJsonObject configurationAsJson() const;
-    bool setConfigFromJson(const QJsonObject& config);
+    bool setConfig(QSettings &settings);
+    bool saveConfig(QSettings &settings);
 
     Q_INVOKABLE void runFlightGear(bool run = true);
     Q_INVOKABLE void autopilotEngage(bool engage = true);
@@ -66,7 +68,7 @@ std::shared_ptr<FgTransport> FgControlledAircraft::transport() const
 
 bool FgControlledAircraft::autopilotEngaged() const
 {
-    return m_Autopilot->engaged();
+    return m_Autopilot ? m_Autopilot->engaged() : false;
 }
 
 void FgControlledAircraft::setAilerons(qreal val)

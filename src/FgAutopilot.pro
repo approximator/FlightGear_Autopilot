@@ -5,7 +5,7 @@ CONFIG  += ordered
 SUBDIRS  = FlightController
 
 DISTFILES += $$files($$SCRIPTS_DIR/*.sh) $$files($$SCRIPTS_DIR/*.py)
-DISTFILES += $$files($$CONFIGS_DIR/*.json)
+DISTFILES += $$files($$CONFIGS_DIR/*)
 DISTFILES += $$files($$ROOT_DIR/Gui/qml/qml-fgear/modules/FGear/*.qml)
 DISTFILES += $$files($$ROOT_DIR/Gui/qml/qml-fgear/modules/FGear/AutopilotItems/*.qml)
 DISTFILES += $$files($$ROOT_DIR/Gui/qml/qml-fgear/modules/FGear/Pointers/*.qml)

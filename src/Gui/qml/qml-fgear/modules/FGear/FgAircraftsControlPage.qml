@@ -31,14 +31,14 @@ Page {
     rightSidebar: PageSidebar {
         width: Units.dp(250)
         showing: false
-        actionBar.title: fgAircraft.callsign
+        actionBar.title: fgAircraft ? fgAircraft.callsign : "(none)"
         actionBar.backgroundColor: Qt.darker(theme.primaryColor)
 
         actions: [
             Action {
                 iconName: "action/info"
                 name: "Info"
-                onTriggered: notify("Info Action")
+                // onTriggered: notify("Info Action")
             },
             Action {
                 iconName: "content/clear"
@@ -50,7 +50,7 @@ Page {
         sidebar: Button {
             text: "Run"
             elevation: 1
-            enabled: fgAircraft.flightgearReady
+            enabled: fgAircraft ? fgAircraft.flightgearReady : false
             onClicked: fgAircraft.runFlightGear()
         }
     }

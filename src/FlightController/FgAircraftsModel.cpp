@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Aug 21, 2015
+ * @date Modified Aug 27, 2015
  */
 
 #include "log.h"
@@ -14,8 +14,7 @@
 #include "FgAircraftsModel.h"
 
 #include <QFile>
-#include <QJsonArray>
-#include <QJsonDocument>
+#include <QSettings>
 #include <QCoreApplication>
 
 FgAircraftsModel::FgAircraftsModel(QObject *parent) :
@@ -26,66 +25,42 @@ FgAircraftsModel::FgAircraftsModel(QObject *parent) :
 
 FgAircraftsModel::~FgAircraftsModel()
 {
-//    saveConfig("./config/fgapConfig.json");
+    saveConfig();
 }
 
 bool FgAircraftsModel::init()
 {
     qDebug() << "Init FgAircraftsModel";
-    QString configFileName("%1/%2/%3");
-    configFileName = configFileName.arg(QCoreApplication::applicationDirPath(),
-                                        CONFIG_PATH,
-                                        "multiplayWithoutServer.json");
 
-    qDebug() << "Reading config " << configFileName;
-    QFile configFile(configFileName);
-    if (!configFile.open(QIODevice::ReadOnly))
+    QSettings settings;
+    int size = settings.beginReadArray("aircrafts");
+    for (int i = 0; i < size; ++i)
     {
-        qWarning() << "Couldn't open config file: " <<  configFileName;
-        return false;
+        settings.setArrayIndex(i);
+        if (!addAircraft(settings))
+        {
+            qWarning() << "Could not set settings for " << i << " aircraft. Skipping...";
+            continue;
+        }
     }
-    QJsonDocument configData(QJsonDocument::fromJson(configFile.readAll()));
-    QJsonObject configObj = configData.object();
-    QJsonArray aircrafts = configObj["aircrafts"].toArray();
+    settings.endArray();
 
-    for (auto const &parameter : aircrafts)
-    {
-        auto aircraft = std::make_shared<FgControlledAircraft>(parameter.toObject(), this);
-        emit beginInsertRows(QModelIndex(), m_OurAircrafts.count(), m_OurAircrafts.count());
-        m_OurAircrafts.append(aircraft);
-        connect(aircraft.get(), &FgControlledAircraft::onConnected, this, &FgAircraftsModel::onAircraftConnected);
-        emit endInsertRows();
-    }
-
-    m_Transport = m_OurAircrafts[0]->transport();
-    connect(m_Transport.get(), &FgTransport::fgDataReceived, this, &FgAircraftsModel::onDataReceived);
-
-//    m_OurAircrafts[0]->runFlightGear();
 //    m_OurAircrafts[0]->autopilot()->engage();
 //    m_OurAircrafts[1]->autopilot()->engage();
 //    m_OurAircrafts[1]->autopilot()->setFollow(m_OurAircrafts[0].get());
     return true;
 }
 
-bool FgAircraftsModel::saveConfig(const QString &filename)
+bool FgAircraftsModel::saveConfig()
 {
-    QFile saveFile(filename);
-
-    if (!saveFile.open(QIODevice::WriteOnly))
+    QSettings settings;
+    settings.beginWriteArray("aircrafts");
+    for (int i = 0; i < m_OurAircrafts.size(); ++i)
     {
-        qWarning() << "Couldn't open save file.";
-        return false;
+        settings.setArrayIndex(i);
+        m_OurAircrafts.at(i)->saveConfig(settings);
     }
-
-    QJsonArray aircrafts;
-    for (auto &aircraft : m_OurAircrafts)
-        aircrafts.append(aircraft->configurationAsJson());
-
-    QJsonObject config;
-    config["aircrafts"] = aircrafts;
-    QJsonDocument saveDoc(config);
-    saveFile.write(saveDoc.toJson());
-
+    settings.endArray();
     return true;
 }
 
@@ -136,6 +111,36 @@ FgControlledAircraft* FgAircraftsModel::get(int index) const
 void FgAircraftsModel::runFlightgear(int index) const
 {
     m_OurAircrafts[index]->runFlightGear();
+}
+
+bool FgAircraftsModel::addAircraft()
+{
+    QSettings settings;
+    settings.beginGroup("basic_aircraft_config");
+    return addAircraft(settings);
+}
+
+bool FgAircraftsModel::addAircraft(QSettings& settings)
+{
+    auto aircraft = std::make_shared<FgControlledAircraft>(this);
+    if (!aircraft->setConfig(settings))
+    {
+        qWarning() << "Could not set settings for aircraft. Skipping...";
+        return false;
+    }
+    emit beginInsertRows(QModelIndex(), m_OurAircrafts.count(), m_OurAircrafts.count());
+    m_OurAircrafts.append(aircraft);
+    connect(aircraft.get(), &FgControlledAircraft::onConnected, this, &FgAircraftsModel::onAircraftConnected);
+    emit endInsertRows();
+
+    if (m_OurAircrafts.size() < 2)
+    {
+        m_Transport = m_OurAircrafts[0]->transport();
+        connect(m_Transport.get(), &FgTransport::fgDataReceived, this, &FgAircraftsModel::onDataReceived);
+        qDebug() << "FgAircraftModel uses transport of " << m_OurAircrafts[0]->callsign();
+    }
+
+    return true;
 }
 
 QHash<int, QByteArray> FgAircraftsModel::roleNames() const

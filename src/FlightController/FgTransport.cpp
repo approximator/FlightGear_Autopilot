@@ -5,49 +5,73 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Jul 30, 2015
+ * @date Modified Aug 27, 2015
  */
 
 #include "log.h"
 #include "FgTransport.h"
 #include "FgGenericProtocol.h"
 
-FgTransport::FgTransport(const QJsonObject &config, QObject *parent) :
+FgTransport::FgTransport(QObject *parent) :
     QObject(parent)
 {
-    if (!config.empty())
-    {
-        m_GenericEnabled = true;
-        QJsonObject in = config["in"].toObject();
-        if (!in.empty())
-        {
-            m_WriteFrequency = in["frequency"].toInt(m_WriteFrequency);
-            m_WritePort = in["port"].toInt(m_WritePort);
-            m_WriteProtocol = in["protocol"].toString(m_WriteProtocol);
-            m_WriteGenericProtocol = in["protocol_file"].toString(m_WriteGenericProtocol);
-            QString host = in["host"].toString(m_WriteHost.toString());
-            m_WriteHost = QHostAddress(host.toLower() == "localhost" ? "127.0.0.1" : host);
-        }
-        QJsonObject out = config["out"].toObject();
-        if (!out.empty())
-        {
-            m_ListenFrequency = out["frequency"].toInt(m_ListenFrequency);
-            m_ListenPort = out["port"].toInt(m_ListenPort);
-            m_ListenProtocol = out["protocol"].toString(m_ListenProtocol);
-            m_ListenGenericProtocol = out["protocol_file"].toString(m_ListenGenericProtocol);
-            QString host = out["host"].toString(m_ListenHost.toString());
-            m_ListenHost = QHostAddress(host.toLower() == "localhost" ? "127.0.0.1" : host);
-        }
-    }
 
-    m_Socket->bind(m_ListenHost, m_ListenPort);
-    connect(m_Socket.get(), &QUdpSocket::readyRead, this, &FgTransport::onSocketRead);
-    qDebug() << "FgTransport ready [" << m_ListenHost.toString() << ":" << m_ListenPort << "]" << "out: " << m_WritePort;
 }
 
 FgTransport::~FgTransport()
 {
     qDebug() << "FgTransport destroyed[" << m_ListenHost.toString() << ":" << m_ListenPort << "]" << "out: " << m_WritePort;
+}
+
+bool FgTransport::setConfig(QSettings &settings)
+{
+    m_GenericEnabled = settings.value("enabled", false).toBool();
+    settings.beginGroup("in");
+    m_WriteFrequency = settings.value("frequency").toInt();
+    m_WritePort = settings.value("port").toInt();
+    m_WriteProtocol = settings.value("protocol").toString();
+    m_WriteGenericProtocol = settings.value("protocol_file").toString();
+    QString host = settings.value("host").toString();
+    m_WriteHost = QHostAddress(host.toLower() == "localhost" ? "127.0.0.1" : host);
+    settings.endGroup();
+
+    settings.beginGroup("out");
+    m_ListenFrequency = settings.value("frequency").toInt();
+    m_ListenPort = settings.value("port").toInt();
+    m_ListenProtocol = settings.value("protocol").toString();
+    m_ListenGenericProtocol = settings.value("protocol_file").toString();
+    host = settings.value("host").toString();
+    m_ListenHost = QHostAddress(host.toLower() == "localhost" ? "127.0.0.1" : host);
+    settings.endGroup();
+
+    if (!m_GenericEnabled)
+        return true;
+
+    m_Socket->bind(m_ListenHost, m_ListenPort);
+    connect(m_Socket.get(), &QUdpSocket::readyRead, this, &FgTransport::onSocketRead);
+    qDebug() << "FgTransport ready [" << m_ListenHost.toString() << ":" << m_ListenPort << "]" << "out: " << m_WritePort;
+    return true;
+}
+
+bool FgTransport::saveConfig(QSettings &settings)
+{
+    settings.setValue("enabled", m_GenericEnabled);
+    settings.beginGroup("in");
+    settings.setValue("frequency", m_WriteFrequency);
+    settings.setValue("port", m_WritePort);
+    settings.setValue("protocol", m_WriteProtocol);
+    settings.setValue("protocol_file", m_WriteGenericProtocol);
+    settings.setValue("host", m_WriteHost.toString());
+    settings.endGroup();
+
+    settings.beginGroup("out");
+    settings.setValue("frequency", m_ListenFrequency);
+    settings.setValue("port", m_ListenPort);
+    settings.setValue("protocol", m_ListenProtocol);
+    settings.setValue("protocol_file", m_ListenGenericProtocol);
+    settings.setValue("host", m_ListenHost.toString());
+    settings.endGroup();
+    return true;
 }
 
 void FgTransport::onSocketRead()

@@ -4,7 +4,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created May 12, 2015
- * @date Modified Aug 03, 2015
+ * @date Modified Aug 27, 2015
  */
 
 #include "log.h"
@@ -12,15 +12,14 @@
 
 #include <QDir>
 #include <QFile>
-#include <QProcess>
-#include <QJsonArray>
 #include <QStandardPaths>
 #include <QtConcurrent/QtConcurrent>
 
-FgFlightgear::FgFlightgear(const QJsonObject &config, QObject *parent) : QObject(parent)
+#include <tuple>
+
+FgFlightgear::FgFlightgear(QObject *parent) : QObject(parent)
 {
-    setConfigFromJson(config);
-    init();
+
 }
 
 FgFlightgear::~FgFlightgear()
@@ -123,61 +122,81 @@ bool FgFlightgear::ready() const
     return m_Ready;
 }
 
-QJsonObject FgFlightgear::configurationAsJson() const
+bool FgFlightgear::setConfig(QSettings& settings)
 {
-    QJsonObject runParameters;
-    for (auto &param : m_RunParameters)
-        runParameters[param.first] = param.second;
+    m_Callsign = settings.value("callsign").toString();
+    m_ExeFile = settings.value("exe_file").toString();
+    m_ProtocolFile = settings.value("protocol_file").toString();
+    m_RootDir = settings.value("root_directory").toString();
+    m_Airport = settings.value("airport").toString();
+    m_Runway = settings.value("runway").toString();
+    m_Aircraft = settings.value("aircraft").toString();
+    m_WindowSize = settings.value("geometry").toString();
+    m_TimeOfDay = settings.value("timeofday").toString();
 
-    QJsonObject config;
-    config["exe_file"] = m_ExeFile;
-    config["protocol_file"] = m_ProtocolFile;
-    config["root_directory"] = m_RootDir;
-    config["run_parameters"] = runParameters;
-    return config;
-}
+    m_Transport = std::make_shared<FgTransport>();
+    settings.beginGroup("generic");
+    m_Transport->setConfig(settings);
+    settings.endGroup();
 
-bool FgFlightgear::setConfigFromJson(const QJsonObject &config)
-{
-    m_Callsign = config["callsign"].toString(m_Callsign);
-    m_ExeFile = config["exe_file"].toString(m_ExeFile);
-    m_ProtocolFile = config["protocol_file"].toString(m_ProtocolFile);
-    m_RootDir = config["root_directory"].toString(m_RootDir);
-    m_Airport = config["airport"].toString(m_Airport);
-    m_Runway = config["runway"].toString(m_Runway);
-    m_Aircraft = config["aircraft"].toString(m_Aircraft);
-    m_WindowSize = config["geometry"].toString(m_WindowSize);
-    m_TimeOfDay = config["timeofday"].toString(m_TimeOfDay);
-
-    QJsonObject transport = config["generic"].toObject();
-    if (!transport.empty())
-    {
-        m_Transport = std::make_shared<FgTransport>(transport);
-    }
-
-    m_MultiplayEnabled = config["multiplay"].isObject();
+    settings.beginGroup("multiplay");
+    m_MultiplayEnabled = settings.value("enabled", false).toBool();
     if (m_MultiplayEnabled)
     {
-        QJsonObject multiplay_in = config["multiplay"].toObject()["in"].toObject();
-        if (!multiplay_in.empty())
-        {
-            m_MultiplayPortIn = multiplay_in["port"].toInt(m_MultiplayPortIn);
-            m_MultiplayFrequencyIn = multiplay_in["frequency"].toInt(m_MultiplayFrequencyIn);
-            m_MultiplayHostIn = multiplay_in["host"].toString(m_MultiplayHostIn);
-        }
-        QJsonObject multiplay_out = config["multiplay"].toObject()["out"].toObject();
-        if (!multiplay_in.empty())
-        {
-            m_MultiplayPortOut = multiplay_out["port"].toInt(m_MultiplayPortOut);
-            m_MultiplayFrequencyOut = multiplay_out["frequency"].toInt(m_MultiplayFrequencyOut);
-            m_MultiplayHostOut = multiplay_out["host"].toString(m_MultiplayHostOut);
-        }
+        auto getMultiplayParams = [](QSettings& settings, const QString& group) {
+            settings.beginGroup(group);
+            int frequency = settings.value("frequency").toInt();
+            QString host = settings.value("host").toString();
+            int port = settings.value("port").toInt();
+            settings.endGroup();
+            return std::make_tuple(frequency, host, port);
+        };
+        std::tie(m_MultiplayPortIn, m_MultiplayHostIn, m_MultiplayFrequencyIn) = getMultiplayParams(settings, "in");
+        std::tie(m_MultiplayPortOut, m_MultiplayHostOut, m_MultiplayFrequencyOut) = getMultiplayParams(settings, "out");
     }
+    settings.endGroup();
 
     m_RunParameters.clear();
-    QJsonObject runParams = config["run_parameters"].toObject();
-    for (auto &key : runParams.keys())
-        m_RunParameters.push_back(QPair<QString, QString>(key, runParams[key].toString()));
+    settings.beginGroup("additional_parameters");
+    QStringList keys = settings.allKeys();
+    for (auto &key : keys)
+        m_RunParameters.push_back(QPair<QString, QString>(key, settings.value(key).toString()));
+    settings.endGroup();
+    return true;
+}
+
+bool FgFlightgear::saveConfig(QSettings &settings)
+{
+    settings.setValue("callsign", m_Callsign);
+    settings.setValue("exe_file", m_ExeFile);
+    settings.setValue("protocol_file", m_ProtocolFile);
+    settings.setValue("root_directory", m_RootDir);
+    settings.setValue("airport", m_Airport);
+    settings.setValue("runway", m_Runway);
+    settings.setValue("aircraft", m_Aircraft);
+    settings.setValue("geometry", m_WindowSize);
+    settings.setValue("timeofday", m_TimeOfDay);
+    settings.beginGroup("generic");
+    m_Transport->saveConfig(settings);
+    settings.endGroup();
+
+    settings.beginGroup("multiplay");
+    settings.setValue("enabled", m_MultiplayEnabled);
+    auto setMultiplayParams = [&settings](const QString& group, int frequency, const QString& host, int port) {
+        settings.beginGroup(group);
+        settings.setValue("frequency", frequency);
+        settings.setValue("host", host);
+        settings.setValue("port", port);
+        settings.endGroup();
+    };
+    setMultiplayParams("in", m_MultiplayFrequencyIn, m_MultiplayHostIn, m_MultiplayPortIn);
+    setMultiplayParams("out", m_MultiplayFrequencyOut, m_MultiplayHostOut, m_MultiplayPortOut);
+    settings.endGroup();
+
+    settings.beginGroup("additional_parameters");
+    for (auto const &param : m_RunParameters)
+        settings.setValue(param.first, param.second);
+    settings.endGroup();
 
     return true;
 }
