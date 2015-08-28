@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Aug 27, 2015
+ * @date Modified Aug 28, 2015
  */
 
 #include "log.h"
@@ -128,6 +128,16 @@ bool FgAircraftsModel::addAircraft(QSettings& settings)
         qWarning() << "Could not set settings for aircraft. Skipping...";
         return false;
     }
+
+    if (aircraft->transport()->port() == 0 || aircraft->transport()->listenPort() == 0)
+    {
+        int port1 = 0;
+        int port2 = 0;
+        std::tie(port1, port2) = getAvailablePorts();
+        aircraft->transport()->setPort(port1);
+        aircraft->transport()->setListenPort(port2);
+    }
+
     emit beginInsertRows(QModelIndex(), m_OurAircrafts.count(), m_OurAircrafts.count());
     m_OurAircrafts.append(aircraft);
     connect(aircraft.get(), &FgControlledAircraft::onConnected, this, &FgAircraftsModel::onAircraftConnected);
@@ -148,8 +158,21 @@ QHash<int, QByteArray> FgAircraftsModel::roleNames() const
     return m_Roles;
 }
 
-void FgAircraftsModel::updateAircraft(const QString & /* aircraftId */)
+std::tuple<int, int> FgAircraftsModel::getAvailablePorts() const
 {
+    auto a = std::max_element(
+                std::begin(m_OurAircrafts), std::end(m_OurAircrafts),
+                [](const std::shared_ptr<FgControlledAircraft>& a1,
+                   const std::shared_ptr<FgControlledAircraft>& a2)
+                {
+                    return std::max(a1->transport()->listenPort(), a1->transport()->port()) <
+                           std::max(a2->transport()->listenPort(), a2->transport()->port());
+                });
+    if (a == std::end(m_OurAircrafts))
+        return std::make_tuple(8000, 8000 + 1);
+
+    int port = std::max((*a)->transport()->listenPort(), (*a)->transport()->port()) + 1;
+    return std::make_tuple(port, port + 1);
 }
 
 void FgAircraftsModel::onDataReceived()

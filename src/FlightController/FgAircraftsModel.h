@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Aug 18, 2015
+ * @date Modified Aug 28, 2015
  */
 
 #ifndef FGCONTROLLER_H
@@ -49,8 +49,7 @@ protected:
 private:
     std::shared_ptr<FgTransport>                 m_Transport { };
     QList<std::shared_ptr<FgControlledAircraft>> m_OurAircrafts { };
-    // QList<std::shared_ptr<FgAircraft>>           m_OtherAircrafts { };
-    qint32 m_AircraftsCount { 0 };
+    qint32 m_AircraftsCount { 0    };
 
     QHash<int, QByteArray> m_Roles {
         { Roles::Name     , "name"     },
@@ -58,15 +57,11 @@ private:
         { Roles::Aircraft , "aircraft" }
     };
 
-    void updateOurAircraftsCount();
-    void updateOtherAircraftsCount();
+    std::tuple<int, int> getAvailablePorts() const;
 
 private slots:
     void onDataReceived();
     void onAircraftConnected();
-
-public slots:
-    void updateAircraft(const QString &aircraftId);
 
 signals:
     void aircraftAdded(FgAircraft* aircraft);
