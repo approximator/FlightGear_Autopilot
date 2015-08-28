@@ -23,6 +23,10 @@
 class FgTransport : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QHostAddress listenHost READ listenHost WRITE setListenHost NOTIFY listenHostChanged)
+    Q_PROPERTY(int          listenPort READ listenPort WRITE setListenPort NOTIFY listenPortChanged)
+    Q_PROPERTY(QHostAddress host       READ host       WRITE setHost       NOTIFY hostChanged)
+    Q_PROPERTY(int          port       READ port       WRITE setPort       NOTIFY portChanged)
 public:
     explicit FgTransport(QObject *parent = 0);
     ~FgTransport();
@@ -69,6 +73,10 @@ private:
 
 signals:
     void fgDataReceived(const FgTransport &transport);
+    void listenHostChanged(const QHostAddress& address);
+    void listenPortChanged(const int port);
+    void hostChanged(const QHostAddress& address);
+    void portChanged(const int port);
 
 private slots:
     void onSocketRead();
