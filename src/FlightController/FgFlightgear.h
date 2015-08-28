@@ -6,7 +6,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created May 12, 2015
- * @date Modified Aug 27, 2015
+ * @date Modified Aug 28, 2015
  */
 
 #ifndef FGFLIGHTGEAR_H
@@ -71,7 +71,7 @@ private:
     int     m_MultiplayFrequencyOut { 10 };
     QString m_MultiplayHostOut      { };
     QProcess m_FlightgearProcess    { };
-    std::shared_ptr<FgTransport>      m_Transport     { };
+    std::shared_ptr<FgTransport>      m_Transport     { std::make_shared<FgTransport>(this) };
     QVector<QPair<QString, QString> > m_RunParameters { };
 
 signals:
