@@ -17,7 +17,7 @@ Item {
     Label {
         id: titleLabel
         width: parent.width
-        text: "none"
+        text: "Add aircraft"
         style: "display3"
     }
 

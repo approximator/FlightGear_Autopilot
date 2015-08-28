@@ -4,11 +4,8 @@ import Material.ListItems 0.1 as ListItem
 
 Page {
     id: aircraftsPage
-
-    property alias leftMenu: menuList
-    property alias model: menuList.model
-
-    property var fgAircraft: null
+    property alias model: aircraftsList.model
+    property QtObject fgAircraft: null
 
     title: "Aircrafts control"
     backgroundColor: Theme.primaryDarkColor
@@ -19,113 +16,35 @@ Page {
             name: "Add aircraft"
             hoverAnimation: true
             enabled: true
-            onTriggered: menuList.model.addAircraft()
+            onTriggered: aircraftsList.model.addAircraft()
         },
         Action {
             iconName: "maps/map"
             name: "Aircrafts map"
             hoverAnimation: true
             enabled: true
-            onTriggered: pageStack.push(Qt.resolvedUrl("FgMap.qml"), { airmodel: menuList.model })
+            onTriggered: pageStack.push(Qt.resolvedUrl("FgMap.qml"), { airmodel: aircraftsList.model })
         },
         Action {
             iconName: "action/settings"
-            name: "Page Settings"
+            name: "Settings"
             hoverAnimation: true
-            onTriggered: rightSidebar.showing = !rightSidebar.showing
+            onTriggered: pageStack.push(Qt.resolvedUrl("FgSettings.qml"), { airmodel: aircraftsList.model })
         }
     ]
 
-    rightSidebar: PageSidebar {
-        id: __rightSidebar
-        width: Units.dp(250)
-        showing: false
-        actionBar.title: fgAircraft ? fgAircraft.callsign : "(none)"
-        actionBar.backgroundColor: Qt.darker(theme.primaryColor)
-
-        actions: [
-            Action {
-                iconName: "action/info"
-                name: "Info"
-                // onTriggered: notify("Info Action")
-            },
-            Action {
-                iconName: "content/clear"
-                name: "Close page settings"
-                onTriggered: rightSidebar.showing = false
-            }
-        ]
-
-        sidebar: Rectangle {
-            color: Qt.lighter(Theme.primaryDarkColor)
-            width: __rightSidebar.width
-            height: Math.max(__rightSidebar.height, childrenRect.height)
-
-            Button {
-                text: "Run"
-                elevation: 1
-                enabled: fgAircraft ? fgAircraft.flightgearReady : false
-                onClicked: fgAircraft.runFlightGear()
-            }
-        }
+    FgAircraftsList {
+        id: aircraftsList
     }
 
     /*Left side menu*/
     Sidebar {
         id: _sidebar
-        header: "Aircrafts menu"
+        header: "Aircrafts"
         width: Units.dp(350)
         backgroundColor: Qt.lighter(Theme.primaryDarkColor)
-        contents: menuList
+        contents: aircraftsList
         style: "dark"
-    }
-
-    ListView {
-        id: menuList
-
-        width: _sidebar.width
-        height: childrenRect.height
-        highlight: Item {
-            Rectangle {
-                color: theme.accentColor
-                opacity: 0.7
-                width: Units.dp(6)
-                anchors {
-                    top: parent.top
-                    bottom: parent.bottom
-                    left: parent.left
-                    topMargin: Units.dp(10)
-                    bottomMargin: Units.dp(10)
-                    leftMargin: Units.dp(2)
-                }
-            }
-        }
-
-        clip: true
-        highlightFollowsCurrentItem: true
-        boundsBehavior: Flickable.StopAtBounds
-
-        model: aircraftsModel
-        delegate: _menuComponent
-
-        Component {
-            id: _menuComponent
-            FgMenuItem {
-                selected: ListView.isCurrentItem
-                onClicked: {
-                    ListView.view.currentIndex = index;
-                    aircraftsPage.fgAircraft = aircraft;
-                }
-
-                infoEnabled: ListView.isCurrentItem
-                onFgInfoClicked: rightSidebar.showing = !rightSidebar.showing
-                Component.onCompleted: {
-                    if (index === 0) {
-                        aircraftsPage.fgAircraft = aircraft;
-                    }
-                }
-            }
-        }
     }
 
     FgAircraftPage {
