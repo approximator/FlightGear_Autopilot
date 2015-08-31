@@ -11,6 +11,7 @@ Page {
     property var fgAircraft: null
 
     title: "Aircrafts control"
+    backgroundColor: Theme.primaryDarkColor
 
     actions: [
         Action {
@@ -36,6 +37,7 @@ Page {
     ]
 
     rightSidebar: PageSidebar {
+        id: __rightSidebar
         width: Units.dp(250)
         showing: false
         actionBar.title: fgAircraft ? fgAircraft.callsign : "(none)"
@@ -54,11 +56,17 @@ Page {
             }
         ]
 
-        sidebar: Button {
-            text: "Run"
-            elevation: 1
-            enabled: fgAircraft ? fgAircraft.flightgearReady : false
-            onClicked: fgAircraft.runFlightGear()
+        sidebar: Rectangle {
+            color: Qt.lighter(Theme.primaryDarkColor)
+            width: __rightSidebar.width
+            height: Math.max(__rightSidebar.height, childrenRect.height)
+
+            Button {
+                text: "Run"
+                elevation: 1
+                enabled: fgAircraft ? fgAircraft.flightgearReady : false
+                onClicked: fgAircraft.runFlightGear()
+            }
         }
     }
 
@@ -67,8 +75,9 @@ Page {
         id: _sidebar
         header: "Aircrafts menu"
         width: Units.dp(350)
-        backgroundColor: Palette.colors["grey"]["200"]
+        backgroundColor: Qt.lighter(Theme.primaryDarkColor)
         contents: menuList
+        style: "dark"
     }
 
     ListView {

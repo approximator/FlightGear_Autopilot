@@ -3,9 +3,9 @@ import qbs
 FgapApplication {
     name: project.app_short_name
     targetName: fgapAppTarget
-//    Depends { name: "qml_fgear" }
-//    Depends { name: "qml_material" }
-//    Depends { name: "qml_material_components" }
+    Depends { name: "qml_fgear" }
+    Depends { name: "qml_material" }
+    Depends { name: "qml_material_components" }
 
     Depends { name: "cpp" }
     cpp.includePaths: [ "./"]
@@ -38,6 +38,6 @@ FgapApplication {
         name: "jsonConfigs"
         fileTags: ["jsonConfigs"]
         prefix: project.fgapConfigSourceRoot
-        files: "*.json"
+        files: "*"
     }
 }

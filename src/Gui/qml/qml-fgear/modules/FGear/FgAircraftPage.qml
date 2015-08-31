@@ -2,11 +2,10 @@ import Material 0.1
 import QtQuick 2.0
 import QtQuick.Layouts 1.1
 
-Rectangle {
+Item {
     id: airPage
     width: Units.dp(100)
     height: Units.dp(200)
-    color: "#f3f7fe"
 
     property QtObject aircraft: null
 
