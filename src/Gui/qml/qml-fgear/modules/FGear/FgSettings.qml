@@ -1,5 +1,5 @@
 import QtQuick 2.3
-import FGear 0.1
+import fgap 1.0
 import QtQuick.Layouts 1.1
 import Material 0.1
 import Material.ListItems 0.1 as ListItem
@@ -9,27 +9,40 @@ import QtQuick.Dialogs 1.0
 Page {
     id: page
     title: "Settings"
+    backgroundColor: Theme.primaryDarkColor
 
-    FileDialog {
-        id: fileDialog
-        title: "Please choose a file"
-        selectFolder: true
-        visible: false
-        onRejected: {
-            console.log("Canceled")
-            visible: false
-        }
+    property alias airmodel: aircraftsList.model
+    property QtObject fgAircraft: null
+    onFgAircraftChanged: {
+        if (fgAircraft)
+            title = fgAircraft.callsign + " - settings"
+    }
+
+    FgAircraftsList {
+        id: aircraftsList
+    }
+
+    /*Left side menu*/
+    Sidebar {
+        id: _sidebar
+        header: "Aircrafts menu"
+        width: Units.dp(350)
+        backgroundColor: Qt.lighter(Theme.primaryDarkColor)
+        contents: aircraftsList
+        style: "dark"
     }
 
     ColumnLayout {
         anchors {
-            fill: parent
-            topMargin: Units.dp(16)
-            bottomMargin: Units.dp(16)
+            left: _sidebar.right
+            right: parent.right
+            top: parent.top
+            bottom: parent.bottom
         }
 
         View {
             id: fgStatus
+            backgroundColor: Qt.lighter(Theme.primaryDarkColor)
 
             anchors {
                 left: parent.left
@@ -95,15 +108,7 @@ Page {
                             Layout.alignment: Qt.AlignVCenter
                             text: "Browse"
                             textColor: Theme.primaryColor
-                            onClicked: {
-                                fileDialog.setSelectFolder(false)
-                                fileDialog.title = "Select Flightgear executable"
-                                fileDialog.accepted.connect(function() {
-                                    executableField.text = decodeURIComponent(fileDialog.fileUrl.toString().replace("file://",""))
-                                    fileDialog.destroy()
-                                })
-                                fileDialog.open()
-                            }
+
                         }
                     }
                 }
@@ -134,15 +139,7 @@ Page {
                             Layout.alignment: Qt.AlignVCenter
                             text: "Browse"
                             textColor: Theme.primaryColor
-                            onClicked: {
-                                fileDialog.setSelectFolder(true)
-                                fileDialog.title = "Select Flightgear data directory"
-                                fileDialog.accepted.connect(function() {
-                                    dataField.text = decodeURIComponent(fileDialog.fileUrl.toString().replace("file://",""))
-                                    fileDialog.destroy()
-                                })
-                                fileDialog.open()
-                            }
+
                         }
                     }
                 }
@@ -189,43 +186,41 @@ Page {
             }
         }
 
+//        View {
+//            anchors {
+//                left: parent.left
+//                right: parent.right
+//                margins: Units.dp(16)
+//            }
 
+//            height: column2.implicitHeight + Units.dp(32)
 
-        View {
-            anchors {
-                left: parent.left
-                right: parent.right
-                margins: Units.dp(16)
-            }
+//            elevation: 1
+//            radius: Units.dp(2)
 
-            height: column2.implicitHeight + Units.dp(32)
+//            ColumnLayout {
+//                id: column2
 
-            elevation: 1
-            radius: Units.dp(2)
+//                anchors {
+//                    fill: parent
+//                    topMargin: Units.dp(16)
+//                    bottomMargin: Units.dp(16)
+//                }
 
-            ColumnLayout {
-                id: column2
+//                Label {
+//                    id: titleLabel2
 
-                anchors {
-                    fill: parent
-                    topMargin: Units.dp(16)
-                    bottomMargin: Units.dp(16)
-                }
+//                    anchors {
+//                        left: parent.left
+//                        right: parent.right
+//                        margins: Units.dp(16)
+//                    }
 
-                Label {
-                    id: titleLabel2
-
-                    anchors {
-                        left: parent.left
-                        right: parent.right
-                        margins: Units.dp(16)
-                    }
-
-                    style: "title"
-                    text: "Other settings"
-                }
-            }
-        }
+//                    style: "title"
+//                    text: "Other settings"
+//                }
+//            }
+//        }
     }
 
 }

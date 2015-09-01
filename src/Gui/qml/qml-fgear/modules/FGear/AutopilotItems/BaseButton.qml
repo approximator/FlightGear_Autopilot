@@ -8,7 +8,7 @@ Button {
   checkable: true
   text: itemText
 
-  backgroundColor: Theme.primaryDarkColor
+  backgroundColor: Qt.lighter(Theme.primaryDarkColor)
   enabled: name === "autopilot_engage" ? true : (engaged)
   onCheckedChanged: buttonChecked(name, itemText, checked)
   tooltip: desc
