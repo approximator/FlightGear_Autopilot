@@ -108,7 +108,64 @@ Page {
                             Layout.alignment: Qt.AlignVCenter
                             text: "Browse"
                             textColor: Theme.primaryColor
+                        }
+                    }
+                }
 
+                ListItem.Standard {
+                    action: Icon {
+                        anchors.centerIn: parent
+                        name: "action/done"
+                        color: "green"
+                    }
+
+                    content: RowLayout {
+                        anchors.centerIn: parent
+                        width: parent.width
+
+                        Label {
+                            style: "dialog"
+                            text: "Listen port:"
+                            Layout.preferredWidth: Units.dp(100)
+                        }
+                        TextField {
+                            Layout.fillWidth: true
+                            Layout.alignment: Qt.AlignVCenter
+                            characterLimit: 5
+                            text: fgAircraft.transport.listenPort
+                            onEditingFinished: {
+                                // TODO: validate port input
+                                fgAircraft.transport.listenPort = parseInt(text)
+                            }
+                        }
+                    }
+                }
+
+                ListItem.Standard {
+                    action: Icon {
+                        anchors.centerIn: parent
+                        name: "action/done"
+                        color: "green"
+                    }
+
+                    content: RowLayout {
+                        anchors.centerIn: parent
+                        width: parent.width
+
+                        Label {
+                            style: "dialog"
+                            text: "Flightgear port:"
+                            Layout.preferredWidth: Units.dp(120)
+                        }
+                        TextField {
+                            Layout.fillWidth: true
+                            Layout.alignment: Qt.AlignVCenter
+                            characterLimit: 5
+                            text: fgAircraft.transport.port
+                            onEditingFinished: {
+                                // TODO: validate port input
+                                fgAircraft.transport.port = parseInt(text)
+                            }
                         }
                     }
                 }

@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Aug 28, 2015
+ * @date Modified Sep 01, 2015
  */
 
 #ifndef FGPROTOCOL_H
@@ -23,6 +23,10 @@
 class FgTransport : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QHostAddress listenHost READ listenHost WRITE setListenHost NOTIFY listenHostChanged)
+    Q_PROPERTY(int          listenPort READ listenPort WRITE setListenPort NOTIFY listenPortChanged)
+    Q_PROPERTY(QHostAddress host       READ host       WRITE setHost       NOTIFY hostChanged)
+    Q_PROPERTY(int          port       READ port       WRITE setPort       NOTIFY portChanged)
 public:
     explicit FgTransport(QObject *parent = 0);
     ~FgTransport();
@@ -69,6 +73,10 @@ private:
 
 signals:
     void fgDataReceived(const FgTransport &transport);
+    void listenHostChanged(const QHostAddress& address);
+    void listenPortChanged(const int port);
+    void hostChanged(const QHostAddress& address);
+    void portChanged(const int port);
 
 private slots:
     void onSocketRead();
@@ -96,7 +104,9 @@ int FgTransport::listenPort() const
 
 void FgTransport::setListenPort(const int _port)
 {
+    qDebug() << "Set listen port to " << _port;
     m_ListenPort = _port;
+    // TODO: restart server if already listening
 }
 
 QHostAddress FgTransport::host() const
@@ -116,6 +126,7 @@ int FgTransport::port() const
 
 void FgTransport::setPort(const int _port)
 {
+    qDebug() << "Set port to " << _port;
     m_WritePort = _port;
 }
 
@@ -170,5 +181,7 @@ QString FgTransport::networkParams() const
             .arg(m_WritePort)
             .arg(m_WriteProtocol, m_WriteGenericProtocol);
 }
+
+Q_DECLARE_METATYPE(FgTransport *)
 
 #endif // FGPROTOCOL_H
