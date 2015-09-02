@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Aug 27, 2015
+ * @date Modified Sep 02, 2015
  */
 
 #include "log.h"
@@ -20,7 +20,7 @@ FgTransport::FgTransport(QObject *parent) :
 
 FgTransport::~FgTransport()
 {
-    qDebug() << "FgTransport destroyed[" << m_ListenHost.toString() << ":" << m_ListenPort << "]" << "out: " << m_WritePort;
+//    qDebug() << "FgTransport destroyed[" << m_ListenHost.toString() << ":" << m_ListenPort << "]" << "out: " << m_WritePort;
 }
 
 bool FgTransport::setConfig(QSettings &settings)
@@ -30,7 +30,7 @@ bool FgTransport::setConfig(QSettings &settings)
     m_WriteFrequency = settings.value("frequency").toInt();
     m_WritePort = settings.value("port").toInt();
     m_WriteProtocol = settings.value("protocol").toString();
-    m_WriteGenericProtocol = settings.value("protocol_file").toString();
+    m_WriteGenericProtocol = settings.value("generic_protocol").toString();
     QString host = settings.value("host").toString();
     m_WriteHost = QHostAddress(host.toLower() == "localhost" ? "127.0.0.1" : host);
     settings.endGroup();
@@ -39,7 +39,7 @@ bool FgTransport::setConfig(QSettings &settings)
     m_ListenFrequency = settings.value("frequency").toInt();
     m_ListenPort = settings.value("port").toInt();
     m_ListenProtocol = settings.value("protocol").toString();
-    m_ListenGenericProtocol = settings.value("protocol_file").toString();
+    m_ListenGenericProtocol = settings.value("generic_protocol").toString();
     host = settings.value("host").toString();
     m_ListenHost = QHostAddress(host.toLower() == "localhost" ? "127.0.0.1" : host);
     settings.endGroup();
@@ -60,7 +60,7 @@ bool FgTransport::saveConfig(QSettings &settings)
     settings.setValue("frequency", m_WriteFrequency);
     settings.setValue("port", m_WritePort);
     settings.setValue("protocol", m_WriteProtocol);
-    settings.setValue("protocol_file", m_WriteGenericProtocol);
+    settings.setValue("generic_protocol", m_WriteGenericProtocol);
     settings.setValue("host", m_WriteHost.toString());
     settings.endGroup();
 
@@ -68,7 +68,7 @@ bool FgTransport::saveConfig(QSettings &settings)
     settings.setValue("frequency", m_ListenFrequency);
     settings.setValue("port", m_ListenPort);
     settings.setValue("protocol", m_ListenProtocol);
-    settings.setValue("protocol_file", m_ListenGenericProtocol);
+    settings.setValue("generic_protocol", m_ListenGenericProtocol);
     settings.setValue("host", m_ListenHost.toString());
     settings.endGroup();
     return true;
@@ -76,6 +76,7 @@ bool FgTransport::saveConfig(QSettings &settings)
 
 void FgTransport::onSocketRead()
 {
+//    qDebug() << "onSocketRead";
     while (m_Socket->hasPendingDatagrams())
     {
         {

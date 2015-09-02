@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Aug 18, 2015
+ * @date Modified Sep 02, 2015
  */
 
 #include "FgMath.h"
@@ -30,7 +30,13 @@ void FgAircraft::onFdmDataChanged(const FgTransport& transport)
     m_Roll      = transport.getFloat(ROLL);
     m_Yaw       = transport.getFloat(YAW);
     m_YawRate   = transport.getFloat(YAW_RATE);
-    m_Heading   = transport.getFloat(HEADING);
+
+    auto hdg        = transport.getFloat(HEADING);
+    if (m_Heading != hdg)
+    {
+        m_Heading = hdg;
+        emit headingChanged();
+    }
     m_Longitude = transport.getFloat(LONGITUDE);
     m_Latitude  = transport.getFloat(LATITUDE);
     m_Altitude  = transport.getFloat(ALTITUDE);
