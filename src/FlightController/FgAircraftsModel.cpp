@@ -145,8 +145,8 @@ bool FgAircraftsModel::addAircraft(QSettings& settings)
 
     if (m_OurAircrafts.size() < 2)
     {
-        m_Transport = std::shared_ptr<FgTransport>(m_OurAircrafts[0]->transport());
-        connect(m_Transport.get(), &FgTransport::fgDataReceived, this, &FgAircraftsModel::onDataReceived);
+        m_Transport = m_OurAircrafts[0]->transport();
+        connect(m_Transport, &FgTransport::fgDataReceived, this, &FgAircraftsModel::onDataReceived);
         qDebug() << "FgAircraftModel uses transport of " << m_OurAircrafts[0]->callsign();
     }
 
@@ -175,9 +175,9 @@ std::tuple<int, int> FgAircraftsModel::getAvailablePorts() const
     return std::make_tuple(port, port + 1);
 }
 
-void FgAircraftsModel::onDataReceived()
+void FgAircraftsModel::onDataReceived(FgTransport *transport)
 {
-    emit fdmDataChanged(m_Transport);
+    emit fdmDataChanged(transport);
 
     //eleron
     //elevator

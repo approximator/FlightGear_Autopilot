@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Sep 01, 2015
+ * @date Modified Sep 02, 2015
  */
 
 #ifndef FGPROTOCOL_H
@@ -57,7 +57,7 @@ private:
     std::shared_ptr<QUdpSocket>        m_SocketOut { std::make_shared<QUdpSocket>()        };
     std::shared_ptr<FgGenericProtocol> m_Protocol  { std::make_shared<FgGenericProtocol>() };
 
-    bool         m_GenericEnabled       { false };
+    bool         m_GenericEnabled       { true };
     QHostAddress m_ListenHost           { "127.0.0.1" };
     quint16      m_ListenPort           { 8000 };
     QString      m_ListenProtocol       { "udp" };
@@ -72,7 +72,7 @@ private:
     QStringList  m_FdmData              { };
 
 signals:
-    void fgDataReceived(const FgTransport &transport);
+    void fgDataReceived(FgTransport *transport);
     void listenHostChanged(const QHostAddress& address);
     void listenPortChanged(const int port);
     void hostChanged(const QHostAddress& address);

@@ -70,7 +70,7 @@ private:
     QString m_Aircraft   { "c172p" };
     QString m_WindowSize { "800x600" };
     QString m_TimeOfDay  { "morning" };
-    bool    m_MultiplayEnabled      { false };
+    bool    m_MultiplayEnabled      { true };
     quint16 m_MultiplayPortIn       { 5000 };
     int     m_MultiplayFrequencyIn  { 10 };
     QString m_MultiplayHostIn       { };

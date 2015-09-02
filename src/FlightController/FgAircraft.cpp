@@ -24,28 +24,28 @@ FgAircraft::~FgAircraft()
     qDebug() << callsign() << ": I am destroying";
 }
 
-void FgAircraft::onFdmDataChanged(const FgTransport& transport)
+void FgAircraft::onFdmDataChanged(FgTransport* transport)
 {
-    m_Pitch     = transport.getFloat(PITCH);
-    m_Roll      = transport.getFloat(ROLL);
-    m_Yaw       = transport.getFloat(YAW);
-    m_YawRate   = transport.getFloat(YAW_RATE);
+    m_Pitch     = transport->getFloat(PITCH);
+    m_Roll      = transport->getFloat(ROLL);
+    m_Yaw       = transport->getFloat(YAW);
+    m_YawRate   = transport->getFloat(YAW_RATE);
 
-    auto hdg        = transport.getFloat(HEADING);
+    auto hdg        = transport->getFloat(HEADING);
     if (m_Heading != hdg)
     {
         m_Heading = hdg;
         emit headingChanged();
     }
-    m_Longitude = transport.getFloat(LONGITUDE);
-    m_Latitude  = transport.getFloat(LATITUDE);
-    m_Altitude  = transport.getFloat(ALTITUDE);
-    m_Airspeed  = transport.getFloat(AIRSPEED);
-    m_GroundLevel   = transport.getFloat(ALTITUDE_AGL);
-    m_VerticalSpeed = transport.getFloat(VERTICAL_SPEED);
+    m_Longitude = transport->getFloat(LONGITUDE);
+    m_Latitude  = transport->getFloat(LATITUDE);
+    m_Altitude  = transport->getFloat(ALTITUDE);
+    m_Airspeed  = transport->getFloat(AIRSPEED);
+    m_GroundLevel   = transport->getFloat(ALTITUDE_AGL);
+    m_VerticalSpeed = transport->getFloat(VERTICAL_SPEED);
 
-    m_ElapsedTime = transport.getFloat(ELAPSED_TIME);
-    m_DeltaTime = transport.getFloat(DELTA_TIME);
+    m_ElapsedTime = transport->getFloat(ELAPSED_TIME);
+    m_DeltaTime = transport->getFloat(DELTA_TIME);
 
     const qreal lat = qDegreesToRadians(m_Latitude);
     const qreal lon = qDegreesToRadians(m_Longitude);

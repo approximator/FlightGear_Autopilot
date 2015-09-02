@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Aug 28, 2015
+ * @date Modified Sep 02, 2015
  */
 
 #ifndef FGCONTROLLER_H
@@ -47,7 +47,7 @@ protected:
     virtual QHash<int, QByteArray> roleNames() const override;
 
 private:
-    std::shared_ptr<FgTransport>                 m_Transport { };
+    FgTransport* m_Transport { nullptr };
     QList<std::shared_ptr<FgControlledAircraft>> m_OurAircrafts { };
     qint32 m_AircraftsCount { 0    };
 
@@ -59,8 +59,11 @@ private:
 
     std::tuple<int, int> getAvailablePorts() const;
 
+    FgAircraftsModel(const FgAircraftsModel& other);
+    FgAircraftsModel& operator=(const FgAircraftsModel& other);
+
 private slots:
-    void onDataReceived();
+    void onDataReceived(FgTransport *transport);
     void onAircraftConnected();
 
 signals:
@@ -70,7 +73,7 @@ signals:
     void aircraftDisconnected(FgAircraft* aircraft);
     void aircraftUpdated(FgAircraft* aircraft);
 
-    void fdmDataChanged(std::shared_ptr<FgTransport> transport);
+    void fdmDataChanged(FgTransport* transport);
 };
 
 #endif // FGCONTROLLER_H

@@ -134,7 +134,6 @@ bool FgFlightgear::setConfig(QSettings& settings)
     m_WindowSize = settings.value("geometry", m_WindowSize).toString();
     m_TimeOfDay = settings.value("timeofday", m_TimeOfDay).toString();
 
-    m_Transport = std::make_shared<FgTransport>();
     settings.beginGroup("generic");
     m_Transport->setConfig(settings);
     settings.endGroup();

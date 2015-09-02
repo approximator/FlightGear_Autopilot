@@ -61,7 +61,7 @@ signals:
     void flightgearChanged();
 
 public slots:
-    virtual void onFdmDataChanged(const FgTransport& transport);
+    virtual void onFdmDataChanged(FgTransport* transport);
 };
 
 //

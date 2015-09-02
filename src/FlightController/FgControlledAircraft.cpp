@@ -37,7 +37,6 @@ bool FgControlledAircraft::setConfig(QSettings &settings)
             break;
         }
 
-        m_Flightgear = std::make_shared<FgFlightgear>();
         if (!m_Flightgear->setConfig(settings))
         {
             qWarning() << "Cant set config for " << callsign() << " flightgear.";
@@ -77,7 +76,7 @@ void FgControlledAircraft::autopilotEngage(bool engage)
     m_Autopilot->engage(engage);
 }
 
-void FgControlledAircraft::onFdmDataChanged(const FgTransport &transport)
+void FgControlledAircraft::onFdmDataChanged(FgTransport *transport)
 {
     assert(m_Autopilot);
     FgAircraft::onFdmDataChanged(transport);
