@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Aug 28, 2015
+ * @date Modified Sep 01, 2015
  */
 
 #include "log.h"
@@ -145,7 +145,7 @@ bool FgAircraftsModel::addAircraft(QSettings& settings)
 
     if (m_OurAircrafts.size() < 2)
     {
-        m_Transport = m_OurAircrafts[0]->transport();
+        m_Transport = std::shared_ptr<FgTransport>(m_OurAircrafts[0]->transport());
         connect(m_Transport.get(), &FgTransport::fgDataReceived, this, &FgAircraftsModel::onDataReceived);
         qDebug() << "FgAircraftModel uses transport of " << m_OurAircrafts[0]->callsign();
     }
