@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 17, 2015
- * @date Modified Aug 27, 2015
+ * @date Modified Sep 01, 2015
  */
 
 #ifndef FGCONTROLLEDAIRCRAFT_H
@@ -26,17 +26,18 @@ class FgControlledAircraft : public FgAircraft
     Q_OBJECT
     Q_PROPERTY(bool autopilotEngaged READ autopilotEngaged)
     Q_PROPERTY(bool flightgearReady READ flightgearReady NOTIFY flightgearReadyChanged)
+    Q_PROPERTY(FgTransport* transport READ transport NOTIFY transportChanged)
 public:
     explicit FgControlledAircraft(QObject *parent = 0);
     ~FgControlledAircraft();
 
-    inline std::shared_ptr<FgTransport> transport() const;
-    inline bool autopilotEngaged() const;
+    inline FgAutopilot *autopilot() const;
+    inline FgTransport *transport() const;
 
+    inline bool autopilotEngaged() const;
     inline void setAilerons(qreal val);
     inline void setElevator(qreal val);
     inline void setRudder(qreal val);
-    inline FgAutopilot *autopilot() const;
     inline bool flightgearReady() const;
     inline void follow(FgAircraft *aircraft);
 
@@ -55,17 +56,13 @@ signals:
     void flightgearStarted();
     void flightgearFinished();
     void flightgearReadyChanged(bool);
+    void transportChanged();
 
 public slots:
     virtual void onFdmDataChanged(const FgTransport& transport);
 };
 
 //
-std::shared_ptr<FgTransport> FgControlledAircraft::transport() const
-{
-    return m_Flightgear->transport();
-}
-
 bool FgControlledAircraft::autopilotEngaged() const
 {
     return m_Autopilot ? m_Autopilot->engaged() : false;
@@ -88,13 +85,16 @@ void FgControlledAircraft::setRudder(qreal val)
 
 FgAutopilot *FgControlledAircraft::autopilot() const
 {
-    qDebug() << "Returning autopilot";
     return m_Autopilot.get();
+}
+
+FgTransport *FgControlledAircraft::transport() const
+{
+    return m_Flightgear->transport().get();
 }
 
 bool FgControlledAircraft::flightgearReady() const
 {
-    qDebug() << "Return ready = " << m_Flightgear->ready();
     return m_Flightgear->ready();
 }
 

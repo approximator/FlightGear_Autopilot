@@ -6,9 +6,10 @@ SUBDIRS  = FlightController
 
 DISTFILES += $$files($$SCRIPTS_DIR/*.sh) $$files($$SCRIPTS_DIR/*.py)
 DISTFILES += $$files($$CONFIGS_DIR/*)
-DISTFILES += $$files($$ROOT_DIR/Gui/qml/qml-fgear/modules/FGear/*.qml)
-DISTFILES += $$files($$ROOT_DIR/Gui/qml/qml-fgear/modules/FGear/AutopilotItems/*.qml)
-DISTFILES += $$files($$ROOT_DIR/Gui/qml/qml-fgear/modules/FGear/Pointers/*.qml)
+DISTFILES += $$files($$ROOT_DIR/Gui/qml/qml-fgear/modules/FGear/*)
+DISTFILES += $$files($$ROOT_DIR/Gui/qml/qml-fgear/modules/FGear/AutopilotItems/*)
+DISTFILES += $$files($$ROOT_DIR/Gui/qml/qml-fgear/modules/FGear/SettingsItems/*)
+DISTFILES += $$files($$ROOT_DIR/Gui/qml/qml-fgear/modules/FGear/Pointers/*)
 DISTFILES += $$ROOT_DIR/../.travis.yml
 
 BASENAME = $$(INSTALL_BASENAME)
