@@ -1,5 +1,6 @@
 import QtQuick 2.3
 import QtQuick.Layouts 1.1
+import QtQuick.Dialogs 1.2
 import Material 0.1
 import Material.ListItems 0.1 as ListItem
 import FGear.SettingsItems 0.1
@@ -52,6 +53,22 @@ Page {
             elevation: 1
             radius: Units.dp(2)
 
+            FileDialog {
+                property var acceptedAction: null
+                id: fileDialog
+                selectFolder: true
+                onAccepted: {
+                    var url = fileDialog.fileUrl.toString()
+                    url = Qt.platform.os == "windows" ? url.replace(
+                                                             /^(file:\/{3})/,
+                                                             "") : url.replace(
+                                                             /^(file:\/{2})/,
+                                                             "")
+                    if (acceptedAction != null)
+                        acceptedAction(decodeURIComponent(url))
+                }
+            }
+
             ColumnLayout {
                 id: column
 
@@ -81,23 +98,47 @@ Page {
 
                 LabeledTextEdit {
                     label: "Flightgear:"
-                    value: "/usr/share/games/flightgear/bin/fgfs"
+                    value: fgAircraft.flightgear.exeFile
                     secondaryItem: Button {
                         text: "Browse"
+                        onClicked: {
+                            fileDialog.acceptedAction = function(url){
+                                fgAircraft.flightgear.exeFile = url
+                            }
+
+                            fileDialog.selectFolder = false
+                            fileDialog.open()
+                        }
+                    }
+                    onEditFinished: {
+                        fgAircraft.flightgear.exeFile = new_text
                     }
                 }
 
                 LabeledTextEdit {
-                    label: "Data dir:"
-                    value: "/usr/share/games/flightgear/"
+                    label: "Root dir:"
+                    value: fgAircraft.flightgear.rootDir
                     secondaryItem: Button {
                         text: "Browse"
+                        onClicked: {
+                            fileDialog.acceptedAction = function(url){
+                                fgAircraft.flightgear.rootDir = url
+                            }
+                            fileDialog.open()
+                        }
+                    }
+                    onEditFinished: {
+                        if(new_text.substr(-1) === '/') {
+                            new_text = new_text.substr(0, new_text.length - 1);
+                        }
+                        fgAircraft.flightgear.rootDir = new_text
                     }
                 }
 
                 LabeledTextEdit {
-                    label: "Protocol file:"
-                    value: "/usr/share/games/flightgear/Protocol/FgaProtocol.xml"
+                    label: "Protocol file: " + fgAircraft.flightgear.rootDir
+                    labelWidth: Units.dp(500)
+                    value: "/Protocol/FgaProtocol.xml"
                     secondaryItem: Button {
                         text: "Browse"
                     }
@@ -121,5 +162,4 @@ Page {
             }
         }
     }
-
 }

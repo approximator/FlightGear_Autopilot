@@ -4,7 +4,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created May 12, 2015
- * @date Modified Aug 27, 2015
+ * @date Modified Sep 02, 2015
  */
 
 #include "log.h"
@@ -55,37 +55,37 @@ bool FgFlightgear::checkPaths()
         return false;
     }
 
-    QProcess fgfs;
-    fgfs.setProcessChannelMode(QProcess::MergedChannels);
-    fgfs.start(m_ExeFile, QStringList() << "--version");
-    if (!fgfs.waitForStarted())
-    {
-        qWarning() << "Can't start " << m_ExeFile;
-        return false;
-    }
+//    QProcess fgfs;
+//    fgfs.setProcessChannelMode(QProcess::MergedChannels);
+//    fgfs.start(m_ExeFile, QStringList() << "--version");
+//    if (!fgfs.waitForStarted())
+//    {
+//        qWarning() << "Can't start " << m_ExeFile;
+//        return false;
+//    }
 
-    if (!fgfs.waitForFinished())
-    {
-        qWarning() << "ERROR: waitForFinished";
-        return false;
-    }
+//    if (!fgfs.waitForFinished())
+//    {
+//        qWarning() << "ERROR: waitForFinished";
+//        return false;
+//    }
 
-    // Read FlightGear output to the string
-    QString fgOutput(fgfs.readAll());
-    qWarning() << (fgOutput.isEmpty() ? "Flightgear output is empty" : "Read Flightgear output, OK." );
+//    // Read FlightGear output to the string
+//    QString fgOutput(fgfs.readAll());
+//    qWarning() << (fgOutput.isEmpty() ? "Flightgear output is empty" : "Read Flightgear output, OK." );
 
-    // parse output to find Flightgear root directory
+//    // parse output to find Flightgear root directory
 
-    // auto fgVersionToken = "FlightGear version: ";
-    // auto fgHomeToken = "FG_HOME=";
-    auto fgRootToken = "FG_ROOT=";
-    for (auto &str : fgOutput.split('\n'))
-    {
-        if (str.startsWith(fgRootToken))
-        {
-            m_RootDir = str.mid(qstrlen(fgRootToken));
-        }
-    }
+//    // auto fgVersionToken = "FlightGear version: ";
+//    // auto fgHomeToken = "FG_HOME=";
+//    auto fgRootToken = "FG_ROOT=";
+//    for (auto &str : fgOutput.split('\n'))
+//    {
+//        if (str.startsWith(fgRootToken))
+//        {
+//            m_RootDir = str.mid(qstrlen(fgRootToken));
+//        }
+//    }
 
     if (!QDir(m_RootDir).exists())
     {
@@ -95,7 +95,7 @@ bool FgFlightgear::checkPaths()
 
     m_ProtocolFile = m_RootDir + m_ProtocolFileName;
 
-    m_Transport->protocol()->writeXml(m_ProtocolFile);
+    result = m_Transport->protocol()->writeXml(m_ProtocolFile);
 
     qDebug() << "FG_ROOT = " << m_RootDir;
     qDebug() << "Protocol file = " << m_ProtocolFile;
@@ -125,14 +125,14 @@ bool FgFlightgear::ready() const
 bool FgFlightgear::setConfig(QSettings& settings)
 {
     m_Callsign = settings.value("callsign").toString();
-    m_ExeFile = settings.value("exe_file").toString();
-    m_ProtocolFile = settings.value("protocol_file").toString();
-    m_RootDir = settings.value("root_directory").toString();
-    m_Airport = settings.value("airport").toString();
-    m_Runway = settings.value("runway").toString();
-    m_Aircraft = settings.value("aircraft").toString();
-    m_WindowSize = settings.value("geometry").toString();
-    m_TimeOfDay = settings.value("timeofday").toString();
+    m_ExeFile = settings.value("exe_file", m_ExeFile).toString();
+    m_ProtocolFile = settings.value("protocol_file", m_ProtocolFile).toString();
+    m_RootDir = settings.value("root_directory", m_RootDir).toString();
+    m_Airport = settings.value("airport", m_Airport).toString();
+    m_Runway = settings.value("runway", m_Runway).toString();
+    m_Aircraft = settings.value("aircraft", m_Aircraft).toString();
+    m_WindowSize = settings.value("geometry", m_WindowSize).toString();
+    m_TimeOfDay = settings.value("timeofday", m_TimeOfDay).toString();
 
     m_Transport = std::make_shared<FgTransport>();
     settings.beginGroup("generic");
@@ -204,6 +204,7 @@ bool FgFlightgear::saveConfig(QSettings &settings)
 QString FgFlightgear::runParameters() const
 {
     QStringList args;
+    args << "--fg-root=" + m_RootDir;
     for (auto const &param : m_RunParameters)
         args << ("--" + param.first + (param.second.isEmpty() ? "" : ("=" + param.second)));
     QString additionalArguments = args.join(' ');

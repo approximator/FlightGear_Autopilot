@@ -6,7 +6,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created May 12, 2015
- * @date Modified Aug 28, 2015
+ * @date Modified Sep 02, 2015
  */
 
 #ifndef FGFLIGHTGEAR_H
@@ -25,6 +25,8 @@
 class FgFlightgear : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString rootDir READ rootDir WRITE setRootDir NOTIFY rootDirChanged)
+    Q_PROPERTY(QString exeFile READ exeFile WRITE setExeFile NOTIFY exeFileChanged)
 public:
     explicit FgFlightgear(QObject *parent = 0);
     ~FgFlightgear();
@@ -36,6 +38,11 @@ public:
     bool setConfig(QSettings& settings);
     bool saveConfig(QSettings& settings);
     QString runParameters() const;
+
+    inline QString rootDir() const;
+    inline void setRootDir(const QString _rootDir);
+    inline QString exeFile() const;
+    inline void setExeFile(const QString _exeFile);
 
     inline const QProcess& process() const;
     inline std::shared_ptr<FgTransport> transport() const;
@@ -80,6 +87,9 @@ signals:
      * Emits when init thread finishes his work
      */
     void readyChanged(bool);
+    void rootDirChanged();
+    void exeFileChanged();
+
 
 public slots:
     bool init();
@@ -89,6 +99,35 @@ public slots:
     friend class ControlledAircraftTest;
 };
 
+
+QString FgFlightgear::rootDir() const
+{
+    return m_RootDir;
+}
+
+void FgFlightgear::setRootDir(const QString _rootDir)
+{
+    if (m_RootDir == _rootDir)
+        return;
+
+    m_RootDir = _rootDir;
+    m_ProtocolFile = m_RootDir + m_ProtocolFileName;
+    emit rootDirChanged();
+}
+
+QString FgFlightgear::exeFile() const
+{
+    return m_ExeFile;
+}
+
+void FgFlightgear::setExeFile(const QString _exeFile)
+{
+    if (m_ExeFile == _exeFile)
+        return;
+
+    m_ExeFile = _exeFile;
+    emit exeFileChanged();
+}
 
 const QProcess &FgFlightgear::process() const
 {

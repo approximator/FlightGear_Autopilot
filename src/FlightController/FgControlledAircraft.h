@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 17, 2015
- * @date Modified Sep 01, 2015
+ * @date Modified Sep 02, 2015
  */
 
 #ifndef FGCONTROLLEDAIRCRAFT_H
@@ -27,12 +27,14 @@ class FgControlledAircraft : public FgAircraft
     Q_PROPERTY(bool autopilotEngaged READ autopilotEngaged)
     Q_PROPERTY(bool flightgearReady READ flightgearReady NOTIFY flightgearReadyChanged)
     Q_PROPERTY(FgTransport* transport READ transport NOTIFY transportChanged)
+    Q_PROPERTY(FgFlightgear* flightgear READ flightgear NOTIFY flightgearChanged)
 public:
     explicit FgControlledAircraft(QObject *parent = 0);
     ~FgControlledAircraft();
 
     inline FgAutopilot *autopilot() const;
     inline FgTransport *transport() const;
+    inline FgFlightgear *flightgear() const;
 
     inline bool autopilotEngaged() const;
     inline void setAilerons(qreal val);
@@ -46,17 +48,17 @@ public:
 
     Q_INVOKABLE void runFlightGear(bool run = true);
     Q_INVOKABLE void autopilotEngage(bool engage = true);
-    inline const FgFlightgear& flightgear() const;
 
 private:
     std::shared_ptr<FgAutopilot>  m_Autopilot  { std::make_shared<FgAutopilot>(this) };
-    std::shared_ptr<FgFlightgear> m_Flightgear { };
+    std::shared_ptr<FgFlightgear> m_Flightgear { std::make_shared<FgFlightgear>(this) };
 
 signals:
     void flightgearStarted();
     void flightgearFinished();
     void flightgearReadyChanged(bool);
     void transportChanged();
+    void flightgearChanged();
 
 public slots:
     virtual void onFdmDataChanged(const FgTransport& transport);
@@ -104,9 +106,9 @@ void FgControlledAircraft::follow(FgAircraft *aircraft)
     m_Autopilot->engage();
 }
 
-const FgFlightgear &FgControlledAircraft::flightgear() const
+FgFlightgear *FgControlledAircraft::flightgear() const
 {
-    return *m_Flightgear.get();
+    return m_Flightgear.get();
 }
 
 Q_DECLARE_METATYPE(FgControlledAircraft *)
