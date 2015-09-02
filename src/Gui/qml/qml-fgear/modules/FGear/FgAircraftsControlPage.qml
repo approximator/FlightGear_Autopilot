@@ -19,7 +19,7 @@ Page {
             onTriggered: aircraftsList.model.addAircraft()
         },
         Action {
-            iconName: "maps/map"
+            iconName: "awesome/globe"
             name: "Aircrafts map"
             hoverAnimation: true
             enabled: true
@@ -31,6 +31,15 @@ Page {
             hoverAnimation: true
             onTriggered: pageStack.push(Qt.resolvedUrl("FgSettings.qml"), { airmodel: aircraftsList.model })
         }
+    ]
+
+    tabs: [
+        {
+            text: "Autopilot control"
+        },
+        {
+            text: "Instruments",
+        },
     ]
 
     FgAircraftsList {
@@ -47,14 +56,43 @@ Page {
         style: "dark"
     }
 
-    FgAircraftPage {
+    TabView {
+        id: tabView
         anchors {
             left: _sidebar.right
             right: parent.right
             top: parent.top
             bottom: parent.bottom
         }
-        aircraft: fgAircraft
+        currentIndex: aircraftsPage.selectedTab
+        model: tabs
     }
 
+    VisualItemModel {
+        id: tabs
+
+        // Tab 1 "Autopilot control"
+        FgAircraftPage {
+            width: tabView.width
+            height: tabView.height
+            aircraft: fgAircraft
+        }
+
+        // Tab 2 "Instruments"
+        Rectangle {
+            width: tabView.width
+            height: tabView.height
+            color: aircraftsPage.backgroundColor
+
+            PictorialNavigation {
+                width: Math.min(parent.width, parent.height)
+                height: width
+
+                heading: fgAircraft.heading
+            }
+        }
+    }
+    Component.onCompleted: {
+        selectedTab = 1
+    }
 }

@@ -24,11 +24,11 @@ Item {
     FgAutopilot {
         id: autopilot
         Layout.alignment: Qt.AlignTop
+
         onAutopilotEngage: {
             if (aircraft) {
                 aircraft.autopilotEngage(activate)
             }
         }
     }
-
 }
