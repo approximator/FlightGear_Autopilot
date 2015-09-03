@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 17, 2015
- * @date Modified Aug 27, 2015
+ * @date Modified Sep 03, 2015
  */
 
 #include "log.h"
@@ -15,7 +15,7 @@
 #include <QSettings>
 
 FgControlledAircraft::FgControlledAircraft(QObject *parent):
-    FgAircraft("(none)", parent)
+    FgAircraft(parent)
 {
 
 }

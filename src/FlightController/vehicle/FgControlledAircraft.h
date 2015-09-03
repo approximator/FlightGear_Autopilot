@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 17, 2015
- * @date Modified Sep 02, 2015
+ * @date Modified Sep 03, 2015
  */
 
 #ifndef FGCONTROLLEDAIRCRAFT_H
@@ -13,9 +13,9 @@
 
 #include "log.h"
 #include "FgAircraft.h"
-#include "FgTransport.h"
-#include "FgAutopilot.h"
-#include "FgFlightgear.h"
+#include "flightgear/FgTransport.h"
+#include "flightgear/FgFlightgear.h"
+#include "autopilot/FgAircraftAutopilot.h"
 
 #include <QSettings>
 
@@ -30,7 +30,7 @@ class FgControlledAircraft : public FgAircraft
     Q_PROPERTY(FgFlightgear* flightgear READ flightgear NOTIFY flightgearChanged)
 public:
     explicit FgControlledAircraft(QObject *parent = 0);
-    ~FgControlledAircraft();
+    virtual ~FgControlledAircraft();
 
     inline FgAutopilot *autopilot() const;
     inline FgTransport *transport() const;
@@ -50,8 +50,8 @@ public:
     Q_INVOKABLE void autopilotEngage(bool engage = true);
 
 private:
-    std::shared_ptr<FgAutopilot>  m_Autopilot  { std::make_shared<FgAutopilot>(this) };
-    std::shared_ptr<FgFlightgear> m_Flightgear { std::make_shared<FgFlightgear>(this) };
+    std::shared_ptr<FgAircraftAutopilot>  m_Autopilot  { std::make_shared<FgAircraftAutopilot>(this) };
+    std::shared_ptr<FgFlightgear>         m_Flightgear { std::make_shared<FgFlightgear>(this) };
 
 signals:
     void flightgearStarted();

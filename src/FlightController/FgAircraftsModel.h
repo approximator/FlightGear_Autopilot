@@ -6,13 +6,13 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Sep 02, 2015
+ * @date Modified Sep 03, 2015
  */
 
 #ifndef FGCONTROLLER_H
 #define FGCONTROLLER_H
 
-#include "FgControlledAircraft.h"
+#include "vehicle/FgControlledAircraft.h"
 
 #include <QList>
 #include <QAbstractListModel>

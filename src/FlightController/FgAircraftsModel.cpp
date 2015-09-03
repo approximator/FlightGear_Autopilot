@@ -6,12 +6,12 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Sep 01, 2015
+ * @date Modified Sep 03, 2015
  */
 
 #include "log.h"
-#include "FgTransport.h"
 #include "FgAircraftsModel.h"
+#include "flightgear/FgTransport.h"
 
 #include <QFile>
 #include <QSettings>
@@ -140,7 +140,7 @@ bool FgAircraftsModel::addAircraft(QSettings& settings)
 
     emit beginInsertRows(QModelIndex(), m_OurAircrafts.count(), m_OurAircrafts.count());
     m_OurAircrafts.append(aircraft);
-    connect(aircraft.get(), &FgControlledAircraft::onConnected, this, &FgAircraftsModel::onAircraftConnected);
+    connect(aircraft.get(), &FgControlledAircraft::connectedChanged, this, &FgAircraftsModel::onAircraftConnected);
     emit endInsertRows();
 
     if (m_OurAircrafts.size() < 2)
@@ -192,6 +192,8 @@ void FgAircraftsModel::onDataReceived(FgTransport *transport)
 void FgAircraftsModel::onAircraftConnected()
 {
     FgAircraft *aircraft = static_cast<FgAircraft*>(sender());
+    if (!aircraft->connected())
+        return; // TODO: set disconnect status if not connected
 
     emit dataChanged(QModelIndex(), index(m_OurAircrafts.size()-1), {Connected});
     qDebug() << "aircraft " << aircraft->callsign() << " connected";

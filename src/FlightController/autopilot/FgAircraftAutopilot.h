@@ -4,42 +4,38 @@
  * @brief Autopilot to control aircraft
  *
  * @author Oleksii Aliakin (alex@nls.la)
- * @date Created Feb 14, 2015
- * @date Modified Aug 20, 2015
+ * @date Created Sep 03, 2015
+ * @date Modified Sep 03, 2015
  */
-#ifndef FGAUTOPILOT_H
-#define FGAUTOPILOT_H
+#ifndef FG_AIRCRAFT_AUTOPILOT_H
+#define FG_AIRCRAFT_AUTOPILOT_H
 
 #include "FgPid.h"
+#include "FgAutopilot.h"
 
 #include <memory>
 #include <QObject>
 
-class FgControlledAircraft;
 class FgAircraft;
+class FgControlledAircraft;
 
-class FgAutopilot : public QObject
+class FgAircraftAutopilot : public FgAutopilot
 {
     Q_OBJECT
 public:
-    explicit FgAutopilot(FgControlledAircraft* aircraft, QObject *parent = 0);
-    FgAutopilot(const FgAutopilot& other);
-    FgAutopilot& operator=(const FgAutopilot& other);
-
-    Q_INVOKABLE inline void engage(bool enable = true);
-    Q_INVOKABLE inline void disengage();
-    Q_INVOKABLE bool engaged();
+    explicit FgAircraftAutopilot(FgControlledAircraft* aircraft, QObject *parent = 0);
+    FgAircraftAutopilot(const FgAircraftAutopilot& other);
+    FgAircraftAutopilot& operator=(const FgAircraftAutopilot& other);
 
     inline void setFollow(FgAircraft *aircraft);
     inline void anglesHold(qreal roll = 0.0, qreal pitch = 3.0);
     inline void altitudeHold(qreal altitude = 2000);
 
-    void computeControl();
+    virtual void computeControl();
 
 private:
-    FgControlledAircraft* m_Aircraft = nullptr;
     std::function<void()>  m_ControlFunc = [this](){ holdHeading(); };
-    bool m_Engaged { false };
+    FgControlledAircraft* m_Aircraft = nullptr;
 
     qreal m_DesiredPitch     = 0.0;    // deg
     qreal m_DesiredRoll      = 0.0;    // deg
@@ -66,41 +62,27 @@ private:
     void holdAngles();
     void follow(FgAircraft *followAircraft);
 
-signals:
-
-public slots:
-
 };
 
-void FgAutopilot::engage(bool enable)
-{
-    m_Engaged = enable;
-}
-
-void FgAutopilot::disengage()
-{
-    m_Engaged = false;
-}
-
-void FgAutopilot::setFollow(FgAircraft *aircraft)
+void FgAircraftAutopilot::setFollow(FgAircraft *aircraft)
 {
     m_toFollow = aircraft;
     m_ControlFunc = [this](){ follow(m_toFollow); };
 }
 
-void FgAutopilot::anglesHold(qreal roll, qreal pitch)
+void FgAircraftAutopilot::anglesHold(qreal roll, qreal pitch)
 {
     m_DesiredRoll = roll;
     m_DesiredPitch = pitch;
     m_ControlFunc = [this](){ holdAngles(); };
 }
 
-void FgAutopilot::altitudeHold(qreal altitude)
+void FgAircraftAutopilot::altitudeHold(qreal altitude)
 {
     m_DesiredAltitude = altitude;
     m_ControlFunc = [this](){ holdAltitude(); };
 }
 
-Q_DECLARE_METATYPE(FgAutopilot *)
+Q_DECLARE_METATYPE(FgAircraftAutopilot *)
 
-#endif // FGAUTOPILOT_H
+#endif // FG_AIRCRAFT_AUTOPILOT_H

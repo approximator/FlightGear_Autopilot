@@ -11,30 +11,35 @@ target.path = $$FGAP_BUILD_TREE
 DEFINES += INSTALL_PREFIX=$$FGAP_INSTALL_PATH
 
 SOURCES += \
-    $$PWD/FgPid.cpp \
-    $$PWD/FgMath.cpp \
     $$ROOT_DIR/main.cpp \
-    $$PWD/FgAircraft.cpp \
-    $$PWD/FgTransport.cpp \
-    $$PWD/FgAutopilot.cpp \
-    $$PWD/FgFlightgear.cpp \
+    $$PWD/utils/FgPid.cpp \
+    $$PWD/utils/FgMath.cpp \
     $$PWD/FgAircraftsModel.cpp \
-    $$PWD/FgGenericProtocol.cpp \
-    $$PWD/FgControlledAircraft.cpp
+    $$PWD/vehicle/FgVehicle.cpp \
+    $$PWD/vehicle/FgAircraft.cpp \
+    $$PWD/autopilot/FgAutopilot.cpp \
+    $$PWD/flightgear/FgTransport.cpp \
+    $$PWD/flightgear/FgFlightgear.cpp \
+    $$PWD/vehicle/FgControlledAircraft.cpp \
+    $$PWD/flightgear/FgGenericProtocol.cpp \
+    $$PWD/autopilot/FgAircraftAutopilot.cpp
 
 HEADERS  += \
-    $$PWD/log.h \
-    $$PWD/FgPid.h \
-    $$PWD/FgMath.h \
-    $$PWD/FgAircraft.h \
-    $$PWD/FgTransport.h \
-    $$PWD/FgAutopilot.h \
-    $$PWD/FgFlightgear.h \
+    $$PWD/utils/log.h \
+    $$PWD/utils/FgPid.h \
+    $$PWD/utils/FgMath.h \
     $$PWD/FgAircraftsModel.h \
-    $$PWD/FgGenericProtocol.h \
-    $$PWD/FgControlledAircraft.h
+    $$PWD/vehicle/FgVehicle.h \
+    $$PWD/vehicle/FgAircraft.h \
+    $$PWD/autopilot/FgAutopilot.h \
+    $$PWD/flightgear/FgTransport.h \
+    $$PWD/flightgear/FgFlightgear.h \
+    $$PWD/vehicle/FgControlledAircraft.h \
+    $$PWD/flightgear/FgGenericProtocol.h \
+    $$PWD/autopilot/FgAircraftAutopilot.h
 
 INCLUDEPATH += $$shell_path($$PWD)
+INCLUDEPATH += $$shell_path($$PWD/utils)
 
 include($$FGAP_SOURCE_TREE/resources/resources.pri)
 # Default rules for deployment.

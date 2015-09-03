@@ -4,27 +4,22 @@
  * @brief Autopilot implementation to control aircraft
  *
  * @author Oleksii Aliakin (alex@nls.la)
- * @date Created Feb 14, 2015
- * @date Modified Aug 21, 2015
+ * @date Created Sep 03, 2015
+ * @date Modified Sep 03, 2015
  */
 
 #include "log.h"
-#include "FgAutopilot.h"
-#include "FgControlledAircraft.h"
+#include "FgAircraftAutopilot.h"
+#include "vehicle/FgControlledAircraft.h"
 
-FgAutopilot::FgAutopilot(FgControlledAircraft *aircraft, QObject *parent) :
-    QObject(parent)
+FgAircraftAutopilot::FgAircraftAutopilot(FgControlledAircraft *aircraft, QObject *parent) :
+    FgAutopilot(parent)
 {
     m_Aircraft = aircraft;
     qDebug() << "Autopilot created";
 }
 
-bool FgAutopilot::engaged()
-{
-    return m_Engaged;
-}
-
-void FgAutopilot::computeControl()
+void FgAircraftAutopilot::computeControl()
 {
     if (!engaged())
         return;
@@ -44,21 +39,21 @@ void FgAutopilot::computeControl()
     m_ControlFunc();
 }
 
-void FgAutopilot::holdYawRate()
+void FgAircraftAutopilot::holdYawRate()
 {
     const qreal yawRateError = m_DesiredYawRate - m_Aircraft->yawRate();
     m_DesiredRoll = m_YawRatePid.update(yawRateError, m_Aircraft->deltaTime());
     holdAltitude();
 }
 
-void FgAutopilot::holdHeading()
+void FgAircraftAutopilot::holdHeading()
 {
     qreal headingError = fgap::math::headingOffset(m_Aircraft->heading(), m_DesiredHeading);
     m_DesiredYawRate = fgap::math::limit(headingError * 1, 5.0);
     holdYawRate();
 }
 
-void FgAutopilot::holdVerticalSpeed()
+void FgAircraftAutopilot::holdVerticalSpeed()
 {
     const qreal vsError = m_DesiredVerticalSpeed - m_Aircraft->verticalSpeed();
     m_DesiredPitch = m_VerticalSpeedPid.update(vsError, m_Aircraft->deltaTime());
@@ -69,14 +64,14 @@ void FgAutopilot::holdVerticalSpeed()
 //    qDebug() << "     Heading = " << m_Aircraft->heading() << "/" << m_DesiredHeading;
 }
 
-void FgAutopilot::holdAltitude()
+void FgAircraftAutopilot::holdAltitude()
 {
     qreal altitudeError = m_DesiredAltitude - m_Aircraft->altitude();
     m_DesiredVerticalSpeed = fgap::math::limit(altitudeError * 0.8, 25.0);
     holdVerticalSpeed();
 }
 
-void FgAutopilot::holdAngles()
+void FgAircraftAutopilot::holdAngles()
 {
     qreal pitch = m_Aircraft->pitch();
     qreal roll = m_Aircraft->roll();
@@ -95,7 +90,7 @@ void FgAutopilot::holdAngles()
 //    qDebug() << "        Roll = " << m_Aircraft->roll() << "/" << m_DesiredRoll;
 }
 
-void FgAutopilot::follow(FgAircraft *followAircraft)
+void FgAircraftAutopilot::follow(FgAircraft *followAircraft)
 {
     m_DesiredAltitude = followAircraft->altitude();
 
