@@ -139,7 +139,7 @@ bool FgFlightgear::setConfig(QSettings& settings)
     settings.endGroup();
 
     settings.beginGroup("multiplay");
-    m_MultiplayEnabled = settings.value("enabled", false).toBool();
+    m_MultiplayEnabled = settings.value("enabled", true).toBool();
     if (m_MultiplayEnabled)
     {
         auto getMultiplayParams = [](QSettings& settings, const QString& group) {

@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Aug 27, 2015
+ * @date Modified Sep 05, 2015
  */
 
 #include "log.h"
@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
         {
             QString configFileName("%1/%2/%3");
             configFileName = configFileName.arg(QCoreApplication::applicationDirPath(), CONFIG_PATH,
-                                                "DefaultSettings.ini");
+                                                "example_multiplayWithoutServer.ini");
             qDebug() << "Copying default settings to " << settings.fileName();
             if (!QFile::copy(configFileName, settings.fileName()))
                 qWarning() << "Could not copy default settings to " << settings.fileName();
