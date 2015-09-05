@@ -6,13 +6,14 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created May 12, 2015
- * @date Modified Sep 02, 2015
+ * @date Modified Sep 05, 2015
  */
 
 #ifndef FGFLIGHTGEAR_H
 #define FGFLIGHTGEAR_H
 
 #include "FgTransport.h"
+#include "utils/Filesystem.h"
 
 #include <QPair>
 #include <QFuture>
@@ -50,15 +51,15 @@ private:
     inline QString multiplayParams() const;
 
 #ifdef Q_OS_WIN
-    QString m_ExeFile { "C:\\Program Files\\FlightGear\\bin\\win32\\fgfs.exe" };
-    QString m_RootDir { "C:\\Program Files\\FlightGear\\data\\" };
-    QString m_ProtocolFileName { "\\Protocol\\FgaProtocol.xml" };
-    QString m_ProtocolFile { m_RootDir + m_ProtocolFileName };
+    QString m_ExeFile { fgap::path::normPath("C:/Program Files/FlightGear/bin/win32/fgfs.exe") };
+    QString m_RootDir { fgap::path::normPath("C:/Program Files/FlightGear/data/") };
+    QString m_ProtocolFileName { fgap::path::normPath("Protocol/FgaProtocol.xml") };
+    QString m_ProtocolFile { fgap::path::join(m_RootDir, m_ProtocolFileName) };
 #else
     QString m_ExeFile { "/usr/games/fgfs" };
     QString m_RootDir { "/usr/share/games/flightgear" };
-    QString m_ProtocolFileName { "/Protocol/FgaProtocol.xml" };
-    QString m_ProtocolFile { m_RootDir +  m_ProtocolFileName };
+    QString m_ProtocolFileName { "Protocol/FgaProtocol.xml" };
+    QString m_ProtocolFile { fgap::path::join(m_RootDir, m_ProtocolFileName) };
 #endif
 
     QFuture<bool>        m_InitFuture        { };
@@ -110,8 +111,8 @@ void FgFlightgear::setRootDir(const QString _rootDir)
     if (m_RootDir == _rootDir)
         return;
 
-    m_RootDir = _rootDir;
-    m_ProtocolFile = m_RootDir + m_ProtocolFileName;
+    m_RootDir = fgap::path::normPath(_rootDir);
+    m_ProtocolFile = fgap::path::join(m_RootDir, m_ProtocolFileName);
     emit rootDirChanged();
 }
 
@@ -125,11 +126,11 @@ void FgFlightgear::setExeFile(const QString _exeFile)
     if (m_ExeFile == _exeFile)
         return;
 
-    m_ExeFile = _exeFile;
+    m_ExeFile = fgap::path::normPath(_exeFile);
     emit exeFileChanged();
 }
 
-const QProcess &FgFlightgear::process() const
+const QProcess& FgFlightgear::process() const
 {
     return m_FlightgearProcess;
 }

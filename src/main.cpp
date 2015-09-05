@@ -11,6 +11,7 @@
 
 #include "log.h"
 #include "FgAircraftsModel.h"
+#include "utils/Filesystem.h"
 
 #include <QtQml>
 #include <QTextCodec>
@@ -20,7 +21,7 @@ int main(int argc, char *argv[])
 {
 #ifdef FGAP_PLUGINS_PATH
     // Add path to search for Qt plugins
-    QString pluginsPaths = QString("%1/%2").arg(
+    QString pluginsPaths = fgap::path::join(
                 QFileInfo(argv[0]).dir().path(),
                 FGAP_PLUGINS_PATH);
     QCoreApplication::addLibraryPath(pluginsPaths);
@@ -42,10 +43,10 @@ int main(int argc, char *argv[])
                 qDebug() << "Could not create settings directory " << settingsDir.absolutePath();
         if (!QFile::exists(settings.fileName()))
         {
-            QString configFileName("%1/%2/%3");
-            configFileName = configFileName.arg(QCoreApplication::applicationDirPath(), CONFIG_PATH,
-                                                "example_multiplayWithoutServer.ini");
-            qDebug() << "Copying default settings to " << settings.fileName();
+            QString configFileName(fgap::path::join(QCoreApplication::applicationDirPath(),
+                                                    CONFIG_PATH,
+                                                    "example_multiplayWithoutServer.ini"));
+            qDebug() << "Copying "<< configFileName << " settings to " << settings.fileName();
             if (!QFile::copy(configFileName, settings.fileName()))
                 qWarning() << "Could not copy default settings to " << settings.fileName();
         }
@@ -54,9 +55,10 @@ int main(int argc, char *argv[])
     // Setup QML
     qmlRegisterType<FgAircraftsModel>("fgap", 1, 0, "FgAircraftsModel");
     QQmlApplicationEngine engine;
-    QString qmlFilesPath = QString("%1/%2").arg(
+    QString qmlFilesPath = fgap::path::join(
                 QCoreApplication::applicationDirPath(),
                 FGAP_QML_MODULES_PATH);
+    qDebug() << "qmlFilesPath = " << qmlFilesPath;
     engine.addImportPath(qmlFilesPath);
     engine.load(QUrl(QStringLiteral("qrc:qml/MainView.qml")));
 

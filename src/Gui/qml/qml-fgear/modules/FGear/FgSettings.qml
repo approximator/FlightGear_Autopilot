@@ -124,6 +124,7 @@ Page {
                             fileDialog.acceptedAction = function(url){
                                 fgAircraft.flightgear.rootDir = url
                             }
+                            fileDialog.selectFolder = true
                             fileDialog.open()
                         }
                     }
@@ -139,9 +140,9 @@ Page {
                     label: "Protocol file: " + fgAircraft.flightgear.rootDir
                     labelWidth: Units.dp(500)
                     value: "/Protocol/FgaProtocol.xml"
-                    secondaryItem: Button {
-                        text: "Browse"
-                    }
+                    // secondaryItem: Button {
+                    //     text: "Browse"
+                    // }
                 }
 
                 LabeledTextEdit {

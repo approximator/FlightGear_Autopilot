@@ -28,6 +28,7 @@ HEADERS  += \
     $$PWD/utils/log.h \
     $$PWD/utils/FgPid.h \
     $$PWD/utils/FgMath.h \
+    $$PWD/utils/Filesystem.h \
     $$PWD/FgAircraftsModel.h \
     $$PWD/vehicle/FgVehicle.h \
     $$PWD/vehicle/FgAircraft.h \

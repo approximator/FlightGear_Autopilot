@@ -4,7 +4,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created May 12, 2015
- * @date Modified Sep 02, 2015
+ * @date Modified Sep 05, 2015
  */
 
 #include "log.h"
@@ -19,7 +19,17 @@
 
 FgFlightgear::FgFlightgear(QObject *parent) : QObject(parent)
 {
-
+    connect(&m_FlightgearProcess, &QProcess::readyReadStandardOutput, [this](){
+        qDebug() << "Flightgear:";
+        for (const auto& str : QString(m_FlightgearProcess.readAllStandardOutput()).split('\n'))
+            qDebug() << str;
+    });
+    connect(&m_FlightgearProcess, &QProcess::readyReadStandardOutput, [this](){
+        qDebug() << "Flightgear error:";
+        for (const auto& str : QString(m_FlightgearProcess.readAllStandardError()).split('\n'))
+            qDebug() << str;
+    });
+    connect(&m_FlightgearProcess, &QProcess::started, [this](){ qDebug() << "Flightgear started"; });
 }
 
 FgFlightgear::~FgFlightgear()
@@ -93,7 +103,7 @@ bool FgFlightgear::checkPaths()
         result = false;
     }
 
-    m_ProtocolFile = m_RootDir + m_ProtocolFileName;
+    m_ProtocolFile = fgap::path::join(m_RootDir, m_ProtocolFileName);
 
     result = m_Transport->protocol()->writeXml(m_ProtocolFile);
 
@@ -105,6 +115,11 @@ bool FgFlightgear::checkPaths()
 bool FgFlightgear::run()
 {
     qDebug() << "Running Flightgear";
+    if (!QFile::exists(m_ExeFile))
+    {
+        qWarning() << "Can't run Flightgear. File " << m_ExeFile << " does not exist.";
+        return false;
+    }
     if (m_FlightgearProcess.state() != QProcess::NotRunning)
     {
         qWarning() << "Can't run Flightgear. It is already running.";
@@ -112,7 +127,9 @@ bool FgFlightgear::run()
     }
 
     qDebug() << "Starting: " << m_ExeFile + ' ' + runParameters();
-    m_FlightgearProcess.start(m_ExeFile + ' ' + runParameters());
+    m_FlightgearProcess.start("\"" + m_ExeFile +  "\"" + ' ' + runParameters());
+    if (!m_FlightgearProcess.waitForStarted())
+        qWarning() << "Failed to start Flightgear";
 
     return true;
 }
@@ -125,9 +142,9 @@ bool FgFlightgear::ready() const
 bool FgFlightgear::setConfig(QSettings& settings)
 {
     m_Callsign = settings.value("callsign").toString();
-    m_ExeFile = settings.value("exe_file", m_ExeFile).toString();
-    m_ProtocolFile = settings.value("protocol_file", m_ProtocolFile).toString();
-    m_RootDir = settings.value("root_directory", m_RootDir).toString();
+    m_ExeFile = fgap::path::normPath(settings.value("exe_file", m_ExeFile).toString());
+    m_ProtocolFile = fgap::path::normPath(settings.value("protocol_file", m_ProtocolFile).toString());
+    m_RootDir = fgap::path::normPath(settings.value("root_directory", m_RootDir).toString());
     m_Airport = settings.value("airport", m_Airport).toString();
     m_Runway = settings.value("runway", m_Runway).toString();
     m_Aircraft = settings.value("aircraft", m_Aircraft).toString();
@@ -148,7 +165,7 @@ bool FgFlightgear::setConfig(QSettings& settings)
             QString host = settings.value("host").toString();
             int port = settings.value("port").toInt();
             settings.endGroup();
-            return std::make_tuple(frequency, host, port);
+            return std::make_tuple(port, host, frequency);
         };
         std::tie(m_MultiplayPortIn, m_MultiplayHostIn, m_MultiplayFrequencyIn) = getMultiplayParams(settings, "in");
         std::tie(m_MultiplayPortOut, m_MultiplayHostOut, m_MultiplayFrequencyOut) = getMultiplayParams(settings, "out");
@@ -203,7 +220,7 @@ bool FgFlightgear::saveConfig(QSettings &settings)
 QString FgFlightgear::runParameters() const
 {
     QStringList args;
-    args << "--fg-root=" + m_RootDir;
+    args << "--fg-root=\"" + m_RootDir + "\"";
     for (auto const &param : m_RunParameters)
         args << ("--" + param.first + (param.second.isEmpty() ? "" : ("=" + param.second)));
     QString additionalArguments = args.join(' ');
