@@ -9,7 +9,8 @@ FgapQmlModule {
         "flight_pic/*",
         "js/*.js",
         "Pointers/*.qml",
-        "Pointers/pictorial_navigation_indicator/*.png"
+        "Pointers/pictorial_navigation_indicator/*.png",
+        "SettingsItems/*qml*"
     ].map(function(file) {
         //prepend moduleName as prefix to all SourceFiles
         return (moduleName + "/" + file);
