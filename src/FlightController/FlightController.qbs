@@ -8,24 +8,35 @@ FgapApplication {
     Depends { name: "qml_material_components" }
 
     Depends { name: "cpp" }
-    cpp.includePaths: [ "./"]
+    cpp.includePaths: [ "./", "utils"]
     cpp.rpaths: qbs.targetOS.contains("osx")
             ? ["@executable_path/../lib"]
             : ["$ORIGIN/../lib"]
 
     Depends { name: "Qt"; submodules: [ "qml", "quick", "network", "xml", "svg"] }
 
+    /* Main source file */
     Group {
         name: "Sources"
         files: [
             "../main.cpp",
-            "*.cpp"
+            "*.cpp",
+            "autopilot/*.cpp",
+            "flightgear/*.cpp",
+            "utils/*.cpp",
+            "vehicle/*.cpp"
         ]
     }
 
     Group {
         name: "Headers"
-        files: "*.h"
+        files: [
+            "*.h",
+            "autopilot/*.h",
+            "flightgear/*.h",
+            "utils/*.h",
+            "vehicle/*.h"
+        ]
     }
 
     Group {
