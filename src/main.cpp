@@ -36,6 +36,10 @@ int main(int argc, char *argv[])
 
     { // Copy default setting if settings file does not exist
         QSettings settings;
+        QDir settingsDir = QFileInfo(settings.fileName()).absoluteDir();
+        if (!settingsDir.exists())
+            if (!settingsDir.mkpath(settingsDir.absolutePath()))
+                qDebug() << "Could not create settings directory " << settingsDir.absolutePath();
         if (!QFile::exists(settings.fileName()))
         {
             QString configFileName("%1/%2/%3");

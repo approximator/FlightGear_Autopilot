@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Sep 03, 2015
+ * @date Modified Sep 05, 2015
  */
 
 #include "log.h"
@@ -33,6 +33,7 @@ bool FgAircraftsModel::init()
     qDebug() << "Init FgAircraftsModel";
 
     QSettings settings;
+    qDebug() << "Reading settings from " << settings.fileName();
     int size = settings.beginReadArray("aircrafts");
     for (int i = 0; i < size; ++i)
     {
