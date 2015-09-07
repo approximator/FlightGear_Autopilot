@@ -63,6 +63,12 @@ FocusScope {
         }
     }
 
+    onEngagedChanged: {
+        _buttons.itemAt(0).item.checked = engaged;
+        _autopilotModel.get(_autopilotModel.count-2).itemTextColor = engaged ?
+                    Palette.colors["deepOrange"]["600"] : Palette.colors["grey"]["700"]
+    }
+
     onButtonChecked: {
         if (btn_name.indexOf("engage") != -1)
         {

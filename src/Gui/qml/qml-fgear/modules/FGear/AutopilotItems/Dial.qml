@@ -14,7 +14,7 @@ Item {
 
     View {
 
-        backgroundColor: Theme.accentColor
+        backgroundColor:  Qt.lighter(Theme.primaryDarkColor)
 
         elevation: _mouseArea.pressed ? 1 : 3
         anchors.fill: parent
