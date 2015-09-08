@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jul 15, 2015
- * @date Modified Aug 21, 2015
+ * @date Modified Sep 08, 2015
  */
 
 #ifndef FGMATH
@@ -14,6 +14,7 @@
 #include <cmath>
 #include <tuple>
 #include <QtMath>
+#include <QString>
 
 namespace fgap
 {
@@ -59,42 +60,43 @@ inline double headingOffset(double heading1, double heading2)
     return normalizeAngle_180(heading2) - normalizeAngle_180(heading1);
 }
 
+
+template <typename T> inline T sqr(const T& x)
+{
+    return x * x;
+}
+
+inline double getDistance(double lat1, double lon1, double lat2, double lon2)
+{
+    using std::sin;
+    using std::cos;
+    using std::asin;
+    using std::sqrt;
+    lat1 = qDegreesToRadians(lat1);
+    lon1 = qDegreesToRadians(lon1);
+    lat2 = qDegreesToRadians(lat2);
+    lon2 = qDegreesToRadians(lon2);
+
+    double d = 2 * asin(sqrt(sqr(sin(lat1-lat2) / 2)) + cos(lat1) * cos(lat2) * sqr(sin((lon1-lon2)/2)));
+    return d * 6366710; // TODO: define radius of Earth
+}
+
 inline double headingTo(double lat1, double lon1, double lat2, double lon2)
 {
-    double offset = 0;
+    using std::sin;
+    using std::cos;
+    using std::acos;
+    using std::fmod;
 
-    // http://mathforum.org/library/drmath/view/55417.html
-    qreal  y = std::sin(lon2-lon1) * std::cos(lat2);
-    qreal  x = std::cos(lat1) * std::sin(lat2) -
-               std::sin(lat1) * std::cos(lat2) * std::cos(lon2-lon1);
-    if (y > 0)
-    {
-        if (x > 0)
-            offset = qRadiansToDegrees(std::atan(y / x));
-        else if (x < 0)
-            offset = 180 - qRadiansToDegrees(std::atan(-y / x));
-        else // (x == 0)
-            offset = 90;
-    }
-    else if (y < 0)
-    {
-        if (x > 0)
-            offset = 360 - qRadiansToDegrees(std::atan(-y / x));
-        else if (x < 0)
-            offset = 180 + qRadiansToDegrees(std::atan(y / x));
-        else
-            offset = 270;
-    }
-    else // (y == 0)
-    {
-        if (x > 0)
-            offset = 0;
-        else if (x < 0)
-            offset = 180;
-        // if (x == 0) then [the 2 points are the same]
-    }
+    lat1 = qDegreesToRadians(lat1);
+    lon1 = qDegreesToRadians(lon1);
+    lat2 = qDegreesToRadians(lat2);
+    lon2 = qDegreesToRadians(lon2);
 
-    return offset;
+    // http://williams.best.vwh.net/avform.htm
+    double tc1 = fmod((atan2(sin(lon1 - lon2)*cos(lat2),
+                 cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(lon1 - lon2))), 2 * M_PI);
+    return qRadiansToDegrees(tc1);
 }
 
 inline qreal rungeKutta(const qreal h, const qreal val)
@@ -107,31 +109,21 @@ inline qreal rungeKutta(const qreal h, const qreal val)
     return d;
 }
 
-
-
-//https://microem.ru/files/2012/08/GPS.G1-X-00006.pdf
-//https://github.com/diydrones/ardupilot/blob/11625031990317bcf1cbf4903c0726ce6b264beb/libraries/AP_Math/AP_Math.h
-// Semi-major axis of the Earth, in meters.
-#define WGS84_A 6378137.0
-//Inverse flattening of the Earth
-#define WGS84_IF 298.257223563
-// The flattening of the Earth
-#define WGS84_F (1/WGS84_IF)
-// Semi-minor axis of the Earth in meters
-#define WGS84_B (WGS84_A*(1-WGS84_F))
-// Eccentricity of the Earth
-#define WGS84_E (sqrt(2*WGS84_F - WGS84_F*WGS84_F))
-
-inline std::tuple<double, double, double> wgsToEcef(const double& lat, const double& lon, const double& h)
+inline std::tuple<int, int, int> degToMinSec(double deg)
 {
-    const double d = WGS84_E * sin(lat);
-    const double N = WGS84_A / sqrt(1. - d*d);
+    using std::fabs;
+    int degrees = deg;
+    double minutesD = fabs(deg - degrees) * 60.0;
+    int minutes = minutesD;
+    int seconds = (minutesD - minutes) * 60.0;
+    return std::make_tuple(degrees, minutes, seconds);
+}
 
-    double x = (N + h) * cos(lat) * cos(lon);
-    double y = (N + h) * cos(lat) * sin(lon);
-    double z = ((1 - WGS84_E*WGS84_E)*N + h) * sin(lat);
-
-    return std::make_tuple(x, y, z);
+inline QString degToMinSecStr(double deg)
+{
+    int degrees, minutes, seconds;
+    std::tie(degrees, minutes, seconds) = degToMinSec(deg);
+    return QString("%1°%2'%3\"").arg(degrees).arg(minutes).arg(seconds);
 }
 
 } // namespace math

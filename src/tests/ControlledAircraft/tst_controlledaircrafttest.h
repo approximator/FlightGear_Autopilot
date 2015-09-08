@@ -13,11 +13,6 @@ public:
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
-    void readConfig1();
-    void readConfig2();
-    void runParameters1();
-    void runParameters2();
-    void runParameters3();
 };
 
 #endif // TST_CONTROLLERAIRCRAFTTEST

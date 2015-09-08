@@ -15,10 +15,11 @@ TEMPLATE = app
 
 
 SOURCES += tst_math.cpp \
-    ../../FlightController/FgMath.cpp
+    ../../FlightController/utils/FgMath.cpp
+
 
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
 HEADERS += \
-    ../../FlightController/FgMath.h \
-    tst_math.h
+    tst_math.h \
+    ../../FlightController/utils/FgMath.h

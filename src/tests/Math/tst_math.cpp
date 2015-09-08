@@ -1,6 +1,8 @@
 
-#include "../../FlightController/FgMath.h"
+#include "../../FlightController/utils/FgMath.h"
 #include "tst_math.h"
+
+#include <QString>
 
 MathTest::MathTest()
 {
@@ -56,6 +58,76 @@ void MathTest::headingOffset1()
     QCOMPARE(headingOffset(359, 179), 180.0);
     QCOMPARE(headingOffset(1, 10), 9.0);
     QCOMPARE(headingOffset(90, 271), -179.0);
+}
+
+void MathTest::distance_data()
+{
+    QTest::addColumn<double>("lat1");
+    QTest::addColumn<double>("lon1");
+    QTest::addColumn<double>("lat2");
+    QTest::addColumn<double>("lon2");
+    QTest::addColumn<double>("result");
+
+    QTest::newRow("1") << 89.0 << 100.0 << 90.0 << 101.0 << 111699.85;
+    QTest::newRow("2") << 37.6328 << -122.3975 << 37.6228 << -122.3875 << 850.92;
+}
+
+void MathTest::distance()
+{
+    using fgap::math::getDistance;
+    QFETCH(double, lat1);
+    QFETCH(double, lon1);
+    QFETCH(double, lat2);
+    QFETCH(double, lon2);
+    QFETCH(double, result);
+
+    const double allowedError = 600;
+    qDebug() << std::fabs(getDistance(lat1, lon1, lat2, lon2) - result);
+    QVERIFY(std::fabs(getDistance(lat1, lon1, lat2, lon2) - result) < allowedError);
+}
+
+void MathTest::degToMinSec_data()
+{
+    QTest::addColumn<double>("degrees");
+    QTest::addColumn<QString>("result");
+
+    QTest::newRow("1") << 90.0 << "90°0'0\"";
+    QTest::newRow("2") << 37.6328 << "37°37'58\"";
+    QTest::newRow("3") << -122.3975 << "-122°23'50\"";
+}
+
+void MathTest::degToMinSec()
+{
+    using fgap::math::degToMinSecStr;
+    QFETCH(double, degrees);
+    QFETCH(QString, result);
+
+    QCOMPARE(degToMinSecStr(degrees), result);
+}
+
+void MathTest::headingTo_data()
+{
+    QTest::addColumn<double>("lat1");
+    QTest::addColumn<double>("lon1");
+    QTest::addColumn<double>("lat2");
+    QTest::addColumn<double>("lon2");
+    QTest::addColumn<double>("result");
+
+    QTest::newRow("1") << 89.0 << 100.0 << 90.0 << 101.0 << 0.0;
+    QTest::newRow("2") << 37.6328 << -122.3975 << 37.6228 << -122.3875 << -141.49;
+}
+
+void MathTest::headingTo()
+{
+    using fgap::math::headingTo;
+    QFETCH(double, lat1);
+    QFETCH(double, lon1);
+    QFETCH(double, lat2);
+    QFETCH(double, lon2);
+    QFETCH(double, result);
+
+    const double allowedError = 0.2;
+    QVERIFY(std::fabs(headingTo(lat1, lon1, lat2, lon2) - result) < allowedError); // Allow 0.2 degree error
 }
 
 QTEST_APPLESS_MAIN(MathTest)
