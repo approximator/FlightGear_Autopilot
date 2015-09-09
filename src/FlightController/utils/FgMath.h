@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jul 15, 2015
- * @date Modified Sep 08, 2015
+ * @date Modified Sep 09, 2015
  */
 
 #ifndef FGMATH
@@ -85,18 +85,46 @@ inline double headingTo(double lat1, double lon1, double lat2, double lon2)
 {
     using std::sin;
     using std::cos;
-    using std::acos;
-    using std::fmod;
+    using std::atan;
+    double offset = 0;
 
     lat1 = qDegreesToRadians(lat1);
     lon1 = qDegreesToRadians(lon1);
     lat2 = qDegreesToRadians(lat2);
     lon2 = qDegreesToRadians(lon2);
 
-    // http://williams.best.vwh.net/avform.htm
-    double tc1 = fmod((atan2(sin(lon1 - lon2)*cos(lat2),
-                 cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(lon1 - lon2))), 2 * M_PI);
-    return qRadiansToDegrees(tc1);
+    // http://mathforum.org/library/drmath/view/55417.html
+    qreal  y = sin(lon2-lon1) * cos(lat2);
+    qreal  x = cos(lat1) * sin(lat2) -
+               sin(lat1) * cos(lat2) * cos(lon2-lon1);
+    if (y > 0)
+    {
+        if (x > 0)
+            offset = qRadiansToDegrees(std::atan(y / x));
+        else if (x < 0)
+            offset = 180 - qRadiansToDegrees(std::atan(-y / x));
+        else // (x == 0)
+            offset = 90;
+    }
+    else if (y < 0)
+    {
+        if (x > 0)
+            offset = 360 - qRadiansToDegrees(std::atan(-y / x));
+        else if (x < 0)
+            offset = 180 + qRadiansToDegrees(std::atan(y / x));
+        else
+            offset = 270;
+    }
+    else // (y == 0)
+    {
+        if (x > 0)
+            offset = 0;
+        else if (x < 0)
+            offset = 180;
+        // if (x == 0) then [the 2 points are the same]
+    }
+
+    return offset;
 }
 
 inline qreal rungeKutta(const qreal h, const qreal val)

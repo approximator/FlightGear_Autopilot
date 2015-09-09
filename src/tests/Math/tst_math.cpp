@@ -115,6 +115,7 @@ void MathTest::headingTo_data()
 
     QTest::newRow("1") << 89.0 << 100.0 << 90.0 << 101.0 << 0.0;
     QTest::newRow("2") << 37.6328 << -122.3975 << 37.6228 << -122.3875 << -141.49;
+    QTest::newRow("3") << 37.6272 << -122.4123 << 37.6428 << -122.3442 << -73.8458;
 }
 
 void MathTest::headingTo()
@@ -126,6 +127,7 @@ void MathTest::headingTo()
     QFETCH(double, lon2);
     QFETCH(double, result);
 
+    qDebug() << headingTo(lat1, lon1, lat2, lon2);
     const double allowedError = 0.2;
     QVERIFY(std::fabs(headingTo(lat1, lon1, lat2, lon2) - result) < allowedError); // Allow 0.2 degree error
 }

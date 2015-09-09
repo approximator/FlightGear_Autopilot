@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Sep 05, 2015
+ * @date Modified Sep 09, 2015
  */
 
 #include "log.h"
@@ -46,9 +46,9 @@ bool FgAircraftsModel::init()
     }
     settings.endArray();
 
-//    m_OurAircrafts[0]->autopilot()->engage();
-//    m_OurAircrafts[1]->autopilot()->engage();
-//    m_OurAircrafts[1]->autopilot()->setFollow(m_OurAircrafts[0].get());
+//    qobject_cast<FgAircraftAutopilot*>(m_OurAircrafts[0]->autopilot())->engage();
+//    qobject_cast<FgAircraftAutopilot*>(m_OurAircrafts[1]->autopilot())->engage();
+//    qobject_cast<FgAircraftAutopilot*>(m_OurAircrafts[1]->autopilot())->setFollow(m_OurAircrafts[0].get());
     return true;
 }
 
