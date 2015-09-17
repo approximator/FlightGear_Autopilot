@@ -2,7 +2,9 @@
 
 Autopilot to control FlightGear's aircrafts.
 
-![Main window screenshot](doc/images/Screenshot.png)
+![Main window screenshot](doc/images/main_window.png)
+
+![Air map screenshot](doc/images/map.png)
 
 -----------------------------------------
 
