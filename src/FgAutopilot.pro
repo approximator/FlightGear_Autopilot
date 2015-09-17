@@ -36,10 +36,8 @@ else {
     deployqt.depends = install
 }
 
-deploy_ext_qml.commands = $$PYTHON -u $$shell_path(\"$$SCRIPTS_DIR/load_qml_modules.py\") \
-                                      \"$$FGAP_INSTALL_QML_MODULES_PATH\"
 deploy_ext_qml.depends = install
-deploy_all.depends = deployqt deploy_ext_qml
+deploy_all.depends = deployqt
 
-QMAKE_EXTRA_TARGETS += deployqt deploy_ext_qml deploy_all
+QMAKE_EXTRA_TARGETS += deployqt deploy_all
 

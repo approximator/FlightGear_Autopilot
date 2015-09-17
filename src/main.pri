@@ -12,10 +12,11 @@ isEmpty(FGAP_BUILD_TREE) {
     FGAP_BUILD_TREE = $$shell_path($$FGAP_BUILD_TREE)
 }
 
-ROOT_DIR = $$shell_path($$PWD)
-SCRIPTS_DIR = $$shell_path($$absolute_path($$ROOT_DIR/../scripts))
-CONFIGS_DIR = $$shell_path($$absolute_path($$ROOT_DIR/../doc/config))
-QML_FGEAR   = $$shell_path($$absolute_path($$ROOT_DIR/Gui/qml/qml-fgear/modules))
+ROOT_DIR     = $$shell_path($$PWD)
+SCRIPTS_DIR  = $$shell_path($$absolute_path($$ROOT_DIR/../scripts))
+CONFIGS_DIR  = $$shell_path($$absolute_path($$ROOT_DIR/../doc/config))
+QML_FGEAR    = $$shell_path($$absolute_path($$ROOT_DIR/Gui/qml/qml-fgear/modules))
+QML_MATERIAL = $$shell_path($$absolute_path($$ROOT_DIR/../qml-material/modules))
 FGAP_SOURCE_TREE = $$shell_path($$PWD)
 
 macx {
@@ -49,9 +50,12 @@ qml_fgear.path  = $$FGAP_INSTALL_QML_MODULES_PATH
 qml_fgear.files = $$QML_FGEAR/*
 INSTALLS += qml_fgear
 
+qml_material_modules.path = $$FGAP_INSTALL_QML_MODULES_PATH
+qml_material_modules.files = $$QML_MATERIAL/*
+INSTALLS += qml_material_modules
+
 FGAP_QML_RELATIVE_PATH = $$relative_path($$FGAP_INSTALL_QML_MODULES_PATH, $$FGAP_INSTALL_PATH)
 FGAP_PLUGINS_RELATIVE_PATH = $$relative_path($$FGAP_INSTALL_PLUGINS_DIR, $$FGAP_INSTALL_PATH)
-
 
 DEFINES += FGAP_QML_RELATIVE_PATH=\\\"$$FGAP_QML_RELATIVE_PATH\\\"
 DEFINES += FGAP_QML_MODULES_PATH=\\\"$$FGAP_QML_RELATIVE_PATH\\\"
