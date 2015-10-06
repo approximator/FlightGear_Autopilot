@@ -3,7 +3,6 @@ sudo: required
 dist: trusty
 
 compiler:
-  - clang
   - gcc
 
 env:
@@ -11,9 +10,8 @@ env:
     - secure: "C1Ai03PHHYwsJg4PXWAYheex75locrF94Fzm9esQ0NE3BaZl86Bw8hgmXFa0EKTd1Vl1vrKlqVXZg9hhPBUP4c5KyDHj5xYGWhEGLtoenLXYqCivERP5Tqq35OrFTWjWuohFvTwTMdUFbWl0r2QqZGjm/nRkQbDNWAABIPBq+4A="
     - secure: "afLxPzrM1+xjYyidIXnuAn4pimOegT5jXxQNsXXpT2Tj59odI6tL6CZuuH5/SC66E0VwcR5YnAnQ7p4OoQyysqjBApZ71fUZSTcD4r9rlOMhvRwL+6nWRPF3/WxsqWYeuHoMDit4QQR8a7WQINPnJg0ZzRjD0/bFN2j1v+vID5I="
     - secure: "cvrIzqJ8FvKXzvB4Tp8Q9gbpFfLTGkVVndrAMA6Pj0trY13nlz6Z2lg9o1Mkcmw/73ndpDImB1IhoPCrgPJBOMYrv7bOKZZJ0D6qCyoIdqspTQX7wJm0WZPQ/SqoACZjpp536AvPJ6vUdZjg+Xj2I913U7SMtvAOrBEUfbMcTOs="
+    - secure: "jVA08E8NJmn4enb9Q953Ng/AW9fGVSWZaIHcBzForKPMqBCFRT15W8nDlaOfiaO4iIiN8PLPpTvzc9PuODdbZwWxaiQF2vcHSlSoKjsexJO2ay2dCH9xw7G6i5ojRniQ9aH7nHrwvf9CBZDUXDGnwmVY+xbbWEsE3sszGG/WaKU="
     - QMAKE_PARAMS="-r"
-  matrix:
-    - DEBUG=debug QMAKE_PARAMS="$QMAKE_PARAMS CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug"
     - DEBUG=release
 
 addons:
@@ -26,6 +24,15 @@ addons:
       - imagemagick
       - p7zip-full
       - python-pip
+  coverity_scan:
+    project:
+      name: approximator/FlightGear_Autopilot
+      version: 1.0
+      description: FlightGear_Autopilot
+    notification_email: alex@nls.la
+    build_command_prepend: cd $TRAVIS_BUILD_DIR/src && qmake $QMAKE_PARAMS
+    build_command: make
+    branch_pattern: coverity_scan
 
 before_install:
   - "export DISPLAY=:99.0"
@@ -65,16 +72,4 @@ before_script:
   - echo "   TRAVIS_COMMIT = $TRAVIS_COMMIT"
 
 script:
-  - cd $SOURCES_DIR
-  - pwd
-  - qmake $QMAKE_PARAMS
-  - make clean
-  - make -j5
-  - make deploy_all
-  - 7z a -mx9 "$DIST_FILE" "$SOURCES_DIR/fgautopilot-0.0.3" &>> ./7z.log
-  - bash $SCRIPTS_DIR/take_screenshot.sh "$SOURCES_DIR/fgautopilot-0.0.3/fgautopilot" "${SCREENSHOT_NAME}"
-  - sleep 5
-  - "ls -lah"
-#  - bash $SCRIPTS_DIR/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE $TRAVIS_COMMIT" "$DIST_FILE" "Distributive linux-$CXX-$DEBUG-$(uname -p)"
-#  - sleep 2
-#  - bash $SCRIPTS_DIR/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE $TRAVIS_COMMIT" "$SCREENSHOT_NAME" "Main window (qml) linux-$CXX-$DEBUG-$(uname -p)"
+  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then make ; fi
