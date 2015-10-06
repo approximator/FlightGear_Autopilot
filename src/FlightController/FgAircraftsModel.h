@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Sep 03, 2015
+ * @date Modified Oct 05, 2015
  */
 
 #ifndef FGCONTROLLER_H
@@ -51,11 +51,7 @@ private:
     QList<std::shared_ptr<FgControlledAircraft>> m_OurAircrafts { };
     qint32 m_AircraftsCount { 0    };
 
-    QHash<int, QByteArray> m_Roles {
-        { Roles::Name     , "name"     },
-        { Roles::Connected, "connected"},
-        { Roles::Aircraft , "aircraft" }
-    };
+    QHash<int, QByteArray> m_Roles {};
 
     std::tuple<int, int> getAvailablePorts() const;
 

@@ -171,7 +171,7 @@ class QtDeployer():
             'Qt5DBus', 'Qt5Svg', 'icudata', 'icui18n', 'icuuc'
         ]
 
-        self.needed_qml = ["QtQuick", "QtQuick.2", "QtGraphicalEffects"]
+        self.needed_qml = ["Qt", "QtQuick", "QtQuick.2", "QtGraphicalEffects"]
 
         if sys.platform.startswith('win'):
             self.needed_libraries.extend(['libgcc_s_dw2-1', 'libwinpthread-1', 'libstdc++-6', 'icuin53', 'icuuc53', 'icudt53'])
