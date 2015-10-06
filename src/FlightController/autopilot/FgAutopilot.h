@@ -5,12 +5,11 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 14, 2015
- * @date Modified Sep 03, 2015
+ * @date Modified Oct 05, 2015
  */
 #ifndef FGAUTOPILOT_H
 #define FGAUTOPILOT_H
 
-#include <memory>
 #include <QObject>
 
 class FgAutopilot : public QObject

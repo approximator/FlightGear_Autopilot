@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Sep 09, 2015
+ * @date Modified Oct 05, 2015
  */
 
 #include "log.h"
@@ -20,6 +20,9 @@
 FgAircraftsModel::FgAircraftsModel(QObject *parent) :
     QAbstractListModel(parent)
 {
+    m_Roles.insert(Roles::Name     , "name"     );
+    m_Roles.insert(Roles::Connected, "connected");
+    m_Roles.insert(Roles::Aircraft , "aircraft" );
     init();
 }
 

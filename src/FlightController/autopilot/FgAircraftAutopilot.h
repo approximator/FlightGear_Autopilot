@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Sep 03, 2015
- * @date Modified Sep 03, 2015
+ * @date Modified Oct 05, 2015
  */
 #ifndef FG_AIRCRAFT_AUTOPILOT_H
 #define FG_AIRCRAFT_AUTOPILOT_H
@@ -13,7 +13,8 @@
 #include "FgPid.h"
 #include "FgAutopilot.h"
 
-#include <memory>
+#include <functional>
+
 #include <QObject>
 
 class FgAircraft;
