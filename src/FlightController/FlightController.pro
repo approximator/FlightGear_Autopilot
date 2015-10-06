@@ -5,6 +5,9 @@ QTPLUGIN += qsvg
 
 TARGET = $$FGAP_APP_TARGET
 DESTDIR = $$FGAP_INSTALL_PATH
+MOC_DIR = mocdir
+OBJECTS_DIR = objectsdir
+RCC_DIR = rccdir
 TEMPLATE = app
 
 target.path = $$FGAP_BUILD_TREE
