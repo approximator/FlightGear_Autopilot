@@ -9,15 +9,15 @@ isEmpty(FGAP_BUILD_TREE) {
     sub_dir ~= s,^$$re_escape($$PWD),,
     FGAP_BUILD_TREE = $$clean_path($$OUT_PWD)
     FGAP_BUILD_TREE ~= s,$$re_escape($$sub_dir)$,,
-    FGAP_BUILD_TREE = $$shell_path($$FGAP_BUILD_TREE)
+    FGAP_BUILD_TREE = $$system_path($$FGAP_BUILD_TREE)
 }
 
-ROOT_DIR     = $$shell_path($$PWD)
-SCRIPTS_DIR  = $$shell_path($$absolute_path($$ROOT_DIR/../scripts))
-CONFIGS_DIR  = $$shell_path($$absolute_path($$ROOT_DIR/../doc/config))
-QML_FGEAR    = $$shell_path($$absolute_path($$ROOT_DIR/Gui/qml/qml-fgear/modules))
-QML_MATERIAL = $$shell_path($$absolute_path($$ROOT_DIR/../qml-material/modules))
-FGAP_SOURCE_TREE = $$shell_path($$PWD)
+ROOT_DIR     = $$system_path($$PWD)
+SCRIPTS_DIR  = $$system_path($$ROOT_DIR/../scripts)
+CONFIGS_DIR  = $$system_path($$ROOT_DIR/../doc/config)
+QML_FGEAR    = $$system_path($$ROOT_DIR/Gui/qml/qml-fgear/modules)
+QML_MATERIAL = $$system_path($$ROOT_DIR/../qml-material/modules)
+FGAP_SOURCE_TREE = $$system_path($$PWD)
 
 macx {
     FGAP_APP_TARGET                 = "FlightGear Autopilot"
@@ -34,13 +34,13 @@ macx {
     QMAKE_BUNDLE_DATA += configs
 } else {
     FGAP_APP_TARGET                 = fgautopilot
-    FGAP_INSTALL_PATH               = $$shell_path($$FGAP_BUILD_TREE/$$FGAP_APP_TARGET-$$FGAP_VERSION)
-    FGAP_AUX_DIR                    = $$shell_path($$FGAP_INSTALL_PATH/data)
-    FGAP_INSTALL_LIBRARY_PATH       = $$shell_path($$FGAP_AUX_DIR/lib)
-    FGAP_INSTALL_PLUGINS_DIR        = $$shell_path($$FGAP_AUX_DIR/plugins)
-    FGAP_INSTALL_QML_MODULES_PATH   = $$shell_path($$FGAP_AUX_DIR/qml)
+    FGAP_INSTALL_PATH               = $$system_path($$FGAP_BUILD_TREE/$$FGAP_APP_TARGET-$$FGAP_VERSION)
+    FGAP_AUX_DIR                    = $$system_path($$FGAP_INSTALL_PATH/data)
+    FGAP_INSTALL_LIBRARY_PATH       = $$system_path($$FGAP_AUX_DIR/lib)
+    FGAP_INSTALL_PLUGINS_DIR        = $$system_path($$FGAP_AUX_DIR/plugins)
+    FGAP_INSTALL_QML_MODULES_PATH   = $$system_path($$FGAP_AUX_DIR/qml)
 
-    configs.path = $$shell_path("$$FGAP_AUX_DIR/config")
+    configs.path = $$system_path("$$FGAP_AUX_DIR/config")
     configs.files = $$files("$$CONFIGS_DIR/*")
     INSTALLS += configs
     CONFIG_PATH = $$relative_path($$FGAP_AUX_DIR/config, $$FGAP_INSTALL_PATH)
@@ -88,11 +88,12 @@ defineReplace(findPython) {  # todo: add Python3
     pathDirs += "C:/Python34" "C:/Python27" "C:/WINDOWS/system32" "C:/WINDOWS"
     pathDirs += "C:/Program Files/Python27" "C:/Program Files/Python34"
     for (pathDir, pathDirs) {
-        PYTHON_PATH = $$shell_path($${pathDir}/$$PYTHON_EXE)
+        PYTHON_PATH = $$system_path($${pathDir}/$$PYTHON_EXE)
+        # message(Looking for python in: $$PYTHON_PATH)
         exists($$PYTHON_PATH) {
-#            message(Python found: $$PYTHON_PATH)
+            message(Python found: $$PYTHON_PATH)
             return($$PYTHON_PATH)
         }
     }
-    message(Python not found)
+    # message(Python not found)
 }

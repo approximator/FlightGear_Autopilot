@@ -39,8 +39,8 @@ HEADERS  += \
     $$PWD/flightgear/FgGenericProtocol.h \
     $$PWD/autopilot/FgAircraftAutopilot.h
 
-INCLUDEPATH += $$shell_path($$PWD)
-INCLUDEPATH += $$shell_path($$PWD/utils)
+INCLUDEPATH += $$system_path($$PWD)
+INCLUDEPATH += $$system_path($$PWD/utils)
 
 include($$FGAP_SOURCE_TREE/resources/resources.pri)
 # Default rules for deployment.
