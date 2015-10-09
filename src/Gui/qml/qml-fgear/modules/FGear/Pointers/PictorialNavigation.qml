@@ -1,10 +1,19 @@
 import QtQuick 2.2
+import Material 0.1
 
 Item {
     id: _pointer
 
+    property real heading: 0
+    property real headingSelect: 0
+    // TODO: make properties for all parameters
+
+    onHeadingChanged: {
+        setCompass(heading)
+    }
+
     anchors.centerIn: parent
-    width: Math.min(parent.width, parent.height)
+    width: Units.dp(200)
     height: width
 
     clip: true

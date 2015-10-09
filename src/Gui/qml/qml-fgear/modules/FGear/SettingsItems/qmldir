@@ -1,0 +1,2 @@
+module FGear.SettingsItems
+LabeledTextEdit 0.1 LabeledTextEdit.qml

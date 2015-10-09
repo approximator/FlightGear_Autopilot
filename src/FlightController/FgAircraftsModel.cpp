@@ -6,84 +6,65 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Jul 22, 2015
+ * @date Modified Oct 05, 2015
  */
 
+#include "log.h"
 #include "FgAircraftsModel.h"
-#include "FgTransport.h"
+#include "flightgear/FgTransport.h"
 
 #include <QFile>
-#include <QJsonArray>
-#include <QJsonDocument>
+#include <QSettings>
 #include <QCoreApplication>
 
 FgAircraftsModel::FgAircraftsModel(QObject *parent) :
     QAbstractListModel(parent)
 {
+    m_Roles.insert(Roles::Name     , "name"     );
+    m_Roles.insert(Roles::Connected, "connected");
+    m_Roles.insert(Roles::Aircraft , "aircraft" );
     init();
 }
 
 FgAircraftsModel::~FgAircraftsModel()
 {
-//    saveConfig("./config/fgapConfig.json");
+    saveConfig();
 }
 
 bool FgAircraftsModel::init()
 {
-    QString configFileName("%1/%2/%3");
-    configFileName = configFileName.arg(QCoreApplication::applicationDirPath(),
-                                        CONFIG_PATH,
-                                        "multiplayWithoutServer.json");
-    QFile configFile(configFileName);
-    if (!configFile.open(QIODevice::ReadOnly))
+    qDebug() << "Init FgAircraftsModel";
+
+    QSettings settings;
+    qDebug() << "Reading settings from " << settings.fileName();
+    int size = settings.beginReadArray("aircrafts");
+    for (int i = 0; i < size; ++i)
     {
-        qWarning("Couldn't open config file: %s",  configFileName.toStdString().c_str());
-        return false;
+        settings.setArrayIndex(i);
+        if (!addAircraft(settings))
+        {
+            qWarning() << "Could not set settings for " << i << " aircraft. Skipping...";
+            continue;
+        }
     }
-    QJsonDocument configData(QJsonDocument::fromJson(configFile.readAll()));
-    QJsonObject configObj = configData.object();
-    QJsonArray aircrafts = configObj["aircrafts"].toArray();
+    settings.endArray();
 
-    for (auto const &parameter : aircrafts)
-    {
-        auto aircraft = std::make_shared<FgControlledAircraft>(parameter.toObject());
-        emit beginInsertRows(QModelIndex(), m_OurAircrafts.count(), m_OurAircrafts.count());
-        m_OurAircrafts.append(aircraft);
-        connect(aircraft.get(), &FgControlledAircraft::onConnected, this, &FgAircraftsModel::onAircraftConnected);
-        emit endInsertRows();
-    }
-
-    m_Transport = m_OurAircrafts[0]->transport();
-    connect(m_Transport.get(), &FgTransport::fgDataReceived, this, &FgAircraftsModel::onDataReceived);
-
-//    m_OurAircrafts["Travis"]->follow(m_OurAircrafts["Rover"].get());
-//    m_OurAircrafts["Rover"]->autopilot()->engage();
-
-//    m_OurAircrafts[0]->runFlightGear();
-//    m_OurAircrafts[0]->autopilot()->engage();
-//    m_OurAircrafts["Rover"]->runFlightGear();
+//    qobject_cast<FgAircraftAutopilot*>(m_OurAircrafts[0]->autopilot())->engage();
+//    qobject_cast<FgAircraftAutopilot*>(m_OurAircrafts[1]->autopilot())->engage();
+//    qobject_cast<FgAircraftAutopilot*>(m_OurAircrafts[1]->autopilot())->setFollow(m_OurAircrafts[0].get());
     return true;
 }
 
-bool FgAircraftsModel::saveConfig(const QString &filename)
+bool FgAircraftsModel::saveConfig()
 {
-    QFile saveFile(filename);
-
-    if (!saveFile.open(QIODevice::WriteOnly))
+    QSettings settings;
+    settings.beginWriteArray("aircrafts");
+    for (int i = 0; i < m_OurAircrafts.size(); ++i)
     {
-        qWarning("Couldn't open save file.");
-        return false;
+        settings.setArrayIndex(i);
+        m_OurAircrafts.at(i)->saveConfig(settings);
     }
-
-    QJsonArray aircrafts;
-    for (auto &aircraft : m_OurAircrafts)
-        aircrafts.append(aircraft->configurationAsJson());
-
-    QJsonObject config;
-    config["aircrafts"] = aircrafts;
-    QJsonDocument saveDoc(config);
-    saveFile.write(saveDoc.toJson());
-
+    settings.endArray();
     return true;
 }
 
@@ -95,21 +76,21 @@ int FgAircraftsModel::rowCount(const QModelIndex &parent) const
 
 QVariant FgAircraftsModel::data(const QModelIndex &index, int role) const
 {
-//    qDebug("FgAircraftsModel::data. row = %d, role = %s", index.row(), m_Roles[role].toStdString().c_str());
+//    LOG("FgAircraftsModel::data. row = %d, role = %s", index.row(), m_Roles[role].c_str());
     if (!index.isValid())
         return QVariant();
 
-    if (index.row() >= m_OurAircrafts.size())
+    if (index.row() < 0 || index.row() >= m_OurAircrafts.size())
         return QVariant();
 
     switch (role)
     {
     case Name:
     case Qt::DisplayRole:
-        return m_OurAircrafts[index.row()]->callsign();
+        return QVariant::fromValue(m_OurAircrafts[index.row()]->callsign());
         break;
     case Connected:
-        return m_OurAircrafts[index.row()]->connected();
+        return QVariant::fromValue(m_OurAircrafts[index.row()]->connected());
         break;
      case Aircraft:
         return QVariant::fromValue(m_OurAircrafts[index.row()].get());
@@ -121,9 +102,14 @@ QVariant FgAircraftsModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-QString FgAircraftsModel::get(int index) const
+FgControlledAircraft* FgAircraftsModel::get(int index) const
 {
-    return m_OurAircrafts.at(index)->callsign();
+    if (index < 0 || index > m_OurAircrafts.length())
+    {
+        qWarning() << "Requested invalid index: " << index;
+        return 0;
+    }
+    return m_OurAircrafts.at(index).get();
 }
 
 void FgAircraftsModel::runFlightgear(int index) const
@@ -131,27 +117,78 @@ void FgAircraftsModel::runFlightgear(int index) const
     m_OurAircrafts[index]->runFlightGear();
 }
 
+bool FgAircraftsModel::addAircraft()
+{
+    QSettings settings;
+    settings.beginGroup("basic_aircraft_config");
+    return addAircraft(settings);
+}
+
+bool FgAircraftsModel::addAircraft(QSettings& settings)
+{
+    auto aircraft = std::make_shared<FgControlledAircraft>(this);
+    if (!aircraft->setConfig(settings))
+    {
+        qWarning() << "Could not set settings for aircraft. Skipping...";
+        return false;
+    }
+
+    if (aircraft->transport()->port() == 0 || aircraft->transport()->listenPort() == 0)
+    {
+        int port1 = 0;
+        int port2 = 0;
+        std::tie(port1, port2) = getAvailablePorts();
+        aircraft->transport()->setPort(port1);
+        aircraft->transport()->setListenPort(port2);
+    }
+
+    emit beginInsertRows(QModelIndex(), m_OurAircrafts.count(), m_OurAircrafts.count());
+    m_OurAircrafts.append(aircraft);
+    connect(aircraft.get(), &FgControlledAircraft::connectedChanged, this, &FgAircraftsModel::onAircraftConnected);
+    emit endInsertRows();
+
+    if (m_OurAircrafts.size() < 2)
+    {
+        m_Transport = m_OurAircrafts[0]->transport();
+        connect(m_Transport, &FgTransport::fgDataReceived, this, &FgAircraftsModel::onDataReceived);
+        qDebug() << "FgAircraftModel uses transport of " << m_OurAircrafts[0]->callsign();
+    }
+
+    return true;
+}
+
 QHash<int, QByteArray> FgAircraftsModel::roleNames() const
 {
     return m_Roles;
 }
 
-void FgAircraftsModel::updateAircraft(const QString & /* aircraftId */)
+std::tuple<int, int> FgAircraftsModel::getAvailablePorts() const
 {
+    auto a = std::max_element(
+                std::begin(m_OurAircrafts), std::end(m_OurAircrafts),
+                [](const std::shared_ptr<FgControlledAircraft>& a1,
+                   const std::shared_ptr<FgControlledAircraft>& a2)
+                {
+                    return std::max(a1->transport()->listenPort(), a1->transport()->port()) <
+                           std::max(a2->transport()->listenPort(), a2->transport()->port());
+                });
+    if (a == std::end(m_OurAircrafts))
+        return std::make_tuple(8000, 8000 + 1);
+
+    int port = std::max((*a)->transport()->listenPort(), (*a)->transport()->port()) + 1;
+    return std::make_tuple(port, port + 1);
 }
 
-void FgAircraftsModel::onDataReceived()
+void FgAircraftsModel::onDataReceived(FgTransport *transport)
 {
-    updateOtherAircraftsCount();
-
-    emit fdmDataChanged(m_Transport);
+    emit fdmDataChanged(transport);
 
     //eleron
     //elevator
 
     if (m_OurAircrafts.isEmpty())
     {
-        qDebug() << "Our aircraft is empty!";
+        qWarning() << "Our aircraft is empty!";
         return;
     }
 }
@@ -159,59 +196,11 @@ void FgAircraftsModel::onDataReceived()
 void FgAircraftsModel::onAircraftConnected()
 {
     FgAircraft *aircraft = static_cast<FgAircraft*>(sender());
+    if (!aircraft->connected())
+        return; // TODO: set disconnect status if not connected
 
     emit dataChanged(QModelIndex(), index(m_OurAircrafts.size()-1), {Connected});
     qDebug() << "aircraft " << aircraft->callsign() << " connected";
 }
 
-void FgAircraftsModel::updateOtherAircraftsCount()
-{
-    qint32 count = m_Transport->getInt("/ai/models/num-players");
 
-    if (m_AircraftsCount == count)
-    {
-        // assume that aircrafts remain the same
-        return;
-    }
-
-    m_AircraftsCount = count;
-
-    // get all aircrafts and add new ones to the list
-    QList<QString> callsigns;
-    for (int i = 0; i < count; ++i)
-    {
-        QString callsign = m_Transport->getString("/ai/models/multiplayer[" + QString::number(i) + "]/callsign");
-        qDebug() << "callsign = " << callsign;
-        callsigns.push_back(callsign);
-        if (m_OtherAircrafts.end() !=
-                std::find_if(m_OtherAircrafts.begin(), m_OtherAircrafts.end(),
-                             [&callsign](std::shared_ptr<FgAircraft> a){ return a->callsign() == callsign;}))
-        {
-            continue;
-        }
-
-        auto aircraft = std::make_shared<FgAircraft>(callsign);
-        aircraft->setConnected(true);
-        //! @todo  aircraft->setIndex();
-        m_OtherAircrafts.append(aircraft);
-        emit aircraftAdded(aircraft.get());
-        qDebug() << "otherAircraftAdded";
-    }
-
-    // remove disconnected aircrafts from the list
-    auto it = m_OtherAircrafts.begin();
-    while (it != m_OtherAircrafts.end())
-    {
-        if (!callsigns.contains((*it)->callsign()))
-        {
-            emit aircraftDisconnected((*it).get());
-            qDebug() << "aircraftDisconnected";
-
-            it = m_OtherAircrafts.erase(it);
-        }
-        else
-        {
-            ++it;
-        }
-    }
-}

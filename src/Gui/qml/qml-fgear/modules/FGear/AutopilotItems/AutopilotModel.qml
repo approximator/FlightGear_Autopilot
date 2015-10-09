@@ -146,7 +146,8 @@ the baro setting if automatic baro correc- tion is not available."
     }
 
     ListElement {
-        itemText: ""
+        itemText: "ON"
+        itemTextColor: "grey"
         name: "display"
         itemSource: "AutopilotItems/Display.qml"
         row: 0; rowSpan: 2

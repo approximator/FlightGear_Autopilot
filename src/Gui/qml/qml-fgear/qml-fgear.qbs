@@ -1,17 +1,18 @@
-import qbs 1.0
+import qbs
 
-Product {
-    property string qmlFilesPath: "modules"
-    property string moduleName: "FGear"
-
-    Group {
-        name: "QmlModules"
-        files: [
-           "modules/FGear",
-            "/Users/andrey/Project/GitHub/qml-extras/modules/Material",
-            "/Users/andrey/Project/GitHub/qml-material/modules/Material"
-        ]
-        qbs.install: true
-        qbs.installDir: project.fgap_qml_modules_path
-    }
+FgapQmlModule {
+    name: "qml_fgear"
+    moduleName: "FGear"
+    sourceFiles: [
+        "*qml*",
+        "AutopilotItems/*qml*",
+        "flight_pic/*",
+        "js/*.js",
+        "Pointers/*.qml",
+        "Pointers/pictorial_navigation_indicator/*.png",
+        "SettingsItems/*qml*"
+    ].map(function(file) {
+        //prepend moduleName as prefix to all SourceFiles
+        return (moduleName + "/" + file);
+      })
 }

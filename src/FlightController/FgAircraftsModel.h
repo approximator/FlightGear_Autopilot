@@ -6,16 +6,16 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Jul 22, 2015
+ * @date Modified Oct 05, 2015
  */
 
 #ifndef FGCONTROLLER_H
 #define FGCONTROLLER_H
 
-#include "FgControlledAircraft.h"
+#include "vehicle/FgControlledAircraft.h"
 
-#include <QAbstractListModel>
 #include <QList>
+#include <QAbstractListModel>
 
 class FgTransport;
 
@@ -32,38 +32,35 @@ public:
     explicit FgAircraftsModel(QObject *parent = 0);
     virtual ~FgAircraftsModel();
     bool init();
-    bool saveConfig(const QString& filename);
+    bool saveConfig();
 
-    int rowCount(const QModelIndex & parent = QModelIndex()) const;
-    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+    Q_INVOKABLE int rowCount(const QModelIndex & parent = QModelIndex()) const;
+    Q_INVOKABLE QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
 
-    Q_INVOKABLE QString get(int index) const;
+    Q_INVOKABLE FgControlledAircraft* get(int index) const;
     Q_INVOKABLE void runFlightgear(int index) const;
+
+    Q_INVOKABLE bool addAircraft();
+    Q_INVOKABLE bool addAircraft(QSettings &settings);
 
 protected:
     virtual QHash<int, QByteArray> roleNames() const override;
 
 private:
-    std::shared_ptr<FgTransport>                 m_Transport { };
+    FgTransport* m_Transport { nullptr };
     QList<std::shared_ptr<FgControlledAircraft>> m_OurAircrafts { };
-    QList<std::shared_ptr<FgAircraft>>           m_OtherAircrafts { };
-    qint32 m_AircraftsCount { 0 };
+    qint32 m_AircraftsCount { 0    };
 
-    QHash<int, QByteArray> m_Roles {
-        { Roles::Name     , "name"     },
-        { Roles::Connected, "connected"},
-        { Roles::Aircraft , "aircraft" }
-    };
+    QHash<int, QByteArray> m_Roles {};
 
-    void updateOurAircraftsCount();
-    void updateOtherAircraftsCount();
+    std::tuple<int, int> getAvailablePorts() const;
+
+    FgAircraftsModel(const FgAircraftsModel& other);
+    FgAircraftsModel& operator=(const FgAircraftsModel& other);
 
 private slots:
-    void onDataReceived();
+    void onDataReceived(FgTransport *transport);
     void onAircraftConnected();
-
-public slots:
-    void updateAircraft(const QString &aircraftId);
 
 signals:
     void aircraftAdded(FgAircraft* aircraft);
@@ -72,7 +69,7 @@ signals:
     void aircraftDisconnected(FgAircraft* aircraft);
     void aircraftUpdated(FgAircraft* aircraft);
 
-    void fdmDataChanged(std::shared_ptr<FgTransport> transport);
+    void fdmDataChanged(FgTransport* transport);
 };
 
 #endif // FGCONTROLLER_H
