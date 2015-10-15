@@ -11,7 +11,9 @@
 #ifndef FG_LOG
 #define FG_LOG
 
+#include <QFile>
 #include <QDebug>
+#include <QCoreApplication>
 
 #include <iostream>
 
@@ -49,10 +51,10 @@ inline void logMessageHandler(QtMsgType type, const QMessageLogContext& context,
     }
 
 /*FIXME to determine right location of this file!!!*/
-//    QFile outFile("log");
-//    outFile.open(QIODevice::WriteOnly | QIODevice::Append);
-//    QTextStream ts(&outFile);
-//    ts << txt << endl;
+    QFile outFile(QCoreApplication::applicationDirPath() + "/fgautopilot.log");
+    outFile.open(QIODevice::WriteOnly | QIODevice::Append);
+    QTextStream ts(&outFile);
+    ts << txt << endl;
 
     std::cout << txt.toStdString() << std::endl;
 }

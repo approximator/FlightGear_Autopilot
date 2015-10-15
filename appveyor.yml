@@ -6,10 +6,12 @@ environment:
     QMAKE_PARAMS: -r -spec win32-g++
     MAKE: mingw32-make
     DEPLOY: mingw32-make deploy_all
+    TAKE_SCREENSHOT: scripts\take_screenshot.bat
   - QTDIR: C:\Qt\5.5\msvc2013_64
     QMAKE_PARAMS: -r -spec win32-msvc2013 -tp vc
     MAKE: msbuild
     DEPLOY: echo "Not implemented yet"
+    TAKE_SCREENSHOT: echo "Not implemented yet"
 
 install:
 - cmd: git submodule update --init --recursive
@@ -24,6 +26,12 @@ build_script:
 
     %DEPLOY%
 
+    %TAKE_SCREENSHOT%
+
 artifacts:
 - path: fgautopilot-0.0.3
   name: fgautopilot-0.0.3
+- path: '*.png'
+  name: screenshot
+- path: 'fgautopilot-0.0.3/*.log'
+  name: logs
