@@ -1,11 +1,12 @@
 import QtQuick 2.2
 import Material 0.1
 import Material.ListItems 0.1 as ListItem
+import fgap 1.0
 
-Page {
+TabbedPage {
     id: aircraftsPage
-    property alias model: aircraftsList.model
     property QtObject fgAircraft: null
+    property int sidebarWidth: Units.dp(350)
 
     title: "Aircrafts control"
     backgroundColor: Theme.primaryDarkColor
@@ -33,66 +34,43 @@ Page {
         }
     ]
 
-    tabs: [
-        {
-            text: "Autopilot control"
-        },
-        {
-            text: "Instruments",
-        },
-    ]
-
-    FgAircraftsList {
-        id: aircraftsList
-    }
-
     /*Left side menu*/
     Sidebar {
         id: _sidebar
         header: "Aircrafts"
-        width: Units.dp(350)
+        width: sidebarWidth
         backgroundColor: Qt.lighter(Theme.primaryDarkColor)
-        contents: aircraftsList
+        contents: FgAircraftsList {
+            model: FgAircraftsModel { }
+            id: aircraftsList
+        }
         style: "dark"
     }
 
-    TabView {
-        id: tabView
-        anchors {
-            left: _sidebar.right
-            right: parent.right
-            top: parent.top
-            bottom: parent.bottom
-        }
-        currentIndex: aircraftsPage.selectedTab
-        model: tabs
-    }
-
-    VisualItemModel {
-        id: tabs
-
-        // Tab 1 "Autopilot control"
+    Tab {
+        title: "Autopilot control"
         FgAircraftPage {
-            width: tabView.width
-            height: tabView.height
+            x: _sidebar.width
+            onHeightChanged: width = parent.width - _sidebar.width
+            onWidthChanged: width = parent.width - _sidebar.width
             aircraft: fgAircraft
         }
+    }
 
-        // Tab 2 "Instruments"
+    Tab {
+        title: "Instruments"
         Rectangle {
-            width: tabView.width
-            height: tabView.height
+            x: _sidebar.width
+            onHeightChanged: width = aircraftsPage.width - _sidebar.width
+            onWidthChanged: width = aircraftsPage.width - _sidebar.width
             color: aircraftsPage.backgroundColor
 
             PictorialNavigation {
+                anchors.centerIn: parent
                 width: Math.min(parent.width, parent.height)
                 height: width
-
-                heading: fgAircraft.heading
+                heading: fgAircraft ? fgAircraft.heading : 0
             }
         }
-    }
-    Component.onCompleted: {
-        selectedTab = 1
     }
 }

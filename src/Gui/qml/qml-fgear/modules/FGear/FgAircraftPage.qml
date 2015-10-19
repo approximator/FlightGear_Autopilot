@@ -3,7 +3,6 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.1
 
 Item {
-    id: airPage
     width: Units.dp(100)
     height: Units.dp(200)
 
@@ -11,7 +10,7 @@ Item {
 
     onAircraftChanged: {
         titleLabel.text = aircraft.callsign
-        autopilot.engaged = aircraft.autopilotEngaged  // TODO: check or uncheck engaged button
+        autopilot.engaged = aircraft.autopilotEngaged
     }
 
     Label {

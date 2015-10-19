@@ -3,7 +3,7 @@ import Material 0.1
 import Material.ListItems 0.1 as ListItem
 
 ListView {
-    width: _sidebar.width
+    width: parent.width
     height: childrenRect.height
     highlight: Item {
         Rectangle {
@@ -25,7 +25,6 @@ ListView {
     highlightFollowsCurrentItem: true
     boundsBehavior: Flickable.StopAtBounds
 
-    model: aircraftsModel
     delegate: _listComponent
 
     Component {

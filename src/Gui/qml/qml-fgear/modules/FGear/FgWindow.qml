@@ -1,7 +1,6 @@
 import QtQuick 2.2
 import Material 0.1
 import Qt.labs.settings 1.0
-import fgap 1.0
 
 ApplicationWindow {
     id: fgap
@@ -28,16 +27,9 @@ ApplicationWindow {
 
     }
 
-    FgAircraftsModel {
-        id: fgapModel
-    }
+    initialPage: FgAircraftsControlPage {
 
-    FgAircraftsControlPage {
-        id: startpage
-        model: fgapModel
     }
-
-    initialPage: startpage
 
     Settings {
         property alias x: fgap.x

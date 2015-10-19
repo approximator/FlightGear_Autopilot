@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Oct 05, 2015
+ * @date Modified Oct 19, 2015
  */
 
 #include "log.h"
@@ -24,6 +24,7 @@ FgAircraftsModel::FgAircraftsModel(QObject *parent) :
     m_Roles.insert(Roles::Connected, "connected");
     m_Roles.insert(Roles::Aircraft , "aircraft" );
     init();
+    qDebug() << "Air model";
 }
 
 FgAircraftsModel::~FgAircraftsModel()
@@ -76,7 +77,7 @@ int FgAircraftsModel::rowCount(const QModelIndex &parent) const
 
 QVariant FgAircraftsModel::data(const QModelIndex &index, int role) const
 {
-//    LOG("FgAircraftsModel::data. row = %d, role = %s", index.row(), m_Roles[role].c_str());
+    // qDebug("FgAircraftsModel::data. row = %d, role = %s", index.row(), m_Roles[role].toStdString().c_str());
     if (!index.isValid())
         return QVariant();
 
