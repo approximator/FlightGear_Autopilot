@@ -1,4 +1,6 @@
 language: cpp
+sudo: required
+dist: trusty
 
 compiler:
   - clang
@@ -29,7 +31,7 @@ before_install:
   - "export DISPLAY=:99.0"
   - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x24"
   - sleep 3
-  - sudo add-apt-repository -y ppa:beineri/opt-qt541
+  - sudo add-apt-repository -y ppa:beineri/opt-qt542-trusty
   - sudo add-apt-repository -y ppa:staticfloat/julia-deps
 
 install:
