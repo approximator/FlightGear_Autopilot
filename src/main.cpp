@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Sep 05, 2015
+ * @date Modified Oct 21, 2015
  */
 
 #include "log.h"
@@ -15,6 +15,7 @@
 
 #include <QtQml>
 #include <QTextCodec>
+#include <QMessageBox>
 #include <QApplication>
 
 int main(int argc, char *argv[])
@@ -53,8 +54,24 @@ int main(int argc, char *argv[])
     }
 
     // Setup QML
+    bool success = true;
     qmlRegisterType<FgAircraftsModel>("fgap", 1, 0, "FgAircraftsModel");
     QQmlApplicationEngine engine;
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, [&app, &success](QObject *object, const QUrl &url){
+        if (!object)
+        {
+            qWarning() << "Could not load QML";
+            QMessageBox::critical(nullptr, "Flightgear autopilot",
+                                  "<b>Flightgear autopilot</b> is failed to start due to errors in the main QML file.\n"
+                                  "Please report the error following this link: "
+                                  "<a href='https://github.com/approximator/FlightGear_Autopilot/issues/new'>"
+                                  "https://github.com/approximator/FlightGear_Autopilot/issues/new</a>");
+            success = false;
+        }
+        else
+            qDebug() << "QML object created successfully: " << url;
+    });
+
     QString qmlFilesPath = fgap::path::join(
                 QCoreApplication::applicationDirPath(),
                 FGAP_QML_MODULES_PATH);
@@ -62,5 +79,5 @@ int main(int argc, char *argv[])
     engine.addImportPath(qmlFilesPath);
     engine.load(QUrl(QStringLiteral("qrc:qml/MainView.qml")));
 
-    return app.exec();
+    return success ? app.exec() : 1;
 }
