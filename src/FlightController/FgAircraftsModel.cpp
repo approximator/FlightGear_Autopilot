@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Oct 19, 2015
+ * @date Modified Oct 21, 2015
  */
 
 #include "log.h"
@@ -99,8 +99,6 @@ QVariant FgAircraftsModel::data(const QModelIndex &index, int role) const
         return QVariant();
         break;
     }
-
-    return QVariant();
 }
 
 FgControlledAircraft* FgAircraftsModel::get(int index) const
