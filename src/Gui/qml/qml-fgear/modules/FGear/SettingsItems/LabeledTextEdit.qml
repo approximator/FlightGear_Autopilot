@@ -4,9 +4,11 @@ import Material 0.1
 import Material.ListItems 0.1 as ListItem
 
 ListItem.Standard {
-    property string label: ""
-    property int labelWidth: Units.dp(120)
-    property string value: ""
+    property alias label          : _label.text
+    property alias value          : _textField.text
+    property alias secondaryLabel : _secondaryLabel.text
+    property alias labelWidth     : _label.width
+
     signal editFinished(string new_text)
 
     action: Icon {
@@ -16,19 +18,26 @@ ListItem.Standard {
     }
 
     content: RowLayout {
-        anchors.centerIn: parent
         width: parent.width
 
         Label {
+            id: _label
             style: "dialog"
-            text: label
-            Layout.preferredWidth: labelWidth
+            Layout.preferredWidth: Math.max(contentWidth, Units.dp(120))
+            Layout.fillWidth: false
         }
+
+        Label {
+            id: _secondaryLabel
+            style: "dialog"
+            Layout.preferredWidth: contentWidth
+            Layout.fillWidth: false
+        }
+
         TextField {
-            id: textField
+            id: _textField
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignVCenter
-            text: value
             onEditingFinished: {
                 editFinished(text)
             }

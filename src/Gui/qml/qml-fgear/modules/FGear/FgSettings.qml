@@ -137,12 +137,9 @@ Page {
                 }
 
                 LabeledTextEdit {
-                    label: "Protocol file: " + fgAircraft.flightgear.rootDir
-                    labelWidth: Units.dp(500)
+                    label: "Protocol file: "
+                    secondaryLabel: fgAircraft.flightgear.rootDir
                     value: "/Protocol/FgaProtocol.xml"
-                    // secondaryItem: Button {
-                    //     text: "Browse"
-                    // }
                 }
 
                 LabeledTextEdit {
