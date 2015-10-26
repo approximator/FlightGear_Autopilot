@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     bool success = true;
     qmlRegisterType<FgAircraftsModel>("fgap", 1, 0, "FgAircraftsModel");
     QQmlApplicationEngine engine;
-    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, [&app, &success](QObject *object, const QUrl &url){
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, [&success](QObject *object, const QUrl &url){
         if (!object)
         {
             qWarning() << "Could not load QML";

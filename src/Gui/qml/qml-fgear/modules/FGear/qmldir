@@ -1,4 +1,6 @@
 module FGear
+SplashScreen 0.1 SplashScreen.qml
+
 FgWindow 0.1 FgWindow.qml
 FgAiModel 0.1 FgAiModel.qml
 
