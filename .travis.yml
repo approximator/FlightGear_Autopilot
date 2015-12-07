@@ -75,6 +75,6 @@ script:
   - bash $SCRIPTS_DIR/take_screenshot.sh "$SOURCES_DIR/fgautopilot-0.0.3/fgautopilot" "${SCREENSHOT_NAME}"
   - sleep 5
   - "ls -lah"
-  - bash $SCRIPTS_DIR/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE $TRAVIS_COMMIT" "$DIST_FILE" "Distributive linux-$CXX-$DEBUG-$(uname -p)"
-  - sleep 2
-  - bash $SCRIPTS_DIR/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE $TRAVIS_COMMIT" "$SCREENSHOT_NAME" "Main window (qml) linux-$CXX-$DEBUG-$(uname -p)"
+#  - bash $SCRIPTS_DIR/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE $TRAVIS_COMMIT" "$DIST_FILE" "Distributive linux-$CXX-$DEBUG-$(uname -p)"
+#  - sleep 2
+#  - bash $SCRIPTS_DIR/upload_file.sh "FlightGear_Autopilot" "$COMMIT_MESSAGE $TRAVIS_COMMIT" "$SCREENSHOT_NAME" "Main window (qml) linux-$CXX-$DEBUG-$(uname -p)"
