@@ -18,9 +18,6 @@ SOURCES += \
     $$PWD/utils/FgPid.cpp \
     $$PWD/utils/FgMath.cpp \
     $$PWD/FgAircraftsModel.cpp \
-    $$PWD/vehicle/FgVehicle.cpp \
-    $$PWD/vehicle/FgAircraft.cpp \
-    $$PWD/autopilot/FgAutopilot.cpp \
     $$PWD/flightgear/FgTransport.cpp \
     $$PWD/flightgear/FgFlightgear.cpp \
     $$PWD/vehicle/FgControlledAircraft.cpp \
@@ -44,6 +41,7 @@ HEADERS  += \
 
 INCLUDEPATH += $$system_path($$PWD)
 INCLUDEPATH += $$system_path($$PWD/utils)
+INCLUDEPATH += $$system_path($$QML_TRIKS/include)
 
 include($$FGAP_SOURCE_TREE/resources/resources.pri)
 # Default rules for deployment.

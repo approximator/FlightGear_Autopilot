@@ -5,116 +5,67 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Sep 03, 2015
+ * @date Modified Dec 07, 2015
  */
 
 #ifndef FGAIRCRAFT_H
 #define FGAIRCRAFT_H
 
 #include "FgVehicle.h"
+#include "FgAircraft.h"
+#include "flightgear/FgTransport.h"
 
 class FgAircraft : public FgVehicle
 {
     Q_OBJECT
-    Q_PROPERTY(qreal heading READ heading NOTIFY headingChanged)
+    QML_READONLY_PROPERTY(qreal, heading)
+    QML_READONLY_PROPERTY(qreal, pitch)
+    QML_READONLY_PROPERTY(qreal, roll)
+    QML_READONLY_PROPERTY(qreal, yaw)
+    QML_READONLY_PROPERTY(qreal, yaw_rate)
+    QML_READONLY_PROPERTY(qreal, vertical_speed)
+    QML_READONLY_PROPERTY(qreal, airspeed)
+
+    QML_WRITABLE_PROPERTY(qreal, ailerons)
+    QML_WRITABLE_PROPERTY(qreal, elevator)
+    QML_WRITABLE_PROPERTY(qreal, rudder)
+    QML_WRITABLE_PROPERTY(qreal, throttle)
 
 public:
-    explicit FgAircraft(QObject *parent = 0);
-    virtual ~FgAircraft();
+    explicit FgAircraft(QObject *parent = 0):
+        FgVehicle(parent),
+        m_heading(0.0),
+        m_pitch(0.0),
+        m_roll(0.0),
+        m_yaw(0.0),
+        m_yaw_rate(0.0),
+        m_vertical_speed(0.0),
+        m_airspeed(0.0),
+        m_ailerons(0.0),
+        m_elevator(0.0),
+        m_rudder(0.0),
+        m_throttle(0.8)
+    {
+    }
 
-    inline qreal pitch() const;
-    inline qreal roll() const;
-    inline qreal yaw() const;
-    inline qreal yawRate() const;
-    inline qreal heading() const;
-    inline qreal verticalSpeed() const;
-    inline qreal airspeed() const;
-
-    inline qreal ailerons() const;
-    inline qreal elevator() const;
-    inline qreal   rudder() const;
-    inline qreal throttle() const;
-
-protected:
-    qint32 m_Index       = -1;
-
-    qreal m_Pitch     = 0.0; // deg
-    qreal m_Roll      = 0.0; // deg
-    qreal m_Yaw       = 0.0; // deg
-    qreal m_YawRate   = 0.0; // degps
-    qreal m_VerticalSpeed = 0.0;
-    qreal m_Airspeed      = 0.0;
-    qreal m_Heading       = 0.0; // deg
-
-    // controls
-    qreal m_Ailerons = 0.0;
-    qreal m_Elevator = 0.0;
-    qreal m_Rudder   = 0.0;
-    qreal m_Throttle = 0.9;
-
-signals:
-    void headingChanged();
+    virtual ~FgAircraft()
+    {
+    }
 
 public slots:
-    virtual void onFdmDataChanged(FgTransport *transport);
+    virtual void onFdmDataChanged(FgTransport *transport)
+    {
+        FgVehicle::onFdmDataChanged(transport);
+        update_pitch   (transport->getFloat(PITCH   ));
+        update_roll    (transport->getFloat(ROLL    ));
+        update_yaw     (transport->getFloat(YAW     ));
+        update_yaw_rate(transport->getFloat(YAW_RATE));
+        update_heading (transport->getFloat(HEADING ));
+        update_airspeed(transport->getFloat(AIRSPEED));
+        update_vertical_speed(transport->getFloat(VERTICAL_SPEED));
+    }
 };
 
-//
-
-qreal FgAircraft::pitch() const
-{
-    return m_Pitch;
-}
-
-qreal FgAircraft::roll() const
-{
-    return m_Roll;
-}
-
-qreal FgAircraft::yaw() const
-{
-    return m_Yaw;
-}
-
-qreal FgAircraft::yawRate() const
-{
-    return m_YawRate;
-}
-
-qreal FgAircraft::verticalSpeed() const
-{
-    return m_VerticalSpeed;
-}
-
-qreal FgAircraft::airspeed() const
-{
-    return m_Airspeed;
-}
-
-qreal FgAircraft::ailerons() const
-{
-    return m_Ailerons;
-}
-
-qreal FgAircraft::elevator() const
-{
-    return m_Elevator;
-}
-
-qreal FgAircraft::rudder() const
-{
-    return m_Rudder;
-}
-
-qreal FgAircraft::throttle() const
-{
-    return m_Throttle;
-}
-
-qreal FgAircraft::heading() const
-{
-    return m_Heading;
-}
-
 Q_DECLARE_METATYPE(FgAircraft *)
+
 #endif // FGAIRCRAFT_H

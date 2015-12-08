@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Sep 03, 2015
- * @date Modified Sep 03, 2015
+ * @date Modified Dec 07, 2015
  */
 
 #include "log.h"
@@ -24,13 +24,13 @@ void FgAircraftAutopilot::computeControl()
     if (!engaged())
         return;
 
-    if (m_Aircraft->deltaTime() < 0.00001) // do not allow autopilot to go crazy with small doubles
+    if (m_Aircraft->delta_time() < 0.00001) // do not allow autopilot to go crazy with small doubles
     {
 //        qWarning() << "Autopilot: Delta time is too small, giving up...";
         return;
     }
 
-    if (m_Aircraft->elapsedTime() < 20) // just stabilize for the first 20 seconds of flight
+    if (m_Aircraft->elapsed_time() < 20) // just stabilize for the first 20 seconds of flight
     {
         holdAngles();
         return;
@@ -41,8 +41,8 @@ void FgAircraftAutopilot::computeControl()
 
 void FgAircraftAutopilot::holdYawRate()
 {
-    const qreal yawRateError = m_DesiredYawRate - m_Aircraft->yawRate();
-    m_DesiredRoll = m_YawRatePid.update(yawRateError, m_Aircraft->deltaTime());
+    const qreal yawRateError = m_DesiredYawRate - m_Aircraft->yaw_rate();
+    m_DesiredRoll = m_YawRatePid.update(yawRateError, m_Aircraft->delta_time());
     holdAltitude();
 }
 
@@ -55,8 +55,8 @@ void FgAircraftAutopilot::holdHeading()
 
 void FgAircraftAutopilot::holdVerticalSpeed()
 {
-    const qreal vsError = m_DesiredVerticalSpeed - m_Aircraft->verticalSpeed();
-    m_DesiredPitch = m_VerticalSpeedPid.update(vsError, m_Aircraft->deltaTime());
+    const qreal vsError = m_DesiredVerticalSpeed - m_Aircraft->vertical_speed();
+    m_DesiredPitch = m_VerticalSpeedPid.update(vsError, m_Aircraft->delta_time());
 
     holdAngles();
 
@@ -80,8 +80,8 @@ void FgAircraftAutopilot::holdAngles()
     qreal rollError = m_DesiredRoll - roll;
 
     // set controls
-    m_Aircraft->setElevator(m_PitchPid.update(pitchError, m_Aircraft->deltaTime()));
-    m_Aircraft->setAilerons( m_RollPid.update(rollError , m_Aircraft->deltaTime()));
+    m_Aircraft->set_elevator(m_PitchPid.update(pitchError, m_Aircraft->delta_time()));
+    m_Aircraft->set_ailerons(m_RollPid.update(rollError , m_Aircraft->delta_time()));
 
 //    qDebug() << "Elapsed time = " << m_Aircraft->elapsedTime();
 //    qDebug() << "  Delta time = " << m_Aircraft->deltaTime();

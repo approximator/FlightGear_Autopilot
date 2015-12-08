@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 17, 2015
- * @date Modified Sep 03, 2015
+ * @date Modified Dec 07, 2015
  */
 
 #ifndef FGCONTROLLEDAIRCRAFT_H
@@ -70,20 +70,7 @@ bool FgControlledAircraft::autopilotEngaged() const
     return m_Autopilot ? m_Autopilot->engaged() : false;
 }
 
-void FgControlledAircraft::setAilerons(qreal val)
-{
-    m_Ailerons = val;
-}
 
-void FgControlledAircraft::setElevator(qreal val)
-{
-    m_Elevator = val;
-}
-
-void FgControlledAircraft::setRudder(qreal val)
-{
-    m_Rudder = val;
-}
 
 FgAutopilot *FgControlledAircraft::autopilot() const
 {
@@ -103,7 +90,7 @@ bool FgControlledAircraft::flightgearReady() const
 void FgControlledAircraft::follow(FgAircraft *aircraft)
 {
     m_Autopilot->setFollow(aircraft);
-    m_Autopilot->engage();
+    m_Autopilot->set_engaged(true);
 }
 
 FgFlightgear *FgControlledAircraft::flightgear() const

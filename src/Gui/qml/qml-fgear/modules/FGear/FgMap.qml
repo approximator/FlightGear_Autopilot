@@ -72,12 +72,12 @@ Page {
                 ctx.save()
 
                 // TODO: autoscale
-                var x = (aircraft.lon - centerOffsets[0]) * scale + userDefinedOffsets[0] + width / 2
-                var y = (aircraft.lat - centerOffsets[1]) * scale - userDefinedOffsets[1] + height / 2
+                var x = (aircraft.longitude - centerOffsets[0]) * scale + userDefinedOffsets[0] + width / 2
+                var y = (aircraft.latitude - centerOffsets[1]) * scale - userDefinedOffsets[1] + height / 2
 
                 ctx.translate(x, height - y)
-                ctx.fillText(aircraft.lat.toFixed(4), 10, -10);
-                ctx.fillText(aircraft.lon.toFixed(4), 10, 1);
+                ctx.fillText(aircraft.latitude.toFixed(4), 10, -10);
+                ctx.fillText(aircraft.longitude.toFixed(4), 10, 1);
                 ctx.rotate(aircraft.heading * Math.PI / 180.0)
                 ctx.drawImage(im, -im.width/2, -im.height/2)
 
@@ -147,7 +147,7 @@ Page {
         var aircraftsCount = airmodel.rowCount()
         for (var i = 0; i < aircraftsCount; ++i) {
             var aircraft = airmodel.get(i)
-            if (aircraft == null) {
+            if (aircraft === null) {
                 console.error('aircraft is null')
                 continue
             }
@@ -167,8 +167,8 @@ Page {
             return [0, 0]
         }
         aircrafts.forEach(function(aircraft) {
-            xSum += aircraft.lon
-            ySum += aircraft.lat
+            xSum += aircraft.longitude
+            ySum += aircraft.latitude
         })
         return [xSum / len, ySum / len]
     }

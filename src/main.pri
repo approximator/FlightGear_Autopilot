@@ -17,6 +17,7 @@ SCRIPTS_DIR  = $$system_path($$ROOT_DIR/../scripts)
 CONFIGS_DIR  = $$system_path($$ROOT_DIR/../doc/config)
 QML_FGEAR    = $$system_path($$ROOT_DIR/Gui/qml/qml-fgear/modules)
 QML_MATERIAL = $$system_path($$ROOT_DIR/../contrib/qml-material/modules)
+QML_TRIKS    = $$system_path($$ROOT_DIR/../contrib/lib-qt-qml-tricks)
 FGAP_SOURCE_TREE = $$system_path($$PWD)
 
 macx {

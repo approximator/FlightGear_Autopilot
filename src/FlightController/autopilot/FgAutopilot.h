@@ -5,29 +5,34 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 14, 2015
- * @date Modified Oct 05, 2015
+ * @date Modified Dec 07, 2015
  */
 #ifndef FGAUTOPILOT_H
 #define FGAUTOPILOT_H
+
+#include "QQmlHelpers"
 
 #include <QObject>
 
 class FgAutopilot : public QObject
 {
     Q_OBJECT
+    QML_WRITABLE_PROPERTY(bool, engaged)
 public:
-    explicit FgAutopilot(QObject *parent = 0);
+    explicit FgAutopilot(QObject *parent = 0):
+        QObject(parent),
+        m_engaged(false)
+    {
+    }
+
+    virtual ~FgAutopilot()
+    {
+    }
+
     FgAutopilot(const FgAutopilot& other);
     FgAutopilot& operator=(const FgAutopilot& other);
 
-    Q_INVOKABLE void engage(bool enable = true);
-    Q_INVOKABLE void disengage();
-    Q_INVOKABLE bool engaged();
-
     virtual void computeControl() = 0;
-
-private:
-    bool m_Engaged { false };
 };
 
 Q_DECLARE_METATYPE(FgAutopilot *)

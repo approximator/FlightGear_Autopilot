@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 17, 2015
- * @date Modified Sep 03, 2015
+ * @date Modified Dec 07, 2015
  */
 
 #include "log.h"
@@ -30,8 +30,8 @@ bool FgControlledAircraft::setConfig(QSettings &settings)
     settings.beginGroup("flightgear");
     do
     {
-        m_Callsign = settings.value("callsign").toString();
-        if (m_Callsign.isEmpty())
+        set_callsign(settings.value("callsign").toString());
+        if (callsign().isEmpty())
         {
             qWarning() << "There is no callsign in the settings";
             break;
@@ -73,7 +73,7 @@ void FgControlledAircraft::runFlightGear(bool run)
 void FgControlledAircraft::autopilotEngage(bool engage)
 {
     assert(m_Autopilot);
-    m_Autopilot->engage(engage);
+    m_Autopilot->set_engaged(engage);
 }
 
 void FgControlledAircraft::onFdmDataChanged(FgTransport *transport)
