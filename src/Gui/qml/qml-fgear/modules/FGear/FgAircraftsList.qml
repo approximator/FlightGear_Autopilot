@@ -35,12 +35,12 @@ ListView {
             onFgInfoClicked: fgAircraft.runFlightGear()
             onClicked: {
                 ListView.view.currentIndex = index;
-                fgAircraft = aircraft;
+                fgAircraft = model.qtObject;
             }
 
             Component.onCompleted: {
                 if (index === 0) {
-                    fgAircraft = aircraft;
+                    fgAircraft = model.qtObject;
                 }
             }
         }

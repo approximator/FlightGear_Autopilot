@@ -17,7 +17,7 @@ SOURCES += \
     $$ROOT_DIR/main.cpp \
     $$PWD/utils/FgPid.cpp \
     $$PWD/utils/FgMath.cpp \
-    $$PWD/FgAircraftsModel.cpp \
+    $$PWD/FgAircraftsManager.cpp \
     $$PWD/flightgear/FgTransport.cpp \
     $$PWD/flightgear/FgFlightgear.cpp \
     $$PWD/vehicle/FgControlledAircraft.cpp \
@@ -29,15 +29,16 @@ HEADERS  += \
     $$PWD/utils/FgPid.h \
     $$PWD/utils/FgMath.h \
     $$PWD/utils/Filesystem.h \
-    $$PWD/FgAircraftsModel.h \
     $$PWD/vehicle/FgVehicle.h \
+    $$PWD/FgAircraftsManager.h \
     $$PWD/vehicle/FgAircraft.h \
     $$PWD/autopilot/FgAutopilot.h \
     $$PWD/flightgear/FgTransport.h \
     $$PWD/flightgear/FgFlightgear.h \
     $$PWD/vehicle/FgControlledAircraft.h \
     $$PWD/flightgear/FgGenericProtocol.h \
-    $$PWD/autopilot/FgAircraftAutopilot.h
+    $$PWD/autopilot/FgAircraftAutopilot.h \
+    $$QML_TRIKS/src/qqmlobjectlistmodel.h
 
 INCLUDEPATH += $$system_path($$PWD)
 INCLUDEPATH += $$system_path($$PWD/utils)

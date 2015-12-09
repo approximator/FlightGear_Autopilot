@@ -5,14 +5,13 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Sep 03, 2015
- * @date Modified Dec 07, 2015
+ * @date Modified Dec 09, 2015
  */
 
 #ifndef FGVEHICLE_H
 #define FGVEHICLE_H
 
 #include "QQmlHelpers"
-#include "FgVehicle.h"
 #include "flightgear/FgTransport.h"
 
 #include <QDebug>

@@ -6,11 +6,11 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Oct 21, 2015
+ * @date Modified Dec 09, 2015
  */
 
 #include "log.h"
-#include "FgAircraftsModel.h"
+#include "FgAircraftsManager.h"
 #include "utils/Filesystem.h"
 
 #include <QtQml>
@@ -55,7 +55,8 @@ int main(int argc, char *argv[])
 
     // Setup QML
     bool success = true;
-    qmlRegisterType<FgAircraftsModel>("fgap", 1, 0, "FgAircraftsModel");
+    qmlRegisterType<FgAircraftsManager>("fgap", 1, 0, "FgAircraftsManager");
+    qRegisterMetaType<TAirModel*>("TAirModel*");
     QQmlApplicationEngine engine;
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, [&success](QObject *object, const QUrl &url){
         if (!object)

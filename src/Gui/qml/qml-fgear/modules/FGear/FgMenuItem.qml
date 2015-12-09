@@ -4,9 +4,8 @@ import Material 0.1
 import Material.ListItems 0.1 as ListItem
 
 ListItem.Subtitled {
-
     height: Units.dp(72)
-    text: name
+    text: model.callsign
 
     property bool infoEnabled: false
 
@@ -17,11 +16,11 @@ ListItem.Subtitled {
         anchors.centerIn: parent
         enabled: infoEnabled
         iconName: "maps/flight"
-        color: (connected === true ? "green" : "gray")
+        color: (model.connected === true ? "green" : "gray")
         size: Units.dp(32)
         onClicked: fgInfoClicked()
     }
 
-    subText: (connected === true ? "Connected" : "Not connected")
+    subText: (model.connected === true ? "Connected" : "Not connected")
     interactive: true
 }

@@ -17,7 +17,7 @@ TabbedPage {
             name: "Add aircraft"
             hoverAnimation: true
             enabled: true
-            onTriggered: aircraftsList.model.addAircraft()
+            onTriggered: _manager.addAircraft()
         },
         Action {
             iconName: "awesome/globe"
@@ -40,8 +40,13 @@ TabbedPage {
         header: "Aircrafts"
         width: sidebarWidth
         backgroundColor: Qt.lighter(Theme.primaryDarkColor)
+
+        FgAircraftsManager {
+            id: _manager
+        }
+
         contents: FgAircraftsList {
-            model: FgAircraftsModel { }
+            model: _manager.model
             id: aircraftsList
         }
         style: "dark"
