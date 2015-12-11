@@ -24,7 +24,7 @@ Project {
 
     property path fgapBinDir: qbs.targetOS.contains("osx")
                                   ? "MacOS"
-                                  : "bin"
+                                  : ""
     property path fgapQmlInstallDir: FileInfo.joinPaths(fgapDataPath, "qml")
     property path fgapConfigSourceRoot: FileInfo.joinPaths(sourceDirectory, "../doc/config/")
     property path fgapConfigInstallDir: FileInfo.joinPaths(fgapDataPath, "config")
@@ -33,6 +33,7 @@ Project {
     qbsSearchPaths: FileInfo.joinPaths(sourceDirectory, "../qbs")
 
     references: [
+        "../contrib/lib-qt-qml-tricks/src/QtLibrary.qbs",
         "FlightController/FlightController.qbs",
         "Gui/qml/qml.qbs"
     ]

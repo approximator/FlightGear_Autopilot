@@ -5,10 +5,14 @@ FgapApplication {
     targetName: fgapAppTarget
     Depends { name: "qml_fgear" }
     Depends { name: "qml_material" }
-    Depends { name: "qml_material_components" }
+    Depends { name: "lib-qt-qml-tricks"; }
 
     Depends { name: "cpp" }
-    cpp.includePaths: [ "./", "utils"]
+    cpp.includePaths: [
+        "./",
+        "utils",
+        "../../contrib/lib-qt-qml-tricks/include",
+    ]
     cpp.rpaths: qbs.targetOS.contains("osx")
             ? ["@executable_path/../lib"]
             : ["$ORIGIN/../lib"]

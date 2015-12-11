@@ -17,19 +17,7 @@ Project {
         ]
     }
 
-    FgapQmlModule {
-        name: "qml_material_components"
-        moduleName: "Material/Components"
-        moduleRootDir: "/tmp/qml-material-components"
-        sourceUrl: "https://github.com/AndreyShelest/qml-material-components.git"
-
-        sourceFiles: [
-            "Material/Components/*qml*"
-        ]
-    }
-
     references: [
         "qml-fgear/qml-fgear.qbs"
     ]
-
 }
