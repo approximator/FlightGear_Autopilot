@@ -44,8 +44,7 @@ class QtDeployer():
         self.qt_qml_dir, err = p.communicate()
         self.qt_qml_dir = os.path.normpath(self.qt_qml_dir.rstrip().decode('utf-8'))
 
-        if not sys.platform.startswith('win'):
-            self.chrpath = 'patchelf'
+        self.chrpath = 'patchelf'
 
         print('Qt deployer starting...')
         print('fgap_exe_file: ', self.fgap_exe_file)
@@ -94,22 +93,9 @@ class QtDeployer():
 
         lib_ext = '*.so.*'
         dest = self.libraries_dir
-        if sys.platform.startswith('win'):
-            lib_ext = '*.dll'
-            dest = os.path.normpath(os.path.join(self.data_dir, '..'))
-            self.qt_libs_dir = self.qt_bin_dir
 
         for needed_lib in self.needed_libraries:
             for lib in glob(os.path.join(self.qt_libs_dir, needed_lib + lib_ext)):
-                if sys.platform.startswith('win') and os.path.basename(lib).startswith('Qt'):
-                    debug_lib = os.path.basename(lib).split('.')[0].endswith('d')
-                    if self.debug_build:
-                        if not debug_lib:
-                            continue
-                    else:
-                        if debug_lib:
-                            continue
-
                 # print('Copy: ', lib, '->', dest)
                 if os.path.islink(lib):
                     linkto = os.readlink(lib)
@@ -122,9 +108,8 @@ class QtDeployer():
                     if not os.path.exists(dest):
                         os.makedirs(dest)
                     shutil.copy2(lib, os.path.join(dest, os.path.basename(lib)))
-                    if not sys.platform.startswith('win'):
-                        self.change_rpath(os.path.join(dest, os.path.basename(lib)),
-                                          os.path.relpath(dest, self.libraries_dir))
+                    self.change_rpath(os.path.join(dest, os.path.basename(lib)),
+                                      os.path.relpath(dest, self.libraries_dir))
 
         print('Copying plugins:', self.plugins)
         for plugin in self.plugins:
@@ -159,9 +144,8 @@ class QtDeployer():
         self.copytree(resourcesource, resourcetarget, symlinks=True)
 
     def deploy(self):
-        if not sys.platform.startswith('win'):
-            self.change_rpath(self.fgap_exe_file,
-                              os.path.relpath(self.libraries_dir, os.path.dirname(self.fgap_exe_file)))
+        self.change_rpath(self.fgap_exe_file,
+                          os.path.relpath(self.libraries_dir, os.path.dirname(self.fgap_exe_file)))
 
         self.plugins = ['iconengines', 'imageformats', 'platformthemes',
                         'platforminputcontexts', 'platforms', 'xcbglintegrations']
@@ -173,12 +157,8 @@ class QtDeployer():
 
         self.needed_qml = ["Qt", "QtQuick", "QtQuick.2", "QtGraphicalEffects"]
 
-        if sys.platform.startswith('win'):
-            self.needed_libraries.extend(['libgcc_s_dw2-1', 'libwinpthread-1', 'libstdc++-6', 'icuin53', 'icuuc53', 'icudt53'])
-            self.copy_libs()
-        else:
-            self.needed_libraries = map(lambda lib: 'lib' + lib, self.needed_libraries)
-            self.copy_libs()
+        self.needed_libraries = map(lambda lib: 'lib' + lib, self.needed_libraries)
+        self.copy_libs()
 
         if 'LLVM_INSTALL_DIR' in os.environ:
             self.copy_libclang(self.data_dir, os.environ["LLVM_INSTALL_DIR"])

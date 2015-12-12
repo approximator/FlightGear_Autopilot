@@ -7,7 +7,7 @@ Project {
     property int v_minor: 0
     property int v_release: 3
     property string fgap_version: v_major + '.' + v_minor + '.' + v_release
-    property string app_name: "FlightGear Autopilot"
+    property string app_name: "FlightGear_Autopilot"
     property string app_short_name: "fgautopilot"
 
     property path fgapInstallRoot: qbs.installRoot

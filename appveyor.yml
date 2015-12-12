@@ -1,37 +1,45 @@
+os: Visual Studio 2015
 version: 1.0.{build}
 environment:
-  MINGW: C:\Qt\Tools\mingw492_32
   matrix:
-  - QTDIR: C:\Qt\5.5\mingw492_32
-    QMAKE_PARAMS: -r -spec win32-g++
-    MAKE: mingw32-make
-    DEPLOY: mingw32-make deploy_all
-    TAKE_SCREENSHOT: scripts\take_screenshot.bat
+  # - QTDIR: C:\Qt\5.5\mingw492_32
+  #   TAKE_SCREENSHOT: scripts\take_screenshot.bat
   - QTDIR: C:\Qt\5.5\msvc2013_64
-    QMAKE_PARAMS: -r -spec win32-msvc2013 -tp vc
-    MAKE: msbuild
-    DEPLOY: echo "Not implemented yet"
     TAKE_SCREENSHOT: echo "Not implemented yet"
 
 install:
 - cmd: git submodule update --init --recursive
-- cmd: set PATH=%PATH%;%QTDIR%\bin;%MINGW%\bin;C:\Qt\Tools\QtCreator\bin
+- cmd: set PATH=%PATH%;%QTDIR%\bin;C:\Qt\Tools\QtCreator\bin
 build_script:
 - cmd: >-
-    qmake src\FgAutopilot.pro %QMAKE_PARAMS%
-
     dir
 
-    %MAKE%
+    qbs setup-toolchains --detect
 
-    %DEPLOY%
+    qbs setup-qt --detect
+
+    qbs setup-qt %QTDIR%\bin\qmake.exe qt
+
+    qbs config defaultProfile qt
+
+    cd src
+
+    qbs --command-echo-mode command-line
+
+    qbs --clean-install-root qbs.installRoot:fgap_install
+
+    cd fgap_install\FlightGear_Autopilot
+
+    windeployqt --debug fgautopilot.exe
+
+    dir
 
     %TAKE_SCREENSHOT%
 
 artifacts:
-- path: fgautopilot-0.0.3
-  name: fgautopilot-0.0.3
-- path: '*.png'
-  name: screenshot
-- path: 'fgautopilot-0.0.3/*.log'
-  name: logs
+- path: src/fgap_install
+  name: Flightgear Autopilot
+# - path: '*.png'
+#   name: screenshot
+# - path: 'fgautopilot-0.0.3/*.log'
+#   name: logs

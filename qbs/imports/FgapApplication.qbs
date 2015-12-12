@@ -15,7 +15,7 @@ Product {
     cpp.defines: generalDefines.concat()
     cpp.cxxLanguageVersion: "c++11"
     cpp.warningLevel: "all"
-    cpp.treatWarningsAsErrors: true
+    cpp.treatWarningsAsErrors: false
     cpp.linkerFlags: {
         var flags = [];
         if (qbs.buildVariant == "release" && (qbs.toolchain.contains("gcc") || qbs.toolchain.contains("mingw")))
