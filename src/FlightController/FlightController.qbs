@@ -6,6 +6,7 @@ FgapApplication {
     Depends { name: "qml_fgear" }
     Depends { name: "qml_material" }
     Depends { name: "lib-qt-qml-tricks"; }
+    Depends { name: "ArdupilotLib"; }
 
     Depends { name: "cpp" }
     cpp.includePaths: [
@@ -13,6 +14,12 @@ FgapApplication {
         "utils",
         "../../contrib/lib-qt-qml-tricks/include",
     ]
+
+    cpp.systemIncludePaths: [
+        "../../contrib/lib-qt-qml-tricks/include",
+        "../../contrib/ardupilot/libraries",
+    ]
+
     cpp.rpaths: qbs.targetOS.contains("osx")
             ? ["@executable_path/../lib"]
             : ["$ORIGIN/../lib"]

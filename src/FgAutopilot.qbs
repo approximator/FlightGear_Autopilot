@@ -34,6 +34,7 @@ Project {
 
     references: [
         "../contrib/lib-qt-qml-tricks/src/QtLibrary.qbs",
+        "../contrib/ardupilot.qbs",
         "FlightController/FlightController.qbs",
         "Gui/qml/qml.qbs"
     ]
