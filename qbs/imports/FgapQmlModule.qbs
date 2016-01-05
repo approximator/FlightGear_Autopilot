@@ -27,6 +27,6 @@ Product {
         name: "qmlModule"
         fileTags: ["copyable_qml_module"]
         prefix: moduleRootDir + "/" + moduleSrcPrefix + "/"
-        files: FgapFunctions.getModuleFiles(product)
+        files: product.sourceFiles
     }
 }
