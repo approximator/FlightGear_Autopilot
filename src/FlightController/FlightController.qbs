@@ -3,21 +3,17 @@ import qbs
 FgapApplication {
     name: project.app_short_name
     targetName: fgapAppTarget
+
+    Depends { name: "Qt"; submodules: [ "qml", "quick", "gui", "network", "xml", "svg"] }
     Depends { name: "qml_fgear" }
     Depends { name: "qml_material" }
-    Depends { name: "lib-qt-qml-tricks"; }
+    Depends { name: "qml_tricks" }
+    Depends { name: "lib-qt-qml-tricks"}
 
-    Depends { name: "cpp" }
-    cpp.includePaths: [
-        "./",
-        "utils",
-        "../../contrib/lib-qt-qml-tricks/include",
-    ]
+    cpp.includePaths: project.fgapIncludePaths.concat([".", "utils"])
     cpp.rpaths: qbs.targetOS.contains("osx")
             ? ["@executable_path/../lib"]
             : ["$ORIGIN/../lib"]
-
-    Depends { name: "Qt"; submodules: [ "qml", "quick", "network", "xml", "svg"] }
 
     /* Main source file */
     Group {
