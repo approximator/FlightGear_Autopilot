@@ -10,6 +10,7 @@ Project {
     property string app_name: "FlightGear Autopilot"
     property string app_short_name: "fgautopilot"
 
+    property path fgapSourceRoot: FileInfo.joinPaths(sourceDirectory, "../")
     property path fgapInstallRoot: qbs.installRoot
     property path fgapInstallDir: qbs.targetOS.contains("osx")
                                    ? app_name + ".app/Contents"
@@ -30,10 +31,13 @@ Project {
     property path fgapConfigInstallDir: FileInfo.joinPaths(fgapDataPath, "config")
 
     minimumQbsVersion: "1.4"
-    qbsSearchPaths: FileInfo.joinPaths(sourceDirectory, "../qbs")
+    qbsSearchPaths: FileInfo.joinPaths(fgapSourceRoot, "qbs")
+
+    property bool fgapSubmodulesReady: false
+    property pathList fgapIncludePaths: []
 
     references: [
-        "../contrib/lib-qt-qml-tricks/src/QtLibrary.qbs",
+        fgapSourceRoot + "contrib/submodules.qbs",
         "FlightController/FlightController.qbs",
         "Gui/qml/qml.qbs"
     ]
