@@ -9,6 +9,10 @@ services:
 #     - secure: "afLxPzrM1+xjYyidIXnuAn4pimOegT5jXxQNsXXpT2Tj59odI6tL6CZuuH5/SC66E0VwcR5YnAnQ7p4OoQyysqjBApZ71fUZSTcD4r9rlOMhvRwL+6nWRPF3/WxsqWYeuHoMDit4QQR8a7WQINPnJg0ZzRjD0/bFN2j1v+vID5I="
 #     - secure: "cvrIzqJ8FvKXzvB4Tp8Q9gbpFfLTGkVVndrAMA6Pj0trY13nlz6Z2lg9o1Mkcmw/73ndpDImB1IhoPCrgPJBOMYrv7bOKZZJ0D6qCyoIdqspTQX7wJm0WZPQ/SqoACZjpp536AvPJ6vUdZjg+Xj2I913U7SMtvAOrBEUfbMcTOs="
 
+env:
+  - UBUNTU_NAME=trusty
+  - UBUNTU_NAME=wily
+
 addons:
   apt:
     packages:
@@ -16,6 +20,7 @@ addons:
       - imagemagick
       - p7zip-full
       - python-pip
+      - tree
 
 before_install:
   - "export DISPLAY=:99.0"
@@ -25,10 +30,9 @@ before_install:
 
 before_script:
   - echo "Before script"
-  - SOURCES_DIR=$TRAVIS_BUILD_DIR
-  - docker build -t approximator/fgap $SOURCES_DIR/scripts/docker
+  - INSTALL_DIR=${TRAVIS_BUILD_DIR}/../fgap_install
+  - docker build -t approximator/fgap -f scripts/docker/Dockerfile_ubuntu_${UBUNTU_NAME} scripts/docker
 
 script:
-  - mkdir result
-  - docker run -v $SOURCES_DIR:/fgap -v $(pwd)/result:/result approximator/fgap
-  - ls $(pwd)/result
+  - docker run -v ${TRAVIS_BUILD_DIR}:/fgap -v ${INSTALL_DIR}:/result approximator/fgap
+  - tree -L 5 ${INSTALL_DIR}

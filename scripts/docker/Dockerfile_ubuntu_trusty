@@ -1,0 +1,27 @@
+FROM ubuntu:trusty
+MAINTAINER Oleksii Aliakin <alex@nls.la>
+ENV DEBIAN_FRONTEND noninteractive
+
+# Add ubuntu-sdk repo and install qt5
+RUN apt-get install -y software-properties-common && \
+    add-apt-repository ppa:ubuntu-sdk-team/ppa    && \
+    apt-get update && apt-get upgrade -y          && \
+    apt-get install --no-install-recommends -y       \
+        make git gcc g++ qt5-default qtdeclarative5-dev qtscript5-dev libqt5svg5-dev
+
+# build latest qbs
+RUN cd /tmp                                    && \
+    git clone git://code.qt.io/qt-labs/qbs.git && \
+    qmake -r qbs/qbs.pro                       && \
+    make -j4                                   && \
+    make install
+
+# build fgap
+CMD qbs setup-toolchains --detect        && \
+    qbs setup-qt --detect                && \
+    qbs setup-qt $(which qmake) qt       && \
+    qbs config defaultProfile qt         && \
+    cd /fgap/src                         && \
+    qbs --command-echo-mode command-line \
+        -d /tmp/fgap_build/              \
+        --clean-install-root qbs.installRoot:/result/install
