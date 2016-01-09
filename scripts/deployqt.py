@@ -63,6 +63,7 @@ class QtDeployer():
         if new_rpath == '.':
             rpath = '$ORIGIN'
         command = [self.chrpath, '--set-rpath', rpath, filename]
+        print(' '.join(command))
         try:
             subprocess.check_call(command)
         except:
@@ -86,6 +87,7 @@ class QtDeployer():
                 lib_dir = lib_dir[0:lib_dir.find('(')].strip()
             if lib_name and lib_dir:
                 self.get_dependencies(lib_dir, dependencies)
+
                 dependencies[lib_name] = lib_dir
 
     def copy_libs(self):
@@ -119,13 +121,17 @@ class QtDeployer():
             pluginPath = os.path.join(self.qt_plugins_dir, plugin)
             if os.path.exists(pluginPath):
                 self.copytree(pluginPath, target, symlinks=True)
+            else:
+                print('Can not copy {} to {}'.format(pluginPath, target))
 
         if os.path.exists(self.qt_qml_dir):
             print('Copying qt quick 2 imports')
             target = os.path.join(self.data_dir, 'qml')
 
             for lib in filter(lambda x: os.path.basename(x) in self.needed_qml, glob(self.qt_qml_dir+'/*')):
-                self.copytree(lib,os.path.join(target, os.path.basename(lib)), symlinks=True)
+                self.copytree(lib, os.path.join(target, os.path.basename(lib)), symlinks=True)
+        else:
+            print('Error {} does not exist.'.format(self.qt_qml_dir))
 
     def copy_libclang(self, data_dir, llvm_install_dir):
         libsource = os.path.join(llvm_install_dir, 'lib', 'libclang.so')
@@ -152,7 +158,7 @@ class QtDeployer():
 
         self.needed_libraries = [
             'Qt5Core', 'Qt5Widgets', 'Qt5Gui', 'Qt5Qml', 'Qt5Quick', 'Qt5Network',
-            'Qt5DBus', 'Qt5Svg', 'icudata', 'icui18n', 'icuuc'
+            'Qt5DBus', 'Qt5Svg', 'icudata', 'icui18n', 'icuuc', 'pcre'
         ]
 
         self.needed_qml = ["Qt", "QtQuick", "QtQuick.2", "QtGraphicalEffects"]
@@ -174,8 +180,7 @@ class QtDeployer():
             else:
                 shutil.copy2(s, d)
 #                print('Copy:', s, '->', d)
-                if not sys.platform.startswith('win') and os.access(d, os.X_OK):
-                    self.change_rpath(d, os.path.relpath(self.libraries_dir, os.path.dirname(d)))
+                self.change_rpath(d, os.path.relpath(self.libraries_dir, os.path.dirname(d)))
 
 
 if __name__ == "__main__":

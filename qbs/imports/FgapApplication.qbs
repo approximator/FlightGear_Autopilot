@@ -6,6 +6,7 @@ Product {
 
     property stringList generalDefines: [
         'FGAP_QML_MODULES_PATH="' + FileInfo.relativePath (project.fgapBinDir, project.fgapQmlInstallDir) + '"',
+        'FGAP_PLUGINS_PATH="' + FileInfo.relativePath (project.fgapBinDir, project.fgapPluginsInstallDir) + '"',
         'CONFIG_PATH="' + FileInfo.relativePath (project.fgapBinDir, project.fgapConfigInstallDir) + '"'
     ]
 

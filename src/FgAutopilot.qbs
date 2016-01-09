@@ -29,6 +29,7 @@ Project {
     property path fgapQmlInstallDir: FileInfo.joinPaths(fgapDataPath, "qml")
     property path fgapConfigSourceRoot: FileInfo.joinPaths(sourceDirectory, "../doc/config/")
     property path fgapConfigInstallDir: FileInfo.joinPaths(fgapDataPath, "config")
+    property path fgapPluginsInstallDir: FileInfo.joinPaths(fgapDataPath, "plugins")
 
     minimumQbsVersion: "1.4"
     qbsSearchPaths: FileInfo.joinPaths(fgapSourceRoot, "qbs")
