@@ -2,9 +2,27 @@ FROM ubuntu:wily
 MAINTAINER Oleksii Aliakin <alex@nls.la>
 ENV DEBIAN_FRONTEND noninteractive
 
+#RUN echo "Acquire::http::proxy \"http://xx.xx.xx.xx:8080/\";" >> /etc/apt/apt.conf
+#RUN echo "Acquire::https::proxy \"https://xx.xx.xx.xx:8080/\";" >> /etc/apt/apt.conf
+#RUN echo "Acquire::ftp::proxy \"ftp://xx.xx.xx.xx:8080/\";" >> /etc/apt/apt.conf
+#RUN echo "Acquire::socks::proxy \"socks://xx.xx.xx.xx:8080/\";" >> /etc/apt/apt.conf
+
 RUN apt-get update && apt-get upgrade -y       && \
     apt-get install --no-install-recommends -y    \
-        git gcc g++ qt5-default qtdeclarative5-dev libqt5svg5-dev qbs
+        g++ \
+        gcc \
+        git \
+        libqt5svg5-dev \
+        patchelf       \
+        python         \
+        qbs            \
+        qml-module-qt-labs-settings   \
+        qml-module-qtgraphicaleffects \
+        qml-module-qtquick-controls   \
+        qml-module-qtquick-dialogs    \
+        qml-module-qtquick2           \
+        qt5-default                   \
+        qtdeclarative5-dev
 
 # build fgap
 CMD qbs setup-toolchains --detect        && \
@@ -12,6 +30,13 @@ CMD qbs setup-toolchains --detect        && \
     qbs setup-qt $(which qmake) qt       && \
     qbs config defaultProfile qt         && \
     cd /fgap/src                         && \
-    qbs --command-echo-mode command-line \
-        -d /tmp/fgap_build/              \
-        --clean-install-root qbs.installRoot:/result/install
+    qbs --command-echo-mode command-line    \
+        -d /tmp/fgap_build/                 \
+        --clean-install-root qbs.installRoot:/result/install    && \
+        python -u /fgap/scripts/deployqt.py                        \
+                  /result/install/FlightGear_Autopilot/fgautopilot \
+                  /result/install/FlightGear_Autopilot             \
+                  /result/install/FlightGear_Autopilot/data        \
+                  /result/install/FlightGear_Autopilot/data/lib    \
+                  $(which qmake)                                   \
+                  release
