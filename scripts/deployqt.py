@@ -58,6 +58,9 @@ class QtDeployer():
         print('Qt plugins dir:', self.qt_plugins_dir)
         print('Qt qml dir:    ', self.qt_qml_dir)
 
+    def is_executable(self, path):
+        return '.so' in path  # TODO: find more reliable way to determine if file is a shared library
+
     def change_rpath(self, filename, new_rpath):
         rpath = '$ORIGIN/' + new_rpath
         if new_rpath == '.':
@@ -95,23 +98,26 @@ class QtDeployer():
 
         lib_ext = '*.so.*'
         dest = self.libraries_dir
+        symlinks = []
 
         for needed_lib in self.needed_libraries:
             for lib in glob(os.path.join(self.qt_libs_dir, needed_lib + lib_ext)):
-                # print('Copy: ', lib, '->', dest)
                 if os.path.islink(lib):
-                    linkto = os.readlink(lib)
-                    try:
-                        os.symlink(linkto, os.path.join(dest, os.path.basename(lib)))
-                    except:
-                       # print('Link exists')
-                       pass
+                    symlinks.append((os.readlink(lib), os.path.join(dest, os.path.basename(lib))))
                 else:
                     if not os.path.exists(dest):
                         os.makedirs(dest)
-                    shutil.copy2(lib, os.path.join(dest, os.path.basename(lib)))
-                    self.change_rpath(os.path.join(dest, os.path.basename(lib)),
-                                      os.path.relpath(dest, self.libraries_dir))
+                    copy_to = os.path.join(dest, os.path.basename(lib))
+                    shutil.copy2(lib, copy_to)
+                    if self.is_executable(copy_to):
+                        self.change_rpath(copy_to, os.path.relpath(dest, self.libraries_dir))
+        # making symlinks after all the libs were copied
+        for symlink in symlinks:
+            try:
+                print('Make link {} -> {}'.format(os.path.basename(symlink[1]), os.path.basename(symlink[0])))
+                os.symlink(symlink[0], symlink[1])
+            except:
+                print('Error while creating the linsk {} -> {}'.format(os.path.basename(symlink[0]), symlink[1]))
 
         print('Copying plugins:', self.plugins)
         for plugin in self.plugins:
@@ -180,7 +186,8 @@ class QtDeployer():
             else:
                 shutil.copy2(s, d)
 #                print('Copy:', s, '->', d)
-                self.change_rpath(d, os.path.relpath(self.libraries_dir, os.path.dirname(d)))
+                if self.is_executable(d):
+                    self.change_rpath(d, os.path.relpath(self.libraries_dir, os.path.dirname(d)))
 
 
 if __name__ == "__main__":
