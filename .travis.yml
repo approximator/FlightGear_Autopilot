@@ -16,23 +16,16 @@ env:
 addons:
   apt:
     packages:
-      - xvfb
-      - imagemagick
       - p7zip-full
-      - python-pip
       - tree
 
-before_install:
-  - "export DISPLAY=:99.0"
-  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x24"
-  - sleep 3
-  - sudo add-apt-repository -y ppa:staticfloat/julia-deps
-
 before_script:
-  - echo "Before script"
   - INSTALL_DIR=${TRAVIS_BUILD_DIR}/../fgap_install
-  - docker build -t approximator/fgap -f scripts/docker/Dockerfile_ubuntu_${UBUNTU_NAME} scripts/docker
+  - docker build -t approximator/fgaptest -f scripts/docker/Dockerfile_deploy_test scripts
+  - docker build -t approximator/fgap -f scripts/docker/Dockerfile_ubuntu_${UBUNTU_NAME} scripts
 
 script:
-  - docker run -v ${TRAVIS_BUILD_DIR}:/fgap -v ${INSTALL_DIR}:/result approximator/fgap
+  - docker run -v ${TRAVIS_BUILD_DIR}:/fgap:ro -v ${INSTALL_DIR}:/result approximator/fgap
+  - tree -L 5 ${INSTALL_DIR}
+  - if [ "$UBUNTU_NAME" == "wily" ]; then docker run -v ${INSTALL_DIR}:/fgap approximator/fgaptest; fi
   - tree -L 5 ${INSTALL_DIR}
