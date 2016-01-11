@@ -1,44 +1,49 @@
-os: Visual Studio 2015
+os: Windows Server 2012 R2
 version: 1.0.{build}
 environment:
+  MINGW: C:\Qt\Tools\mingw492_32
   matrix:
-  # - QTDIR: C:\Qt\5.5\mingw492_32
-  #   TAKE_SCREENSHOT: scripts\take_screenshot.bat
-  - QTDIR: C:\Qt\5.5\msvc2013_64
-    TAKE_SCREENSHOT: echo "Not implemented yet"
+  - QTDIR: C:\Qt\5.5\mingw492_32
+    TAKE_SCREENSHOT: scripts\take_screenshot.bat
+  # - QTDIR: C:\Qt\5.5\msvc2013_64
+  #   TAKE_SCREENSHOT: echo "Not implemented yet"
 
 install:
 - cmd: git submodule update --init --recursive
-- cmd: set PATH=%PATH%;%QTDIR%\bin;C:\Qt\Tools\QtCreator\bin
+- cmd: set PATH=%MINGW%\bin;%QTDIR%\bin;C:\Qt\Tools\QtCreator\bin;%PATH%
+- cmd: set INSTALL_DIR=%APPVEYOR_BUILD_FOLDER%\install
 build_script:
 - cmd: >-
-    dir
 
     qbs setup-toolchains --detect
 
-    qbs setup-qt --detect
-
     qbs setup-qt %QTDIR%\bin\qmake.exe qt
+
+    qbs config profiles.i686-w64-mingw32.cpp.archiverPath "%MINGW%\bin\ar.exe"
+
+    qbs config profiles.i686-w64-mingw32.cpp.nmPath "%MINGW%\bin\nm.exe"
+
+    qbs config profiles.i686-w64-mingw32.cpp.objcopyPath "%MINGW%\bin\objcopy.exe"
+
+    qbs config profiles.i686-w64-mingw32.cpp.stripPath "%MINGW%\bin\strip.exe"
 
     qbs config defaultProfile qt
 
-    cd src
+    cd %APPVEYOR_BUILD_FOLDER%\src
 
-    qbs --command-echo-mode command-line
+    qbs --command-echo-mode command-line --clean-install-root qbs.installRoot:%INSTALL_DIR%
 
-    qbs --clean-install-root qbs.installRoot:fgap_install
-
-    cd fgap_install\FlightGear_Autopilot
+    cd %INSTALL_DIR%\FlightGear_Autopilot
 
     windeployqt --debug fgautopilot.exe
 
     dir
 
-    %TAKE_SCREENSHOT%
+#    %TAKE_SCREENSHOT%
 
 artifacts:
-- path: src/fgap_install
-  name: Flightgear Autopilot
+- path: install
+  name: Flightgear_Autopilot
 # - path: '*.png'
 #   name: screenshot
 # - path: 'fgautopilot-0.0.3/*.log'
