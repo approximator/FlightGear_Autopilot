@@ -7,4 +7,4 @@
 	url = https://github.com/approximator/Qt-QML-Tricks
 [submodule "contrib/ardupilot"]
 	path = contrib/ardupilot
-	url = https://github.com/diydrones/ardupilot
+	url = https://github.com/approximator/ardupilot
