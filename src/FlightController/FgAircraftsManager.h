@@ -24,7 +24,7 @@ typedef QQmlObjectListModel<FgControlledAircraft> TAirModel;
 class FgAircraftsManager : public QObject
 {
     Q_OBJECT
-    QML_READONLY_PROPERTY(TAirModel*, model)
+    QML_READONLY_PROPERTY(TAirModel *, model)
 
 public:
     explicit FgAircraftsManager(QObject *parent = 0);
@@ -33,10 +33,10 @@ public:
     bool saveConfig();
 
     Q_INVOKABLE bool addAircraft();
-    Q_INVOKABLE bool addAircraft(QSettings &settings);
+    Q_INVOKABLE bool addAircraft(QSettings& settings);
 
 private:
-    FgTransport* m_Transport { nullptr };
+    FgTransport *m_Transport { nullptr };
     std::tuple<int, int> getAvailablePorts() const;
 
     FgAircraftsManager(const FgAircraftsManager& other);
@@ -47,7 +47,7 @@ private slots:
     void onAircraftConnected();
 
 signals:
-    void fdmDataChanged(FgTransport* transport);
+    void fdmDataChanged(FgTransport *transport);
 };
 
 #endif // FGCONTROLLER_H

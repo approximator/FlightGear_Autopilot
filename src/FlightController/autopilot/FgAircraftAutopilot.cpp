@@ -22,7 +22,9 @@ FgAircraftAutopilot::FgAircraftAutopilot(FgControlledAircraft *aircraft, QObject
 void FgAircraftAutopilot::computeControl()
 {
     if (!engaged())
+    {
         return;
+    }
 
     if (m_Aircraft->delta_time() < 0.00001) // do not allow autopilot to go crazy with small doubles
     {
@@ -95,10 +97,10 @@ void FgAircraftAutopilot::follow(FgAircraft *followAircraft)
     m_DesiredAltitude = followAircraft->altitude();
 
     m_DesiredHeading = fgap::math::headingTo(
-                m_Aircraft->latitude(),
-                m_Aircraft->longitude(),
-                followAircraft->latitude(),
-                followAircraft->longitude());
+                           m_Aircraft->latitude(),
+                           m_Aircraft->longitude(),
+                           followAircraft->latitude(),
+                           followAircraft->longitude());
 
     holdHeading();
 }

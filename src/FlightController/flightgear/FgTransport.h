@@ -61,7 +61,7 @@ private:
     QHostAddress m_ListenHost           { "127.0.0.1" };
     quint16      m_ListenPort           { 8000 };
     QString      m_ListenProtocol       { "udp" };
-    QString      m_ListenGenericProtocol{ "FgaProtocol" };
+    QString      m_ListenGenericProtocol { "FgaProtocol" };
     int          m_ListenFrequency      { 40 };
     QHostAddress m_WriteHost            { "127.0.0.1" };
     quint16      m_WritePort            { 8001 };
@@ -169,17 +169,19 @@ std::shared_ptr<FgGenericProtocol> FgTransport::protocol() const
 QString FgTransport::networkParams() const
 {
     if (!m_GenericEnabled)
+    {
         return "";
+    }
 
     return QString("--generic=socket,out,%1,%2,%3,%4,%5 --generic=socket,in,%6,%7,%8,%9,%10")
-            .arg(m_ListenFrequency)
-            .arg(m_ListenHost.toString())
-            .arg(m_ListenPort)
-            .arg(m_ListenProtocol, m_ListenGenericProtocol)
-            .arg(m_WriteFrequency)
-            .arg(m_WriteHost.toString())
-            .arg(m_WritePort)
-            .arg(m_WriteProtocol, m_WriteGenericProtocol);
+           .arg(m_ListenFrequency)
+           .arg(m_ListenHost.toString())
+           .arg(m_ListenPort)
+           .arg(m_ListenProtocol, m_ListenGenericProtocol)
+           .arg(m_WriteFrequency)
+           .arg(m_WriteHost.toString())
+           .arg(m_WritePort)
+           .arg(m_WriteProtocol, m_WriteGenericProtocol);
 }
 
 Q_DECLARE_METATYPE(FgTransport *)

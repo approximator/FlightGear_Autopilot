@@ -44,7 +44,9 @@ double FgPid::update(double error, double dt)
         _prev_d = 0;
     }
     else
+    {
         d = (error - _prev_error) / dt;
+    }
 
     double RC = 1 / (2 * 3.14 * _filter);
     d = _prev_d + ((dt / (RC + dt)) * (d - _prev_d));

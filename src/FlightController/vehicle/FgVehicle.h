@@ -20,13 +20,13 @@
 class FgVehicle : public QObject
 {
     Q_OBJECT
-    QML_WRITABLE_PROPERTY(QString, callsign  )
-    QML_READONLY_PROPERTY(bool , connected   )
-    QML_READONLY_PROPERTY(qreal, latitude    )
-    QML_READONLY_PROPERTY(qreal, longitude   )
-    QML_READONLY_PROPERTY(qreal, altitude    )
+    QML_WRITABLE_PROPERTY(QString, callsign)
+    QML_READONLY_PROPERTY(bool , connected)
+    QML_READONLY_PROPERTY(qreal, latitude)
+    QML_READONLY_PROPERTY(qreal, longitude)
+    QML_READONLY_PROPERTY(qreal, altitude)
     QML_READONLY_PROPERTY(qreal, ground_level)
-    QML_READONLY_PROPERTY(qreal, delta_time  )
+    QML_READONLY_PROPERTY(qreal, delta_time)
     QML_READONLY_PROPERTY(qreal, elapsed_time)
 
 public:
@@ -51,15 +51,17 @@ public:
 public slots:
     virtual void onFdmDataChanged(FgTransport *transport)
     {
-        update_longitude   (transport->getFloat(LONGITUDE   ));
-        update_latitude    (transport->getFloat(LATITUDE    ));
-        update_altitude    (transport->getFloat(ALTITUDE    ));
+        update_longitude(transport->getFloat(LONGITUDE));
+        update_latitude(transport->getFloat(LATITUDE));
+        update_altitude(transport->getFloat(ALTITUDE));
         update_ground_level(transport->getFloat(ALTITUDE_AGL));
         update_elapsed_time(transport->getFloat(ELAPSED_TIME));
-        update_delta_time  (transport->getFloat(DELTA_TIME  ));
+        update_delta_time(transport->getFloat(DELTA_TIME));
 
         if (!connected())
+        {
             update_connected(true);
+        }
     }
 };
 

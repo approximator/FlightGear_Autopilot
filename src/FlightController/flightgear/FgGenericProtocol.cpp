@@ -69,7 +69,7 @@ FgGenericProtocol::FgGenericProtocol(QObject *parent) :
     index = 0;
     ADD_PARAM(AILERONS, Parameter::FLOAT);
     ADD_PARAM(ELEVATOR, Parameter::FLOAT);
-    ADD_PARAM(  RUDDER, Parameter::FLOAT);
+    ADD_PARAM(RUDDER, Parameter::FLOAT);
 //    ADD_PARAM(   WHEEL, Parameter::FLOAT);
     ADD_PARAM(THROTTLE, Parameter::FLOAT);
 #undef ADD_PARAM
@@ -80,7 +80,7 @@ FgGenericProtocol::~FgGenericProtocol()
     qDebug() << "FgGenericProtocol detroyed.";
 }
 
-bool FgGenericProtocol::writeXml(const QString &fileName)
+bool FgGenericProtocol::writeXml(const QString& fileName)
 {
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -89,11 +89,13 @@ bool FgGenericProtocol::writeXml(const QString &fileName)
         return false;
     }
 
-    auto writeParameters = [](QXmlStreamWriter& stream, const QHash<QString, Parameter>& params) {
+    auto writeParameters = [](QXmlStreamWriter & stream, const QHash<QString, Parameter>& params)
+    {
         std::vector<Parameter> temp;
         std::copy(std::begin(params), std::end(params), std::back_inserter(temp));
         std::sort(std::begin(temp), std::end(temp));
-        std::for_each(std::begin(temp), std::end(temp), [&stream](const Parameter& param){
+        std::for_each(std::begin(temp), std::end(temp), [&stream](const Parameter & param)
+        {
             stream.writeStartElement("chunk");
             stream.writeTextElement("name", param.name);
             stream.writeTextElement("node", param.name);

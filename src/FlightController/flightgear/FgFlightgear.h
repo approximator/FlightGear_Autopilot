@@ -79,8 +79,8 @@ private:
     int     m_MultiplayFrequencyOut { 10 };
     QString m_MultiplayHostOut      { };
     QProcess m_FlightgearProcess    { };
-    std::shared_ptr<FgTransport>      m_Transport     { std::make_shared<FgTransport>(this) };
-    QVector<QPair<QString, QString> > m_RunParameters { };
+    std::shared_ptr<FgTransport>      m_Transport    { std::make_shared<FgTransport>(this) };
+    QVector<QPair<QString, QString>> m_RunParameters { };
 
 signals:
     /*!
@@ -109,7 +109,9 @@ QString FgFlightgear::rootDir() const
 void FgFlightgear::setRootDir(const QString _rootDir)
 {
     if (m_RootDir == _rootDir)
+    {
         return;
+    }
 
     m_RootDir = fgap::path::normPath(_rootDir);
     m_ProtocolFile = fgap::path::join(m_RootDir, m_ProtocolFileName);
@@ -124,7 +126,9 @@ QString FgFlightgear::exeFile() const
 void FgFlightgear::setExeFile(const QString _exeFile)
 {
     if (m_ExeFile == _exeFile)
+    {
         return;
+    }
 
     m_ExeFile = fgap::path::normPath(_exeFile);
     emit exeFileChanged();
@@ -143,15 +147,17 @@ std::shared_ptr<FgTransport> FgFlightgear::transport() const
 QString FgFlightgear::multiplayParams() const
 {
     if (!m_MultiplayEnabled)
+    {
         return "";
+    }
 
     return QString("--multiplay=out,%1,%2,%3 --multiplay=in,%4,%5,%6")
-            .arg(m_MultiplayFrequencyOut)
-            .arg(m_MultiplayHostOut)
-            .arg(m_MultiplayPortOut)
-            .arg(m_MultiplayFrequencyIn)
-            .arg(m_MultiplayHostIn)
-            .arg(m_MultiplayPortIn);
+           .arg(m_MultiplayFrequencyOut)
+           .arg(m_MultiplayHostOut)
+           .arg(m_MultiplayPortOut)
+           .arg(m_MultiplayFrequencyIn)
+           .arg(m_MultiplayHostIn)
+           .arg(m_MultiplayPortIn);
 }
 
 #endif // FGFLIGHTGEAR_H

@@ -24,7 +24,7 @@ FgControlledAircraft::~FgControlledAircraft()
 {
 }
 
-bool FgControlledAircraft::setConfig(QSettings &settings)
+bool FgControlledAircraft::setConfig(QSettings& settings)
 {
     bool result = false;
     settings.beginGroup("flightgear");
@@ -44,19 +44,20 @@ bool FgControlledAircraft::setConfig(QSettings &settings)
         }
 
         connect(m_Flightgear->transport().get(), &FgTransport::fgDataReceived, this, &FgControlledAircraft::onFdmDataChanged);
-        connect(&m_Flightgear->process(), static_cast<void (QProcess::*)(int)>(&QProcess::finished), [this](int){ emit flightgearFinished(); });
-        connect(&m_Flightgear->process(), &QProcess::started , [this](){ emit flightgearStarted(); });
+        connect(&m_Flightgear->process(), static_cast<void (QProcess::*)(int)>(&QProcess::finished), [this](int) { emit flightgearFinished(); });
+        connect(&m_Flightgear->process(), &QProcess::started , [this]() { emit flightgearStarted(); });
         connect(m_Flightgear.get(), &FgFlightgear::readyChanged,
-                [this](bool ready){ emit flightgearReadyChanged(ready); });
+        [this](bool ready) { emit flightgearReadyChanged(ready); });
 
         result = true;
-    } while (0);
+    }
+    while (0);
 
     settings.endGroup();
     return result;
 }
 
-bool FgControlledAircraft::saveConfig(QSettings &settings)
+bool FgControlledAircraft::saveConfig(QSettings& settings)
 {
     settings.beginGroup("flightgear");
     m_Flightgear->saveConfig(settings);
@@ -82,7 +83,9 @@ void FgControlledAircraft::onFdmDataChanged(FgTransport *transport)
     FgAircraft::onFdmDataChanged(transport);
 
     if (!m_Autopilot->engaged())
+    {
         return;
+    }
 
     m_Autopilot->computeControl();
     m_Flightgear->transport()->writeData(QString("%1\t%2\t%3\t%4\n")

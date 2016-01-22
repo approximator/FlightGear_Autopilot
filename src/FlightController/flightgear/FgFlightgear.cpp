@@ -19,17 +19,23 @@
 
 FgFlightgear::FgFlightgear(QObject *parent) : QObject(parent)
 {
-    connect(&m_FlightgearProcess, &QProcess::readyReadStandardOutput, [this](){
+    connect(&m_FlightgearProcess, &QProcess::readyReadStandardOutput, [this]()
+    {
         qDebug() << "Flightgear:";
         for (const auto& str : QString(m_FlightgearProcess.readAllStandardOutput()).split('\n'))
+        {
             qDebug() << str;
+        }
     });
-    connect(&m_FlightgearProcess, &QProcess::readyReadStandardOutput, [this](){
+    connect(&m_FlightgearProcess, &QProcess::readyReadStandardOutput, [this]()
+    {
         qDebug() << "Flightgear error:";
         for (const auto& str : QString(m_FlightgearProcess.readAllStandardError()).split('\n'))
+        {
             qDebug() << str;
+        }
     });
-    connect(&m_FlightgearProcess, &QProcess::started, [this](){ qDebug() << "Flightgear started"; });
+    connect(&m_FlightgearProcess, &QProcess::started, [this]() { qDebug() << "Flightgear started"; });
 }
 
 FgFlightgear::~FgFlightgear()
@@ -129,7 +135,9 @@ bool FgFlightgear::run()
     qDebug() << "Starting: " << m_ExeFile + ' ' + runParameters();
     m_FlightgearProcess.start("\"" + m_ExeFile +  "\"" + ' ' + runParameters());
     if (!m_FlightgearProcess.waitForStarted())
+    {
         qWarning() << "Failed to start Flightgear";
+    }
 
     return true;
 }
@@ -159,7 +167,8 @@ bool FgFlightgear::setConfig(QSettings& settings)
     m_MultiplayEnabled = settings.value("enabled", true).toBool();
     if (m_MultiplayEnabled)
     {
-        auto getMultiplayParams = [](QSettings& settings, const QString& group) {
+        auto getMultiplayParams = [](QSettings & settings, const QString & group)
+        {
             settings.beginGroup(group);
             int frequency = settings.value("frequency").toInt();
             QString host = settings.value("host").toString();
@@ -175,13 +184,15 @@ bool FgFlightgear::setConfig(QSettings& settings)
     m_RunParameters.clear();
     settings.beginGroup("additional_parameters");
     QStringList keys = settings.allKeys();
-    for (auto &key : keys)
+    for (auto& key : keys)
+    {
         m_RunParameters.push_back(QPair<QString, QString>(key, settings.value(key).toString()));
+    }
     settings.endGroup();
     return true;
 }
 
-bool FgFlightgear::saveConfig(QSettings &settings)
+bool FgFlightgear::saveConfig(QSettings& settings)
 {
     settings.setValue("callsign", m_Callsign);
     settings.setValue("exe_file", m_ExeFile);
@@ -198,7 +209,8 @@ bool FgFlightgear::saveConfig(QSettings &settings)
 
     settings.beginGroup("multiplay");
     settings.setValue("enabled", m_MultiplayEnabled);
-    auto setMultiplayParams = [&settings](const QString& group, int frequency, const QString& host, int port) {
+    auto setMultiplayParams = [&settings](const QString & group, int frequency, const QString & host, int port)
+    {
         settings.beginGroup(group);
         settings.setValue("frequency", frequency);
         settings.setValue("host", host);
@@ -210,8 +222,10 @@ bool FgFlightgear::saveConfig(QSettings &settings)
     settings.endGroup();
 
     settings.beginGroup("additional_parameters");
-    for (auto const &param : m_RunParameters)
+    for (auto const& param : m_RunParameters)
+    {
         settings.setValue(param.first, param.second);
+    }
     settings.endGroup();
 
     return true;
@@ -221,20 +235,28 @@ QString FgFlightgear::runParameters() const
 {
     QStringList args;
     args << "--fg-root=\"" + m_RootDir + "\"";
-    for (auto const &param : m_RunParameters)
+    for (auto const& param : m_RunParameters)
+    {
         args << ("--" + param.first + (param.second.isEmpty() ? "" : ("=" + param.second)));
+    }
     QString additionalArguments = args.join(' ');
     QString multiplay = multiplayParams();
     QString network = m_Transport->networkParams();
 
     QString result = QString("--callsign=%1 --airport=%2 --runway=%3 --aircraft=%4 --geometry=%5 --timeofday=%6").
-            arg(m_Callsign, m_Airport, m_Runway, m_Aircraft, m_WindowSize, m_TimeOfDay);
+                     arg(m_Callsign, m_Airport, m_Runway, m_Aircraft, m_WindowSize, m_TimeOfDay);
     if (!additionalArguments.isEmpty())
+    {
         result.append(' ').append(additionalArguments);
+    }
     if (!multiplay.isEmpty())
+    {
         result.append(' ').append(multiplay);
+    }
     if (!network.isEmpty())
+    {
         result.append(' ').append(network);
+    }
 
     return result;
 }

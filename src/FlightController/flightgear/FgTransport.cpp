@@ -23,7 +23,7 @@ FgTransport::~FgTransport()
 //    qDebug() << "FgTransport destroyed[" << m_ListenHost.toString() << ":" << m_ListenPort << "]" << "out: " << m_WritePort;
 }
 
-bool FgTransport::setConfig(QSettings &settings)
+bool FgTransport::setConfig(QSettings& settings)
 {
     m_GenericEnabled = settings.value("enabled", false).toBool();
     settings.beginGroup("in");
@@ -45,7 +45,9 @@ bool FgTransport::setConfig(QSettings &settings)
     settings.endGroup();
 
     if (!m_GenericEnabled)
+    {
         return true;
+    }
 
     m_Socket->bind(m_ListenHost, m_ListenPort);
     connect(m_Socket.get(), &QUdpSocket::readyRead, this, &FgTransport::onSocketRead);
@@ -53,7 +55,7 @@ bool FgTransport::setConfig(QSettings &settings)
     return true;
 }
 
-bool FgTransport::saveConfig(QSettings &settings)
+bool FgTransport::saveConfig(QSettings& settings)
 {
     settings.setValue("enabled", m_GenericEnabled);
     settings.beginGroup("in");
@@ -107,7 +109,7 @@ void FgTransport::onSocketRead()
     }
 }
 
-bool FgTransport::writeData(const QString &data)
+bool FgTransport::writeData(const QString& data)
 {
     m_SocketOut->writeDatagram(data.toLocal8Bit(), m_WriteHost, m_WritePort);
     return true;

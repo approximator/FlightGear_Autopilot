@@ -18,21 +18,23 @@
 #include <QtMath>
 #include <QString>
 
-namespace fgap
-{
+namespace fgap {
 
-namespace math
-{
+namespace math {
 
 
 template <typename T>
 T limit(const T& value, const T& _min_limit, const T& _max_limit)
 {
     if (value < _min_limit)
+    {
         return _min_limit;
+    }
 
     if (value > _max_limit)
+    {
         return _max_limit;
+    }
 
     return value;
 }
@@ -45,15 +47,15 @@ T limit(const T& value, const T& _limit)
 
 inline double normalizeAngle_360(double angle)
 {
-    while (angle >= 360) angle -= 360;
-    while (angle <  0)   angle += 360;
+    while (angle >= 360) { angle -= 360; }
+    while (angle <  0) { angle += 360; }
     return angle;
 }
 
 inline double normalizeAngle_180(double angle)
 {
-    while (angle >  180) angle -= 360;
-    while (angle < -180) angle += 360;
+    while (angle >  180) { angle -= 360; }
+    while (angle < -180) { angle += 360; }
     return angle;
 }
 
@@ -79,7 +81,7 @@ inline double getDistance(double lat1, double lon1, double lat2, double lon2)
     lat2 = qDegreesToRadians(lat2);
     lon2 = qDegreesToRadians(lon2);
 
-    double d = 2 * asin(sqrt(sqr(sin(lat1-lat2) / 2)) + cos(lat1) * cos(lat2) * sqr(sin((lon1-lon2)/2)));
+    double d = 2 * asin(sqrt(sqr(sin(lat1 - lat2) / 2)) + cos(lat1) * cos(lat2) * sqr(sin((lon1 - lon2) / 2)));
     return d * 6366710; // TODO: define radius of Earth
 }
 
@@ -96,33 +98,49 @@ inline double headingTo(double lat1, double lon1, double lat2, double lon2)
     lon2 = qDegreesToRadians(lon2);
 
     // http://mathforum.org/library/drmath/view/55417.html
-    qreal  y = sin(lon2-lon1) * cos(lat2);
+    qreal  y = sin(lon2 - lon1) * cos(lat2);
     qreal  x = cos(lat1) * sin(lat2) -
-               sin(lat1) * cos(lat2) * cos(lon2-lon1);
+               sin(lat1) * cos(lat2) * cos(lon2 - lon1);
     if (y > 0)
     {
         if (x > 0)
+        {
             offset = qRadiansToDegrees(std::atan(y / x));
+        }
         else if (x < 0)
+        {
             offset = 180 - qRadiansToDegrees(std::atan(-y / x));
+        }
         else // (x == 0)
+        {
             offset = 90;
+        }
     }
     else if (y < 0)
     {
         if (x > 0)
+        {
             offset = 360 - qRadiansToDegrees(std::atan(-y / x));
+        }
         else if (x < 0)
+        {
             offset = 180 + qRadiansToDegrees(std::atan(y / x));
+        }
         else
+        {
             offset = 270;
+        }
     }
     else // (y == 0)
     {
         if (x > 0)
+        {
             offset = 0;
+        }
         else if (x < 0)
+        {
             offset = 180;
+        }
         // if (x == 0) then [the 2 points are the same]
     }
 

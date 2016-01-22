@@ -109,14 +109,17 @@ bool FgAircraftsManager::addAircraft(QSettings& settings)
 std::tuple<int, int> FgAircraftsManager::getAvailablePorts() const
 {
     auto a = std::max_element(m_model->constBegin(), m_model->constEnd(),
-                [](const FgControlledAircraft* a1,
-                   const FgControlledAircraft* a2) {
-                    return std::max(a1->transport()->listenPort(), a1->transport()->port()) <
-                           std::max(a2->transport()->listenPort(), a2->transport()->port());
-                });
+                              [](const FgControlledAircraft * a1,
+                                 const FgControlledAircraft * a2)
+    {
+        return std::max(a1->transport()->listenPort(), a1->transport()->port()) <
+               std::max(a2->transport()->listenPort(), a2->transport()->port());
+    });
 
     if (a == m_model->constEnd())
+    {
         return std::make_tuple(8000, 8000 + 1);
+    }
 
     auto transport = (*a)->transport();
     int port = std::max(transport->listenPort(), transport->port()) + 1;
@@ -139,9 +142,11 @@ void FgAircraftsManager::onDataReceived(FgTransport *transport)
 
 void FgAircraftsManager::onAircraftConnected()
 {
-    FgAircraft *aircraft = static_cast<FgAircraft*>(sender());
+    FgAircraft *aircraft = static_cast<FgAircraft *>(sender());
     if (!aircraft->connected())
-        return; // TODO: set disconnect status if not connected
+    {
+        return;    // TODO: set disconnect status if not connected
+    }
 
     qDebug() << "aircraft " << aircraft->callsign() << " connected";
 }

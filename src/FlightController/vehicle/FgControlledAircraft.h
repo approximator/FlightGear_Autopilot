@@ -26,8 +26,8 @@ class FgControlledAircraft : public FgAircraft
     Q_OBJECT
     Q_PROPERTY(bool autopilotEngaged READ autopilotEngaged)
     Q_PROPERTY(bool flightgearReady READ flightgearReady NOTIFY flightgearReadyChanged)
-    Q_PROPERTY(FgTransport* transport READ transport NOTIFY transportChanged)
-    Q_PROPERTY(FgFlightgear* flightgear READ flightgear NOTIFY flightgearChanged)
+    Q_PROPERTY(FgTransport *transport READ transport NOTIFY transportChanged)
+    Q_PROPERTY(FgFlightgear *flightgear READ flightgear NOTIFY flightgearChanged)
 public:
     explicit FgControlledAircraft(QObject *parent = 0);
     virtual ~FgControlledAircraft();
@@ -43,8 +43,8 @@ public:
     inline bool flightgearReady() const;
     inline void follow(FgAircraft *aircraft);
 
-    bool setConfig(QSettings &settings);
-    bool saveConfig(QSettings &settings);
+    bool setConfig(QSettings& settings);
+    bool saveConfig(QSettings& settings);
 
     Q_INVOKABLE void runFlightGear(bool run = true);
     Q_INVOKABLE void autopilotEngage(bool engage = true);
@@ -61,7 +61,7 @@ signals:
     void flightgearChanged();
 
 public slots:
-    virtual void onFdmDataChanged(FgTransport* transport);
+    virtual void onFdmDataChanged(FgTransport *transport);
 };
 
 //

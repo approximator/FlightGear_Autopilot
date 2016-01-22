@@ -85,7 +85,7 @@ int FgGenericProtocol::getParamIndex(const QString& node) const
     return m_InParameters.value(node, Parameter(-1, "none", Parameter::INT)).index;
 }
 
-FgGenericProtocol::Parameter::Parameter(int idx, const QString &_name, ParamType t):
+FgGenericProtocol::Parameter::Parameter(int idx, const QString& _name, ParamType t):
     index(idx),
     name(_name),
     type(t)
@@ -93,7 +93,7 @@ FgGenericProtocol::Parameter::Parameter(int idx, const QString &_name, ParamType
 
 }
 
-bool FgGenericProtocol::Parameter::operator<(const FgGenericProtocol::Parameter &other) const
+bool FgGenericProtocol::Parameter::operator<(const FgGenericProtocol::Parameter& other) const
 {
     return this->index < other.index;
 }
@@ -102,15 +102,15 @@ const QString FgGenericProtocol::Parameter::typeStr() const
 {
     switch (type)
     {
-    case INT:
-        return "int";
-    case FLOAT:
-        return "float";
-    case STRING:
-        return "string";
-    default:
-        return "unknown";
-        break;
+        case INT:
+            return "int";
+        case FLOAT:
+            return "float";
+        case STRING:
+            return "string";
+        default:
+            return "unknown";
+            break;
     }
 }
 
@@ -118,12 +118,12 @@ const QString FgGenericProtocol::Parameter::formatStr() const
 {
     switch (type)
     {
-    case INT:
-        return "%d";
-    case FLOAT:
-        return "%f";
-    default:
-        return "%s";
+        case INT:
+            return "%d";
+        case FLOAT:
+            return "%f";
+        default:
+            return "%s";
     }
 }
 

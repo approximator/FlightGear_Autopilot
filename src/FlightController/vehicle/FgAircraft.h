@@ -56,11 +56,11 @@ public slots:
     virtual void onFdmDataChanged(FgTransport *transport)
     {
         FgVehicle::onFdmDataChanged(transport);
-        update_pitch   (transport->getFloat(PITCH   ));
-        update_roll    (transport->getFloat(ROLL    ));
-        update_yaw     (transport->getFloat(YAW     ));
+        update_pitch(transport->getFloat(PITCH));
+        update_roll(transport->getFloat(ROLL));
+        update_yaw(transport->getFloat(YAW));
         update_yaw_rate(transport->getFloat(YAW_RATE));
-        update_heading (transport->getFloat(HEADING ));
+        update_heading(transport->getFloat(HEADING));
         update_airspeed(transport->getFloat(AIRSPEED));
         update_vertical_speed(transport->getFloat(VERTICAL_SPEED));
     }
