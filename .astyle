@@ -1,0 +1,20 @@
+--style=allman
+--indent=spaces=4
+--indent-switches
+--indent-preprocessor
+--pad-oper
+--pad-header
+--unpad-paren
+--align-pointer=name
+--align-reference=type
+--convert-tabs
+--close-templates # c++11 only
+--max-code-length=120
+--break-after-logical
+--keep-one-line-blocks
+--attach-namespaces
+--add-brackets
+--break-closing-brackets
+--suffix=none
+
+# find src \( -name '*.cpp' -o -name '*.h' \) -exec astyle --options=.astyle {} \;
