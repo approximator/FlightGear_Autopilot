@@ -2,17 +2,10 @@
 #include "../../FlightController/vehicle/FgControlledAircraft.h"
 #include "tst_controlledaircrafttest.h"
 
-ControlledAircraftTest::ControlledAircraftTest()
-{
-}
+ControlledAircraftTest::ControlledAircraftTest() {}
 
-void ControlledAircraftTest::initTestCase()
-{
-}
+void ControlledAircraftTest::initTestCase() {}
 
-void ControlledAircraftTest::cleanupTestCase()
-{
-}
+void ControlledAircraftTest::cleanupTestCase() {}
 
 QTEST_APPLESS_MAIN(ControlledAircraftTest)
-

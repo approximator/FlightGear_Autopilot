@@ -27,5 +27,4 @@ private Q_SLOTS:
     void headingTo();
 };
 
-#endif // TST_CONTROLLERAIRCRAFTTEST
-
+#endif /* TST_CONTROLLERAIRCRAFTTEST */
