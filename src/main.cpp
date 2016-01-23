@@ -6,7 +6,7 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Dec 09, 2015
+ * @date Modified Jan 24, 2016
  */
 
 #include "log.h"
@@ -22,9 +22,7 @@ int main(int argc, char *argv[])
 {
 #ifdef FGAP_PLUGINS_PATH
     // Add path to search for Qt plugins
-    QString pluginsPaths = fgap::path::join(
-                QFileInfo(argv[0]).dir().path(),
-                FGAP_PLUGINS_PATH);
+    QString pluginsPaths = fgap::path::join(QFileInfo(argv[0]).dir().path(), FGAP_PLUGINS_PATH);
     QCoreApplication::addLibraryPath(pluginsPaths);
 #endif
 
@@ -42,12 +40,10 @@ int main(int argc, char *argv[])
         if (!settingsDir.exists())
             if (!settingsDir.mkpath(settingsDir.absolutePath()))
                 qDebug() << "Could not create settings directory " << settingsDir.absolutePath();
-        if (!QFile::exists(settings.fileName()))
-        {
-            QString configFileName(fgap::path::join(QCoreApplication::applicationDirPath(),
-                                                    CONFIG_PATH,
+        if (!QFile::exists(settings.fileName())) {
+            QString configFileName(fgap::path::join(QCoreApplication::applicationDirPath(), CONFIG_PATH,
                                                     "example_multiplayWithoutServer.ini"));
-            qDebug() << "Copying "<< configFileName << " settings to " << settings.fileName();
+            qDebug() << "Copying " << configFileName << " settings to " << settings.fileName();
             if (!QFile::copy(configFileName, settings.fileName()))
                 qWarning() << "Could not copy default settings to " << settings.fileName();
         }
@@ -56,11 +52,10 @@ int main(int argc, char *argv[])
     // Setup QML
     bool success = true;
     qmlRegisterType<FgAircraftsManager>("fgap", 1, 0, "FgAircraftsManager");
-    qRegisterMetaType<TAirModel*>("TAirModel*");
+    qRegisterMetaType<TAirModel *>("TAirModel*");
     QQmlApplicationEngine engine;
-    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, [&success](QObject *object, const QUrl &url){
-        if (!object)
-        {
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, [&success](QObject *object, const QUrl &url) {
+        if (!object) {
             qWarning() << "Could not load QML";
             QMessageBox::critical(nullptr, "Flightgear autopilot",
                                   "<b>Flightgear autopilot</b> is failed to start due to errors in the main QML file.\n"
@@ -73,9 +68,7 @@ int main(int argc, char *argv[])
             qDebug() << "QML object created successfully: " << url;
     });
 
-    QString qmlFilesPath = fgap::path::join(
-                QCoreApplication::applicationDirPath(),
-                FGAP_QML_MODULES_PATH);
+    QString qmlFilesPath = fgap::path::join(QCoreApplication::applicationDirPath(), FGAP_QML_MODULES_PATH);
     qDebug() << "qmlFilesPath = " << qmlFilesPath;
     engine.addImportPath(qmlFilesPath);
     engine.load(QUrl(QStringLiteral("qrc:qml/MainView.qml")));

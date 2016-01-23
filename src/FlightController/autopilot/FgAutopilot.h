@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 14, 2015
- * @date Modified Jan 23, 2016
+ * @date Modified Jan 24, 2016
  */
 #ifndef FGAUTOPILOT_H
 #define FGAUTOPILOT_H
@@ -14,14 +14,11 @@
 
 #include <QObject>
 
-class FgAutopilot : public QObject
-{
+class FgAutopilot : public QObject {
     Q_OBJECT
     QML_WRITABLE_VAR_PROPERTY(bool, engaged)
 public:
-    explicit FgAutopilot(QObject *parent = 0):
-        QObject(parent),
-        m_engaged(false)
+    explicit FgAutopilot(QObject *parent = 0) : QObject(parent), m_engaged(false)
     {
     }
 
@@ -29,8 +26,8 @@ public:
     {
     }
 
-    FgAutopilot(const FgAutopilot& other);
-    FgAutopilot& operator=(const FgAutopilot& other);
+    FgAutopilot(const FgAutopilot &other);
+    FgAutopilot &operator=(const FgAutopilot &other);
 
     virtual void computeControl() = 0;
 };

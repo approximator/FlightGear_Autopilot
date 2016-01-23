@@ -15,4 +15,3 @@ void ControlledAircraftTest::cleanupTestCase()
 }
 
 QTEST_APPLESS_MAIN(ControlledAircraftTest)
-

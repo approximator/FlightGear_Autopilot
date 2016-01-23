@@ -133,4 +133,3 @@ void MathTest::headingTo()
 }
 
 QTEST_APPLESS_MAIN(MathTest)
-

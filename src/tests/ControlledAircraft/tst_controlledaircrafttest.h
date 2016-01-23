@@ -3,8 +3,7 @@
 
 #include <QtTest>
 
-class ControlledAircraftTest : public QObject
-{
+class ControlledAircraftTest : public QObject {
     Q_OBJECT
 
 public:
@@ -16,4 +15,3 @@ private Q_SLOTS:
 };
 
 #endif // TST_CONTROLLERAIRCRAFTTEST
-

@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Aug 12, 2015
+ * @date Modified Jan 24, 2016
  */
 
 #include "log.h"
@@ -16,8 +16,7 @@
 #include <QFile>
 #include <QXmlStreamWriter>
 
-FgGenericProtocol::FgGenericProtocol(QObject *parent) :
-    QObject(parent)
+FgGenericProtocol::FgGenericProtocol(QObject *parent) : QObject(parent)
 {
     // Parameters of instance that we control
     int index = 0;
@@ -45,9 +44,7 @@ FgGenericProtocol::FgGenericProtocol(QObject *parent) :
     ADD_PARAM(NUM_PLAYERS, Parameter::INT);
     ADD_PARAM(MODELS_COUNT, Parameter::INT);
 
-
-
-    // TODO: fix this multiplayer stuff
+// TODO: fix this multiplayer stuff
 //    for (int i = 0; i < 20; ++i)
 //    {
 //        ADD_PARAM("/ai/models/multiplayer[" + QString::number(i) + "]/callsign", Parameter::STRING);
@@ -63,14 +60,13 @@ FgGenericProtocol::FgGenericProtocol(QObject *parent) :
 
 #undef ADD_PARAM
 
-
-    // Parameteres to control
+// Parameteres to control
 #define ADD_PARAM(node, type) m_OutParameters.insert(node, Parameter(index++, node, type));
     index = 0;
     ADD_PARAM(AILERONS, Parameter::FLOAT);
     ADD_PARAM(ELEVATOR, Parameter::FLOAT);
-    ADD_PARAM(  RUDDER, Parameter::FLOAT);
-//    ADD_PARAM(   WHEEL, Parameter::FLOAT);
+    ADD_PARAM(RUDDER, Parameter::FLOAT);
+    //    ADD_PARAM(   WHEEL, Parameter::FLOAT);
     ADD_PARAM(THROTTLE, Parameter::FLOAT);
 #undef ADD_PARAM
 }
@@ -83,17 +79,16 @@ FgGenericProtocol::~FgGenericProtocol()
 bool FgGenericProtocol::writeXml(const QString &fileName)
 {
     QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-    {
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         qWarning() << "Can't open file for writing (" << fileName << ")";
         return false;
     }
 
-    auto writeParameters = [](QXmlStreamWriter& stream, const QHash<QString, Parameter>& params) {
+    auto writeParameters = [](QXmlStreamWriter &stream, const QHash<QString, Parameter> &params) {
         std::vector<Parameter> temp;
         std::copy(std::begin(params), std::end(params), std::back_inserter(temp));
         std::sort(std::begin(temp), std::end(temp));
-        std::for_each(std::begin(temp), std::end(temp), [&stream](const Parameter& param){
+        std::for_each(std::begin(temp), std::end(temp), [&stream](const Parameter &param) {
             stream.writeStartElement("chunk");
             stream.writeTextElement("name", param.name);
             stream.writeTextElement("node", param.name);
@@ -131,4 +126,3 @@ bool FgGenericProtocol::writeXml(const QString &fileName)
     qDebug() << "Protocol has been written to " << fileName;
     return true;
 }
-

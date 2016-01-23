@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Jan 04, 2015
- * @date Modified Aug 12, 2015
+ * @date Modified Jan 24, 2016
  */
 
 #ifndef FGGENERICPROTOCOL_H
@@ -38,23 +38,15 @@ const QString ELEVATOR("/controls/flight/elevator");
 const QString RUDDER("/controls/flight/rudder");
 const QString THROTTLE("/controls/engines/engine/throttle");
 
-
-class FgGenericProtocol : public QObject
-{
+class FgGenericProtocol : public QObject {
     Q_OBJECT
 public:
-    class Parameter
-    {
+    class Parameter {
     public:
-        enum ParamType
-        {
-            INT = 0,
-            FLOAT = 1,
-            STRING
-        } ;
+        enum ParamType { INT = 0, FLOAT = 1, STRING };
 
-        inline Parameter(int idx, const QString& _name, ParamType t);
-        inline bool operator<(const Parameter& other) const;
+        inline Parameter(int idx, const QString &_name, ParamType t);
+        inline bool operator<(const Parameter &other) const;
         inline const QString typeStr() const;
         inline const QString formatStr() const;
 
@@ -66,31 +58,26 @@ public:
     explicit FgGenericProtocol(QObject *parent = 0);
     ~FgGenericProtocol();
 
-    bool writeXml(const QString& fileName);
-    inline int getParamIndex(const QString& node) const;
+    bool writeXml(const QString &fileName);
+    inline int getParamIndex(const QString &node) const;
 
 private:
-    QHash<QString, Parameter> m_InParameters  { };
-    QHash<QString, Parameter> m_OutParameters { };
+    QHash<QString, Parameter> m_InParameters{};
+    QHash<QString, Parameter> m_OutParameters{};
 
 signals:
 
 public slots:
 };
 
-
 // Inline functions
-int FgGenericProtocol::getParamIndex(const QString& node) const
+int FgGenericProtocol::getParamIndex(const QString &node) const
 {
     return m_InParameters.value(node, Parameter(-1, "none", Parameter::INT)).index;
 }
 
-FgGenericProtocol::Parameter::Parameter(int idx, const QString &_name, ParamType t):
-    index(idx),
-    name(_name),
-    type(t)
+FgGenericProtocol::Parameter::Parameter(int idx, const QString &_name, ParamType t) : index(idx), name(_name), type(t)
 {
-
 }
 
 bool FgGenericProtocol::Parameter::operator<(const FgGenericProtocol::Parameter &other) const
@@ -100,30 +87,28 @@ bool FgGenericProtocol::Parameter::operator<(const FgGenericProtocol::Parameter 
 
 const QString FgGenericProtocol::Parameter::typeStr() const
 {
-    switch (type)
-    {
-    case INT:
-        return "int";
-    case FLOAT:
-        return "float";
-    case STRING:
-        return "string";
-    default:
-        return "unknown";
-        break;
+    switch (type) {
+        case INT:
+            return "int";
+        case FLOAT:
+            return "float";
+        case STRING:
+            return "string";
+        default:
+            return "unknown";
+            break;
     }
 }
 
 const QString FgGenericProtocol::Parameter::formatStr() const
 {
-    switch (type)
-    {
-    case INT:
-        return "%d";
-    case FLOAT:
-        return "%f";
-    default:
-        return "%s";
+    switch (type) {
+        case INT:
+            return "%d";
+        case FLOAT:
+            return "%f";
+        default:
+            return "%s";
     }
 }
 
