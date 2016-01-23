@@ -45,7 +45,7 @@ FgapApplication {
         files: "../resources/qml/qml_res.qrc"
     }
 
-    /*Fgap JSON configs*/
+    /* Fgap JSON configs */
     Group {
         name: "jsonConfigs"
         fileTags: ["jsonConfigs"]

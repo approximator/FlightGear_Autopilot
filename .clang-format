@@ -1,0 +1,48 @@
+---
+# find src \( -name '*.cpp' -o -name '*.h' \) -exec clang-format -style=file -i {} \;
+Language:        Cpp
+BasedOnStyle:  WebKit
+ColumnLimit: 120
+
+# The extra indent or outdent of access modifiers
+AccessModifierOffset: -4
+
+# Allows contracting simple braced statements to a single line
+AlignConsecutiveAssignments: true
+
+AlignTrailingComments: true
+SpacesBeforeTrailingComments: 10
+AllowShortBlocksOnASingleLine: true
+AllowShortFunctionsOnASingleLine: All
+AllowShortBlocksOnASingleLine: true
+BreakBeforeBinaryOperators: All
+
+BreakBeforeBraces: Linux
+
+# Control of individual brace wrapping cases
+# Only for clang-format >= 3.9
+#BreakBeforeBraces: Custom
+#BraceWrapping: {
+#    AfterClass: true
+#    AfterControlStatement: false
+#    AfterEnum: false
+#    AfterFunction: true
+#    AfterNamespace: false
+#    AfterStruct: true
+#    AfterUnion: true
+#    BeforeCatch: false
+#    BeforeElse: false
+#    IndentBraces: false
+#}
+
+NamespaceIndentation: None
+DerivePointerAlignment: true
+PointerAlignment: Left
+BreakConstructorInitializersBeforeComma: true
+Cpp11BracedListStyle: true
+IndentCaseLabels: true
+IndentWidth:     4
+Standard:        Cpp11
+TabWidth:        4
+UseTab:          Never
+...
