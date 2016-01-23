@@ -40,26 +40,10 @@ Project {
         }
     }
 
-    Product {
-        name: "qml_tricks"
-        Depends { name: "Qt"; submodules: [ "qml", "quick", "gui"] }
-
-        Export {
-            Depends { name: "cpp"}
-            cpp.systemIncludePaths: FileInfo.joinPaths(
-                                  product.sourceDirectory,
-                                  "lib-qt-qml-tricks/include"
-                                  )
-
-            Depends {
-                name: "lib-qt-qml-tricks";
-            }
-        }
-    }
-
     references: [
-        "lib-qt-qml-tricks/src/QtLibrary.qbs",
-        "ardupilot.qbs"
+        "qt-qml-models/QtQmlModels.qbs",
+        "qt-super-macros/QtSuperMacros.qbs",
+        "ardupilot.qbs",
     ]
 
 }

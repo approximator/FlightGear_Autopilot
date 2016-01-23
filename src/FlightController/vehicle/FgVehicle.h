@@ -5,13 +5,13 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Sep 03, 2015
- * @date Modified Dec 09, 2015
+ * @date Modified Jan 23, 2016
  */
 
 #ifndef FGVEHICLE_H
 #define FGVEHICLE_H
 
-#include "QQmlHelpers"
+#include "QQmlVarPropertyHelpers.h"
 #include "flightgear/FgTransport.h"
 
 #include <QDebug>
@@ -20,14 +20,14 @@
 class FgVehicle : public QObject
 {
     Q_OBJECT
-    QML_WRITABLE_PROPERTY(QString, callsign  )
-    QML_READONLY_PROPERTY(bool , connected   )
-    QML_READONLY_PROPERTY(qreal, latitude    )
-    QML_READONLY_PROPERTY(qreal, longitude   )
-    QML_READONLY_PROPERTY(qreal, altitude    )
-    QML_READONLY_PROPERTY(qreal, ground_level)
-    QML_READONLY_PROPERTY(qreal, delta_time  )
-    QML_READONLY_PROPERTY(qreal, elapsed_time)
+    QML_WRITABLE_VAR_PROPERTY(QString, callsign  )
+    QML_READONLY_VAR_PROPERTY(bool , connected   )
+    QML_READONLY_VAR_PROPERTY(qreal, latitude    )
+    QML_READONLY_VAR_PROPERTY(qreal, longitude   )
+    QML_READONLY_VAR_PROPERTY(qreal, altitude    )
+    QML_READONLY_VAR_PROPERTY(qreal, ground_level)
+    QML_READONLY_VAR_PROPERTY(qreal, delta_time  )
+    QML_READONLY_VAR_PROPERTY(qreal, elapsed_time)
 
 public:
     explicit FgVehicle(QObject *parent = 0):

@@ -6,13 +6,14 @@
  * @author Andrey Shelest
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 08, 2015
- * @date Modified Dec 09, 2015
+ * @date Modified Jan 23, 2016
  */
 
 #ifndef FGCONTROLLER_H
 #define FGCONTROLLER_H
 
-#include "QQmlObjectListModel"
+#include "QQmlObjectListModel.h"
+#include "QQmlVarPropertyHelpers.h"
 #include "vehicle/FgControlledAircraft.h"
 
 #include <QList>
@@ -24,7 +25,7 @@ typedef QQmlObjectListModel<FgControlledAircraft> TAirModel;
 class FgAircraftsManager : public QObject
 {
     Q_OBJECT
-    QML_READONLY_PROPERTY(TAirModel*, model)
+    QML_READONLY_VAR_PROPERTY(TAirModel*, model)
 
 public:
     explicit FgAircraftsManager(QObject *parent = 0);

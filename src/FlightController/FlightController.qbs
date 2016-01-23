@@ -9,8 +9,8 @@ FgapApplication {
 
     Depends { name: "qml_fgear" }
     Depends { name: "qml_material" }
-    Depends { name: "qml_tricks" }
-    Depends { name: "lib-qt-qml-tricks"}
+    Depends { name: "libqtqmltricks-qtqmlmodels" }
+    Depends { name: "libqtqmltricks-qtsupermacros" }
     Depends { name: "lib_ardupilot" }
 
     cpp.includePaths: [".", "utils"]

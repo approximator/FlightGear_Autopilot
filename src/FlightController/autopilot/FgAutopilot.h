@@ -5,19 +5,19 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 14, 2015
- * @date Modified Dec 07, 2015
+ * @date Modified Jan 23, 2016
  */
 #ifndef FGAUTOPILOT_H
 #define FGAUTOPILOT_H
 
-#include "QQmlHelpers"
+#include "QQmlVarPropertyHelpers.h"
 
 #include <QObject>
 
 class FgAutopilot : public QObject
 {
     Q_OBJECT
-    QML_WRITABLE_PROPERTY(bool, engaged)
+    QML_WRITABLE_VAR_PROPERTY(bool, engaged)
 public:
     explicit FgAutopilot(QObject *parent = 0):
         QObject(parent),
