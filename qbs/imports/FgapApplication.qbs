@@ -4,16 +4,7 @@ import qbs.FileInfo
 Product {
     type: "application" // no Mac app bundle
 
-    property stringList generalDefines: [
-        'FGAP_QML_MODULES_PATH="' + FileInfo.relativePath (project.fgapBinDir, project.fgapQmlInstallDir) + '"',
-        'FGAP_PLUGINS_PATH="' + FileInfo.relativePath (project.fgapBinDir, project.fgapPluginsInstallDir) + '"',
-        'CONFIG_PATH="' + FileInfo.relativePath (project.fgapBinDir, project.fgapConfigInstallDir) + '"'
-    ]
-
-    property stringList generalCppFlags: []
-
     Depends { name: "cpp" }
-    cpp.defines: generalDefines.concat()
     cpp.cxxLanguageVersion: "c++11"
     cpp.warningLevel: "all"
     cpp.treatWarningsAsErrors: false
@@ -26,6 +17,10 @@ Product {
     cpp.minimumOsxVersion: "10.7"
     cpp.minimumWindowsVersion: qbs.architecture === "x86" ? "5.1" : "5.2"
     cpp.visibility: "minimal"
+    cpp.rpaths: qbs.targetOS.contains("osx")
+            ? ["@executable_path/../lib"]
+            : ["$ORIGIN/../lib"]
+
     Properties {
         //OS X special compiler configs
         condition: qbs.targetOS.contains("osx")
