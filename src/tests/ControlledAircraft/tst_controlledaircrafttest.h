@@ -16,4 +16,3 @@ private Q_SLOTS:
 };
 
 #endif // TST_CONTROLLERAIRCRAFTTEST
-
