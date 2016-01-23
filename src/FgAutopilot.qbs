@@ -35,7 +35,14 @@ Project {
     qbsSearchPaths: FileInfo.joinPaths(fgapSourceRoot, "qbs")
 
     property bool fgapSubmodulesReady: false
-    property pathList fgapIncludePaths: []
+
+    property stringList generalDefines: [
+        'FGAP_QML_MODULES_PATH="' + FileInfo.relativePath (fgapBinDir, fgapQmlInstallDir) + '"',
+        'FGAP_PLUGINS_PATH="' + FileInfo.relativePath (fgapBinDir, fgapPluginsInstallDir) + '"',
+        'CONFIG_PATH="' + FileInfo.relativePath (fgapBinDir, fgapConfigInstallDir) + '"'
+    ]
+
+    property stringList generalCppFlags: []
 
     references: [
         fgapSourceRoot + "contrib/submodules.qbs",

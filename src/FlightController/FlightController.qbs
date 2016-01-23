@@ -4,17 +4,17 @@ FgapApplication {
     name: project.app_short_name
     targetName: fgapAppTarget
 
-    Depends { name: "Qt"; submodules: [ "qml", "quick", "gui", "network", "xml", "svg"] }
+    Depends { name: "Qt"; submodules: [ "qml", "quick", "gui",
+            "network", "xml", "svg"] }
+
     Depends { name: "qml_fgear" }
     Depends { name: "qml_material" }
     Depends { name: "qml_tricks" }
     Depends { name: "lib-qt-qml-tricks"}
-    Depends { name: "lib-ardupilot" }
+    Depends { name: "lib_ardupilot" }
 
-    cpp.includePaths: project.fgapIncludePaths.concat([".", "utils"])
-    cpp.rpaths: qbs.targetOS.contains("osx")
-            ? ["@executable_path/../lib"]
-            : ["$ORIGIN/../lib"]
+    cpp.includePaths: [".", "utils"]
+    cpp.defines: project.generalDefines
 
     /* Main source file */
     Group {
