@@ -1,41 +1,41 @@
 import qbs
 import qbs.FileInfo
 
-Product {
-    type: "staticlibrary"
-    name: "lib-ardupilot"
-    condition: lib_ardupilot_probe.found
+StaticLibrary {
+    name: "lib_ardupilot"
+    targetName: "libardupilot"
 
-    FgapSubmoduleProbe {
-        id: lib_ardupilot_probe
-        moduleName: "ardupilot"
-        gitRootDir: project.fgapSourceRoot
-    }
+    property path includePath: FileInfo.joinPaths(
+                               sourceDirectory,
+                               "ardupilot/libraries"
+                               )
+
+    property stringList publicDefines: [
+        'TOOLCHAIN=NATIVE',
+        'HAL_BOARD=HAL_BOARD_SITL',
+        'HAL_BOARD_SUBTYPE=HAL_BOARD_SUBTYPE_NONE',
+        'CONFIG_HAL_BOARD=HAL_BOARD',
+        'CONFIG_HAL_BOARD_SUBTYPE=HAL_BOARD_SUBTYPE',
+    ]
 
     Export {
         Depends { name: "cpp" }
 
-        cpp.cxxLanguageVersion: "c++11"
-        cpp.systemIncludePaths: FileInfo.joinPaths(
-                              product.sourceDirectory,
-                              "ardupilot/libraries"
-                              )
-
-
-        Properties {
-            //OS X special compiler configs
-            condition: qbs.targetOS.contains("osx")
-            cpp.cxxStandardLibrary: "libc++"
-        }
-
-        cpp.defines: [
-            'TOOLCHAIN=NATIVE',
-            'HAL_BOARD=HAL_BOARD_SITL',
-            'HAL_BOARD_SUBTYPE=HAL_BOARD_SUBTYPE_NONE',
-            'CONFIG_HAL_BOARD=HAL_BOARD',
-            'CONFIG_HAL_BOARD_SUBTYPE=HAL_BOARD_SUBTYPE',
-        ]
+        cpp.defines: product.publicDefines
+        cpp.systemIncludePaths: product.includePath
     }
+
+    Properties {
+        //OS X special compiler configs
+        condition: qbs.targetOS.contains("osx")
+        cpp.cxxStandardLibrary: "libc++"
+    }
+
+    Depends { name: "cpp" }
+
+    cpp.defines: publicDefines
+    cpp.systemIncludePaths: includePath
+    cpp.cxxLanguageVersion: "c++11"
 
     files: [
         "ardupilot/libraries/AP_Common/AP_Common.cpp",

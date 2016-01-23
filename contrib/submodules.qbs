@@ -42,23 +42,10 @@ Project {
 
     Product {
         name: "qml_tricks"
-        condition: qml_trick_probe.found
-
-        FgapSubmoduleProbe {
-            id: qml_trick_probe
-            moduleName: "lib-qt-qml-tricks"
-            gitRootDir: project.fgapSourceRoot
-        }
-
-
-        files: [
-            "lib-qt-qml-tricks/src/*.h",
-            "lib-qt-qml-tricks/src/*.cpp",
-            "lib-qt-qml-tricks/include/*.h"
-        ]
+        Depends { name: "Qt"; submodules: [ "qml", "quick", "gui"] }
 
         Export {
-            Depends { name: "cpp" }
+            Depends { name: "cpp"}
             cpp.systemIncludePaths: FileInfo.joinPaths(
                                   product.sourceDirectory,
                                   "lib-qt-qml-tricks/include"
@@ -66,20 +53,13 @@ Project {
 
             Depends {
                 name: "lib-qt-qml-tricks";
-                condition: qml_trick_probe.found;
             }
         }
     }
 
-    SubProject {
-        inheritProperties: true
-        filePath: "lib-qt-qml-tricks/src/QtLibrary.qbs"
-    }
-
-    SubProject {
-        inheritProperties: true
-        filePath: "ardupilot.qbs"
-    }
-
+    references: [
+        "lib-qt-qml-tricks/src/QtLibrary.qbs",
+        "ardupilot.qbs"
+    ]
 
 }
