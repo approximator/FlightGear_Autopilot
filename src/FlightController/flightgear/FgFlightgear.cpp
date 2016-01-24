@@ -19,7 +19,6 @@
 
 FgFlightgear::FgFlightgear(QObject *parent)
     : QObject(parent)
-    , dfds(dd)
 {
     connect(&m_FlightgearProcess, &QProcess::readyReadStandardOutput, [this]() {
         qDebug() << "Flightgear:";
