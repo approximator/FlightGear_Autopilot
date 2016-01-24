@@ -19,7 +19,6 @@
 
 FgFlightgear::FgFlightgear(QObject *parent)
     : QObject(parent)
-    , dfds(dd)
 {
     connect(&m_FlightgearProcess, &QProcess::readyReadStandardOutput, [this]() {
         qDebug() << "Flightgear:";
@@ -66,7 +65,7 @@ bool FgFlightgear::checkPaths()
         return false;
     }
 
-#ifdef 0
+#if 0
     QProcess fgfs;
     fgfs.setProcessChannelMode(QProcess::MergedChannels);
     fgfs.start(m_ExeFile, QStringList() << "--version");
