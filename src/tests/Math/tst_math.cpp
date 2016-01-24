@@ -4,11 +4,17 @@
 
 #include <QString>
 
-MathTest::MathTest() {}
+MathTest::MathTest()
+{
+}
 
-void MathTest::initTestCase() {}
+void MathTest::initTestCase()
+{
+}
 
-void MathTest::cleanupTestCase() {}
+void MathTest::cleanupTestCase()
+{
+}
 
 void MathTest::normalizeAngle_360()
 {
@@ -123,9 +129,8 @@ void MathTest::headingTo()
 
     qDebug() << headingTo(lat1, lon1, lat2, lon2);
     const double allowedError = 0.2;
-
-    /* Allow 0.2 degree error */
-    QVERIFY(std::fabs(headingTo(lat1, lon1, lat2, lon2) - result) < allowedError);
+    QVERIFY(std::fabs(headingTo(lat1, lon1, lat2, lon2) - result) < allowedError); // Allow 0.2 degree error
 }
 
 QTEST_APPLESS_MAIN(MathTest)
+

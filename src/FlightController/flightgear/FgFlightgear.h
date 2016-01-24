@@ -6,7 +6,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created May 12, 2015
- * @date Modified Jan 24, 2016
+ * @date Modified Sep 05, 2015
  */
 
 #ifndef FGFLIGHTGEAR_H
@@ -36,8 +36,8 @@ public:
     bool run();
     Q_INVOKABLE bool ready() const;
 
-    bool setConfig(QSettings &settings);
-    bool saveConfig(QSettings &settings);
+    bool setConfig(QSettings& settings);
+    bool saveConfig(QSettings& settings);
     QString runParameters() const;
 
     inline QString rootDir() const;
@@ -45,25 +45,23 @@ public:
     inline QString exeFile() const;
     inline void setExeFile(const QString _exeFile);
 
-    inline const QProcess &process() const;
+    inline const QProcess& process() const;
     inline std::shared_ptr<FgTransport> transport() const;
-
 private:
     inline QString multiplayParams() const;
 
 #ifdef Q_OS_WIN
-    QString m_ExeFile{ fgap::path::normPath("C:/Program Files/FlightGear/bin/win32/fgfs.exe") };
-    QString m_RootDir{ fgap::path::normPath("C:/Program Files/FlightGear/data/") };
-    QString m_ProtocolFileName{ fgap::path::normPath("Protocol/FgaProtocol.xml") };
-    QString m_ProtocolFile{ fgap::path::join(m_RootDir, m_ProtocolFileName) };
+    QString m_ExeFile { fgap::path::normPath("C:/Program Files/FlightGear/bin/win32/fgfs.exe") };
+    QString m_RootDir { fgap::path::normPath("C:/Program Files/FlightGear/data/") };
+    QString m_ProtocolFileName { fgap::path::normPath("Protocol/FgaProtocol.xml") };
+    QString m_ProtocolFile { fgap::path::join(m_RootDir, m_ProtocolFileName) };
 #else
-    QString m_ExeFile{ "/usr/games/fgfs" };
-    QString m_RootDir{ "/usr/share/games/flightgear" };
-    QString m_ProtocolFileName{ "Protocol/FgaProtocol.xml" };
-    QString m_ProtocolFile{ fgap::path::join(m_RootDir, m_ProtocolFileName) };
+    QString m_ExeFile { "/usr/games/fgfs" };
+    QString m_RootDir { "/usr/share/games/flightgear" };
+    QString m_ProtocolFileName { "Protocol/FgaProtocol.xml" };
+    QString m_ProtocolFile { fgap::path::join(m_RootDir, m_ProtocolFileName) };
 #endif
 
-    // clang-format off
     QFuture<bool>        m_InitFuture        { };
     QFutureWatcher<bool> m_InitFutureWatcher { };
     bool    m_Ready      { false };
@@ -83,7 +81,6 @@ private:
     QProcess m_FlightgearProcess    { };
     std::shared_ptr<FgTransport>      m_Transport     { std::make_shared<FgTransport>(this) };
     QVector<QPair<QString, QString> > m_RunParameters { };
-    // clang-format on
 
 signals:
     /*!
@@ -94,6 +91,7 @@ signals:
     void rootDirChanged();
     void exeFileChanged();
 
+
 public slots:
     bool init();
 
@@ -102,19 +100,26 @@ public slots:
     friend class ControlledAircraftTest;
 };
 
-QString FgFlightgear::rootDir() const { return m_RootDir; }
+
+QString FgFlightgear::rootDir() const
+{
+    return m_RootDir;
+}
 
 void FgFlightgear::setRootDir(const QString _rootDir)
 {
     if (m_RootDir == _rootDir)
         return;
 
-    m_RootDir      = fgap::path::normPath(_rootDir);
+    m_RootDir = fgap::path::normPath(_rootDir);
     m_ProtocolFile = fgap::path::join(m_RootDir, m_ProtocolFileName);
     emit rootDirChanged();
 }
 
-QString FgFlightgear::exeFile() const { return m_ExeFile; }
+QString FgFlightgear::exeFile() const
+{
+    return m_ExeFile;
+}
 
 void FgFlightgear::setExeFile(const QString _exeFile)
 {
@@ -125,9 +130,15 @@ void FgFlightgear::setExeFile(const QString _exeFile)
     emit exeFileChanged();
 }
 
-const QProcess &FgFlightgear::process() const { return m_FlightgearProcess; }
+const QProcess& FgFlightgear::process() const
+{
+    return m_FlightgearProcess;
+}
 
-std::shared_ptr<FgTransport> FgFlightgear::transport() const { return m_Transport; }
+std::shared_ptr<FgTransport> FgFlightgear::transport() const
+{
+    return m_Transport;
+}
 
 QString FgFlightgear::multiplayParams() const
 {
@@ -135,12 +146,12 @@ QString FgFlightgear::multiplayParams() const
         return "";
 
     return QString("--multiplay=out,%1,%2,%3 --multiplay=in,%4,%5,%6")
-        .arg(m_MultiplayFrequencyOut)
-        .arg(m_MultiplayHostOut)
-        .arg(m_MultiplayPortOut)
-        .arg(m_MultiplayFrequencyIn)
-        .arg(m_MultiplayHostIn)
-        .arg(m_MultiplayPortIn);
+            .arg(m_MultiplayFrequencyOut)
+            .arg(m_MultiplayHostOut)
+            .arg(m_MultiplayPortOut)
+            .arg(m_MultiplayFrequencyIn)
+            .arg(m_MultiplayHostIn)
+            .arg(m_MultiplayPortIn);
 }
 
-#endif /* FGFLIGHTGEAR_H */
+#endif // FGFLIGHTGEAR_H

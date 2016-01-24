@@ -15,4 +15,5 @@ private Q_SLOTS:
     void cleanupTestCase();
 };
 
-#endif /* TST_CONTROLLERAIRCRAFTTEST */
+#endif // TST_CONTROLLERAIRCRAFTTEST
+

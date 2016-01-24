@@ -5,7 +5,7 @@
  *
  * @author Oleksii Aliakin (alex@nls.la)
  * @date Created Feb 17, 2015
- * @date Modified Jan 24, 2016
+ * @date Modified Dec 07, 2015
  */
 
 #ifndef FGCONTROLLEDAIRCRAFT_H
@@ -26,8 +26,8 @@ class FgControlledAircraft : public FgAircraft
     Q_OBJECT
     Q_PROPERTY(bool autopilotEngaged READ autopilotEngaged)
     Q_PROPERTY(bool flightgearReady READ flightgearReady NOTIFY flightgearReadyChanged)
-    Q_PROPERTY(FgTransport *transport READ transport NOTIFY transportChanged)
-    Q_PROPERTY(FgFlightgear *flightgear READ flightgear NOTIFY flightgearChanged)
+    Q_PROPERTY(FgTransport* transport READ transport NOTIFY transportChanged)
+    Q_PROPERTY(FgFlightgear* flightgear READ flightgear NOTIFY flightgearChanged)
 public:
     explicit FgControlledAircraft(QObject *parent = 0);
     virtual ~FgControlledAircraft();
@@ -50,8 +50,8 @@ public:
     Q_INVOKABLE void autopilotEngage(bool engage = true);
 
 private:
-    std::shared_ptr<FgAircraftAutopilot> m_Autopilot{ std::make_shared<FgAircraftAutopilot>(this) };
-    std::shared_ptr<FgFlightgear> m_Flightgear{ std::make_shared<FgFlightgear>(this) };
+    std::shared_ptr<FgAircraftAutopilot>  m_Autopilot  { std::make_shared<FgAircraftAutopilot>(this) };
+    std::shared_ptr<FgFlightgear>         m_Flightgear { std::make_shared<FgFlightgear>(this) };
 
 signals:
     void flightgearStarted();
@@ -61,16 +61,31 @@ signals:
     void flightgearChanged();
 
 public slots:
-    virtual void onFdmDataChanged(FgTransport *transport);
+    virtual void onFdmDataChanged(FgTransport* transport);
 };
 
-bool FgControlledAircraft::autopilotEngaged() const { return m_Autopilot ? m_Autopilot->engaged() : false; }
+//
+bool FgControlledAircraft::autopilotEngaged() const
+{
+    return m_Autopilot ? m_Autopilot->engaged() : false;
+}
 
-FgAutopilot *FgControlledAircraft::autopilot() const { return m_Autopilot.get(); }
 
-FgTransport *FgControlledAircraft::transport() const { return m_Flightgear->transport().get(); }
 
-bool FgControlledAircraft::flightgearReady() const { return m_Flightgear->ready(); }
+FgAutopilot *FgControlledAircraft::autopilot() const
+{
+    return m_Autopilot.get();
+}
+
+FgTransport *FgControlledAircraft::transport() const
+{
+    return m_Flightgear->transport().get();
+}
+
+bool FgControlledAircraft::flightgearReady() const
+{
+    return m_Flightgear->ready();
+}
 
 void FgControlledAircraft::follow(FgAircraft *aircraft)
 {
@@ -78,8 +93,11 @@ void FgControlledAircraft::follow(FgAircraft *aircraft)
     m_Autopilot->set_engaged(true);
 }
 
-FgFlightgear *FgControlledAircraft::flightgear() const { return m_Flightgear.get(); }
+FgFlightgear *FgControlledAircraft::flightgear() const
+{
+    return m_Flightgear.get();
+}
 
 Q_DECLARE_METATYPE(FgControlledAircraft *)
 
-#endif /* FGCONTROLLEDAIRCRAFT_H */
+#endif // FGCONTROLLEDAIRCRAFT_H
