@@ -2,11 +2,12 @@ os: Windows Server 2012 R2
 version: 1.0.{build}
 environment:
   MINGW: C:\Qt\Tools\mingw492_32
+  QTDIR: C:\Qt\5.5\mingw492_32
+  TAKE_SCREENSHOT: scripts\take_screenshot.bat
+
   matrix:
-  - QTDIR: C:\Qt\5.5\mingw492_32
-    TAKE_SCREENSHOT: scripts\take_screenshot.bat
-  # - QTDIR: C:\Qt\5.5\msvc2013_64
-  #   TAKE_SCREENSHOT: echo "Not implemented yet"
+  - BUILD_VARIANT: debug
+  - BUILD_VARIANT: release
 
 install:
 - cmd: git submodule update --init --recursive
@@ -31,11 +32,11 @@ build_script:
 
     cd %APPVEYOR_BUILD_FOLDER%\src
 
-    qbs --command-echo-mode command-line --clean-install-root qbs.installRoot:%INSTALL_DIR%
+    qbs --command-echo-mode command-line --clean-install-root qbs.installRoot:%INSTALL_DIR% %BUILD_VARIANT%
 
     cd %INSTALL_DIR%\FlightGear_Autopilot
 
-    windeployqt --debug fgautopilot.exe
+    windeployqt --%BUILD_VARIANT% fgautopilot.exe
 
     dir
 
