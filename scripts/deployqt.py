@@ -21,6 +21,7 @@ def usage():
 
 
 class QtDeployer():
+
     def __init__(self, fgap_exe_file, install_dir, data_dir, libraries_dir, qmake, debug_build):
         self.fgap_exe_file = os.path.normpath(fgap_exe_file)
         self.install_dir = os.path.normpath(install_dir)
@@ -74,8 +75,10 @@ class QtDeployer():
 
     def get_dependencies(self, file_name, dependencies):
         try:
-            p = subprocess.Popen([file_name], stdout=subprocess.PIPE,
-                                 env=dict(os.environ.copy(), LD_TRACE_LOADED_OBJECTS='1'))
+            p = subprocess.Popen([file_name],
+                                 stdout=subprocess.PIPE,
+                                 env=dict(os.environ.copy(),
+                                          LD_TRACE_LOADED_OBJECTS='1'))
             deps, err = p.communicate()
         except OSError:
             return
@@ -114,10 +117,12 @@ class QtDeployer():
         # making symlinks after all the libs were copied
         for symlink in symlinks:
             try:
-                print('Make link {} -> {}'.format(os.path.basename(symlink[1]), os.path.basename(symlink[0])))
+                print('Make link {} -> {}'.format(
+                    os.path.basename(symlink[1]), os.path.basename(symlink[0])))
                 os.symlink(symlink[0], symlink[1])
             except:
-                print('Error while creating the links {} -> {}'.format(os.path.basename(symlink[0]), symlink[1]))
+                print('Error while creating the links {} -> {}'.format(
+                    os.path.basename(symlink[0]), symlink[1]))
 
         print('Copying plugins:', self.plugins)
         for plugin in self.plugins:
@@ -134,7 +139,8 @@ class QtDeployer():
             print('Copying qt quick 2 imports')
             target = os.path.join(self.data_dir, 'qml')
 
-            for lib in filter(lambda x: os.path.basename(x) in self.needed_qml, glob(self.qt_qml_dir+'/*')):
+            for lib in filter(lambda x: os.path.basename(x) in self.needed_qml,
+                              glob(self.qt_qml_dir + '/*')):
                 self.copytree(lib, os.path.join(target, os.path.basename(lib)), symlinks=True)
         else:
             print('Error {} does not exist.'.format(self.qt_qml_dir))
@@ -159,12 +165,12 @@ class QtDeployer():
         self.change_rpath(self.fgap_exe_file,
                           os.path.relpath(self.libraries_dir, os.path.dirname(self.fgap_exe_file)))
 
-        self.plugins = ['iconengines', 'imageformats', 'platformthemes',
-                        'platforminputcontexts', 'platforms', 'xcbglintegrations']
+        self.plugins = ['iconengines', 'imageformats', 'platformthemes', 'platforminputcontexts',
+                        'platforms', 'xcbglintegrations']
 
         self.needed_libraries = [
-            'Qt5Core', 'Qt5Widgets', 'Qt5Gui', 'Qt5Qml', 'Qt5Quick', 'Qt5Network',
-            'Qt5DBus', 'Qt5Svg', 'icudata', 'icui18n', 'icuuc', 'pcre'
+            'Qt5Core', 'Qt5Widgets', 'Qt5Gui', 'Qt5Qml', 'Qt5Quick', 'Qt5Network', 'Qt5DBus',
+            'Qt5Svg', 'icudata', 'icui18n', 'icuuc', 'pcre'
         ]
 
         self.needed_qml = ["Qt", "QtQuick", "QtQuick.2", "QtGraphicalEffects"]
@@ -185,7 +191,7 @@ class QtDeployer():
                 self.copytree(s, d, symlinks, ignore)
             else:
                 shutil.copy2(s, d)
-#                print('Copy:', s, '->', d)
+                #                print('Copy:', s, '->', d)
                 if self.is_executable(d):
                     self.change_rpath(d, os.path.relpath(self.libraries_dir, os.path.dirname(d)))
 
@@ -194,12 +200,22 @@ if __name__ == "__main__":
     if sys.platform == 'darwin':
         print("Use macqtdeploy!")
         sys.exit(2)
-    else:
-        try:
-            opts, args = getopt.gnu_getopt(sys.argv[1:], 'hi', ['help', 'ignore-errors'])
-        except:
-            usage()
-            sys.exit(2)
-                              # fgap_exe_name, install_dir, data_dir, libraries_dir, qmake, debug_build
-        deployer = QtDeployer(os.path.normpath(args[0]), args[1], args[2], args[3], args[4], args[5])
-        deployer.deploy()
+
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--app_file',
+                        required=True,
+                        help='Path to the application that is being deployed')
+    parser.add_argument('--install_dir', required=True)  # todo: make it not required
+    parser.add_argument('--data_dir', required=True)
+    parser.add_argument('--libraries_dir', required=True)
+    parser.add_argument('--qmake', required=True)
+    parser.add_argument('--debug_build', required=True, help='"debug" or "release"')
+    args = parser.parse_args()
+
+    deployer = QtDeployer(
+        os.path.normpath(args.app_file), args.install_dir, args.data_dir, args.libraries_dir,
+        args.qmake, args.debug_build)
+    deployer.deploy()
+
+    sys.exit(0)  # fixme: return proper code

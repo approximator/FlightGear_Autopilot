@@ -22,10 +22,10 @@ qbs --command-echo-mode command-line \
     -d /tmp/fgap_build/              \
     --clean-install-root qbs.installRoot:$FGAP_INSTALL_DIR
 
-python -u $FGAP_SRC_DIR/scripts/deployqt.py                  \
-          $FGAP_INSTALL_DIR/FlightGear_Autopilot/fgautopilot \
-          $FGAP_INSTALL_DIR/FlightGear_Autopilot             \
-          $FGAP_INSTALL_DIR/FlightGear_Autopilot/data        \
-          $FGAP_INSTALL_DIR/FlightGear_Autopilot/data/lib    \
-          $(which qmake) \
-          $BUILD_VARIANT
+python -u $FGAP_SRC_DIR/scripts/deployqt.py                                  \
+          --app_file      $FGAP_INSTALL_DIR/FlightGear_Autopilot/fgautopilot \
+          --install_dir   $FGAP_INSTALL_DIR/FlightGear_Autopilot             \
+          --data_dir      $FGAP_INSTALL_DIR/FlightGear_Autopilot/data        \
+          --libraries_dir $FGAP_INSTALL_DIR/FlightGear_Autopilot/data/lib    \
+          --qmake         $(which qmake)                                     \
+          --debug_build   $BUILD_VARIANT
