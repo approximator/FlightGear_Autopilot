@@ -16,11 +16,13 @@ qbs setup-qt --detect
 qbs setup-qt $(which qmake) qt
 qbs config defaultProfile qt
 
-cd $FGAP_SRC_DIR/src
-
-qbs --command-echo-mode command-line \
-    -d /tmp/fgap_build/              \
-    --clean-install-root qbs.installRoot:$FGAP_INSTALL_DIR
+qbs build                             \
+    --file $FGAP_SRC_DIR/src          \
+    --command-echo-mode command-line  \
+    --clean-install-root              \
+    --build-directory /tmp/fgap_build \
+    qbs.installRoot:$FGAP_INSTALL_DIR \
+    $BUILD_VARIANT
 
 python -u $FGAP_SRC_DIR/scripts/deployqt.py                                  \
           --app_file      $FGAP_INSTALL_DIR/FlightGear_Autopilot/fgautopilot \
