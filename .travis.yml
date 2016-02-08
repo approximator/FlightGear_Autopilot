@@ -10,10 +10,10 @@ services:
 #     - secure: "cvrIzqJ8FvKXzvB4Tp8Q9gbpFfLTGkVVndrAMA6Pj0trY13nlz6Z2lg9o1Mkcmw/73ndpDImB1IhoPCrgPJBOMYrv7bOKZZJ0D6qCyoIdqspTQX7wJm0WZPQ/SqoACZjpp536AvPJ6vUdZjg+Xj2I913U7SMtvAOrBEUfbMcTOs="
 
 env:
-  - UBUNTU_NAME=trusty
-  - UBUNTU_NAME=wily
-  - BUILD_VARIANT=debug
-  - BUILD_VARIANT=release
+    - UBUNTU_NAME=trusty BUILD_VARIANT=debug
+    - UBUNTU_NAME=wily BUILD_VARIANT=debug
+    - UBUNTU_NAME=trusty BUILD_VARIANT=release
+    - UBUNTU_NAME=wily BUILD_VARIANT=release
 
 addons:
   apt:
