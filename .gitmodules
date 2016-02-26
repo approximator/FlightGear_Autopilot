@@ -11,3 +11,6 @@
 [submodule "contrib/ardupilot"]
 	path = contrib/ardupilot
 	url = https://github.com/approximator/ardupilot
+[submodule "contrib/Qt-Qbs-Application"]
+	path = contrib/Qt-Qbs-Application
+	url = https://github.com/approximator/Qt-Qbs-Application.git

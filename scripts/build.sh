@@ -7,6 +7,7 @@ if [ $# != 3 ]; then
 fi
 
 ROOT_DIR=$(cd $(dirname $0) && pwd)
+DEPLOY_SCRIPT=$(cd ${ROOT_DIR}/../contrib/Qt-Qbs-Application/scripts && pwd)/deployqt.py
 FGAP_SRC_DIR=$1
 FGAP_INSTALL_DIR=$2
 BUILD_VARIANT=$3     # release or debug
@@ -24,7 +25,7 @@ qbs build                             \
     qbs.installRoot:$FGAP_INSTALL_DIR \
     $BUILD_VARIANT
 
-python -u $FGAP_SRC_DIR/scripts/deployqt.py                                  \
+python -u ${DEPLOY_SCRIPT}                                                   \
           --app_file      $FGAP_INSTALL_DIR/FlightGear_Autopilot/fgautopilot \
           --install_dir   $FGAP_INSTALL_DIR/FlightGear_Autopilot             \
           --data_dir      $FGAP_INSTALL_DIR/FlightGear_Autopilot/data        \
