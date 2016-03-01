@@ -23,8 +23,6 @@
 #ifndef FGMATH
 #define FGMATH
 
-#include "AP_Math/AP_Math.h"
-
 #include <cmath>
 #include <tuple>
 #include <QtMath>
