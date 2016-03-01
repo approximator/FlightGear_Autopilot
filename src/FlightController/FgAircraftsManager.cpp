@@ -69,9 +69,9 @@ bool FgAircraftsManager::saveConfig()
     QSettings settings;
     settings.beginWriteArray("aircrafts");
     int i = 0;
-    for (auto aircraft = m_model->constBegin(); aircraft != m_model->constEnd(); ++aircraft) {
+    for (auto& aircraft : *m_model) {
         settings.setArrayIndex(i++);
-        (*aircraft)->saveConfig(settings);
+        aircraft->saveConfig(settings);
     }
     settings.endArray();
     return true;
@@ -115,7 +115,7 @@ bool FgAircraftsManager::addAircraft(QSettings &settings)
 std::tuple<int, int> FgAircraftsManager::getAvailablePorts() const
 {
     auto a = std::max_element(
-        m_model->constBegin(), m_model->constEnd(), [](const FgControlledAircraft *a1, const FgControlledAircraft *a2) {
+        m_model->constBegin(), m_model->constEnd(), [](const auto *a1, const auto *a2) {
             return std::max(a1->transport()->listenPort(), a1->transport()->port())
                 < std::max(a2->transport()->listenPort(), a2->transport()->port());
         });

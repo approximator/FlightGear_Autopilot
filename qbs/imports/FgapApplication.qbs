@@ -5,7 +5,7 @@ Product {
     type: "application" // no Mac app bundle
 
     Depends { name: "cpp" }
-    cpp.cxxLanguageVersion: "c++11"
+    cpp.cxxLanguageVersion: "c++14"
     cpp.warningLevel: "all"
     cpp.treatWarningsAsErrors: false
     cpp.linkerFlags: {

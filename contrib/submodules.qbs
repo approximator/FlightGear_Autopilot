@@ -43,7 +43,6 @@ Project {
     references: [
         "qt-qml-models/QtQmlModels.qbs",
         "qt-super-macros/QtSuperMacros.qbs",
-        "ardupilot.qbs",
     ]
 
 }
