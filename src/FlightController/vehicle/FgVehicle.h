@@ -55,7 +55,10 @@ public:
     {
     }
 
-    virtual ~FgVehicle() { qDebug() << callsign() << ": I am destroying"; }
+    virtual ~FgVehicle()
+    {
+        qDebug() << callsign() << ": I am destroying";
+    }
 
 public slots:
     virtual void onFdmDataChanged(FgTransport *transport)

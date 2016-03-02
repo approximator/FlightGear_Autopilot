@@ -23,8 +23,8 @@
 #ifndef FGGENERICPROTOCOL_H
 #define FGGENERICPROTOCOL_H
 
-#include <QObject>
 #include <QHash>
+#include <QObject>
 
 const QString NUM_PLAYERS("/ai/models/num-players");
 const QString MODELS_COUNT("/ai/models/count");

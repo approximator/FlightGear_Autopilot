@@ -27,11 +27,11 @@
 #include "FgTransport.h"
 #include "utils/Filesystem.h"
 
-#include <QPair>
 #include <QFuture>
+#include <QFutureWatcher>
+#include <QPair>
 #include <QProcess>
 #include <QSettings>
-#include <QFutureWatcher>
 
 #include <memory>
 
@@ -114,7 +114,10 @@ public slots:
     friend class ControlledAircraftTest;
 };
 
-QString FgFlightgear::rootDir() const { return m_RootDir; }
+QString FgFlightgear::rootDir() const
+{
+    return m_RootDir;
+}
 
 void FgFlightgear::setRootDir(const QString _rootDir)
 {
@@ -126,7 +129,10 @@ void FgFlightgear::setRootDir(const QString _rootDir)
     emit rootDirChanged();
 }
 
-QString FgFlightgear::exeFile() const { return m_ExeFile; }
+QString FgFlightgear::exeFile() const
+{
+    return m_ExeFile;
+}
 
 void FgFlightgear::setExeFile(const QString _exeFile)
 {
@@ -137,9 +143,15 @@ void FgFlightgear::setExeFile(const QString _exeFile)
     emit exeFileChanged();
 }
 
-const QProcess &FgFlightgear::process() const { return m_FlightgearProcess; }
+const QProcess &FgFlightgear::process() const
+{
+    return m_FlightgearProcess;
+}
 
-std::shared_ptr<FgTransport> FgFlightgear::transport() const { return m_Transport; }
+std::shared_ptr<FgTransport> FgFlightgear::transport() const
+{
+    return m_Transport;
+}
 
 QString FgFlightgear::multiplayParams() const
 {

@@ -23,10 +23,10 @@
 #ifndef FGMATH
 #define FGMATH
 
+#include <QString>
+#include <QtMath>
 #include <cmath>
 #include <tuple>
-#include <QtMath>
-#include <QString>
 
 namespace fgap
 {
@@ -45,7 +45,10 @@ template <typename T> T limit(const T &value, const T &_min_limit, const T &_max
     return value;
 }
 
-template <typename T> T limit(const T &value, const T &_limit) { return limit(value, -_limit, _limit); }
+template <typename T> T limit(const T &value, const T &_limit)
+{
+    return limit(value, -_limit, _limit);
+}
 
 inline double normalizeAngle_360(double angle)
 {
@@ -70,7 +73,10 @@ inline double headingOffset(double heading1, double heading2)
     return normalizeAngle_180(heading2) - normalizeAngle_180(heading1);
 }
 
-template <typename T> inline T sqr(const T &x) { return x * x; }
+template <typename T> inline T sqr(const T &x)
+{
+    return x * x;
+}
 
 inline double getDistance(double lat1, double lon1, double lat2, double lon2)
 {
@@ -109,7 +115,7 @@ inline double headingTo(double lat1, double lon1, double lat2, double lon2)
             offset = qRadiansToDegrees(std::atan(y / x));
         else if (x < 0)
             offset = 180 - qRadiansToDegrees(std::atan(-y / x));
-        else          // (x == 0)
+        else  // (x == 0)
             offset = 90;
     } else if (y < 0) {
         if (x > 0)
@@ -147,7 +153,7 @@ inline std::tuple<int, int, int> degToMinSec(double deg)
     int degrees     = deg;
     double minutesD = fabs(deg - degrees) * 60.0;
     int minutes     = minutesD;
-    int seconds = (minutesD - minutes) * 60.0;
+    int seconds     = (minutesD - minutes) * 60.0;
     return std::make_tuple(degrees, minutes, seconds);
 }
 

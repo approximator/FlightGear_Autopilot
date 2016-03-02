@@ -28,8 +28,8 @@
 #include "QQmlVarPropertyHelpers.h"
 #include "vehicle/FgControlledAircraft.h"
 
-#include <QList>
 #include <QAbstractListModel>
+#include <QList>
 
 class FgTransport;
 typedef QQmlObjectListModel<FgControlledAircraft> TAirModel;

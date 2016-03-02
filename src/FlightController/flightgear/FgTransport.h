@@ -25,10 +25,10 @@
 
 #include "FgGenericProtocol.h"
 
+#include <QHostAddress>
 #include <QObject>
 #include <QSettings>
 #include <QUdpSocket>
-#include <QHostAddress>
 
 #include <memory>
 
@@ -100,11 +100,20 @@ public slots:
     friend class ControlledAircraftTest;
 };
 
-QHostAddress FgTransport::listenHost() const { return m_ListenHost; }
+QHostAddress FgTransport::listenHost() const
+{
+    return m_ListenHost;
+}
 
-void FgTransport::setListenHost(const QHostAddress &address) { m_ListenHost = address; }
+void FgTransport::setListenHost(const QHostAddress &address)
+{
+    m_ListenHost = address;
+}
 
-int FgTransport::listenPort() const { return m_ListenPort; }
+int FgTransport::listenPort() const
+{
+    return m_ListenPort;
+}
 
 void FgTransport::setListenPort(const int _port)
 {
@@ -113,11 +122,20 @@ void FgTransport::setListenPort(const int _port)
     // TODO: restart server if already listening
 }
 
-QHostAddress FgTransport::host() const { return m_WriteHost; }
+QHostAddress FgTransport::host() const
+{
+    return m_WriteHost;
+}
 
-void FgTransport::setHost(const QHostAddress &address) { m_WriteHost = address; }
+void FgTransport::setHost(const QHostAddress &address)
+{
+    m_WriteHost = address;
+}
 
-int FgTransport::port() const { return m_WritePort; }
+int FgTransport::port() const
+{
+    return m_WritePort;
+}
 
 void FgTransport::setPort(const int _port)
 {
@@ -155,7 +173,10 @@ qint32 FgTransport::getInt(const QString &node, bool *exists) const
     return param.isEmpty() ? 0 : param.toInt(exists);
 }
 
-std::shared_ptr<FgGenericProtocol> FgTransport::protocol() const { return m_Protocol; }
+std::shared_ptr<FgGenericProtocol> FgTransport::protocol() const
+{
+    return m_Protocol;
+}
 
 QString FgTransport::networkParams() const
 {

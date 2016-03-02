@@ -24,9 +24,9 @@
 #ifndef FG_LOG
 #define FG_LOG
 
-#include <QFile>
-#include <QDebug>
 #include <QCoreApplication>
+#include <QDebug>
+#include <QFile>
 
 #include <iostream>
 

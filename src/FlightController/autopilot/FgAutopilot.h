@@ -38,7 +38,9 @@ public:
     {
     }
 
-    virtual ~FgAutopilot() {}
+    virtual ~FgAutopilot()
+    {
+    }
 
     FgAutopilot(const FgAutopilot &other);
     FgAutopilot &operator=(const FgAutopilot &other);

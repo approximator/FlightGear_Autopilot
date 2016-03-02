@@ -20,9 +20,9 @@
  * limitations under the License.
  */
 
-#include "log.h"
 #include "FgTransport.h"
 #include "FgGenericProtocol.h"
+#include "log.h"
 
 FgTransport::FgTransport(QObject *parent)
     : QObject(parent)
@@ -48,7 +48,7 @@ bool FgTransport::setConfig(QSettings &settings)
     m_WriteProtocol        = settings.value("protocol").toString();
     m_WriteGenericProtocol = settings.value("generic_protocol").toString();
     QString host           = settings.value("host").toString();
-    m_WriteHost = QHostAddress(host.toLower() == "localhost" ? "127.0.0.1" : host);
+    m_WriteHost            = QHostAddress(host.toLower() == "localhost" ? "127.0.0.1" : host);
     settings.endGroup();
 
     settings.beginGroup("out");
@@ -57,7 +57,7 @@ bool FgTransport::setConfig(QSettings &settings)
     m_ListenProtocol        = settings.value("protocol").toString();
     m_ListenGenericProtocol = settings.value("generic_protocol").toString();
     host                    = settings.value("host").toString();
-    m_ListenHost = QHostAddress(host.toLower() == "localhost" ? "127.0.0.1" : host);
+    m_ListenHost            = QHostAddress(host.toLower() == "localhost" ? "127.0.0.1" : host);
     settings.endGroup();
 
     if (!m_GenericEnabled)
@@ -115,7 +115,7 @@ void FgTransport::onSocketRead()
 
         /* we have the whole line */
         QString line = QString::fromLocal8Bit(m_Buffer.data(), newLineIndex);
-        m_FdmData = line.split("\t");
+        m_FdmData    = line.split("\t");
         m_Buffer.remove(0, newLineIndex + 1);
 
         emit fgDataReceived(this);

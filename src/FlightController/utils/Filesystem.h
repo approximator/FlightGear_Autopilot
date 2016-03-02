@@ -31,9 +31,15 @@ namespace fgap
 namespace path
 {
 
-inline QString normPath(const QString &path) { return QDir::toNativeSeparators(QDir::cleanPath(path)); }
+inline QString normPath(const QString &path)
+{
+    return QDir::toNativeSeparators(QDir::cleanPath(path));
+}
 
-inline QString join(const QString &path1, const QString &path2) { return normPath(QString("%1/%2").arg(path1, path2)); }
+inline QString join(const QString &path1, const QString &path2)
+{
+    return normPath(QString("%1/%2").arg(path1, path2));
+}
 
 inline QString join(const QString &path1, const QString &path2, const QString &path3)
 {

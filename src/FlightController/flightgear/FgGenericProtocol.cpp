@@ -20,12 +20,12 @@
  * limitations under the License.
  */
 
-#include "log.h"
 #include "FgGenericProtocol.h"
+#include "log.h"
 
+#include <QFile>
 #include <QMap>
 #include <QPair>
-#include <QFile>
 #include <QXmlStreamWriter>
 
 #define ADD_PARAM(node, type) m_InParameters.insert(node, Parameter(index++, node, type));
@@ -80,7 +80,10 @@ FgGenericProtocol::FgGenericProtocol(QObject *parent)
     ADD_PARAM(THROTTLE, Parameter::FLOAT);
 }
 
-FgGenericProtocol::~FgGenericProtocol() { qDebug() << "FgGenericProtocol detroyed."; }
+FgGenericProtocol::~FgGenericProtocol()
+{
+    qDebug() << "FgGenericProtocol detroyed.";
+}
 
 bool FgGenericProtocol::writeXml(const QString &fileName)
 {
@@ -100,7 +103,7 @@ bool FgGenericProtocol::writeXml(const QString &fileName)
             stream.writeTextElement("node", param.name);
             stream.writeTextElement("type", param.typeStr());
             stream.writeTextElement("format", param.formatStr());
-            stream.writeEndElement();          // chunk
+            stream.writeEndElement();  // chunk
         });
     };
 
@@ -115,17 +118,17 @@ bool FgGenericProtocol::writeXml(const QString &fileName)
     stream.writeTextElement("line_separator", "newline");
     stream.writeTextElement("var_separator", "tab");
     writeParameters(stream, m_InParameters);
-    stream.writeEndElement();          // output
+    stream.writeEndElement();  // output
 
     /* input section */
     stream.writeStartElement("input");
     stream.writeTextElement("line_separator", "newline");
     stream.writeTextElement("var_separator", "tab");
     writeParameters(stream, m_OutParameters);
-    stream.writeEndElement();          // input
+    stream.writeEndElement();  // input
 
-    stream.writeEndElement();          // generic
-    stream.writeEndElement();          // PropertyList
+    stream.writeEndElement();  // generic
+    stream.writeEndElement();  // PropertyList
     stream.writeEndDocument();
     file.close();
 

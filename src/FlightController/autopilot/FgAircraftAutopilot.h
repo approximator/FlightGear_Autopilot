@@ -23,8 +23,8 @@
 #ifndef FG_AIRCRAFT_AUTOPILOT_H
 #define FG_AIRCRAFT_AUTOPILOT_H
 
-#include "FgPid.h"
 #include "FgAutopilot.h"
+#include "FgPid.h"
 
 #include <functional>
 
@@ -49,17 +49,17 @@ public:
 
 private:
     std::function<void()> m_ControlFunc = [this]() { holdHeading(); };
-    FgControlledAircraft *m_Aircraft = nullptr;
+    FgControlledAircraft *m_Aircraft    = nullptr;
 
-    qreal m_DesiredPitch         = 0.0;             // deg
-    qreal m_DesiredRoll          = 0.0;             // deg
-    qreal m_DesiredYaw           = 0.0;             // deg
-    qreal m_DesiredYawRate       = 0.0;             // deg
-    qreal m_DesiredLongitude     = 0.0;             // deg
-    qreal m_DesiredLatitude      = 0.0;             // deg
-    qreal m_DesiredAltitude      = 2000.0;          // ft
-    qreal m_DesiredHeading       = 45;              // deg
-    qreal m_DesiredVerticalSpeed = 1.0;             //
+    qreal m_DesiredPitch         = 0.0;     // deg
+    qreal m_DesiredRoll          = 0.0;     // deg
+    qreal m_DesiredYaw           = 0.0;     // deg
+    qreal m_DesiredYawRate       = 0.0;     // deg
+    qreal m_DesiredLongitude     = 0.0;     // deg
+    qreal m_DesiredLatitude      = 0.0;     // deg
+    qreal m_DesiredAltitude      = 2000.0;  // ft
+    qreal m_DesiredHeading       = 45;      // deg
+    qreal m_DesiredVerticalSpeed = 1.0;     //
 
     /* clang-format off */
     /************************   kp         ki        kd    max_ouput  max_int */

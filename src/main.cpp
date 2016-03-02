@@ -21,14 +21,14 @@
  * limitations under the License.
  */
 
-#include "log.h"
 #include "FgAircraftsManager.h"
+#include "log.h"
 #include "utils/Filesystem.h"
 
-#include <QtQml>
-#include <QTextCodec>
-#include <QMessageBox>
 #include <QApplication>
+#include <QMessageBox>
+#include <QTextCodec>
+#include <QtQml>
 
 int main(int argc, char *argv[])
 {

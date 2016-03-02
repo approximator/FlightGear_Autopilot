@@ -1,14 +1,20 @@
 
-#include "../../FlightController/utils/FgMath.h"
 #include "tst_math.h"
+#include "../../FlightController/utils/FgMath.h"
 
 #include <QString>
 
-MathTest::MathTest() {}
+MathTest::MathTest()
+{
+}
 
-void MathTest::initTestCase() {}
+void MathTest::initTestCase()
+{
+}
 
-void MathTest::cleanupTestCase() {}
+void MathTest::cleanupTestCase()
+{
+}
 
 void MathTest::normalizeAngle_360()
 {

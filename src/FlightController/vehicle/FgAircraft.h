@@ -23,8 +23,8 @@
 #ifndef FGAIRCRAFT_H
 #define FGAIRCRAFT_H
 
-#include "FgVehicle.h"
 #include "FgAircraft.h"
+#include "FgVehicle.h"
 #include "flightgear/FgTransport.h"
 
 class FgAircraft : public FgVehicle
@@ -60,7 +60,9 @@ public:
     {
     }
 
-    virtual ~FgAircraft() {}
+    virtual ~FgAircraft()
+    {
+    }
 
 public slots:
     virtual void onFdmDataChanged(FgTransport *transport)

@@ -20,13 +20,13 @@
  * limitations under the License.
  */
 
-#include "log.h"
 #include "FgAircraftsManager.h"
 #include "flightgear/FgTransport.h"
+#include "log.h"
 
+#include <QCoreApplication>
 #include <QFile>
 #include <QSettings>
-#include <QCoreApplication>
 
 FgAircraftsManager::FgAircraftsManager(QObject *parent)
     : QObject(parent)
@@ -36,7 +36,10 @@ FgAircraftsManager::FgAircraftsManager(QObject *parent)
     qDebug() << "Air model";
 }
 
-FgAircraftsManager::~FgAircraftsManager() { saveConfig(); }
+FgAircraftsManager::~FgAircraftsManager()
+{
+    saveConfig();
+}
 
 bool FgAircraftsManager::init()
 {
@@ -124,7 +127,7 @@ std::tuple<int, int> FgAircraftsManager::getAvailablePorts() const
         return std::make_tuple(8000, 8000 + 1);
 
     auto transport = (*a)->transport();
-    int port = std::max(transport->listenPort(), transport->port()) + 1;
+    int port       = std::max(transport->listenPort(), transport->port()) + 1;
     return std::make_tuple(port, port + 1);
 }
 

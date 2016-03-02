@@ -11,10 +11,10 @@ AccessModifierOffset: -4
 AlignConsecutiveAssignments: true
 
 AlignTrailingComments: true
-SpacesBeforeTrailingComments: 10
-AllowShortBlocksOnASingleLine: true
-AllowShortFunctionsOnASingleLine: All
-AllowShortBlocksOnASingleLine: true
+SpacesBeforeTrailingComments: 2
+AllowShortBlocksOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortBlocksOnASingleLine: false
 BreakBeforeBinaryOperators: All
 
 BreakBeforeBraces: Linux
@@ -41,7 +41,7 @@ PointerAlignment: Left
 BreakConstructorInitializersBeforeComma: true
 IndentCaseLabels: true
 IndentWidth:     4
-Standard:        Cpp11
+# Standard:        Cpp11  # ugly braces
 TabWidth:        4
 UseTab:          Never
 ...

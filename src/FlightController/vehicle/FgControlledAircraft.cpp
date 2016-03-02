@@ -20,18 +20,20 @@
  * limitations under the License.
  */
 
-#include "log.h"
 #include "FgControlledAircraft.h"
+#include "log.h"
 
-#include <assert.h>
 #include <QSettings>
+#include <assert.h>
 
 FgControlledAircraft::FgControlledAircraft(QObject *parent)
     : FgAircraft(parent)
 {
 }
 
-FgControlledAircraft::~FgControlledAircraft() {}
+FgControlledAircraft::~FgControlledAircraft()
+{
+}
 
 bool FgControlledAircraft::setConfig(QSettings &settings)
 {

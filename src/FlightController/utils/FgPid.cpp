@@ -20,8 +20,8 @@
  * limitations under the License.
  */
 
-#include "log.h"
 #include "FgPid.h"
+#include "log.h"
 
 FgPid::FgPid(double initial_kp, double initial_ki, double initial_kd, double max_output, double initial_int_max)
     : _kp(initial_kp)

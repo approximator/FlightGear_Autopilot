@@ -23,11 +23,11 @@
 #ifndef FGCONTROLLEDAIRCRAFT_H
 #define FGCONTROLLEDAIRCRAFT_H
 
-#include "log.h"
 #include "FgAircraft.h"
-#include "flightgear/FgTransport.h"
-#include "flightgear/FgFlightgear.h"
 #include "autopilot/FgAircraftAutopilot.h"
+#include "flightgear/FgFlightgear.h"
+#include "flightgear/FgTransport.h"
+#include "log.h"
 
 #include <QSettings>
 
@@ -76,13 +76,25 @@ public slots:
     virtual void onFdmDataChanged(FgTransport *transport);
 };
 
-bool FgControlledAircraft::autopilotEngaged() const { return m_Autopilot ? m_Autopilot->engaged() : false; }
+bool FgControlledAircraft::autopilotEngaged() const
+{
+    return m_Autopilot ? m_Autopilot->engaged() : false;
+}
 
-FgAutopilot *FgControlledAircraft::autopilot() const { return m_Autopilot.get(); }
+FgAutopilot *FgControlledAircraft::autopilot() const
+{
+    return m_Autopilot.get();
+}
 
-FgTransport *FgControlledAircraft::transport() const { return m_Flightgear->transport().get(); }
+FgTransport *FgControlledAircraft::transport() const
+{
+    return m_Flightgear->transport().get();
+}
 
-bool FgControlledAircraft::flightgearReady() const { return m_Flightgear->ready(); }
+bool FgControlledAircraft::flightgearReady() const
+{
+    return m_Flightgear->ready();
+}
 
 void FgControlledAircraft::follow(FgAircraft *aircraft)
 {
@@ -90,7 +102,10 @@ void FgControlledAircraft::follow(FgAircraft *aircraft)
     m_Autopilot->set_engaged(true);
 }
 
-FgFlightgear *FgControlledAircraft::flightgear() const { return m_Flightgear.get(); }
+FgFlightgear *FgControlledAircraft::flightgear() const
+{
+    return m_Flightgear.get();
+}
 
 Q_DECLARE_METATYPE(FgControlledAircraft *)
 

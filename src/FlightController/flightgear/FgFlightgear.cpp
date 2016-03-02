@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#include "log.h"
 #include "FgFlightgear.h"
+#include "log.h"
 
 #include <QDir>
 #include <QFile>
@@ -142,7 +142,10 @@ bool FgFlightgear::run()
     return true;
 }
 
-bool FgFlightgear::ready() const { return m_Ready; }
+bool FgFlightgear::ready() const
+{
+    return m_Ready;
+}
 
 bool FgFlightgear::setConfig(QSettings &settings)
 {
@@ -167,11 +170,11 @@ bool FgFlightgear::setConfig(QSettings &settings)
             settings.beginGroup(group);
             int frequency = settings.value("frequency").toInt();
             QString host  = settings.value("host").toString();
-            int port = settings.value("port").toInt();
+            int port      = settings.value("port").toInt();
             settings.endGroup();
             return std::make_tuple(port, host, frequency);
         };
-        std::tie(m_MultiplayPortIn, m_MultiplayHostIn, m_MultiplayFrequencyIn) = getMultiplayParams(settings, "in");
+        std::tie(m_MultiplayPortIn, m_MultiplayHostIn, m_MultiplayFrequencyIn)    = getMultiplayParams(settings, "in");
         std::tie(m_MultiplayPortOut, m_MultiplayHostOut, m_MultiplayFrequencyOut) = getMultiplayParams(settings, "out");
     }
     settings.endGroup();

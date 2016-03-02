@@ -20,8 +20,8 @@
  * limitations under the License.
  */
 
-#include "log.h"
 #include "FgAircraftAutopilot.h"
+#include "log.h"
 #include "vehicle/FgControlledAircraft.h"
 
 FgAircraftAutopilot::FgAircraftAutopilot(FgControlledAircraft *aircraft, QObject *parent)
@@ -54,14 +54,14 @@ void FgAircraftAutopilot::computeControl()
 void FgAircraftAutopilot::holdYawRate()
 {
     const qreal yawRateError = m_DesiredYawRate - m_Aircraft->yaw_rate();
-    m_DesiredRoll = m_YawRatePid.update(yawRateError, m_Aircraft->delta_time());
+    m_DesiredRoll            = m_YawRatePid.update(yawRateError, m_Aircraft->delta_time());
     holdAltitude();
 }
 
 void FgAircraftAutopilot::holdHeading()
 {
     qreal headingError = fgap::math::headingOffset(m_Aircraft->heading(), m_DesiredHeading);
-    m_DesiredYawRate = fgap::math::limit(headingError * 1, 5.0);
+    m_DesiredYawRate   = fgap::math::limit(headingError * 1, 5.0);
     holdYawRate();
 }
 
