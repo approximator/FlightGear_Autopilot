@@ -1,32 +1,18 @@
 import qbs
 import qbs.FileInfo
-import FgapFunctions
+
 
 Product {
-    type: "copied_qml_module"
+    type: "copied_resource"
 
-    property string moduleName
-    property string moduleSrcPrefix: "modules"
-    property path moduleSrcDir: moduleSrcPrefix + "/" + moduleName +"/"
-    property path moduleRootDir: sourceDirectory //Search or download dIr
-    property string sourceUrl
-    property stringList sourceFiles: []
+    property string srcPrefix: "modules"
 
-    Depends { name: "copyable_qml_module" }
-    copyable_qml_module.targetDirectory: FileInfo.joinPaths(
-        project.fgapInstallRoot,
-        project.fgapInstallDir,
-        project.fgapQmlInstallDir
-    )
-    copyable_qml_module.moduleSrcRoot: FileInfo.joinPaths(
-        moduleRootDir,
-        moduleSrcPrefix
-        )
+    Depends { name: "copyable_resource" }
+    copyable_resource.prefix: srcPrefix
+    copyable_resource.targetDirectory: FileInfo.joinPaths(
+                                           project.fgapInstallRoot,
+                                           project.fgapInstallDir,
+                                           project.fgapQmlInstallDir
+                                           )
 
-    Group {
-        name: "qmlModule"
-        fileTags: ["copyable_qml_module"]
-        prefix: moduleRootDir + "/" + moduleSrcPrefix + "/"
-        files: product.sourceFiles
-    }
 }

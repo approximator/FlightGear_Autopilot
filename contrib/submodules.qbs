@@ -5,39 +5,19 @@ import qbs.ModUtils
 Project {
     name: "contrib_projects"
 
-    Product {
-        type: "copied_qml_module"
+    FgapQmlModule {
         name: "qml_material"
+        srcPrefix: "qml-material/modules"
 
-        Depends { name: "copyable_qml_module" }
-        copyable_qml_module.targetDirectory: FileInfo.joinPaths(
-                                                 project.fgapInstallRoot,
-                                                 project.fgapInstallDir,
-                                                 project.fgapQmlInstallDir
-                                                 )
-        copyable_qml_module.moduleSrcRoot: FileInfo.joinPaths(
-                                               sourceDirectory,
-                                               "qml-material/modules"
-                                               )
+        files: [
+            "qml-material/modules/Material/*",
+            "qml-material/modules/Material/Extras",
+            "qml-material/modules/Material/fonts",
+            "qml-material/modules/Material/icons",
+            "qml-material/modules/Material/ListItems/*",
+            "qml-material/modules/QtQuick/"
+        ]
 
-        Group {
-            name: "qml_sources"
-            fileTags: ["copyable_qml_module"]
-            prefix: "qml-material/modules/"
-            files: [
-                "Material/*",
-                "Material/Extras",
-                "Material/fonts",
-                "Material/icons",
-                "Material/ListItems/*",
-                "QtQuick/"
-            ]
-        }
-
-        FgapSubmoduleProbe {
-            moduleName: "qml-material"
-            gitRootDir: project.fgapSourceRoot
-        }
     }
 
     references: [
