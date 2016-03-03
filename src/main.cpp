@@ -32,9 +32,9 @@
 
 int main(int argc, char *argv[])
 {
-#ifdef FGAP_PLUGINS_PATH
+#ifdef APP_PLUGINS_PATH
     /* Add path to search for Qt plugins */
-    QString pluginsPaths = fgap::path::join(QFileInfo(argv[0]).dir().path(), FGAP_PLUGINS_PATH);
+    QString pluginsPaths = fgap::path::join(QFileInfo(argv[0]).dir().path(), APP_PLUGINS_PATH);
     QCoreApplication::addLibraryPath(pluginsPaths);
 #endif
 
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
                 qDebug() << "Could not create settings directory " << settingsDir.absolutePath();
         if (!QFile::exists(settings.fileName())) {
             QString configFileName(fgap::path::join(
-                QCoreApplication::applicationDirPath(), CONFIG_PATH, "example_multiplayWithoutServer.ini"));
+                QCoreApplication::applicationDirPath(), APP_CONFIG_PATH, "example_multiplayWithoutServer.ini"));
             qDebug() << "Copying " << configFileName << " settings to " << settings.fileName();
             if (!QFile::copy(configFileName, settings.fileName()))
                 qWarning() << "Could not copy default settings to " << settings.fileName();
@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
             qDebug() << "QML object created successfully: " << url;
     });
 
-    QString qmlFilesPath = fgap::path::join(QCoreApplication::applicationDirPath(), FGAP_QML_MODULES_PATH);
+    QString qmlFilesPath = fgap::path::join(QCoreApplication::applicationDirPath(), APP_QML_MODULES_PATH);
     qDebug() << "qmlFilesPath = " << qmlFilesPath;
     engine.addImportPath(qmlFilesPath);
     engine.load(QUrl(QStringLiteral("qrc:qml/MainView.qml")));

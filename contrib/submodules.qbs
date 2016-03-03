@@ -10,9 +10,9 @@ Project {
         srcPrefix: "qml-material/modules"
 
         targetDirectory: FileInfo.joinPaths(
-                             project.fgapInstallRoot,
-                             project.fgapInstallDir,
-                             project.fgapQmlInstallDir
+                             project.appInstallRoot,
+                             project.appInstallDir,
+                             project.appQmlInstallDir
                              )
 
         files: [
@@ -28,7 +28,7 @@ Project {
 
     references: [
         "qt-qml-models/QtQmlModels.qbs",
-        "qt-super-macros/QtSuperMacros.qbs",
+        "qt-super-macros/QtSuperMacros.qbs"
     ]
 
 }

@@ -6,9 +6,9 @@ QmlModule {
 
     srcPrefix: "modules"
     targetDirectory: FileInfo.joinPaths(
-                         project.fgapInstallRoot,
-                         project.fgapInstallDir,
-                         project.fgapQmlInstallDir
+                         project.appInstallRoot,
+                         project.appInstallDir,
+                         project.appQmlInstallDir
                          )
 
     files: [
