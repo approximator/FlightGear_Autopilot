@@ -5,9 +5,15 @@ import qbs.ModUtils
 Project {
     name: "contrib_projects"
 
-    FgapQmlModule {
+    QmlModule {
         name: "qml_material"
         srcPrefix: "qml-material/modules"
+
+        targetDirectory: FileInfo.joinPaths(
+                             project.fgapInstallRoot,
+                             project.fgapInstallDir,
+                             project.fgapQmlInstallDir
+                             )
 
         files: [
             "qml-material/modules/Material/*",

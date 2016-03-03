@@ -32,7 +32,10 @@ Project {
     property path fgapPluginsInstallDir: FileInfo.joinPaths(fgapDataPath, "plugins")
 
     minimumQbsVersion: "1.4"
-    qbsSearchPaths: FileInfo.joinPaths(fgapSourceRoot, "qbs")
+    qbsSearchPaths: [
+        FileInfo.joinPaths(fgapSourceRoot, "qbs"),
+        FileInfo.joinPaths(fgapSourceRoot, "contrib/Qt-Qbs-Application/qbs")
+    ]
 
     property bool fgapSubmodulesReady: false
 

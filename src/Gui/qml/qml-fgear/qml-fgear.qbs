@@ -1,8 +1,15 @@
 import qbs
 import qbs.FileInfo
 
-FgapQmlModule {
+QmlModule {
     name: "qml_fgear"
+
+    srcPrefix: "modules"
+    targetDirectory: FileInfo.joinPaths(
+                         project.fgapInstallRoot,
+                         project.fgapInstallDir,
+                         project.fgapQmlInstallDir
+                         )
 
     files: [
         "modules/FGear/*qml*",
