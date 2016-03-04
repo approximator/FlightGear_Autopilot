@@ -27,5 +27,5 @@ before_script:
 script:
   - docker run --rm -v ${TRAVIS_BUILD_DIR}:/fgap:ro -v ${INSTALL_DIR}:/result approximator/dockerfiles:qt$UBUNTU_NAME /bin/bash /fgap/scripts/build.sh /fgap /result/install $BUILD_VARIANT
   - tree -L 5 ${INSTALL_DIR}
-  - if [ "$UBUNTU_NAME" == "wily" ]; then docker run --rm -v ${INSTALL_DIR}:/fgap approximator/dockerfiles:qttest /bin/bash -c "cd /fgap/install/FlightGear_Autopilot && bash /take_screenshot.sh ./fgautopilot /fgap/screenshot.png"; fi
+  - if [ "$UBUNTU_NAME" == "wily" ]; then docker run --rm -v ${INSTALL_DIR}:/fgap approximator/dockerfiles:qttest /bin/bash -c "cd /fgap/install/FlightGear_Autopilot && bash /take_screenshot.sh ./FlightGear_Autopilot /fgap/screenshot.png"; fi
   - tree -L 5 ${INSTALL_DIR}
