@@ -14,7 +14,7 @@ QmlModule {
     files: [
         "modules/FGear/*qml*",
         "modules/FGear/AutopilotItems/*qml*",
-        "modules/FGear/flight_pic/*flight_pic/*",
+        "modules/FGear/flight_pic/*",
         "modules/FGear/js/*.js",
         "modules/FGear/ListItems/*",
         "modules/FGear/Pointers/*.qml",
