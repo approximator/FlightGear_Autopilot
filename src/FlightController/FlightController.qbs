@@ -30,6 +30,7 @@ CppApplicationBase {
     Depends { name: "libqtqmltricks-qtsupermacros" }
 
     cpp.includePaths: [".", "utils"]
+    cpp.defines: project.generalDefines.concat(['QTQMLTRICKS_NO_PREFIX_ON_GETTERS'])
 
     /* Main source file */
     Group {
