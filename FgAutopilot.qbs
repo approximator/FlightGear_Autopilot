@@ -21,10 +21,14 @@ import qbs.FileInfo
 
 Project {
     name: "fgap_project"
+    minimumQbsVersion: "1.5"
+
+    property path appSourceRoot: sourceDirectory
 
     qbsSearchPaths: ["qbs", "contrib/Qt-Qbs-Application/qbs"]
 
     references: [
-        "src/src.qbs"
+        "src/FlightController.qbs",
+        "contrib/submodules.qbs",
     ]
 }
