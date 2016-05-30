@@ -24,10 +24,15 @@ QmlTools.QtQmlApplication
 {
     appShortName: "FlightGear_Autopilot"
     appName: "FlightGear Autopilot"
-    appDataPath: FileInfo.joinPaths(appContentsPath, "data")
-    appQmlInstallDir: FileInfo.joinPaths(appDataPath, "qml")
-    appPluginsInstallDir: FileInfo.joinPaths(appDataPath, "plugins")
-    appConfigSourceRoot: FileInfo.joinPaths(appSourceRoot, "doc/config/")
+
+    Properties {
+        condition: !bundle.isBundle
+        appDataPath: FileInfo.joinPaths(appContentsPath, "data")
+        appQmlInstallDir: FileInfo.joinPaths(appDataPath, "qml")
+        appPluginsInstallDir: FileInfo.joinPaths(appDataPath, "plugins")
+        appConfigInstallDir: FileInfo.joinPaths(appDataPath, "config")
+        appConfigSourceRoot: FileInfo.joinPaths(project.appSourceRoot, "doc", "config", "/")
+    }
 
     Depends { name: "Qt"; submodules: [
             "qml", "quick",
@@ -37,14 +42,15 @@ QmlTools.QtQmlApplication
     Depends { name: "libqtqmltricks-qtqmlmodels" }
     Depends { name: "libqtqmltricks-qtsupermacros" }
 
-    cpp.includePaths: ["FlightController/", "FlightController/utils"]
+    cpp.includePaths: [
+        "FlightController",
+        "FlightController/utils"
+    ]
     cpp.defines: generalDefines.concat(['QTQMLTRICKS_NO_PREFIX_ON_GETTERS'])
 
     qmlImportsPaths: [
-        FileInfo.joinPaths(project.appSourceRoot
-                           + "/contrib/qml-material/modules/"),
-        FileInfo.joinPaths(sourceDirectory
-                           + "/Gui/qml/qml-fgear/modules/")
+        FileInfo.joinPaths(project.appSourceRoot, "contrib", "qml-material", "modules"),
+        FileInfo.joinPaths(sourceDirectory, "Gui", "qml", "qml-fgear", "modules")
     ]
 
     /* Main source file */
