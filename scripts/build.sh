@@ -18,7 +18,7 @@ qbs setup-qt $(which qmake) qt
 qbs config defaultProfile qt
 
 qbs build                             \
-    --file $FGAP_SRC_DIR/src          \
+    --file $FGAP_SRC_DIR              \
     --command-echo-mode command-line  \
     --clean-install-root              \
     --build-directory /tmp/fgap_build \

@@ -22,8 +22,8 @@ import QmlTools
 
 QmlTools.QtQmlApplication
 {
-    appShortName: "FlightGear_Autopilot"
-    appName: "FlightGear Autopilot"
+    name: "FlightGear_Autopilot"
+    appShortName: "fgautopilot"
 
     Depends { name: "Qt"; submodules: [
             "qml", "quick",
@@ -37,10 +37,8 @@ QmlTools.QtQmlApplication
     cpp.defines: generalDefines.concat(['QTQMLTRICKS_NO_PREFIX_ON_GETTERS'])
 
     qmlImportsPaths: [
-        FileInfo.joinPaths(project.appSourceRoot
-                           + "/contrib/qml-material/modules/"),
-        FileInfo.joinPaths(sourceDirectory
-                           + "/Gui/qml/qml-fgear/modules/")
+        FileInfo.joinPaths(project.appSourceRoot, "contrib", "qml-material", "modules"),
+        FileInfo.joinPaths(sourceDirectory, "Gui", "qml", "qml-fgear", "modules")
     ]
 
     /* Main source file */
