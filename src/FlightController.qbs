@@ -24,6 +24,10 @@ QmlTools.QtQmlApplication
 {
     appShortName: "FlightGear_Autopilot"
     appName: "FlightGear Autopilot"
+    appDataPath: FileInfo.joinPaths(appContentsPath, "data")
+    appQmlInstallDir: FileInfo.joinPaths(appDataPath, "qml")
+    appPluginsInstallDir: FileInfo.joinPaths(appDataPath, "plugins")
+    appConfigSourceRoot: FileInfo.joinPaths(appSourceRoot, "doc/config/")
 
     Depends { name: "Qt"; submodules: [
             "qml", "quick",

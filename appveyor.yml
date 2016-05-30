@@ -34,7 +34,7 @@ build_script:
 
     qbs --command-echo-mode command-line --clean-install-root qbs.installRoot:%INSTALL_DIR% %BUILD_VARIANT%
 
-    cd %INSTALL_DIR%\FlightGear_Autopilot
+    cd %INSTALL_DIR%
 
     windeployqt --%BUILD_VARIANT% FlightGear_Autopilot.exe
 

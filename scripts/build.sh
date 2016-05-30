@@ -18,17 +18,17 @@ qbs setup-qt $(which qmake) qt
 qbs config defaultProfile qt
 
 qbs build                             \
-    --file $FGAP_SRC_DIR/src          \
+    --file $FGAP_SRC_DIR/             \
     --command-echo-mode command-line  \
     --clean-install-root              \
     --build-directory /tmp/fgap_build \
     qbs.installRoot:$FGAP_INSTALL_DIR \
     $BUILD_VARIANT
 
-python -u ${DEPLOY_SCRIPT}                                                   \
-          --app_file      $FGAP_INSTALL_DIR/FlightGear_Autopilot/fgautopilot \
-          --install_dir   $FGAP_INSTALL_DIR/FlightGear_Autopilot             \
-          --data_dir      $FGAP_INSTALL_DIR/FlightGear_Autopilot/data        \
-          --libraries_dir $FGAP_INSTALL_DIR/FlightGear_Autopilot/data/lib    \
-          --qmake         $(which qmake)                                     \
+python -u ${DEPLOY_SCRIPT}                                       \
+          --app_file      $FGAP_INSTALL_DIR/FlightGear_Autopilot \
+          --install_dir   $FGAP_INSTALL_DIR/                     \
+          --data_dir      $FGAP_INSTALL_DIR/data                 \
+          --libraries_dir $FGAP_INSTALL_DIR/data/lib             \
+          --qmake         $(which qmake)                         \
           --debug_build   $BUILD_VARIANT
