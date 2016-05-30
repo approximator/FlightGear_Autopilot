@@ -21,7 +21,7 @@ import qbs.FileInfo
 
 Project {
     name: "fgap_project"
-    minimumQbsVersion: "1.5"
+    minimumQbsVersion: "1.4"
 
     property path appSourceRoot: sourceDirectory
 
