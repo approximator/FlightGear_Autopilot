@@ -30,18 +30,18 @@
 class FgAircraft : public FgVehicle
 {
     Q_OBJECT
-    QML_READONLY_VAR_PROPERTY(qreal, heading)
-    QML_READONLY_VAR_PROPERTY(qreal, pitch)
-    QML_READONLY_VAR_PROPERTY(qreal, roll)
-    QML_READONLY_VAR_PROPERTY(qreal, yaw)
-    QML_READONLY_VAR_PROPERTY(qreal, yaw_rate)
-    QML_READONLY_VAR_PROPERTY(qreal, vertical_speed)
-    QML_READONLY_VAR_PROPERTY(qreal, airspeed)
+    QML_READONLY_AUTO_PROPERTY(qreal, heading)
+    QML_READONLY_AUTO_PROPERTY(qreal, pitch)
+    QML_READONLY_AUTO_PROPERTY(qreal, roll)
+    QML_READONLY_AUTO_PROPERTY(qreal, yaw)
+    QML_READONLY_AUTO_PROPERTY(qreal, yaw_rate)
+    QML_READONLY_AUTO_PROPERTY(qreal, vertical_speed)
+    QML_READONLY_AUTO_PROPERTY(qreal, airspeed)
 
-    QML_WRITABLE_VAR_PROPERTY(qreal, ailerons)
-    QML_WRITABLE_VAR_PROPERTY(qreal, elevator)
-    QML_WRITABLE_VAR_PROPERTY(qreal, rudder)
-    QML_WRITABLE_VAR_PROPERTY(qreal, throttle)
+    QML_WRITABLE_AUTO_PROPERTY(qreal, ailerons)
+    QML_WRITABLE_AUTO_PROPERTY(qreal, elevator)
+    QML_WRITABLE_AUTO_PROPERTY(qreal, rudder)
+    QML_WRITABLE_AUTO_PROPERTY(qreal, throttle)
 
 public:
     explicit FgAircraft(QObject *parent = 0)

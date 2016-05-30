@@ -23,23 +23,24 @@
 #ifndef FGVEHICLE_H
 #define FGVEHICLE_H
 
-#include "QQmlVarPropertyHelpers.h"
+#include "QQmlAutoPropertyHelpers.h"
 #include "flightgear/FgTransport.h"
 
 #include <QDebug>
 #include <QObject>
+#include <QString>
 
 class FgVehicle : public QObject
 {
     Q_OBJECT
-    QML_WRITABLE_VAR_PROPERTY(QString, callsign)
-    QML_READONLY_VAR_PROPERTY(bool, connected)
-    QML_READONLY_VAR_PROPERTY(qreal, latitude)
-    QML_READONLY_VAR_PROPERTY(qreal, longitude)
-    QML_READONLY_VAR_PROPERTY(qreal, altitude)
-    QML_READONLY_VAR_PROPERTY(qreal, ground_level)
-    QML_READONLY_VAR_PROPERTY(qreal, delta_time)
-    QML_READONLY_VAR_PROPERTY(qreal, elapsed_time)
+    QML_WRITABLE_AUTO_PROPERTY(QString, callsign)
+    QML_READONLY_AUTO_PROPERTY(bool, connected)
+    QML_READONLY_AUTO_PROPERTY(qreal, latitude)
+    QML_READONLY_AUTO_PROPERTY(qreal, longitude)
+    QML_READONLY_AUTO_PROPERTY(qreal, altitude)
+    QML_READONLY_AUTO_PROPERTY(qreal, ground_level)
+    QML_READONLY_AUTO_PROPERTY(qreal, delta_time)
+    QML_READONLY_AUTO_PROPERTY(qreal, elapsed_time)
 
 public:
     explicit FgVehicle(QObject *parent = 0)

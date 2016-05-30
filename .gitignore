@@ -34,3 +34,6 @@ Makefile*
 
 # OS X
 .DS_Store
+
+# GitEye
+/.project

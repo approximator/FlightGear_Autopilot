@@ -23,14 +23,14 @@
 #ifndef FGAUTOPILOT_H
 #define FGAUTOPILOT_H
 
-#include "QQmlVarPropertyHelpers.h"
+#include "QQmlAutoPropertyHelpers.h"
 
 #include <QObject>
 
 class FgAutopilot : public QObject
 {
     Q_OBJECT
-    QML_WRITABLE_VAR_PROPERTY(bool, engaged)
+    QML_WRITABLE_AUTO_PROPERTY(bool, engaged)
 public:
     explicit FgAutopilot(QObject *parent = 0)
         : QObject(parent)
