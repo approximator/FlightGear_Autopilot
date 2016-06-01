@@ -17,58 +17,64 @@
 */
 
 import qbs
+import qbs.FileInfo
+import QmlTools
 
-CppApplicationBase {
-    targetName: project.appAppTarget
+QmlTools.QtQmlApplication
+{
+    name: "FlightGear_Autopilot"
+    appShortName: "fgautopilot"
 
-    Depends { name: "Qt"; submodules: [ "qml", "quick", "gui",
-            "network", "xml", "svg"] }
+    Depends { name: "Qt"; submodules: [
+            "qml", "quick",
+            "network", "xml", "svg"
+        ] }
 
-    Depends { name: "qml_fgear" }
-    Depends { name: "qml_material" }
     Depends { name: "libqtqmltricks-qtqmlmodels" }
     Depends { name: "libqtqmltricks-qtsupermacros" }
 
-    cpp.includePaths: [".", "utils"]
-    cpp.defines: project.generalDefines.concat(['QTQMLTRICKS_NO_PREFIX_ON_GETTERS'])
+    cpp.includePaths: ["FlightController/", "FlightController/utils"]
+    cpp.defines: generalDefines.concat(['QTQMLTRICKS_NO_PREFIX_ON_GETTERS'])
+
+    qmlImportsPaths: [
+        FileInfo.joinPaths(project.appSourceRoot, "contrib", "qml-material", "modules"),
+        FileInfo.joinPaths(sourceDirectory, "Gui", "qml", "qml-fgear", "modules")
+    ]
 
     /* Main source file */
     Group {
-        name: "Sources"
+        name: "main_source"
         files: [
-            "../main.cpp",
-            "*.cpp",
-            "autopilot/*.cpp",
-            "flightgear/*.cpp",
-            "utils/*.cpp",
-            "vehicle/*.cpp"
+            "main.cpp",
+        ]
+    }
+
+    Group {
+        name: "Sources"
+        prefix: "FlightController/**/"
+        files: [
+            "*.cpp"
         ]
     }
 
     Group {
         name: "Headers"
+        prefix: "FlightController/**/"
         files: [
-            "*.h",
-            "autopilot/*.h",
-            "flightgear/*.h",
-            "utils/*.h",
-            "vehicle/*.h"
+            "*.h"
         ]
     }
 
     Group {
         name: "Resources"
-        files: "../resources/qml/qml_res.qrc"
+        files: "resources/qml/qml_res.qrc"
     }
 
     /* Fgap JSON configs */
     Group {
         name: "jsonConfigs"
         fileTags: ["jsonConfigs"]
-        prefix: project.appConfigSourceRoot
+        prefix: appConfigSourceRoot
         files: "*"
     }
-
-    targetInstallDir: project.appInstallDir
-    targetInstallPrefix: project.appBinDir
 }
