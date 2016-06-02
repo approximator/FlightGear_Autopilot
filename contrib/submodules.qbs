@@ -7,7 +7,8 @@ Project {
 
     references: [
         "qt-qml-models/QtQmlModels.qbs",
-        "qt-super-macros/QtSuperMacros.qbs"
+        "qt-super-macros/QtSuperMacros.qbs",
+        "nameit/nameit.qbs"
     ]
 
 }

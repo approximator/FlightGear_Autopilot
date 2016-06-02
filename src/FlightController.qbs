@@ -32,6 +32,7 @@ QmlTools.QtQmlApplication
 
     Depends { name: "libqtqmltricks-qtqmlmodels" }
     Depends { name: "libqtqmltricks-qtsupermacros" }
+    Depends { name: "nameit" }
 
     cpp.includePaths: ["FlightController/", "FlightController/utils"]
     cpp.defines: generalDefines.concat(['QTQMLTRICKS_NO_PREFIX_ON_GETTERS'])
