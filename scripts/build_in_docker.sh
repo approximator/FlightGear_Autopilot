@@ -12,6 +12,8 @@ echo "SRC_DIR: ${FGAP_SRC_DIR}"
 echo "INSTALL_DIR: ${INSTALL_DIR}"
 echo "BUILD_VARIANT: ${BUILD_VARIANT}"
 
+mkdir -p ${INSTALL_DIR}
+
 cat > ${ENTRY_POINT} << EOF
 #!/bin/bash
 groupadd -g $(getent group $USER | cut -d: -f3) $USER
@@ -25,7 +27,7 @@ chmod +x ${ENTRY_POINT}
 VOLUMES="-v ${ENTRY_POINT}:${ENTRY_POINT}:ro -v ${SRC_DIR}:/home/prj/fgap:ro"
 VOLUMES="${VOLUMES} -v ${INSTALL_DIR}:/fgap"
 
-docker run --rm --entrypoint=${ENTRY_POINT} ${VOLUMES} approximator/qbs:1.5
+docker run --rm --entrypoint=${ENTRY_POINT} ${VOLUMES} approximator/qbs:1.5.0.Qt5.6.1
 rm ${ENTRY_POINT}
 
 echo "Build finished!"

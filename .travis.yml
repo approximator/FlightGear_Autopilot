@@ -3,17 +3,9 @@ language: cpp
 services:
   - docker
 
-# env:
-#   global:
-#     - secure: "C1Ai03PHHYwsJg4PXWAYheex75locrF94Fzm9esQ0NE3BaZl86Bw8hgmXFa0EKTd1Vl1vrKlqVXZg9hhPBUP4c5KyDHj5xYGWhEGLtoenLXYqCivERP5Tqq35OrFTWjWuohFvTwTMdUFbWl0r2QqZGjm/nRkQbDNWAABIPBq+4A="
-#     - secure: "afLxPzrM1+xjYyidIXnuAn4pimOegT5jXxQNsXXpT2Tj59odI6tL6CZuuH5/SC66E0VwcR5YnAnQ7p4OoQyysqjBApZ71fUZSTcD4r9rlOMhvRwL+6nWRPF3/WxsqWYeuHoMDit4QQR8a7WQINPnJg0ZzRjD0/bFN2j1v+vID5I="
-#     - secure: "cvrIzqJ8FvKXzvB4Tp8Q9gbpFfLTGkVVndrAMA6Pj0trY13nlz6Z2lg9o1Mkcmw/73ndpDImB1IhoPCrgPJBOMYrv7bOKZZJ0D6qCyoIdqspTQX7wJm0WZPQ/SqoACZjpp536AvPJ6vUdZjg+Xj2I913U7SMtvAOrBEUfbMcTOs="
-
 env:
-    - UBUNTU_NAME=trusty BUILD_VARIANT=debug
-    - UBUNTU_NAME=wily BUILD_VARIANT=debug
-    - UBUNTU_NAME=trusty BUILD_VARIANT=release
-    - UBUNTU_NAME=wily BUILD_VARIANT=release
+    - BUILD_VARIANT=debug
+    - BUILD_VARIANT=release
 
 addons:
   apt:
@@ -22,10 +14,11 @@ addons:
       - tree
 
 before_script:
-  - INSTALL_DIR=${TRAVIS_BUILD_DIR}/../fgap_install
+  - INSTALL_DIR=/tmp/fgap/docker
 
 script:
-  - docker run --rm -v ${TRAVIS_BUILD_DIR}:/fgap:ro -v ${INSTALL_DIR}:/result approximator/dockerfiles:qt$UBUNTU_NAME /bin/bash /fgap/scripts/build.sh /fgap /result/install $BUILD_VARIANT
+  - ./scripts/build_in_docker.sh
   - tree -L 5 ${INSTALL_DIR}
-  - if [ "$UBUNTU_NAME" == "wily" ]; then docker run --rm -v ${INSTALL_DIR}:/fgap approximator/dockerfiles:qttest /bin/bash -c "cd /fgap/install/FlightGear_Autopilot && bash /take_screenshot.sh ./fgautopilot /fgap/screenshot.png"; fi
+  - docker run --rm -v ${INSTALL_DIR}:/fgap -v $PWD/contrib/Qt-Qbs-Application/scripts:/scripts approximator/qttest python /scripts/take_screenshot.py -f /fgap/install/FlightGear_Autopilot/fgautopilot -t 55 -o /fgap/install/FlightGear_Autopilot/screenshot.png
   - tree -L 5 ${INSTALL_DIR}
+  - cat ${INSTALL_DIR}/install/FlightGear_Autopilot/fgautopilot.log
