@@ -17,9 +17,11 @@ BUILD_VARIANT=$3     # release or debug
 echo ""
 echo "I am: $(id)"
 echo ""
-echo "FGAP_SRC_DIR: $FGAP_SRC_DIR"
+echo "FGAP_SRC_DIR:     $FGAP_SRC_DIR"
 echo "FGAP_INSTALL_DIR: $FGAP_INSTALL_DIR"
-echo "BUILD_VARIANT: $BUILD_VARIANT"
+echo "BUILD_VARIANT:    $BUILD_VARIANT"
+echo "qmake version:    $(qmake --version)"
+# echo "qbs version:      $(qbs --version)"
 
 qbs setup-toolchains --detect
 qbs setup-qt $(which qmake) qt

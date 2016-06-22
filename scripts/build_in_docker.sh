@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ $# = 1 ]; then
+   QBS_VERSION=$1
+fi
+
 SRC_DIR=$(cd $(dirname $0)/../ && pwd)
 SCRIPT_NAME="$(basename \"$(test -L \"$0\" && readlink \"$0\" || echo \"$0\")\")"
 ENTRY_POINT="/tmp/dock_fgap_entry_point.sh"
@@ -7,10 +11,12 @@ ENTRY_POINT="/tmp/dock_fgap_entry_point.sh"
 : ${FGAP_SRC_DIR:=$(cd "${SRC_DIR}/.." && pwd)}
 : ${INSTALL_DIR:="/tmp/fgap/docker"}
 : ${BUILD_VARIANT:="release"}
+: ${QBS_VERSION:="qbs:1.5.0.Qt5.6.1"}
 
 echo "SRC_DIR: ${FGAP_SRC_DIR}"
 echo "INSTALL_DIR: ${INSTALL_DIR}"
 echo "BUILD_VARIANT: ${BUILD_VARIANT}"
+echo "QBS_VERSION: ${QBS_VERSION}"
 
 mkdir -p ${INSTALL_DIR}
 
@@ -27,7 +33,7 @@ chmod +x ${ENTRY_POINT}
 VOLUMES="-v ${ENTRY_POINT}:${ENTRY_POINT}:ro -v ${SRC_DIR}:/home/prj/fgap:ro"
 VOLUMES="${VOLUMES} -v ${INSTALL_DIR}:/fgap"
 
-docker run --rm --entrypoint=${ENTRY_POINT} ${VOLUMES} approximator/qbs:1.5.0.Qt5.6.1
+docker run --rm --entrypoint=${ENTRY_POINT} ${VOLUMES} approximator/${QBS_VERSION}
 rm ${ENTRY_POINT}
 
 echo "Build finished!"
