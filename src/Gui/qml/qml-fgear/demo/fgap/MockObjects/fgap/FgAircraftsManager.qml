@@ -16,29 +16,25 @@
  * limitations under the License.
  */
 
-import QtQuick 2.7
+import QtQuick 2.0
 
-import QtQuick.Controls 2.0
+import fgapObjects 0.1
 
-import FGear 0.1
-import FGear.Components.Autopilot 0.1
+QtObject {
+    id: aircraftsManager
 
-ApplicationWindow {
-    title: "Autopilot Test"
+    property ListModel model: ListModel { }
 
-    width: 900
-    height: 300
+    signal aircraftConnected(var aircraft);
+    signal ourAircraftConnected(var aircraft);
+    signal aircraftDisconnected(var aircraft);
+    signal aircraftUpdated(var aircraft);
 
-    FgAutopilotView {
-        id: fgautopilot
-
-        anchors.fill: parent
-        anchors.margins: AppConfig.dp(50)
-
-        onAutopilotEngage: console.log("autopilot engage state,", activate)
-        onModeChanged: console.log("autopilot mode changed to,", mode)
-        onAltitudeChanged: console.log("altitude changed to,", altitude)
-        onVesticalSpeedChanged: console.log("vertical speed changed to,", vspeed)
-
+    function addAircraft() {
+        var _aircraft = Aircraft.newAircraft();
+        model.append({"callsign": _aircraft.callsign});
+        console.log("[tst_AircraftsManager] aircraft added: ", _aircraft.callsign);
+        ourAircraftConnected(_aircraft);
     }
+
 }

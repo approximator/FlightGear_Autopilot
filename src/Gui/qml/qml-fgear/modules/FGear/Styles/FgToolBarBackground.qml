@@ -18,27 +18,19 @@
 
 import QtQuick 2.7
 
-import QtQuick.Controls 2.0
-
 import FGear 0.1
-import FGear.Components.Autopilot 0.1
 
-ApplicationWindow {
-    title: "Autopilot Test"
+Rectangle {
+    color: "transparent"
+    Rectangle {
+        id: bottomBorder
 
-    width: 900
-    height: 300
-
-    FgAutopilotView {
-        id: fgautopilot
-
-        anchors.fill: parent
-        anchors.margins: AppConfig.dp(50)
-
-        onAutopilotEngage: console.log("autopilot engage state,", activate)
-        onModeChanged: console.log("autopilot mode changed to,", mode)
-        onAltitudeChanged: console.log("altitude changed to,", altitude)
-        onVesticalSpeedChanged: console.log("vertical speed changed to,", vspeed)
-
+        anchors {
+            bottom: parent.bottom
+            left: parent.left
+            right: parent.right
+        }
+        height: AppConfig.dp(2)
+        color: "#ff474853"
     }
 }

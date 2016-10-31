@@ -19,26 +19,36 @@
 import QtQuick 2.7
 
 import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
 
 import FGear 0.1
-import FGear.Components.Autopilot 0.1
 
-ApplicationWindow {
-    title: "Autopilot Test"
+ListView {
+    id: menuList
 
-    width: 900
-    height: 300
+    clip: true
+    highlightFollowsCurrentItem: true
+    highlight: __listHightlight
+    boundsBehavior: Flickable.StopAtBounds
 
-    FgAutopilotView {
-        id: fgautopilot
+    ScrollIndicator.vertical: ScrollIndicator { }
 
-        anchors.fill: parent
-        anchors.margins: AppConfig.dp(50)
-
-        onAutopilotEngage: console.log("autopilot engage state,", activate)
-        onModeChanged: console.log("autopilot mode changed to,", mode)
-        onAltitudeChanged: console.log("altitude changed to,", altitude)
-        onVesticalSpeedChanged: console.log("vertical speed changed to,", vspeed)
-
+    Component {
+        id: __listHightlight
+        Item {
+            Rectangle {
+                color: Material.accentColor
+                opacity: 0.7
+                width: AppConfig.dp(6)
+                anchors {
+                    top: parent.top
+                    bottom: parent.bottom
+                    left: parent.left
+                    topMargin: AppConfig.dp(10)
+                    bottomMargin: AppConfig.dp(10)
+                    leftMargin: AppConfig.dp(2)
+                }
+            }
+        }
     }
 }

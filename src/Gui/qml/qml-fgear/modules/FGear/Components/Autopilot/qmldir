@@ -1,0 +1,10 @@
+module FGear.Components.Autopilot
+
+AutopilotModel 0.1 AutopilotModel.qml
+BaseAutopilotButton 0.1 BaseAutopilotButton.qml
+DialButton 0.1 DialButton.qml
+Display 0.1 Display.qml
+EngageButton 0.1 EngageButton.qml
+FgAutopilotView 0.1 FgAutopilotView.qml
+ModeButton 0.1 ModeButton.qml
+TrimButton 0.1 TrimButton.qml

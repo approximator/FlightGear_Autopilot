@@ -1,0 +1,4 @@
+module FGear.Components.Views
+
+FgMainView 0.1 FgMainView.qml
+FgSplitPageView 0.1 FgSplitPageView.qml

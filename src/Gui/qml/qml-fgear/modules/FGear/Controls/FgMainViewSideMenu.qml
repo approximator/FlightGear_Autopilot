@@ -21,24 +21,33 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 
 import FGear 0.1
-import FGear.Components.Autopilot 0.1
+import FGear.ListItems 0.1
 
-ApplicationWindow {
-    title: "Autopilot Test"
+FgListSideMenu {
+    id: mainViewSideMenu
 
-    width: 900
-    height: 300
+    objectName: "mainViewSideMenu"
 
-    FgAutopilotView {
-        id: fgautopilot
+//    property StackView pageStack: null
 
-        anchors.fill: parent
-        anchors.margins: AppConfig.dp(50)
+    title: AppConfig.appName
+//    delegate: FgMenuItem {
+//        selected: ListView.isCurrentItem
+//        infoEnabled: ListView.isCurrentItem
+//        onFgInfoClicked: fgap.aircraft.runFlightGear()
 
-        onAutopilotEngage: console.log("autopilot engage state,", activate)
-        onModeChanged: console.log("autopilot mode changed to,", mode)
-        onAltitudeChanged: console.log("altitude changed to,", altitude)
-        onVesticalSpeedChanged: console.log("vertical speed changed to,", vspeed)
+//        connected: connected
+//        text: callsign
 
-    }
+//        onClicked: {
+//            ListView.view.currentIndex = index;
+////            fgap.aircraft = model.qtObject;
+//        }
+
+//        Component.onCompleted: {
+//            if (index === 0) {
+////                fgap.aircraft = model.qtObject;
+//            }
+//        }
+//    }
 }

@@ -1,9 +1,33 @@
-import QtQuick 2.4
-import QtQuick.Window 2.0
-import QtQuick.Controls 1.2
-import FGear 0.1
+/*
+ * Copyright © 2015-2016 Oleksii Aliakin. All rights reserved.
+ * Author: Oleksii Aliakin (alex@nls.la)
+ * Author: Andrii Shelest
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-Window {
+import QtQuick 2.7
+
+import QtQuick.Controls 2.0
+import QtQuick.Layouts 1.1
+
+import FGear 0.1
+import fgap 1.0
+
+ApplicationWindow {
+    id: testFgapWindow
+
+    property alias fgapWindow: fgap_loader.item
 
     title: "FGap Gui Test"
 
@@ -12,9 +36,7 @@ Window {
 
     Component {
         id: fgap_window_comp
-        FgWindow {
-            fgController: controller
-        }
+        FgWindow { }
     }
 
     Loader {
@@ -29,46 +51,22 @@ Window {
         running: !fgap_loader.item
     }
 
-    Component.onCompleted: {
-//        controllerTimer.start();
-    }
-
-    Row {
+    RowLayout {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
 
         Button {
+            Layout.alignment: Qt.AlignLeft
             text: "add flight"
-            onClicked: controller.ourAircraftConnected(AircraftUtils.newAircraft());
+            onClicked: fgapWindow.fgManager.addAircraft();
         }
         Button {
+            Layout.alignment: Qt.AlignRight
             text: "add other flight"
-            onClicked: controller.aircraftConnected(AircraftUtils.newAircraft());
+            onClicked: fgapWindow.fgManager.addAircraft();
         }
     }
 
-    /* debug objects and functions*/
-    QtObject {
-        id: controller
 
-        property var aircrafts: []
-        signal aircraftConnected(var aircraft);
-        signal ourAircraftConnected(var aircraft);
-        signal aircraftDisconnected(var aircraft);
-        signal aircraftUpdated(var aircraft);
-    }
-
-    Timer {
-        property int counter: 0
-        id: controllerTimer
-        interval: 2000; running: false; repeat: true
-        onTriggered: {
-            switch (counter % 2) {
-            case 0: controller.ourAircraftConnected(AircraftUtils.newAircraft()); break;
-            case 1: controller.aircraftConnected(AircraftUtils.newAircraft()); break;
-            }
-            counter+=1;
-        }
-    }
 }

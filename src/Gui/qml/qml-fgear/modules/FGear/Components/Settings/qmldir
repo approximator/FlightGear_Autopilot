@@ -1,0 +1,3 @@
+module FGear.Components.Settings
+
+FgSettingsView 0.1 FgSettingsView.qml

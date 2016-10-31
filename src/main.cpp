@@ -29,6 +29,7 @@
 #include <QMessageBox>
 #include <QTextCodec>
 #include <QtQml>
+#include <QQuickStyle>
 
 int main(int argc, char *argv[])
 {
@@ -37,8 +38,10 @@ int main(int argc, char *argv[])
     QString pluginsPaths = fgap::path::join(QFileInfo(argv[0]).dir().path(), APP_PLUGINS_PATH);
     QCoreApplication::addLibraryPath(pluginsPaths);
 #endif
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QApplication app(argc, argv);
+    QQuickStyle::setStyle("Material");
     qInstallMessageHandler(logMessageHandler);
 
     /* Set up settings */

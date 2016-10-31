@@ -18,27 +18,39 @@
 
 import QtQuick 2.7
 
-import QtQuick.Controls 2.0
+import QtQuick.Layouts 1.1
 
 import FGear 0.1
-import FGear.Components.Autopilot 0.1
 
-ApplicationWindow {
-    title: "Autopilot Test"
+Item {
+    id: splitPageView
 
-    width: 900
-    height: 300
+    property int splitContentWidth: AppConfig.dp(350)
 
-    FgAutopilotView {
-        id: fgautopilot
+    default property alias data: baseContent.data
+    property alias splitContent: splitContent.data
+
+    RowLayout {
+        id: layout
 
         anchors.fill: parent
-        anchors.margins: AppConfig.dp(50)
 
-        onAutopilotEngage: console.log("autopilot engage state,", activate)
-        onModeChanged: console.log("autopilot mode changed to,", mode)
-        onAltitudeChanged: console.log("altitude changed to,", altitude)
-        onVesticalSpeedChanged: console.log("vertical speed changed to,", vspeed)
+        Item {
+            id: splitContent
 
+            Layout.preferredWidth: splitContentWidth
+            Layout.fillHeight: true
+
+            clip: true
+        }
+
+        Item {
+            id: baseContent
+
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+
+            clip: true
+        }
     }
 }

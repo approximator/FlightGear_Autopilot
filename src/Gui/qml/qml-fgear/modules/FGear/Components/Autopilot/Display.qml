@@ -18,27 +18,37 @@
 
 import QtQuick 2.7
 
+import QtQuick.Controls.Material 2.0
 import QtQuick.Controls 2.0
 
 import FGear 0.1
-import FGear.Components.Autopilot 0.1
+import FGear.Controls 0.1
 
-ApplicationWindow {
-    title: "Autopilot Test"
+Pane {
+    anchors.fill: parent
+    background: Rectangle { color:"#2e1c1c" }
 
-    width: 900
-    height: 300
+    FgLabel {
+        id: __label
 
-    FgAutopilotView {
-        id: fgautopilot
+        styleName: "display2"
+        color: itemTextColor
 
-        anchors.fill: parent
-        anchors.margins: AppConfig.dp(50)
+        anchors {
+            left: parent.left
+            margins: AppConfig.dp(20)
+        }
+        text: qsTr("OFF")
+    }
 
-        onAutopilotEngage: console.log("autopilot engage state,", activate)
-        onModeChanged: console.log("autopilot mode changed to,", mode)
-        onAltitudeChanged: console.log("altitude changed to,", altitude)
-        onVesticalSpeedChanged: console.log("vertical speed changed to,", vspeed)
-
+    states: State {
+        when: engaged
+        name: "active"
+        PropertyChanges {
+            target: __label;
+            color: Material.accent;
+            font.weight: Font.Bold
+            text: qsTr("ON")
+        }
     }
 }

@@ -18,27 +18,30 @@
 
 import QtQuick 2.7
 
-import QtQuick.Controls 2.0
-
 import FGear 0.1
-import FGear.Components.Autopilot 0.1
+import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
 
-ApplicationWindow {
-    title: "Autopilot Test"
+Dial {
+    id: autopilotDial
 
-    width: 900
-    height: 300
+    from: 0
+    to: 360
+    stepSize: 10
 
-    FgAutopilotView {
-        id: fgautopilot
 
-        anchors.fill: parent
-        anchors.margins: AppConfig.dp(50)
+    anchors.margins: AppConfig.dp(16)
 
-        onAutopilotEngage: console.log("autopilot engage state,", activate)
-        onModeChanged: console.log("autopilot mode changed to,", mode)
-        onAltitudeChanged: console.log("altitude changed to,", altitude)
-        onVesticalSpeedChanged: console.log("vertical speed changed to,", vspeed)
-
+    onValueChanged: {
+        /* emit signal if it exists */
+        if (typeof buttonChecked !== "undefined") {
+            altitudeChanged(Math.round(value))
+        }
     }
+
+    Label {
+        anchors.centerIn: parent
+        text: Math.round((position * to) + from)
+    }
+
 }

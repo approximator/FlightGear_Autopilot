@@ -16,29 +16,31 @@
  * limitations under the License.
  */
 
-import QtQuick 2.7
-
+import QtQml 2.2
+import QtQml.Models 2.2
 import QtQuick.Controls 2.0
 
 import FGear 0.1
-import FGear.Components.Autopilot 0.1
+import FGear.ListItems 0.1
 
-ApplicationWindow {
-    title: "Autopilot Test"
+ObjectModel {
+    id: mainViewModel
 
-    width: 900
-    height: 300
+    signal menuSelected(string pageSource)
 
-    FgAutopilotView {
-        id: fgautopilot
-
-        anchors.fill: parent
-        anchors.margins: AppConfig.dp(50)
-
-        onAutopilotEngage: console.log("autopilot engage state,", activate)
-        onModeChanged: console.log("autopilot mode changed to,", mode)
-        onAltitudeChanged: console.log("altitude changed to,", altitude)
-        onVesticalSpeedChanged: console.log("vertical speed changed to,", vspeed)
-
+    FgMenuItem {
+        text: "FgAircraftPage"
+        itemSource: "Pages/FgAircraftPage.qml"
     }
+
+    FgMenuItem {
+        text: "FgMapPage"
+        itemSource: "Pages/FgMapPage.qml"
+    }
+
+    FgMenuItem {
+        text: "FgInstruments"
+        itemSource: "Pages/FgInstrumentsPage.qml"
+    }
+
 }

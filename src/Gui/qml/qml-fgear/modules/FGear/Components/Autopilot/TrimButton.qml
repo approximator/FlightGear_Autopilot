@@ -1,3 +1,4 @@
+
 /*
  * Copyright © 2015-2016 Oleksii Aliakin. All rights reserved.
  * Author: Oleksii Aliakin (alex@nls.la)
@@ -18,27 +19,14 @@
 
 import QtQuick 2.7
 
-import QtQuick.Controls 2.0
-
 import FGear 0.1
-import FGear.Components.Autopilot 0.1
 
-ApplicationWindow {
-    title: "Autopilot Test"
-
-    width: 900
-    height: 300
-
-    FgAutopilotView {
-        id: fgautopilot
-
-        anchors.fill: parent
-        anchors.margins: AppConfig.dp(50)
-
-        onAutopilotEngage: console.log("autopilot engage state,", activate)
-        onModeChanged: console.log("autopilot mode changed to,", mode)
-        onAltitudeChanged: console.log("altitude changed to,", altitude)
-        onVesticalSpeedChanged: console.log("vertical speed changed to,", vspeed)
-
+BaseAutopilotButton {
+    onClicked: {
+          /* emit signal if it exists */
+        if (typeof vesticalSpeedChanged !== "undefined") {
+            var sign = name.indexOf("up") > 0 ? 1 : -1;
+            vesticalSpeedChanged(sign * 10);
+        }
     }
 }

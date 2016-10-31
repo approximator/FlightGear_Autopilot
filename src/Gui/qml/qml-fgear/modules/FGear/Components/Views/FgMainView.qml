@@ -20,25 +20,38 @@ import QtQuick 2.7
 
 import QtQuick.Controls 2.0
 
-import FGear 0.1
-import FGear.Components.Autopilot 0.1
+import FGear.Controls 0.1
+import FGear.Pages 0.1
+import FGear.Styles 0.1
 
-ApplicationWindow {
-    title: "Autopilot Test"
+FgPage {
+    id: page
+    property alias pageStack: __pageStack
 
-    width: 900
-    height: 300
+    /* QTBUG-50992 see in SplashScreen.qml */
+    background: FgMainViewBackground { }
 
-    FgAutopilotView {
-        id: fgautopilot
+    FgToolBar { id: toolBar }
+    header: toolBar
+
+    StackView {
+        id: __pageStack
 
         anchors.fill: parent
-        anchors.margins: AppConfig.dp(50)
+        initialItem: aircraftPageComponent
 
-        onAutopilotEngage: console.log("autopilot engage state,", activate)
-        onModeChanged: console.log("autopilot mode changed to,", mode)
-        onAltitudeChanged: console.log("altitude changed to,", altitude)
-        onVesticalSpeedChanged: console.log("vertical speed changed to,", vspeed)
+    }
 
+    Component {
+        id: aircraftPageComponent
+
+        FgAircraftPage { }
+    }
+
+    /* Window connections */
+    Connections {
+        target: toolBar
+        onSettingsClicked: fgap.pushPage("Pages/FgSettingsPage.qml")
+        onMapClicked: fgap.pushPage("Pages/FgMapPage.qml")
     }
 }

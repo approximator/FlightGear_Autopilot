@@ -26,7 +26,7 @@ QmlTools.QtQmlApplication
     appShortName: "fgautopilot"
 
     Depends { name: "Qt"; submodules: [
-            "qml", "quick",
+            "qml", "quick", "quickcontrols2",
             "network", "xml", "svg"
         ] }
 
@@ -34,10 +34,10 @@ QmlTools.QtQmlApplication
     Depends { name: "libqtqmltricks-qtsupermacros" }
 
     cpp.includePaths: ["FlightController/", "FlightController/utils"]
-    cpp.defines: generalDefines.concat(['QTQMLTRICKS_NO_PREFIX_ON_GETTERS'])
+    generalDefines: ['QTQMLTRICKS_NO_PREFIX_ON_GETTERS']
 
     qmlImportsPaths: [
-        FileInfo.joinPaths(project.appSourceRoot, "contrib", "qml-material", "modules"),
+        FileInfo.joinPaths(project.appSourceRoot, "contrib", "modules"),
         FileInfo.joinPaths(sourceDirectory, "Gui", "qml", "qml-fgear", "modules")
     ]
 

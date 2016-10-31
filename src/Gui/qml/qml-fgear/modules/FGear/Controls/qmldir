@@ -1,0 +1,12 @@
+module FGear.Controls
+
+FgLabel 0.1 FgLabel.qml
+FgList 0.1 FgList.qml
+FgMenuBackButton 0.1 FgMenuBackButton.qml
+FgToolBar 0.1 FgToolBar.qml
+FgSlideBar 0.1 FgSlideBar.qml
+
+FgBaseSideMenu 0.1 FgBaseSideMenu.qml
+FgListSideMenu 0.1 FgListSideMenu.qml
+FgAircraftsSideMenu 0.1 FgAircraftsSideMenu.qml
+FgMainViewSideMenu 0.1 FgMainViewSideMenu.qml
