@@ -30,8 +30,8 @@ QtObject {
     signal aircraftDisconnected(var aircraft);
     signal aircraftUpdated(var aircraft);
 
-    function addAircraft() {
-        var _aircraft = Aircraft.newAircraft();
+    function addAircraft(callsign) {
+        var _aircraft = Aircraft.newAircraft(callsign);
         model.append({"callsign": _aircraft.callsign});
         console.log("[tst_AircraftsManager] aircraft added: ", _aircraft.callsign);
         ourAircraftConnected(_aircraft);

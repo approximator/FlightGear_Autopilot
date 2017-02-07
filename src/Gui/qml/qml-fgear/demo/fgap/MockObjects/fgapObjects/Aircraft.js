@@ -9,11 +9,11 @@ function createVehicleInfo(_model,_image_type){
     return info;
 }
 
-function newAircraft() {
+function newAircraft(_callsign) {
 
     // Creating aircraft object like in FgAircraft.h
     var that = {
-        callsign: __createCallsign(),
+        callsign: !!_callsign ? _callsign : __createCallsign(),
         index: __createIndex(),
         params: newParams(),
         controls: newControls(),

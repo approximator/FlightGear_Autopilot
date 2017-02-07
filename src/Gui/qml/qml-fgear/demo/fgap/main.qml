@@ -22,6 +22,8 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 
 import FGear 0.1
+
+/* Using MOC objects */
 import fgap 1.0
 
 ApplicationWindow {
@@ -56,15 +58,19 @@ ApplicationWindow {
         anchors.left: parent.left
         anchors.right: parent.right
 
+        TextField {
+            id: __callsignInput
+        }
+
         Button {
             Layout.alignment: Qt.AlignLeft
             text: "add flight"
-            onClicked: fgapWindow.fgManager.addAircraft();
+            onClicked: fgapWindow.aircraftsManager.addAircraft(__callsignInput.text);
         }
         Button {
             Layout.alignment: Qt.AlignRight
             text: "add other flight"
-            onClicked: fgapWindow.fgManager.addAircraft();
+            onClicked: fgapWindow.aircraftsManager.addAircraft(__callsignInput.text);
         }
     }
 
