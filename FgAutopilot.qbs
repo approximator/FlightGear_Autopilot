@@ -20,7 +20,7 @@ import qbs
 import qbs.FileInfo
 
 Project {
-    name: "fgap_project"
+    name: "fgautopilot"
     minimumQbsVersion: "1.4"
 
     property path appSourceRoot: sourceDirectory

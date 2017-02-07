@@ -17,19 +17,25 @@
  */
 
 import QtQuick 2.7
-import QtQuick.Controls 2.0
 
 import FGear 0.1
-import FGear.Controls 0.1
-import FGear.Styles 0.1
+import FGear.Components.Actions 0.1
 
-Page {
-    id: basePage
+FgBaseAction {
+    id: showHideAction
+    objectName: "showHideAction"
 
-    objectName: "basePage"
+    property bool isShown: true
+    signal show()
+    signal hide()
 
-//    property FgBaseSideMenu menuItem: FgBaseSideMenu { }
-
-    /* QTBUG-50992 see in SplashScreen.qml */
-    background: FgBasePageBackground { }
+    onTriggered: {
+        if (isShown) {
+            isShown = false;
+            hide();
+        } else {
+            isShown = true;
+            show();
+        }
+    }
 }

@@ -17,38 +17,46 @@
  */
 
 import QtQuick 2.7
-
-import QtQuick.Controls.Material 2.0
 import QtQuick.Controls 2.0
 
 import FGear 0.1
 import FGear.Controls 0.1
+import FGear.Components.Autopilot 0.1
 
-Pane {
-    anchors.fill: parent
-    background: Rectangle { color:"#2e1c1c" }
+FgPage {
+
+    objectName: "AircraftPage"
+    id: fgAircraftPage
+
+    title: qsTr("Aircraft control")
+
+    property var aircraft: null
+    readonly property bool active: (aircraft !== null)
 
     Label {
-        id: __label
+        id: callsignLabel
 
-        color: itemTextColor
-        font.pointSize: 40
+        anchors.top: parent.top
+        anchors.left: parent.left
+        topPadding: 10
+        leftPadding: 10
 
-        anchors {
-            left: parent.left
-            margins: AppConfig.dp(20)
-        }
-        text: qsTr("OFF")
+        text: qsTr("Select aircraft")
+        font.pointSize: 32
+        font.weight: Font.Light
+    }
+
+    FgAutopilotView { id: autopilot }
+    Connections {
+        enabled: active
+        target: autopilot
+        onAutopilotEngage: aircraft.autopilotEngage(activate)
     }
 
     states: State {
-        when: engaged
         name: "active"
-        PropertyChanges {
-            target: __label;
-            color: Material.accent;
-            font.weight: Font.Bold
-            text: qsTr("ON")
-        }
+        when: active
+
+        PropertyChanges { target: callsignLabel; text: aircraft.callsign }
     }
 }

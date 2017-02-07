@@ -17,19 +17,29 @@
  */
 
 import QtQuick 2.7
-import QtQuick.Controls 2.0
 
 import FGear 0.1
-import FGear.Controls 0.1
-import FGear.Styles 0.1
+import FGear.Components.Actions 0.1
 
-Page {
-    id: basePage
+FgBaseAction {
+    id: menuAction
+    objectName: "menuAction"
 
-    objectName: "basePage"
+    property FgMenuActionGroup group
+    readonly property bool active: group && (group.activatedAction === menuAction)
 
-//    property FgBaseSideMenu menuItem: FgBaseSideMenu { }
+    property string pageSource: ""
+    signal menuSelected(string source)
 
-    /* QTBUG-50992 see in SplashScreen.qml */
-    background: FgBasePageBackground { }
+    onTriggered: {
+        if (group) {
+            if (group.activatedAction === menuAction) {
+                console.log("[MenuAction] skip double trigger of", objectName);
+                return;
+            }
+
+            group.activatedAction = menuAction;
+        }
+        menuSelected(pageSource)
+    }
 }

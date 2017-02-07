@@ -17,19 +17,18 @@
  */
 
 import QtQuick 2.7
-import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
 
-import FGear 0.1
-import FGear.Controls 0.1
-import FGear.Styles 0.1
+QtObject {
+    id: mainWindowStyle
 
-Page {
-    id: basePage
+    property int width: 1280
+    property int height: 768
 
-    objectName: "basePage"
+    property int colorType: Material.Dark
+    property color primary: Material.color(Material.Blue)
+    property color accent: Material.color(Material.DeepOrange)
+    property color background: Material.background
 
-//    property FgBaseSideMenu menuItem: FgBaseSideMenu { }
-
-    /* QTBUG-50992 see in SplashScreen.qml */
-    background: FgBasePageBackground { }
+    property int sideBarWidth: 270
 }

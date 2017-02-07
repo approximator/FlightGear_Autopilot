@@ -16,20 +16,20 @@
  * limitations under the License.
  */
 
+
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 
 import FGear 0.1
-import FGear.Controls 0.1
-import FGear.Styles 0.1
 
-Page {
-    id: basePage
+FgPage {
+    objectName: "BusyPage"
+    id: fgAircraftPage
 
-    objectName: "basePage"
+    title: qsTr("Waiting...")
 
-//    property FgBaseSideMenu menuItem: FgBaseSideMenu { }
-
-    /* QTBUG-50992 see in SplashScreen.qml */
-    background: FgBasePageBackground { }
+    BusyIndicator {
+        id: busyIndicator
+        anchors.centerIn: parent
+    }
 }

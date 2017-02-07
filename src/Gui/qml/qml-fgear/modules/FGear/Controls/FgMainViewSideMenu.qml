@@ -21,33 +21,19 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 
 import FGear 0.1
+import FGear.Models 0.1
 import FGear.ListItems 0.1
 
 FgListSideMenu {
     id: mainViewSideMenu
-
     objectName: "mainViewSideMenu"
 
-//    property StackView pageStack: null
-
     title: AppConfig.appName
-//    delegate: FgMenuItem {
-//        selected: ListView.isCurrentItem
-//        infoEnabled: ListView.isCurrentItem
-//        onFgInfoClicked: fgap.aircraft.runFlightGear()
 
-//        connected: connected
-//        text: callsign
-
-//        onClicked: {
-//            ListView.view.currentIndex = index;
-////            fgap.aircraft = model.qtObject;
-//        }
-
-//        Component.onCompleted: {
-//            if (index === 0) {
-////                fgap.aircraft = model.qtObject;
-//            }
-//        }
-//    }
+    model: FgMainViewModel { }
+    delegate: FgMenuItem {
+        text: model.text
+        actionName: model.actionName
+        width: mainViewSideMenu.width
+    }
 }

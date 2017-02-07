@@ -6,7 +6,6 @@ import FGear 0.1
 
 FgBaseSideMenu {
     id: listSideMenu
-
     objectName: "listSideMenu"
 
     property alias delegate: menuList.delegate
@@ -14,13 +13,14 @@ FgBaseSideMenu {
 
     anchors.fill: parent
 
-    header: FgLabel {
-        styleName: "headline"
+    header: Label {
         text: title
 
+        font.pointSize: 14
+
         horizontalAlignment: Text.AlignHCenter
-        topPadding: AppConfig.dp(12)
-        bottomPadding: AppConfig.dp(12)
+        topPadding: style.topPadding
+        bottomPadding: style.bottomPadding
     }
 
     FgList {
@@ -28,5 +28,4 @@ FgBaseSideMenu {
 
         anchors.fill: parent
     }
-
 }

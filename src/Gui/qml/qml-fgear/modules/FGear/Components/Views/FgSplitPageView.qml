@@ -21,11 +21,18 @@ import QtQuick 2.7
 import QtQuick.Layouts 1.1
 
 import FGear 0.1
+import FGear.Components.Actions 0.1
 
 Item {
     id: splitPageView
 
-    property int splitContentWidth: AppConfig.dp(350)
+    property string actionName: "menuShowAction"
+    readonly property FgSideBarShowAction action: !!actionsManager
+                                               ? actionsManager.getByName(actionName)
+                                               : null
+
+    property int splitContentWidth: 200
+    property bool sidePanelHidden: action ? !action.isShown : false
 
     default property alias data: baseContent.data
     property alias splitContent: splitContent.data
@@ -34,6 +41,7 @@ Item {
         id: layout
 
         anchors.fill: parent
+        spacing: 0.0
 
         Item {
             id: splitContent
@@ -53,4 +61,31 @@ Item {
             clip: true
         }
     }
+
+    states: [
+        State {
+            name: "hide_left_side"
+            when: sidePanelHidden
+            PropertyChanges { target: splitContent; Layout.preferredWidth: 0; }
+        }
+    ]
+
+    transitions: [
+        Transition {
+            from: "*"
+            to: "hide_left_side"
+            SequentialAnimation {
+                NumberAnimation { targets: splitContent; properties: "Layout.preferredWidth"; duration: 400 }
+                PropertyAction { target: splitContent; property: "visible"; value: false }
+            }
+        },
+        Transition {
+            from: "hide_left_side"
+            to: "*"
+            SequentialAnimation {
+                PropertyAction { target: splitContent; property: "visible"; value: true }
+                NumberAnimation { target: splitContent; properties: "Layout.preferredWidth"; duration: 400 }
+            }
+        }
+    ]
 }

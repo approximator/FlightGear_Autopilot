@@ -1,0 +1,12 @@
+module FGear.Components.Actions
+
+FgBaseAction 0.1 FgBaseAction.qml
+FgMenuAction 0.1 FgMenuAction.qml
+FgShowHideAction 0.1 FgShowHideAction.qml
+FgSideBarShowAction 0.1 FgSideBarShowAction.qml
+
+FgBaseActionGroup 0.1 FgBaseActionGroup.qml
+FgMenuActionGroup 0.1 FgMenuActionGroup.qml
+
+FgBaseActionManager 0.1 FgBaseActionManager.qml
+FgMainViewActionManager 0.1 FgMainViewActionManager.qml

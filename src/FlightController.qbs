@@ -22,8 +22,7 @@ import QmlTools
 
 QmlTools.QtQmlApplication
 {
-    name: "FlightGear_Autopilot"
-    appShortName: "fgautopilot"
+    appName: "FlightGear_Autopilot"
 
     Depends { name: "Qt"; submodules: [
             "qml", "quick", "quickcontrols2",

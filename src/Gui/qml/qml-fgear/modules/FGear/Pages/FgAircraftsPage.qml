@@ -17,19 +17,19 @@
  */
 
 import QtQuick 2.7
+
 import QtQuick.Controls 2.0
 
 import FGear 0.1
+import FGear.Pages 0.1
 import FGear.Controls 0.1
-import FGear.Styles 0.1
 
-Page {
-    id: basePage
+FgPage {
+    id: aircraftsPage
 
-    objectName: "basePage"
+    title: qsTr("Aircrafts")
 
-//    property FgBaseSideMenu menuItem: FgBaseSideMenu { }
 
-    /* QTBUG-50992 see in SplashScreen.qml */
-    background: FgBasePageBackground { }
+//    menuItem: FgAircraftsSideMenu { model: fgModel}
+
 }

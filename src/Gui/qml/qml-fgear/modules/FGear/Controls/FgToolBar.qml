@@ -29,43 +29,38 @@ ToolBar {
 
     property alias title: titleLabel.text
 
-    signal settingsClicked()
-    signal mapClicked()
-    signal menuClicked()
-    signal backClicked()
-
     /* QTBUG-50992 see in SplashScreen.qml */
     background: FgToolBarBackground {}
 
     RowLayout {
         anchors.fill: parent
 
-        FgMenuBackButton {
-//            back: drawer.visible || pageStack.depth > 1
-//            onBackClicked: pageStack.pop()
-//            onMenuClicked: drawer.open()
-
+        FgToolBarMenuButton {
             Layout.preferredWidth: height
         }
 
-        FgLabel {
+        Label {
             id: titleLabel
 
-            styleName: "title"
+            font.pointSize: 18
 
             Layout.fillWidth: true
-            Layout.leftMargin: AppConfig.dp(30)
             Layout.alignment: Qt.AlignVCenter
         }
 
-        ToolButton {
-            text: qsTr("\uD83C Map")
-            onClicked: mapClicked()
+        FgToolBarButton {
+            actionName: "aircraftControlPageMenuAction"
+            text: qsTr("\u25C0 Aircraft")
         }
 
-        ToolButton {
-            text: qsTr("\u25C0 Settings")
-            onClicked: settingsClicked()
+        FgToolBarButton {
+            actionName: "mapPageMenuAction"
+            text: qsTr("\uD83C Map")
+        }
+
+        FgToolBarButton {
+            actionName: "instrumentsPageMenuAction"
+            text: qsTr("\u25C0 Instruments")
         }
     }
 }

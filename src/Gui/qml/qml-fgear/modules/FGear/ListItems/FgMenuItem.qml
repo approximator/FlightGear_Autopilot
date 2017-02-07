@@ -1,34 +1,33 @@
 import QtQuick 2.7
-
 import QtQuick.Controls 2.0
-import QtQuick.Layouts 1.1
 
 import FGear 0.1
 import FGear.ListItems 0.1
+import FGear.Styles 0.1
+import FGear.Components.Actions 0.1
 
 MenuItem {
-    height: AppConfig.dp(72)
+    id: menuItem
 
-    property string itemSource: ""
+    /* actionName is used for search in actionsManager */
+    property string actionName: "menuAction"
+    readonly property FgMenuAction action: !!actionsManager
+                                           ? actionsManager.getByName(actionName)
+                                           : null
+    property FgMenuItemStyle style: FgMenuItemStyle { }
 
-    property bool infoEnabled: false
-    property bool connected: false
-    property bool selected: false
+    height: style.height
+    width: style.width
 
-    signal fgInfoClicked()
+    // TODO
+    //    property bool infoEnabled: false
+    //    property bool connected: false
+    //    property bool selected: false
+    //    signal fgInfoClicked()
 
-    onTriggered: menuSelected(itemSource)
+    onTriggered: {
+        ListView.view.currentIndex = ListView.view.indexAt(x, y);
+        action.triggered();
+    }
 
-//    //iconName: "maps/flight"
-//    secondaryItem: IconButton {
-//        anchors.centerIn: parent
-//        enabled: infoEnabled
-//        iconName: "maps/flight"
-//        color: (connected === true ? "green" : "gray")
-//        size: AppConfig.dp(32)
-//        onClicked: fgInfoClicked()
-//    }
-
-//    subText: (connected === true ? "Connected" : "Not connected")
-//    interactive: true
 }

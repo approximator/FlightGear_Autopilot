@@ -17,19 +17,20 @@
  */
 
 import QtQuick 2.7
-import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
 
-import FGear 0.1
-import FGear.Controls 0.1
-import FGear.Styles 0.1
+QtObject {
+    id: splashScreenStyle
 
-Page {
-    id: basePage
+    property int colorType: Material.Dark
+    property color primary: Material.color(Material.Blue)
+    property color accent: Material.color(Material.DeepOrange)
+    property color background: "#222127"
 
-    objectName: "basePage"
-
-//    property FgBaseSideMenu menuItem: FgBaseSideMenu { }
-
-    /* QTBUG-50992 see in SplashScreen.qml */
-    background: FgBasePageBackground { }
+    readonly property int width: 300
+    readonly property int height: 200
+    readonly property real radius: 10
+    readonly property real opacity: 0.8
+    readonly property real headerTopPadding: 5
+    readonly property real footerPadding: 10
 }

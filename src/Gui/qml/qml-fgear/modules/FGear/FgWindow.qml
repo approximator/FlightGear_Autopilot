@@ -20,76 +20,66 @@ import QtQuick 2.7
 
 import QtQuick.Controls.Material 2.0
 import QtQuick.Controls 2.0
-
-//import Qt.labs.settings 1.0
+import QtQuick.Window 2.2
+import Qt.labs.settings 1.0
 
 import FGear 0.1
 import FGear.Controls 0.1
 import FGear.Components.Views 0.1
-import FGear.Models 0.1
+import FGear.Components.Actions 0.1
+import FGear.Styles 0.1
 
 import fgap 1.0
 
 ApplicationWindow {
-    id: fgap
+    id: mainWindow
+    objectName: "mainWindow"
 
-    property alias fgManager: __fgManager
-    property alias fgModel: __fgManager.model
-    property QtObject aircraft: null
 
+    property FgBaseActionManager actionsManager: FgMainViewActionManager { }
+    property FgAircraftsManager aircraftsManager: FgAircraftsManager { }
+    property FgMainWindowStyle style: FgMainWindowStyle { }
 
     title: AppConfig.appName
 
-    Material.theme: AppConfig.colorType
-    Material.accent: AppConfig.accent
-    Material.primary: AppConfig.primary
-    color: Material.background
+    Material.theme: style.colorType
+    Material.accent: style.accent
+    Material.primary: style.primary
 
-    width: AppConfig.appWindowWidth
-    height: AppConfig.appWindowHeight
-    // x: AppConfig.appWindowX
-    // y: AppConfig.appWindowY
+    color: style.background
+
+    width: style.width
+    height: style.height
     visible: true
 
     Component.onCompleted: {
         /* It is needed to recalculate pixelDensity */
-        AppConfig.screenUpdated()
+        AppConfig.screenUpdated(Screen);
     }
-
-    FgAircraftsManager { id: __fgManager }
 
     FgSplitPageView {
         id: splitPageView
 
         anchors.fill: parent
 
-        splitContent: FgMainViewSideMenu {
-            model: __mainViewModel
-        }
+        splitContentWidth: style.sideBarWidth
+        splitContent: FgMainViewSideMenu { }
 
         FgMainView {
-            id: __mainView
-
             anchors.fill: parent
-        }
-
-        FgMainViewModel {
-            id: __mainViewModel
-        }
-
-        Connections {
-            target: __mainViewModel
-            onMenuSelected: __mainView.pageStack.replace(Qt.resolvedUrl(pageSource))
+            menuActions: FgBaseActionGroup {
+                actions: actionsManager.getActionsByName("PageMenuAction");
+            }
         }
 
     }
 
-
     /* Saving settings to config file */
-    //    Settings {
-    //        property alias x: fgap.AppConfig.appWindowX
-    //        property alias y: AppConfig.appWindowY
-    //        property alias width: AppConfig.appWindowWidth
-    //        property alias height: AppConfig.appWindowHeight
-    //    }
+    Settings {
+        category: mainWindow.objectName
+        property alias x: mainWindow.x
+        property alias y: mainWindow.y
+        property alias width: mainWindow.width
+        property alias height: mainWindow.height
+    }
 }

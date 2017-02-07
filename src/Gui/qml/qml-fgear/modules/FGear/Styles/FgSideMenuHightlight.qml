@@ -17,19 +17,20 @@
  */
 
 import QtQuick 2.7
-import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
 
-import FGear 0.1
-import FGear.Controls 0.1
-import FGear.Styles 0.1
-
-Page {
-    id: basePage
-
-    objectName: "basePage"
-
-//    property FgBaseSideMenu menuItem: FgBaseSideMenu { }
-
-    /* QTBUG-50992 see in SplashScreen.qml */
-    background: FgBasePageBackground { }
+Item {
+    Rectangle {
+        color: Material.accentColor
+        opacity: 0.7
+        width: 6
+        anchors {
+            top: parent.top
+            bottom: parent.bottom
+            left: parent.left
+            topMargin: 10
+            bottomMargin: 10
+            leftMargin: 2
+        }
+    }
 }

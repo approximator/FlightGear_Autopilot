@@ -19,51 +19,30 @@
 import QtQuick 2.7
 
 import QtQuick.Controls.Material 2.0
-import QtQuick.Window 2.2
 
 pragma Singleton
 
 QtObject {
     id: appConfig
 
-    /* Main window configuration */
-    property int appWindowX: 0
-    property int appWindowY: 0
-    property int appWindowWidth: 1280
-    property int appWindowHeight: 720
-    readonly property int sidebarWidth: dp(300)
-
     readonly property string appName: qsTr("Flight Gear Autopilot")
-
-    /* Style colors */
-    property int colorType: Material.Dark
-    property color primary: Material.color(Material.Blue)
-    property color accent: Material.color(Material.DeepOrange)
-
-    /* Splash screen configuration */
-    property bool showSplash: true
-
-    readonly property int splashWidth: dp(350)
-    readonly property int splashHeight: dp(200)
+    property bool showSplashScreen: true
+    property bool showSidebar: true
 
     /* Pixel density dependent helpers */
     readonly property real defaultPixelDensity: 4.46
     property real pixelDensity: defaultPixelDensity
     property real multiplier: 1.4
-    property var screen
 
-    Binding on pixelDensity {
-        id: pdBinding
-    }
+    Binding on pixelDensity { id: pdBinding }
     onPixelDensityChanged: {
         console.log("[AppConfig] pixelDensity updated to: ", pixelDensity);
     }
-
-    function screenUpdated() {
-        pdBinding.when = typeof Screen === 'object';
+    function screenUpdated(screen) {
+        pdBinding.when = typeof screen === "object";
 
         if (pdBinding.when)
-            pdBinding.value = Screen.pixelDensity
+            pdBinding.value = screen.pixelDensity
     }
 
     function dp(number) {

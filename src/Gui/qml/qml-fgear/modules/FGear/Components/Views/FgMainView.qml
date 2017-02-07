@@ -23,35 +23,36 @@ import QtQuick.Controls 2.0
 import FGear.Controls 0.1
 import FGear.Pages 0.1
 import FGear.Styles 0.1
+import FGear.Components.Actions 0.1
 
 FgPage {
-    id: page
-    property alias pageStack: __pageStack
+    id: mainView
+
+    property FgMenuActionGroup menuActions
+    property string initialActionName: "aircraftsPageMenuAction"
+
+    readonly property string pagesDirPrefix: "../../";
 
     /* QTBUG-50992 see in SplashScreen.qml */
     background: FgMainViewBackground { }
-
-    FgToolBar { id: toolBar }
-    header: toolBar
 
     StackView {
         id: __pageStack
 
         anchors.fill: parent
-        initialItem: aircraftPageComponent
-
+        initialItem: FgBusyPage { }
     }
 
-    Component {
-        id: aircraftPageComponent
+    header: FgToolBar { }
 
-        FgAircraftPage { }
+    function __openPage(source) {
+        console.info("[MainView] Open page ", source);
+        __pageStack.replace(Qt.resolvedUrl(pagesDirPrefix + source));
     }
 
-    /* Window connections */
     Connections {
-        target: toolBar
-        onSettingsClicked: fgap.pushPage("Pages/FgSettingsPage.qml")
-        onMapClicked: fgap.pushPage("Pages/FgMapPage.qml")
+        target: menuActions.activatedAction
+        onMenuSelected: __openPage(source)
     }
+
 }

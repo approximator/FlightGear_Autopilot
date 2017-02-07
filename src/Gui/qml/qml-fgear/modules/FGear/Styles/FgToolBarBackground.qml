@@ -30,7 +30,7 @@ Rectangle {
             left: parent.left
             right: parent.right
         }
-        height: AppConfig.dp(2)
+        height: 2
         color: "#ff474853"
     }
 }

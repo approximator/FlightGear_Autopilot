@@ -25,36 +25,35 @@ import QtQuick.Window 2.2
 
 import FGear 0.1
 import FGear.Controls 0.1
+import FGear.Styles 0.1
 
 ApplicationWindow {
     id: splashWindow
 
     property var windowSource
+    property alias asynchronous: loader.asynchronous
+    property FgSplashScreenStyle style: FgSplashScreenStyle { }
 
     title: AppConfig.appName
     color: "transparent"
 
-    Material.theme: AppConfig.colorType
-    Material.accent: AppConfig.accent
-    Material.primary: AppConfig.primary
+    Material.theme: style.colorType
+    Material.accent: style.accent
+    Material.primary: style.primary
 
-    visible: true
+    visible: AppConfig.showSplashScreen
     flags: Qt.SplashScreen
 
-    width: AppConfig.splashWidth
-    height: AppConfig.splashHeight
+    width: style.width
+    height: style.height
 
     Component.onCompleted: {
-
-        AppConfig.screenUpdated();
-
         /* We need to start loading application window
          * only after splashWindow has been created */
         if (!setWindowSource(windowSource)) {
             console.error("[SplashScreen] window source didn't set.");
             loader.sourceComponent = message;
         }
-
     }
 
     function setWindowSource (_windowSource) {
@@ -71,9 +70,9 @@ ApplicationWindow {
     }
 
     background: Rectangle {
-        radius: AppConfig.dp(10)
-        color: Material.background
-        opacity: 0.8
+        radius: style.radius
+        color: style.background
+        opacity: style.opacity
     }
 
 
@@ -82,25 +81,24 @@ ApplicationWindow {
         anchors.centerIn: parent
     }
 
-    header: FgLabel {
+    header: Label {
         text: AppConfig.appName
 
         horizontalAlignment: Text.AlignHCenter
-        topPadding: AppConfig.dp(3)
+        topPadding: style.headerTopPadding
 
+        font.pointSize: 20
         font.bold: true
-        styleName: "title"
     }
-    footer: FgLabel {
+    footer: Label {
         text: qsTr("Loading...")
 
-        padding: AppConfig.dp(10)
-        styleName: "dialog"
+        padding: style.footerPadding
+        font.pointSize: 16
     }
 
     Loader {
         id: loader
-        asynchronous: false /* QTBUG-50992 set to true after fix */
         onStatusChanged: {
             if (status == Loader.Loading)
                 return

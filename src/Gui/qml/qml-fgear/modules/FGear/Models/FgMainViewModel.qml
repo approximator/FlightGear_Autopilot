@@ -23,24 +23,27 @@ import QtQuick.Controls 2.0
 import FGear 0.1
 import FGear.ListItems 0.1
 
-ObjectModel {
+ListModel {
     id: mainViewModel
 
-    signal menuSelected(string pageSource)
-
-    FgMenuItem {
-        text: "FgAircraftPage"
-        itemSource: "Pages/FgAircraftPage.qml"
+    ListElement {
+        text: "AircraftsPage"
+        actionName: "aircraftControlPageMenuAction"
     }
 
-    FgMenuItem {
-        text: "FgMapPage"
-        itemSource: "Pages/FgMapPage.qml"
+    ListElement {
+        text: "AircraftControlPage"
+        actionName: "aircraftControlPageMenuAction"
     }
 
-    FgMenuItem {
-        text: "FgInstruments"
-        itemSource: "Pages/FgInstrumentsPage.qml"
+    ListElement {
+        text: "MapPage"
+        actionName: "mapPageMenuAction"
+    }
+
+    ListElement {
+        text: "Instruments"
+        actionName: "instrumentsPageMenuAction"
     }
 
 }

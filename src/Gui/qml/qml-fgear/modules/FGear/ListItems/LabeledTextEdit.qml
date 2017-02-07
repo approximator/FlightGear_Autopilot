@@ -24,16 +24,14 @@ ItemDelegate {
     RowLayout {
         width: parent.width
 
-        FgLabel {
+        Label {
             id: _label
-//            style: "dialog"
             Layout.preferredWidth: Math.max(contentWidth, AppConfig.dp(120))
             Layout.fillWidth: false
         }
 
-        FgLabel {
+        Label {
             id: _secondaryLabel
-//            style: "dialog"
             Layout.preferredWidth: contentWidth
             Layout.fillWidth: false
         }
