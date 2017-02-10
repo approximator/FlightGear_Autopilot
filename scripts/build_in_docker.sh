@@ -1,9 +1,5 @@
 #!/bin/bash
 
-if [ $# = 1 ]; then
-   QBS_VERSION=$1
-fi
-
 SRC_DIR=$(cd $(dirname $0)/../ && pwd)
 SCRIPT_NAME="$(basename \"$(test -L \"$0\" && readlink \"$0\" || echo \"$0\")\")"
 ENTRY_POINT="/tmp/dock_fgap_entry_point.sh"
@@ -11,7 +7,7 @@ ENTRY_POINT="/tmp/dock_fgap_entry_point.sh"
 : ${FGAP_SRC_DIR:=$(cd "${SRC_DIR}/.." && pwd)}
 : ${INSTALL_DIR:="/tmp/fgap/docker"}
 : ${BUILD_VARIANT:="release"}
-: ${QBS_VERSION:="qbs:1.5.0.Qt5.6.1"}
+: ${QBS_VERSION:="qbs:1.5.1.Qt5.7.1"}
 
 echo "SRC_DIR: ${FGAP_SRC_DIR}"
 echo "INSTALL_DIR: ${INSTALL_DIR}"
