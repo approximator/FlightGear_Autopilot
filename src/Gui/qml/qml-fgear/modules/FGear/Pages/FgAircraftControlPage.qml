@@ -24,9 +24,8 @@ import FGear.Controls 0.1
 import FGear.Components.Autopilot 0.1
 
 FgPage {
-
-    objectName: "AircraftPage"
     id: fgAircraftPage
+    objectName: "AircraftControlPage"
 
     title: qsTr("Aircraft control")
 

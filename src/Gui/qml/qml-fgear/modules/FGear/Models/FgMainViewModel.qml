@@ -28,7 +28,7 @@ ListModel {
 
     ListElement {
         text: "AircraftsPage"
-        actionName: "aircraftControlPageMenuAction"
+        actionName: "aircraftsPageMenuAction"
     }
 
     ListElement {

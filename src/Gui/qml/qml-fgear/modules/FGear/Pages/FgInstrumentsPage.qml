@@ -25,6 +25,7 @@ import FGear.Components.Pointers 0.1
 
 FgPage {
     title: qsTr("Instruments")
+    objectName: "InstrumentsPage"
 
     PictorialNavigation {
         anchors.centerIn: parent

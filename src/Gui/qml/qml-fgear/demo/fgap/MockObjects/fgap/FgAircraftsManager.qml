@@ -17,24 +17,25 @@
  */
 
 import QtQuick 2.0
+import QtQml.Models 2.2
 
-import fgapObjects 0.1
+import "fgObjects.js" as Tools
 
 QtObject {
     id: aircraftsManager
 
     property ListModel model: ListModel { }
 
-    signal aircraftConnected(var aircraft);
-    signal ourAircraftConnected(var aircraft);
-    signal aircraftDisconnected(var aircraft);
-    signal aircraftUpdated(var aircraft);
+    signal aircraftConnected(QtObject aircraft);
+    //signal aircraftDisconnected(var aircraft);
+    //signal aircraftUpdated(var aircraft);
 
     function addAircraft(callsign) {
-        var _aircraft = Aircraft.newAircraft(callsign);
-        model.append({"callsign": _aircraft.callsign});
-        console.log("[tst_AircraftsManager] aircraft added: ", _aircraft.callsign);
-        ourAircraftConnected(_aircraft);
-    }
+        var initArgs = new Tools.Aircraft(callsign);
+        model.append(initArgs);
 
+        var obj = model.get(model.count - 1);
+        console.log("[tst_AircraftsManager] aircraft added: ", obj.callsign);
+        aircraftConnected(obj);
+    }
 }

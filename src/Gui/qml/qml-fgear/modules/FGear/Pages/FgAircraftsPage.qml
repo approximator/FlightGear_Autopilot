@@ -26,10 +26,13 @@ import FGear.Controls 0.1
 
 FgPage {
     id: aircraftsPage
+    objectName: "AircraftsPage"
 
     title: qsTr("Aircrafts")
 
-
-//    menuItem: FgAircraftsSideMenu { model: fgModel}
-
+    FgList {
+        anchors.fill: parent
+        model: aircraftsManager.model
+        delegate: Text { text: callsign}
+    }
 }

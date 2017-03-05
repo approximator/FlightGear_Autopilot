@@ -28,8 +28,6 @@ Page {
 
     objectName: "basePage"
 
-//    property FgBaseSideMenu menuItem: FgBaseSideMenu { }
-
     /* QTBUG-50992 see in SplashScreen.qml */
     background: FgBasePageBackground { }
 }

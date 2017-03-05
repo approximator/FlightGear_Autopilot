@@ -33,8 +33,8 @@ FgBaseAction {
 
     onTriggered: {
         if (group) {
-            if (group.activatedAction === menuAction) {
-                console.log("[MenuAction] skip double trigger of", objectName);
+            if (active) {
+                console.log("[MenuAction]", objectName, "already activated!");
                 return;
             }
 

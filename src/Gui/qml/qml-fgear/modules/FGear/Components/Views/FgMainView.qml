@@ -29,8 +29,8 @@ FgPage {
     id: mainView
 
     property FgMenuActionGroup menuActions
-    property string initialActionName: "aircraftsPageMenuAction"
 
+    readonly property string initialActionName: "aircraftsPageMenuAction"
     readonly property string pagesDirPrefix: "../../";
 
     /* QTBUG-50992 see in SplashScreen.qml */
@@ -39,20 +39,50 @@ FgPage {
     StackView {
         id: __pageStack
 
+        property bool pushFirst: true
+
+        function openPage(source) {
+            var url = Qt.resolvedUrl(source);
+            console.info("[MainView] Open page ", url);
+
+            if (pushFirst) {
+                pushFirst = false;
+                __pageStack.push(url);
+            } else {
+                __pageStack.replace(url);
+            }
+
+        }
+
         anchors.fill: parent
         initialItem: FgBusyPage { }
     }
 
-    header: FgToolBar { }
-
-    function __openPage(source) {
-        console.info("[MainView] Open page ", source);
-        __pageStack.replace(Qt.resolvedUrl(pagesDirPrefix + source));
-    }
+    header: FgToolBar { title: __pageStack.currentItem.title }
 
     Connections {
         target: menuActions.activatedAction
-        onMenuSelected: __openPage(source)
+        onMenuSelected: __pageStack.openPage(pagesDirPrefix + source)
     }
 
+    Component.onCompleted: {
+        activateInitialAction();
+    }
+
+    function activateInitialAction() {
+        var initial = null;
+        var i = 0;
+        for (; i < menuActions.actions.length; i++) {
+            if(menuActions.actions[i].objectName === initialActionName) {
+                initial = menuActions.actions[i];
+                break;
+            }
+        }
+
+        if (initial !== null) {
+            initial.triggered();
+        } else {
+            console.error("[MainView] Can not found action", initialActionName);
+        }
+    }
 }
