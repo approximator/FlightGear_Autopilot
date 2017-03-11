@@ -28,36 +28,22 @@ FgToolBarButton {
     actionName: "menuShowAction"
 
     property bool back: action ? action.isShown : false
-    property int animationDuration: 350
+    property int animationDuration: 250
 
     property color color: Material.foreground
-    readonly property real lineHeight: /*Math.round(AppConfig.dp(4))*/ 4
-    readonly property real lineSplacing: /*Math.round(AppConfig.dp(15))*/ 15
+    readonly property real lineHeight: /*Math.round(AppConfig.dp(4))*/ 3
+    readonly property real lineSplacing: /*Math.round(AppConfig.dp(15))*/ 10
     readonly property real contentHeight: Math.round(2 * (lineHeight + lineSplacing))
-    property var linesModel: [
-        {
-            'angle': 45,
-            'translateY': -lineSplacing
-        },
-        {
-            'angle': 0,
-            'translateY': 0
-        },
-        {
-            'angle': -45,
-            'translateY': lineSplacing
-        }
-    ]
 
     flat: true
     clip: true
 
     Repeater{
-        id: __linesRepeater
-
-
-
-        model: linesModel
+        model: [
+            { 'angle': 45,  'translateY': -lineSplacing },
+            { 'angle': 0,   'translateY': 0             },
+            { 'angle': -45, 'translateY': lineSplacing  }
+        ]
         delegate: __lineComponent
     }
 
@@ -72,7 +58,7 @@ FgToolBarButton {
 
             height: mbButtom.lineHeight
             width: mbButtom.contentHeight
-            radius: AppConfig.dp(1)
+            radius: 1
 
             anchors.centerIn: parent
 

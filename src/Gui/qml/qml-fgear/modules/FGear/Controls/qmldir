@@ -5,6 +5,8 @@ FgList 0.1 FgList.qml
 FgToolBar 0.1 FgToolBar.qml
 FgToolBarButton 0.1 FgToolBarButton.qml
 FgToolBarMenuButton 0.1 FgToolBarMenuButton.qml
+FgAircraftsStatusBar 0.1 FgAircraftsStatusBar.qml
+FgSideMenuFooter 0.1 FgSideMenuFooter.qml
 
 FgBaseSideMenu 0.1 FgBaseSideMenu.qml
 FgListSideMenu 0.1 FgListSideMenu.qml

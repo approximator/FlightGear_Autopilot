@@ -24,6 +24,7 @@ import FGear.Components.Actions 0.1
 
 ToolButton {
     id: toolButton
+    objectName: "toolBarButton"
 
     property string actionName: "menuAction"
     readonly property FgBaseAction action: !!actionsManager
@@ -32,7 +33,6 @@ ToolButton {
 
     Connections {
         target: action !== null ? toolButton : null
-        //enabled: action !== null /* does not disable the connection !!*/
         onClicked: action.triggered();
     }
 }

@@ -24,18 +24,41 @@ import "fgObjects.js" as Tools
 QtObject {
     id: aircraftsManager
 
-    property ListModel model: ListModel { }
+    readonly property ListModel model: ListModel { }
 
-    signal aircraftConnected(QtObject aircraft);
-    //signal aircraftDisconnected(var aircraft);
-    //signal aircraftUpdated(var aircraft);
+    /* Private functionality is not available in C++ model */
+    property int __activeIndex: -1
+    readonly property var __activeElement: model.get(__activeIndex)
 
     function addAircraft(callsign) {
         var initArgs = new Tools.Aircraft(callsign);
-        model.append(initArgs);
 
-        var obj = model.get(model.count - 1);
-        console.log("[tst_AircraftsManager] aircraft added: ", obj.callsign);
-        aircraftConnected(obj);
+        model.append(initArgs);
+        __activeIndex = model.count-1;
+        console.log("[tst_AircraftsManager] aircraft added: ", __activeElement.callsign);
+
+        connectedTimer.restart();
+    }
+
+    readonly property int __timerInterval: 5000
+    property Timer connectedTimer: Timer {
+        interval: __timerInterval
+        repeat: false
+        onTriggered: {
+            console.log("[tst_AircraftsManager] aircraft connected:",
+                        __activeElement.callsign);
+            model.setProperty(__activeIndex, "connected", true);
+
+            disconnectedTimer.restart();
+        }
+    }
+    property Timer disconnectedTimer: Timer {
+        interval: __timerInterval
+        repeat: false
+        onTriggered: {
+            console.log("[tst_AircraftsManager] aircraft disconnected:",
+                        __activeElement.callsign);
+            model.setProperty(__activeIndex, "connected", false);
+        }
     }
 }

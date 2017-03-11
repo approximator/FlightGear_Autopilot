@@ -18,21 +18,13 @@
 
 import QtQuick 2.7
 
-import QtQuick.Controls 2.0
-
 import FGear 0.1
-import FGear.Pages 0.1
-import FGear.Controls 0.1
+import FGear.Components.Actions 0.1
 
-FgPage {
-    id: aircraftsPage
-    objectName: "AircraftsPage"
+FgBaseAction {
+    id: aircraftAction
+    objectName: "aircraftAction"
 
-    title: qsTr("Aircrafts")
+    property QtObject activeObject: null
 
-    FgList {
-        anchors.fill: parent
-        model: aircraftsManager.model
-        delegate: Text { text: callsign + ", connected: " + connected}
-    }
 }

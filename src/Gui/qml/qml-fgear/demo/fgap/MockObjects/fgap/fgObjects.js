@@ -25,6 +25,7 @@ var Aircraft = (function () {
         this.callsign = (call_sign !== "")
              ? call_sign
              : this.__createCallsign();
+        this.connected = false;
     }
 
     Aircraft.prototype.__createCallsign = function () {

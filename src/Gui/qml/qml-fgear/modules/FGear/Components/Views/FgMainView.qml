@@ -59,6 +59,7 @@ FgPage {
     }
 
     header: FgToolBar { title: __pageStack.currentItem.title }
+    footer: FgAircraftsStatusBar {}
 
     Connections {
         target: menuActions.activatedAction

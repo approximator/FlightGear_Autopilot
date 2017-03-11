@@ -37,26 +37,35 @@ Item {
     default property alias data: baseContent.data
     property alias splitContent: splitContent.data
 
-    RowLayout {
+    Row {
         id: layout
 
         anchors.fill: parent
-        spacing: 0.0
 
         Item {
-            id: splitContent
+            id: splitItem
 
-            Layout.preferredWidth: splitContentWidth
-            Layout.fillHeight: true
+            width: splitContentWidth
+            height: parent.height
 
             clip: true
+            Item {
+                id: splitContent
+
+                width: splitContentWidth
+                anchors {
+                    right: parent.right
+                    top: parent.top
+                    bottom: parent.bottom
+                }
+            }
         }
 
         Item {
             id: baseContent
 
-            Layout.fillHeight: true
-            Layout.fillWidth: true
+            height: parent.height
+            width: parent.width - splitItem.width
 
             clip: true
         }
@@ -66,7 +75,7 @@ Item {
         State {
             name: "hide_left_side"
             when: sidePanelHidden
-            PropertyChanges { target: splitContent; Layout.preferredWidth: 0; }
+            PropertyChanges { target: splitItem; width: 0; }
         }
     ]
 
@@ -75,16 +84,26 @@ Item {
             from: "*"
             to: "hide_left_side"
             SequentialAnimation {
-                NumberAnimation { targets: splitContent; properties: "Layout.preferredWidth"; duration: 400 }
-                PropertyAction { target: splitContent; property: "visible"; value: false }
+                NumberAnimation {
+                    target: splitItem
+                    property: "width"
+                    easing.type: Easing.OutQuad
+                    duration: 400
+                }
+                PropertyAction { target: splitItem; property: "visible"; value: false }
             }
         },
         Transition {
             from: "hide_left_side"
             to: "*"
             SequentialAnimation {
-                PropertyAction { target: splitContent; property: "visible"; value: true }
-                NumberAnimation { target: splitContent; properties: "Layout.preferredWidth"; duration: 400 }
+                PropertyAction { target: splitItem; property: "visible"; value: true }
+                NumberAnimation {
+                    target: splitItem
+                    property: "width"
+                    easing.type: Easing.OutQuad
+                    duration: 400
+                }
             }
         }
     ]

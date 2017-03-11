@@ -18,21 +18,13 @@
 
 import QtQuick 2.7
 
-import QtQuick.Controls 2.0
-
 import FGear 0.1
-import FGear.Pages 0.1
-import FGear.Controls 0.1
+import FGear.Styles 0.1
 
-FgPage {
-    id: aircraftsPage
-    objectName: "AircraftsPage"
+FgToolBarButton {
+    actionName: "aircraftsPageMenuAction"
 
-    title: qsTr("Aircrafts")
-
-    FgList {
-        anchors.fill: parent
-        model: aircraftsManager.model
-        delegate: Text { text: callsign + ", connected: " + connected}
-    }
+    text: objectName
+    /* QTBUG-50992 see in SplashScreen.qml */
+    // background: FgToolBarBackground {}
 }

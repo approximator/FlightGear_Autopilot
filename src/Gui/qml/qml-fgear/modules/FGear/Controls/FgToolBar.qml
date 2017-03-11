@@ -31,6 +31,7 @@ ToolBar {
 
     /* QTBUG-50992 see in SplashScreen.qml */
     background: FgToolBarBackground {}
+    padding: 5
 
     RowLayout {
         anchors.fill: parent

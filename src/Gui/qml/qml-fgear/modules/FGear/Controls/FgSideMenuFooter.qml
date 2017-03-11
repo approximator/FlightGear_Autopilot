@@ -17,22 +17,14 @@
  */
 
 import QtQuick 2.7
-
 import QtQuick.Controls 2.0
 
 import FGear 0.1
-import FGear.Pages 0.1
-import FGear.Controls 0.1
 
-FgPage {
-    id: aircraftsPage
-    objectName: "AircraftsPage"
-
-    title: qsTr("Aircrafts")
-
-    FgList {
-        anchors.fill: parent
-        model: aircraftsManager.model
-        delegate: Text { text: callsign + ", connected: " + connected}
-    }
+Row {
+    spacing: 3
+    Label { text: "connected:" }
+    Label { text: aircraftActionManager.connectedCount }
+    Label { text: "all:" }
+    Label { text: aircraftActionManager.count }
 }

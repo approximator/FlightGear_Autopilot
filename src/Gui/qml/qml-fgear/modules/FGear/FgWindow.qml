@@ -37,7 +37,11 @@ ApplicationWindow {
 
 
     property FgBaseActionManager actionsManager: FgMainViewActionManager { }
+
     property FgAircraftsManager aircraftsManager: FgAircraftsManager { }
+    property FgBaseActionManager aircraftActionManager:
+        FgAircraftActionManager { aircraftObjects.model: aircraftsManager.model }
+
     property FgMainWindowStyle style: FgMainWindowStyle { }
 
     title: AppConfig.appName
