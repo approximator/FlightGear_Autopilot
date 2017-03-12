@@ -11,3 +11,7 @@ FgSideMenuFooter 0.1 FgSideMenuFooter.qml
 FgBaseSideMenu 0.1 FgBaseSideMenu.qml
 FgListSideMenu 0.1 FgListSideMenu.qml
 FgMainViewSideMenu 0.1 FgMainViewSideMenu.qml
+
+FgTile 0.1 FgTile.qml
+FgInfoTile 0.1 FgInfoTile.qml
+FgTileView 0.1 FgTileView.qml

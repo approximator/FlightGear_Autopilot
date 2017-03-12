@@ -30,7 +30,7 @@ QtObject {
     }
 
     /* Private functionality is not available in C++ model */
-    property int count: !!model ? model.length : 0
+    property int __count: !!model ? model.length : 0
     property int __activeIndex: 0
 
     function addAircraft(callsign) {
@@ -40,7 +40,7 @@ QtObject {
 
         /* copy existing objects into new model */
         var modelArray = []; var i;
-        for (i = 0; i < count; i++) {
+        for (i = 0; i < __count; i++) {
             modelArray.push(model[i]);
         }
 
@@ -50,6 +50,4 @@ QtObject {
         __activeIndex = model.length-1;
         console.log("[tst_AircraftsManager] aircraft added: ", newObj.callsign);
     }
-
-
 }

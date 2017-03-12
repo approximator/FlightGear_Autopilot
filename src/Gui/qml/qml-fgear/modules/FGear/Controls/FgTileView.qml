@@ -19,23 +19,30 @@
 import QtQuick 2.7
 
 import FGear 0.1
-import FGear.Pages 0.1
-import FGear.Controls 0.1
 
-FgPage {
-    id: aircraftsPage
-    objectName: "AircraftsPage"
+GridView {
+    id: tileView
 
-    title: qsTr("Aircrafts")
+    property alias overlayItem: overlay
+    readonly property bool extendedView: state === "extended_view"
 
-    property bool extended: false
+    cellHeight: 200
+    cellWidth: 400
 
-    FgTileView {
-        id: tileView
-        anchors.fill: parent
-        model: aircraftsManager.model
-        delegate: FgInfoTile {
-            overlay: tileView.overlayItem
+    clip: true
+
+    populate: Transition {
+        NumberAnimation {
+            properties: "scale, opacity"
+            from: 0; to: 1.0
+            easing.type: Easing.OutQuad
+            duration: 400
         }
+    }
+
+    Item {
+        id: overlay
+
+        anchors.fill: parent
     }
 }

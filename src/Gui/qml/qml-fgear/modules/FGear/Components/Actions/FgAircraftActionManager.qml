@@ -35,9 +35,7 @@ FgBaseActionManager {
         }
     ]
 
-    readonly property int count: aircraftObjects.model
-                                 ? (aircraftObjects.model.count | aircraftObjects.model.length)
-                                 : 0
+    readonly property int count: aircraftObjects.count
 
     property int connectedCount: 0
     readonly property int disconnectedCount: (count - connectedCount)
