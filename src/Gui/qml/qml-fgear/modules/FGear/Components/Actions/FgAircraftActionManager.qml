@@ -35,7 +35,10 @@ FgBaseActionManager {
         }
     ]
 
-    readonly property int count: aircraftObjects.model ? aircraftObjects.model.count : 0
+    readonly property int count: aircraftObjects.model
+                                 ? (aircraftObjects.model.count | aircraftObjects.model.length)
+                                 : 0
+
     property int connectedCount: 0
     readonly property int disconnectedCount: (count - connectedCount)
 
@@ -44,22 +47,22 @@ FgBaseActionManager {
 
     readonly property Instantiator aircraftObjects: Instantiator {
         QtObject {
-            id: __aircraft
-
-            property string _callsign: callsign
-            property bool _connected: connected
-
-            on_ConnectedChanged: {
-                if (connected) {
-                    connectedAction.activeObject = __aircraft;
-                    connectedCount++;
-                    connectedAction.triggered();
-                } else {
-                    disconnectedAction.activeObject = __aircraft;
-                    connectedCount--;
-                    disconnectedAction.triggered();
+            property Connections __intConn: Connections {
+                target: qtObject
+                ignoreUnknownSignals: true
+                onConnectedChanged: {
+                    if (qtObject.connected) {
+                        connectedAction.activeObject = qtObject;
+                        connectedCount++;
+                        connectedAction.triggered();
+                    } else {
+                        disconnectedAction.activeObject = qtObject;
+                        connectedCount--;
+                        disconnectedAction.triggered();
+                    }
                 }
             }
+
         }
     }
 }

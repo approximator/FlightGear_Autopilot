@@ -19,46 +19,37 @@
 import QtQuick 2.0
 import QtQml.Models 2.2
 
-import "fgObjects.js" as Tools
-
 QtObject {
     id: aircraftsManager
+    objectName: "tst_aircraftsManager"
 
-    readonly property ListModel model: ListModel { }
+    property list<QtObject> model
+
+    property Component __aircraftcomponent: Component {
+        FgControlledAircraft { }
+    }
 
     /* Private functionality is not available in C++ model */
-    property int __activeIndex: -1
-    readonly property var __activeElement: model.get(__activeIndex)
+    property int count: !!model ? model.length : 0
+    property int __activeIndex: 0
 
     function addAircraft(callsign) {
-        var initArgs = new Tools.Aircraft(callsign);
+        var initArgs = { };
+        if (callsign !== "")
+            initArgs["callsign"] = callsign;
 
-        model.append(initArgs);
-        __activeIndex = model.count-1;
-        console.log("[tst_AircraftsManager] aircraft added: ", __activeElement.callsign);
-
-        connectedTimer.restart();
-    }
-
-    readonly property int __timerInterval: 5000
-    property Timer connectedTimer: Timer {
-        interval: __timerInterval
-        repeat: false
-        onTriggered: {
-            console.log("[tst_AircraftsManager] aircraft connected:",
-                        __activeElement.callsign);
-            model.setProperty(__activeIndex, "connected", true);
-
-            disconnectedTimer.restart();
+        /* copy existing objects into new model */
+        var modelArray = []; var i;
+        for (i = 0; i < count; i++) {
+            modelArray.push(model[i]);
         }
+
+        var newObj = __aircraftcomponent.createObject(this, initArgs);
+        modelArray.push(newObj);
+        model = modelArray;
+        __activeIndex = model.length-1;
+        console.log("[tst_AircraftsManager] aircraft added: ", newObj.callsign);
     }
-    property Timer disconnectedTimer: Timer {
-        interval: __timerInterval
-        repeat: false
-        onTriggered: {
-            console.log("[tst_AircraftsManager] aircraft disconnected:",
-                        __activeElement.callsign);
-            model.setProperty(__activeIndex, "connected", false);
-        }
-    }
+
+
 }

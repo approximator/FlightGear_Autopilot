@@ -1,3 +1,4 @@
 module fgap
 
 FgAircraftsManager 1.0 FgAircraftsManager.qml
+FgControlledAircraft 1.0 FgControlledAircraft.qml

@@ -33,6 +33,12 @@ FgPage {
     FgList {
         anchors.fill: parent
         model: aircraftsManager.model
-        delegate: Text { text: callsign + ", connected: " + connected}
+        delegate: Text {
+            text: callsign + ", connected: " + connected
+            MouseArea {
+                anchors.fill: parent
+                onClicked: qtObject.runFlightGear()
+            }
+        }
     }
 }
