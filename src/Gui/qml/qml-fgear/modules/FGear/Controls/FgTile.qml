@@ -42,7 +42,7 @@ Item {
     states: [
         State {
             name: "extended_view"
-            when: extended
+            when: extended && (overlay != null)
             ParentChange {
                 target: tile
                 parent: overlay
@@ -50,16 +50,20 @@ Item {
                 height: parent.height
                 width: parent.width
             }
+            PropertyChanges { target: tile; z: 100 }
         }
     ]
 
     transitions: Transition {
-        ParentAnimation {
-            NumberAnimation {
-                properties: "x, width, y, height"
-                duration: 400
-                easing.type: Easing.InOutQuad
+        SequentialAnimation {
+            ParentAnimation {
+                NumberAnimation {
+                    properties: "x, width, y, height"
+                    duration: 400
+                    easing.type: Easing.InOutQuad
+                }
             }
+            PropertyAction { target: tile; property: "z" }
         }
     }
 }

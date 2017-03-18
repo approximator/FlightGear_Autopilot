@@ -28,15 +28,22 @@ FgTile {
 
     overlay: tileView.overlayItem
 
-    RowLayout {
-        anchors.fill: parent
-        anchors.margins: 5
+    GridLayout {
+        anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
+            margins: 5
+        }
+        columnSpacing: 5
+        rowSpacing: 10
 
         Rectangle {
             id: image
 
             Layout.preferredHeight: parent.height
             Layout.preferredWidth: height
+
 
             color: connected ? "green" : "lightgrey"
         }
