@@ -27,11 +27,6 @@ Page {
     id: settingsPage
 
     property QtObject fgAircraft: null
-    property var menuData: {
-        'title': title,
-        'model': fgap.fgModel,
-        'delegate': __listComponent
-    }
 
     title: qsTr("Settings")
 
@@ -57,30 +52,6 @@ Page {
 
         FgSettingsView {
             id: settingsView
-        }
-    }
-
-    Component {
-        id: __listComponent
-
-        FgMenuItem {
-            selected: ListView.isCurrentItem
-            infoEnabled: ListView.isCurrentItem
-            onFgInfoClicked: fgAircraft.runFlightGear()
-
-            connected: connected
-            text: callsign
-
-            onClicked: {
-                ListView.view.currentIndex = index;
-                fgAircraft = model.qtObject;
-            }
-
-            Component.onCompleted: {
-                if (index === 0) {
-                    fgAircraft = model.qtObject;
-                }
-            }
         }
     }
 

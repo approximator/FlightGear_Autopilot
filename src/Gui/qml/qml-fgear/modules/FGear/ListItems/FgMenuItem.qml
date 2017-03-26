@@ -19,12 +19,6 @@ MenuItem {
     height: style.height
     width: style.width
 
-    // TODO
-    //    property bool infoEnabled: false
-    //    property bool connected: false
-    //    property bool selected: false
-    //    signal fgInfoClicked()
-
     onTriggered: {
         ListView.view.currentIndex = ListView.view.indexAt(x, y);
         action.triggered();
