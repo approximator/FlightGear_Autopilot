@@ -1,23 +1,35 @@
 os: Visual Studio 2015
 version: 1.0.{build}
 environment:
-  QTDIR: C:\Qt\5.6\msvc2015_64
-  PYTHON: "C:\\Python27"
+  PYTHON: "C:\\Python34"
 
   matrix:
   - BUILD_VARIANT: debug
+    QTDIR: C:\Qt\5.7\msvc2015_64
+
   - BUILD_VARIANT: release
+    QTDIR: C:\Qt\5.7\msvc2015_64
+
+  - BUILD_VARIANT: debug
+    QTDIR: C:\Qt\5.8\msvc2015_64
+
+  - BUILD_VARIANT: release
+    QTDIR: C:\Qt\5.8\msvc2015_64
 
 install:
+  - cmd: dir C:\Qt\
+  - cmd: dir C:\Qt\5.8
   - cmd: git submodule update --init --recursive
   - cmd: set INSTALL_DIR=%APPVEYOR_BUILD_FOLDER%\install
-  - cmd: curl -fsS -o rclone.zip http://downloads.rclone.org/rclone-v1.28-windows-386.zip && 7z e rclone.zip
-  - cmd: set PATH=%QTDIR%\bin;C:\Qt\Tools\QtCreator\bin;%PATH%;%PYTHON%;%PYTHON%\Scripts;%cd%;%cd%\rclone-v1.28-windows-386
+  - cmd: curl -fsS -o rclone.zip https://downloads.rclone.org/rclone-current-windows-amd64.zip && 7z e rclone.zip
+  - cmd: set PATH=%PYTHON%;%PYTHON%\Scripts;%QTDIR%\bin;C:\Qt\Tools\QtCreator\bin;%PATH%;%cd%
   - cmd: set SCRIPTS_DIR=%APPVEYOR_BUILD_FOLDER%\scripts
-  - cmd: python -m pip install --upgrade pip && pip install --upgrade wheel -V && pip install --upgrade PySide pyscreenshot pyvirtualdisplay easyprocess pillow -V
+  - cmd: dir %cd%
+  - cmd: python -m pip install --upgrade pip && pip install --upgrade wheel -V && pip install --upgrade PySide easyprocess Pillow pyscreenshot pyvirtualdisplay -V
   - python --version
   - pip --version
-  - ps: $screen_resolution = '1280x800'; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-desktop.ps1'))
+  - qbs --version
+  - ps: $screen_resolution = '1280x800'; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 build_script:
 - cmd: >-
@@ -40,14 +52,17 @@ build_script:
 
     IF EXIST iconengines\ ( rmdir iconengines /s /q ) && IF EXIST imageformats\ ( rmdir imageformats /s /q ) && IF EXIST platforms\ ( rmdir platforms /s /q ) && IF EXIST Qt\ ( rmdir Qt /s /q ) && IF EXIST QtGraphicalEffects\ ( rmdir QtGraphicalEffects /s /q ) && IF EXIST QtQml\ ( rmdir QtQml /s /q ) && IF EXIST QtQuick\ ( rmdir QtQuick /s /q ) && IF EXIST QtQuick.2\ ( rmdir QtQuick.2 /s /q ) && IF EXIST bearer\ ( rmdir bearer /s /q )
 
-    python %APPVEYOR_BUILD_FOLDER%/contrib/Qt-Qbs-Application/scripts/take_screenshot.py -f fgautopilot.exe -t 55 -o screenshot.png
+    python -u %APPVEYOR_BUILD_FOLDER%/contrib/Qt-Qbs-Application/scripts/take_screenshot.py -f fgautopilot.exe -t 55 -o screenshot.png
 
     dir
 
 artifacts:
-- path: install
+- path: install\FlightGear_Autopilot
   name: Flightgear_Autopilot
-# - path: '*.png'
-#   name: screenshot
-# - path: 'fgautopilot-0.0.3/*.log'
-#   name: logs
+- path: install\FlightGear_Autopilot/*.png
+  name: screenshot
+- path: install\FlightGear_Autopilot/*.log
+  name: logs
+
+# on_finish:
+#   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
