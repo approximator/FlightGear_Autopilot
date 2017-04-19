@@ -36,7 +36,7 @@ QmlTools.QtQmlApplication
     cpp.includePaths: ["FlightController/", "FlightController/utils"]
     generalDefines: ['QTQMLTRICKS_NO_PREFIX_ON_GETTERS']
 
-    qmlImportsPaths: [
+    qmlImportPaths: [
         FileInfo.joinPaths(project.appSourceRoot, "contrib", "modules"),
         FileInfo.joinPaths(project.appSourceRoot, "contrib", "qml-material", "modules"),
         FileInfo.joinPaths(sourceDirectory, "Gui", "qml", "qml-fgear", "modules")
