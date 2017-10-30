@@ -56,8 +56,7 @@ int main(int argc, char *argv[])
             if (!settingsDir.mkpath(settingsDir.absolutePath()))
                 qDebug() << "Could not create settings directory " << settingsDir.absolutePath();
         if (!QFile::exists(settings.fileName())) {
-            QString configFileName(fgap::path::join(
-                QCoreApplication::applicationDirPath(), APP_CONFIG_PATH, "example_multiplayWithoutServer.ini"));
+            QString configFileName(":/config/example_multiplayWithoutServer.ini");
             qDebug() << "Copying " << configFileName << " settings to " << settings.fileName();
             if (!QFile::copy(configFileName, settings.fileName()))
                 qWarning() << "Could not copy default settings to " << settings.fileName();

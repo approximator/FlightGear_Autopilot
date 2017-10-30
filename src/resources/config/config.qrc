@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/config">
+        <file>DefaultSettings.ini</file>
+        <file>example_multiplayWithoutServer.ini</file>
+        <file>example_multiplayWithServer.ini</file>
+    </qresource>
+</RCC>

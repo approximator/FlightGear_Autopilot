@@ -23,6 +23,7 @@ import QmlTools
 QmlTools.QtQmlApplication
 {
     appName: "FlightGear_Autopilot"
+    appShortName: "fgautopilot"
 
     Depends { name: "Qt"; submodules: [
             "qml", "quick", "quickcontrols2",
@@ -36,7 +37,6 @@ QmlTools.QtQmlApplication
     generalDefines: ['QTQMLTRICKS_NO_PREFIX_ON_GETTERS']
 
     qmlImportPaths: [
-        FileInfo.joinPaths(project.appSourceRoot, "contrib", "modules"),
         FileInfo.joinPaths(sourceDirectory, "Gui", "qml", "qml-fgear", "modules")
     ]
 
@@ -66,14 +66,6 @@ QmlTools.QtQmlApplication
 
     Group {
         name: "Resources"
-        files: "resources/qml/qml_res.qrc"
-    }
-
-    /* Fgap JSON configs */
-    Group {
-        name: "jsonConfigs"
-        fileTags: ["jsonConfigs"]
-        prefix: appConfigSourceRoot
-        files: "*"
+        files: "resources/**/*.qrc"
     }
 }
