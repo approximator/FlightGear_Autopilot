@@ -1,0 +1,5 @@
+module FGear.Components.Pointers
+
+IndicatorItem 0.1 IndicatorItem.qml
+PictorialNavigation 0.1 PictorialNavigation.qml
+PictorialNavigationModel 0.1 PictorialNavigationModel.qml

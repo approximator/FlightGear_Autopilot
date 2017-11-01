@@ -1,0 +1,9 @@
+module FGear.Pages
+
+FgPage 0.1 FgPage.qml
+FgBusyPage 0.1 FgBusyPage.qml
+FgMapPage 0.1 FgMapPage.qml
+FgAircraftsPage 0.1 FgAircraftsPage.qml
+FgInstrumentsPage 0.1 FgInstrumentsPage.qml
+FgAircraftControlPage 0.1 FgAircraftControlPage.qml
+FgSettingsPage 0.1 FgSettingsPage.qml

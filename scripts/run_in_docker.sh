@@ -9,17 +9,31 @@ echo "INSTALL_DIR: ${INSTALL_DIR}"
 
 cat > ${ENTRY_POINT} << EOF
 #!/bin/bash
-groupadd -g $(getent group $USER | cut -d: -f3) $USER
-useradd -m -g $USER -G sudo -N -u $UID $USER
-chown -R $USER:$USER /fgap
+if [ ! -d /home/$USER ]; then
+    mkdir -p /home/$USER
+fi
+
+grep $(id -g) /etc/group >> /dev/null
+[[ $? -eq 0 ]] || groupadd -g $(id -g) $USER
+
+useradd -N -u $(id -u) $USER
+chown $(id -u):$(id -g) /home/$USER
+
+export HOME=/home/$USER
+export USER=$USER
+
 /bin/su $USER -c "/fgap/install/FlightGear_Autopilot/fgautopilot"
 
 EOF
 chmod +x ${ENTRY_POINT}
 
-VOLUMES="-v ${ENTRY_POINT}:${ENTRY_POINT}:ro"
-VOLUMES="${VOLUMES} -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/shm:/dev/shm"
-VOLUMES="${VOLUMES} -v ${INSTALL_DIR}:/fgap"
+docker run --rm                         \
+    --entrypoint=${ENTRY_POINT}         \
+    -v ${ENTRY_POINT}:${ENTRY_POINT}:ro \
+    -v /tmp/.X11-unix:/tmp/.X11-unix    \
+    -v /dev/shm:/dev/shm                \
+    -v ${INSTALL_DIR}:/fgap             \
+    -e DISPLAY=$DISPLAY                 \
+    approximator/qttest
 
-docker run --rm --entrypoint=${ENTRY_POINT} ${VOLUMES} -e DISPLAY=$DISPLAY  approximator/qttest
 rm ${ENTRY_POINT}

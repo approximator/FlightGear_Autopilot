@@ -1,0 +1,15 @@
+module FGear.Styles
+
+FgToolBarBackground 0.1 FgToolBarBackground.qml
+FgBaseSideMenuBackground 0.1 FgBaseSideMenuBackground.qml
+
+FgMainViewBackground 0.1 FgMainViewBackground.qml
+FgBasePageBackground 0.1 FgBasePageBackground.qml
+
+FgSplashScreenStyle 0.1 FgSplashScreenStyle.qml
+FgMainWindowStyle 0.1 FgMainWindowStyle.qml
+FgMenuItemStyle 0.1 FgMenuItemStyle.qml
+FgSideMenuStyle 0.1 FgSideMenuStyle.qml
+FgSideMenuHightlight 0.1 FgSideMenuHightlight.qml
+
+FgMapPageStyle 0.1 FgMapPageStyle.qml

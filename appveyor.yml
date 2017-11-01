@@ -5,10 +5,10 @@ environment:
 
   matrix:
   - BUILD_VARIANT: debug
-    QTDIR: C:\Qt\5.7\msvc2015_64
+    QTDIR: C:\Qt\5.9\msvc2015_64
 
   - BUILD_VARIANT: release
-    QTDIR: C:\Qt\5.7\msvc2015_64
+    QTDIR: C:\Qt\5.9\msvc2015_64
 
   - BUILD_VARIANT: debug
     QTDIR: C:\Qt\5.8\msvc2015_64
@@ -16,9 +16,15 @@ environment:
   - BUILD_VARIANT: release
     QTDIR: C:\Qt\5.8\msvc2015_64
 
+  - BUILD_VARIANT: debug
+    QTDIR: C:\Qt\5.7\msvc2015_64
+
+  - BUILD_VARIANT: release
+    QTDIR: C:\Qt\5.7\msvc2015_64
+
 install:
   - cmd: dir C:\Qt\
-  - cmd: dir C:\Qt\5.8
+  - cmd: dir %QTDIR%\..
   - cmd: git submodule update --init --recursive
   - cmd: set INSTALL_DIR=%APPVEYOR_BUILD_FOLDER%\install
   - cmd: curl -fsS -o rclone.zip https://downloads.rclone.org/rclone-current-windows-amd64.zip && 7z e rclone.zip
@@ -38,6 +44,8 @@ build_script:
 
     qbs setup-qt %QTDIR%\bin\qmake.exe qt
 
+    qbs config profiles.qt.baseProfile MSVC2015-x86_amd64
+
     qbs config defaultProfile qt
 
     qbs --file %APPVEYOR_BUILD_FOLDER% --command-echo-mode command-line --clean-install-root qbs.installRoot:%INSTALL_DIR% %BUILD_VARIANT%
@@ -46,11 +54,9 @@ build_script:
 
     windeployqt --%BUILD_VARIANT% --no-system-d3d-compiler --no-translations --no-qmltooling --qmldir %APPVEYOR_BUILD_FOLDER%\src\Gui\qml\qml-fgear\modules\FGear %INSTALL_DIR%\FlightGear_Autopilot
 
-    windeployqt --%BUILD_VARIANT% --no-system-d3d-compiler --no-translations --no-qmltooling --qmldir %APPVEYOR_BUILD_FOLDER%\contrib\qml-material\modules\Material %INSTALL_DIR%\FlightGear_Autopilot
+    FOR %%G IN ( iconengines imageformats platforms platforminputcontexts scenegraph ) DO ( IF EXIST %%G ( rclone copy %%G data\plugins\%%G\ && rmdir %%G /s /q  && echo "Copied and removed: %%G" ) )
 
-    IF EXIST iconengines\ ( rclone copy iconengines\ data\plugins\iconengines\ ) && IF EXIST imageformats\ ( rclone copy imageformats\ data\plugins\imageformats\ ) && IF EXIST platforms\ ( rclone copy platforms\ data\plugins\platforms\ ) && IF EXIST Qt\ ( rclone copy Qt\ data\qml\Qt\ ) && IF EXIST QtGraphicalEffects\ ( rclone copy QtGraphicalEffects\ data\qml\QtGraphicalEffects\ ) && IF EXIST QtQml\ ( rclone copy QtQml\ data\qml\QtQml\ ) && IF EXIST QtQuick\ ( rclone copy QtQuick\ data\qml\QtQuick\ ) && IF EXIST QtQuick.2\ ( rclone copy QtQuick.2\ data\qml\QtQuick.2\ )
-
-    IF EXIST iconengines\ ( rmdir iconengines /s /q ) && IF EXIST imageformats\ ( rmdir imageformats /s /q ) && IF EXIST platforms\ ( rmdir platforms /s /q ) && IF EXIST Qt\ ( rmdir Qt /s /q ) && IF EXIST QtGraphicalEffects\ ( rmdir QtGraphicalEffects /s /q ) && IF EXIST QtQml\ ( rmdir QtQml /s /q ) && IF EXIST QtQuick\ ( rmdir QtQuick /s /q ) && IF EXIST QtQuick.2\ ( rmdir QtQuick.2 /s /q ) && IF EXIST bearer\ ( rmdir bearer /s /q )
+    FOR %%G IN ( Qt QtGraphicalEffects QtQml QtQuick QtQuick.2 Qt3D ) DO ( IF EXIST %%G ( rclone copy %%G data\qml\%%G && rmdir %%G /s /q && echo "Copied and removed: %%G" ) )
 
     python -u %APPVEYOR_BUILD_FOLDER%/contrib/Qt-Qbs-Application/scripts/take_screenshot.py -f fgautopilot.exe -t 55 -o screenshot.png
 

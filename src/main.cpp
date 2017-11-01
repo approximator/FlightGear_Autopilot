@@ -29,6 +29,7 @@
 #include <QMessageBox>
 #include <QTextCodec>
 #include <QtQml>
+#include <QQuickStyle>
 
 int main(int argc, char *argv[])
 {
@@ -37,8 +38,10 @@ int main(int argc, char *argv[])
     QString pluginsPaths = fgap::path::join(QFileInfo(argv[0]).dir().path(), APP_PLUGINS_PATH);
     QCoreApplication::addLibraryPath(pluginsPaths);
 #endif
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QApplication app(argc, argv);
+    QQuickStyle::setStyle("Material");
     qInstallMessageHandler(logMessageHandler);
 
     /* Set up settings */
@@ -53,8 +56,7 @@ int main(int argc, char *argv[])
             if (!settingsDir.mkpath(settingsDir.absolutePath()))
                 qDebug() << "Could not create settings directory " << settingsDir.absolutePath();
         if (!QFile::exists(settings.fileName())) {
-            QString configFileName(fgap::path::join(
-                QCoreApplication::applicationDirPath(), APP_CONFIG_PATH, "example_multiplayWithoutServer.ini"));
+            QString configFileName(":/config/example_multiplayWithoutServer.ini");
             qDebug() << "Copying " << configFileName << " settings to " << settings.fileName();
             if (!QFile::copy(configFileName, settings.fileName()))
                 qWarning() << "Could not copy default settings to " << settings.fileName();

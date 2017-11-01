@@ -1,0 +1,4 @@
+module FGear.Models
+
+FgAutopilotModel 0.1 FgAutopilotModel.qml
+FgMainViewModel 0.1 FgMainViewModel.qml

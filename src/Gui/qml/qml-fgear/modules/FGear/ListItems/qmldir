@@ -1,0 +1,4 @@
+module FGear.ListItems
+
+FgMenuItem 0.1 FgMenuItem.qml
+LabeledTextEdit 0.1 LabeledTextEdit.qml
