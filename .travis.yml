@@ -17,8 +17,8 @@ before_script:
   - INSTALL_DIR=/tmp/fgap
 
 script:
-  - ./scripts/build_in_docker.sh
+  - ./tools/build_in_docker.sh
   - tree -L 5 ${INSTALL_DIR}
-  - docker run --rm -v ${INSTALL_DIR}:/fgap -v $PWD/contrib/Qt-Qbs-Application/scripts:/scripts approximator/qttest python /scripts/take_screenshot.py -f /fgap/fgautopilot -t 55 -o /fgap/screenshot.png
+  - docker run --rm -v ${INSTALL_DIR}:/fgap -v $PWD/FlightControlCenter/submodules/qt-qbs-application/scripts:/scripts approximator/qttest python /scripts/take_screenshot.py -f /fgap/fgautopilot -t 55 -o /fgap/screenshot.png
   - tree -L 5 ${INSTALL_DIR}
   - cat ${INSTALL_DIR}/fgautopilot.log

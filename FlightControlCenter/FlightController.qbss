@@ -18,38 +18,54 @@
 
 import qbs
 
-Product {
-    name: "flight_controller"
-    Export {
+Project {
+    name: "app_sources"
+
+    QtQmlApplication {
+        name: "fgap_target"
+
+        appName: "FlightGear Autopilot"
+        appShortName: "fgautopilot"
+
         Depends {
             name: "Qt"
             submodules: [
-                "qml", "quick", "quickcontrols2",
-                "network", "xml", "svg"
+                "qml", "quick", "quickcontrols2", "network", "xml", "svg"
             ]
         }
 
         Depends { name: "libqtqmltricks-qtqmlmodels" }
         Depends { name: "libqtqmltricks-qtsupermacros" }
 
-        Depends { name: "cpp" }
-        cpp.includePaths: [".", "utils"]
-        cpp.defines: ['QTQMLTRICKS_NO_PREFIX_ON_GETTERS']
+        cpp.includePaths: ["FlightController/", "FlightController/utils"]
+
+        /* Main source file */
+        Group {
+            name: "main_source"
+            files: [
+                "main.cpp",
+            ]
+        }
 
         Group {
-            name: "FcSources"
-            prefix: "./**/"
+            name: "Sources"
+            prefix: "FlightController/**/"
             files: [
                 "*.cpp"
             ]
         }
 
         Group {
-            name: "FcHeaders"
-            prefix: "./**/"
+            name: "Headers"
+            prefix: "FlightController/**/"
             files: [
                 "*.h"
             ]
+        }
+
+        Group {
+            name: "Resources"
+            files: "resources/**/*.qrc"
         }
     }
 }

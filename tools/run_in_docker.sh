@@ -4,7 +4,7 @@ SRC_DIR=$(cd $(dirname $0)/../ && pwd)
 SCRIPT_NAME="$(basename \"$(test -L \"$0\" && readlink \"$0\" || echo \"$0\")\")"
 ENTRY_POINT="/tmp/dock_fgap_run_entry_point.sh"
 
-: ${INSTALL_DIR:="/tmp/fgap/docker"}
+: ${INSTALL_DIR:="/tmp/fgap"}
 echo "INSTALL_DIR: ${INSTALL_DIR}"
 
 cat > ${ENTRY_POINT} << EOF
