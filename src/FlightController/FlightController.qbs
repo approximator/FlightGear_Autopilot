@@ -17,7 +17,6 @@
 */
 
 import qbs
-import qbs.FileInfo
 
 Product {
     name: "flight_controller"

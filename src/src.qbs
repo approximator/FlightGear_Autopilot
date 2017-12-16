@@ -16,7 +16,6 @@
  */
 
 import qbs
-import qbs.FileInfo
 
 Project {
     name: "app_sources"

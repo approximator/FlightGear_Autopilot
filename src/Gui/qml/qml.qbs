@@ -17,7 +17,6 @@
 */
 
 import qbs
-import qbs.FileInfo
 
 Project {
     name: "gui_qml_modules"
