@@ -45,7 +45,7 @@ build_script:
 
     qbs --file %APPVEYOR_BUILD_FOLDER% --command-echo-mode command-line --clean-install-root qbs.installRoot:%INSTALL_DIR% %BUILD_VARIANT%
 
-    cd %INSTALL_DIR%\FlightGear_Autopilot
+    cd %INSTALL_DIR%
 
     windeployqt --%BUILD_VARIANT% --no-system-d3d-compiler --no-translations --no-qmltooling --qmldir %APPVEYOR_BUILD_FOLDER%\src\Gui\qml\qml-fgear\modules\FGear %INSTALL_DIR%
 
@@ -53,13 +53,13 @@ build_script:
 
     FOR %%G IN ( Qt QtGraphicalEffects QtQml QtQuick QtQuick.2 Qt3D ) DO ( IF EXIST %%G ( rclone copy %%G data\qml\%%G && rmdir %%G /s /q && echo "Copied and removed: %%G" ) )
 
-    python -u %APPVEYOR_BUILD_FOLDER%/contrib/Qt-Qbs-Application/scripts/take_screenshot.py -f FlightGear_Autopilot.exe -t 55 -o screenshot.png
+    python -u %APPVEYOR_BUILD_FOLDER%/contrib/Qt-Qbs-Application/scripts/take_screenshot.py -f fgautopilot.exe -t 55 -o screenshot.png
 
     dir
 
 artifacts:
 - path: install
-  name: Flightgear_Autopilot
+  name: fgautopilot
 - path: install/*.png
   name: screenshot
 - path: install/*.log

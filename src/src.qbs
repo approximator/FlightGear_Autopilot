@@ -22,7 +22,10 @@ Project {
     name: "app_sources"
 
     QtQmlApplication {
-        name: "FlightGear_Autopilot"
+        name: "fgap_target"
+
+        appName: "FlightGear Autopilot"
+        appShortName: "fgautopilot"
 
         Depends { name: "app_config" }
         Depends { name: "flight_controller" }
