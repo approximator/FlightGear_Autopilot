@@ -5,22 +5,16 @@ environment:
 
   matrix:
   - BUILD_VARIANT: debug
-    QTDIR: C:\Qt\5.9\msvc2015_64
-
-  - BUILD_VARIANT: release
-    QTDIR: C:\Qt\5.9\msvc2015_64
-
-  - BUILD_VARIANT: debug
     QTDIR: C:\Qt\5.8\msvc2015_64
 
   - BUILD_VARIANT: release
     QTDIR: C:\Qt\5.8\msvc2015_64
 
   - BUILD_VARIANT: debug
-    QTDIR: C:\Qt\5.7\msvc2015_64
+    QTDIR: C:\Qt\5.9\msvc2015_64
 
   - BUILD_VARIANT: release
-    QTDIR: C:\Qt\5.7\msvc2015_64
+    QTDIR: C:\Qt\5.9\msvc2015_64
 
 install:
   - cmd: dir C:\Qt\
@@ -28,7 +22,8 @@ install:
   - cmd: git submodule update --init --recursive
   - cmd: set INSTALL_DIR=%APPVEYOR_BUILD_FOLDER%\install
   - cmd: curl -fsS -o rclone.zip https://downloads.rclone.org/rclone-current-windows-amd64.zip && 7z e rclone.zip
-  - cmd: set PATH=%PYTHON%;%PYTHON%\Scripts;%QTDIR%\bin;C:\Qt\Tools\QtCreator\bin;%PATH%;%cd%
+  - cmd: curl -fsSL -o qbs.zip https://download.qt.io/official_releases/qbs/1.10.0/qbs-windows-x86_64-1.10.0.zip && 7z x qbs.zip
+  - cmd: set PATH=%cd%\qbs-windows-x86_64-1.10.0\bin;%PYTHON%;%PYTHON%\Scripts;%QTDIR%\bin;C:\Qt\Tools\QtCreator\bin;%PATH%;%cd%
   - cmd: set SCRIPTS_DIR=%APPVEYOR_BUILD_FOLDER%\scripts
   - cmd: dir %cd%
   - cmd: python -m pip install --upgrade pip && pip install --upgrade wheel -V && pip install --upgrade PySide easyprocess Pillow pyscreenshot pyvirtualdisplay -V
@@ -52,22 +47,22 @@ build_script:
 
     cd %INSTALL_DIR%\FlightGear_Autopilot
 
-    windeployqt --%BUILD_VARIANT% --no-system-d3d-compiler --no-translations --no-qmltooling --qmldir %APPVEYOR_BUILD_FOLDER%\src\Gui\qml\qml-fgear\modules\FGear %INSTALL_DIR%\FlightGear_Autopilot
+    windeployqt --%BUILD_VARIANT% --no-system-d3d-compiler --no-translations --no-qmltooling --qmldir %APPVEYOR_BUILD_FOLDER%\src\Gui\qml\qml-fgear\modules\FGear %INSTALL_DIR%
 
     FOR %%G IN ( iconengines imageformats platforms platforminputcontexts scenegraph ) DO ( IF EXIST %%G ( rclone copy %%G data\plugins\%%G\ && rmdir %%G /s /q  && echo "Copied and removed: %%G" ) )
 
     FOR %%G IN ( Qt QtGraphicalEffects QtQml QtQuick QtQuick.2 Qt3D ) DO ( IF EXIST %%G ( rclone copy %%G data\qml\%%G && rmdir %%G /s /q && echo "Copied and removed: %%G" ) )
 
-    python -u %APPVEYOR_BUILD_FOLDER%/contrib/Qt-Qbs-Application/scripts/take_screenshot.py -f fgautopilot.exe -t 55 -o screenshot.png
+    python -u %APPVEYOR_BUILD_FOLDER%/contrib/Qt-Qbs-Application/scripts/take_screenshot.py -f FlightGear_Autopilot.exe -t 55 -o screenshot.png
 
     dir
 
 artifacts:
-- path: install\FlightGear_Autopilot
+- path: install
   name: Flightgear_Autopilot
-- path: install\FlightGear_Autopilot/*.png
+- path: install/*.png
   name: screenshot
-- path: install\FlightGear_Autopilot/*.log
+- path: install/*.log
   name: logs
 
 # on_finish:
