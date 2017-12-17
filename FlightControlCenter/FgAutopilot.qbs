@@ -21,12 +21,11 @@ import qbs.FileInfo
 
 Project {
     name: "fgautopilot"
-    minimumQbsVersion: "1.9"
 
-    qbsSearchPaths: ["qbs", "contrib/Qt-Qbs-Application/qbs"]
+    qbsSearchPaths: ["qbs", "submodules/qt-qbs-application/qbs"]
 
     references: [
-        "src/src.qbs",
-        "contrib/submodules.qbs",
+        "FlightController.qbss",
+        "submodules/submodules.qbs",
     ]
 }

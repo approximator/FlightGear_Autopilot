@@ -93,8 +93,7 @@ bool FgFlightgear::checkPaths()
 
     /* Read FlightGear output to the string */
     QString fgOutput(fgfs.readAll());
-       qWarning() << (fgOutput.isEmpty() ? "Flightgear output is empty" : "Read
-       Flightgear output, OK." );
+       qWarning() << (fgOutput.isEmpty() ? "Flightgear output is empty" : "Read Flightgear output, OK." );
 
        /* parse output to find Flightgear root directory */
 

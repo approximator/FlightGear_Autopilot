@@ -1,9 +1,9 @@
-[submodule "contrib/qt-qml-models"]
-	path = contrib/qt-qml-models
+[submodule "FlightControlCenter/submodules/qt-qml-models"]
+	path = FlightControlCenter/submodules/qt-qml-models
 	url = https://github.com/approximator/Qt-QML-Models.git
-[submodule "contrib/qt-super-macros"]
-	path = contrib/qt-super-macros
+[submodule "FlightControlCenter/submodules/qt-super-macros"]
+	path = FlightControlCenter/submodules/qt-super-macros
 	url = https://github.com/approximator/Qt-Super-Macros.git
-[submodule "contrib/Qt-Qbs-Application"]
-	path = contrib/Qt-Qbs-Application
+[submodule "FlightControlCenter/submodules/qt-qbs-application"]
+	path = FlightControlCenter/submodules/qt-qbs-application
 	url = https://github.com/approximator/Qt-Qbs-Application.git
