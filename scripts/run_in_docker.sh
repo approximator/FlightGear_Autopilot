@@ -22,7 +22,7 @@ chown $(id -u):$(id -g) /home/$USER
 export HOME=/home/$USER
 export USER=$USER
 
-/bin/su $USER -c "/fgap/install/FlightGear_Autopilot/fgautopilot"
+/bin/su $USER -c "/fgap/fgautopilot"
 
 EOF
 chmod +x ${ENTRY_POINT}

@@ -14,11 +14,11 @@ addons:
       - tree
 
 before_script:
-  - INSTALL_DIR=/tmp/fgap/docker
+  - INSTALL_DIR=/tmp/fgap
 
 script:
   - ./scripts/build_in_docker.sh
   - tree -L 5 ${INSTALL_DIR}
-  - docker run --rm -v ${INSTALL_DIR}:/fgap -v $PWD/contrib/Qt-Qbs-Application/scripts:/scripts approximator/qttest python /scripts/take_screenshot.py -f /fgap/install/FlightGear_Autopilot/fgautopilot -t 55 -o /fgap/install/FlightGear_Autopilot/screenshot.png
+  - docker run --rm -v ${INSTALL_DIR}:/fgap -v $PWD/contrib/Qt-Qbs-Application/scripts:/scripts approximator/qttest python /scripts/take_screenshot.py -f /fgap/fgautopilot -t 55 -o /fgap/screenshot.png
   - tree -L 5 ${INSTALL_DIR}
-  - cat ${INSTALL_DIR}/install/FlightGear_Autopilot/fgautopilot.log
+  - cat ${INSTALL_DIR}/fgautopilot.log

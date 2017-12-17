@@ -1,5 +1,5 @@
 /*
-* Copyright © 2015-2016 Oleksii Aliakin. All rights reserved.
+* Copyright © 2017 Oleksii Aliakin. All rights reserved.
 * Author: Oleksii Aliakin (alex@nls.la)
 * Author: Andrii Shelest
 *
@@ -17,16 +17,21 @@
 */
 
 import qbs
-import qbs.FileInfo
 
 Project {
-    name: "fgautopilot"
-    minimumQbsVersion: "1.9"
+    name: "gui_qml_modules"
 
-    qbsSearchPaths: ["qbs", "contrib/Qt-Qbs-Application/qbs"]
+    Product {
+        name: "qml_imports"
+        type: "qml_import"
+
+        Export {
+            Depends { name: "qml_fgear" }
+        }
+
+    }
 
     references: [
-        "src/src.qbs",
-        "contrib/submodules.qbs",
+        "qml-fgear/qml-fgear.qbs"
     ]
 }
