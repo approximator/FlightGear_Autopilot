@@ -16,15 +16,15 @@
  * limitations under the License.
  */
 
-import QtQuick 2.7
-import QtQuick.Controls 2.0
+import QtQuick 2.0
+import QtQuick.Controls 2.3
 
 import FGear 0.1
 
 Row {
     spacing: 3
     Label { text: "connected:" }
-    Label { text: aircraftActionManager.connectedCount }
+    Label { text: aircraftActionsModel.connectedCount }
     Label { text: "all:" }
-    Label { text: aircraftActionManager.count }
+    Label { text: aircraftActionsModel.count }
 }

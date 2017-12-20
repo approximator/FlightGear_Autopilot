@@ -1,3 +1,4 @@
+
 /*
  * Copyright © 2015-2016 Oleksii Aliakin. All rights reserved.
  * Author: Oleksii Aliakin (alex@nls.la)
@@ -15,12 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import QtQuick 2.7
+import QtQuick 2.0
 
 Rectangle {
-        gradient: Gradient {
-            GradientStop { position: 0.0; color: "#ff53535f" }
-            GradientStop { position: 1.0; color: "#ff363642" }
+    gradient: Gradient {
+        GradientStop {
+            position: 0.0
+            color: "#ff53535f"
         }
+        GradientStop {
+            position: 1.0
+            color: "#ff363642"
+        }
+    }
 }

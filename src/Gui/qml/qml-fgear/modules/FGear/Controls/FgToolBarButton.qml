@@ -16,25 +16,12 @@
  * limitations under the License.
  */
 
-import QtQuick 2.7
-import QtQuick.Controls 2.0
-
-import FGear 0.1
-import FGear.Components.Actions 0.1
+import QtQuick 2.0
+import QtQuick.Controls 2.3
 
 ToolButton {
     id: toolButton
     objectName: "toolBarButton"
-
-    property string actionName: "menuAction"
-    readonly property FgBaseAction action: !!actionsManager
-                                           ? actionsManager.getByName(actionName)
-                                           : null
-
-    Connections {
-        target: action !== null ? toolButton : null
-        onClicked: action.triggered();
-    }
 }
 
 

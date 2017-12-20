@@ -17,14 +17,10 @@
  */
 
 import QtQuick 2.7
-import QtQuick.Controls.Material 2.0
 
 QtObject {
     id: splashScreenStyle
 
-    property int colorType: Material.Dark
-    property color primary: Material.color(Material.Blue)
-    property color accent: Material.color(Material.DeepOrange)
     property color background: "#222127"
 
     readonly property int width: 300

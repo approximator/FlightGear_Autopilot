@@ -18,10 +18,9 @@
 
 import QtQuick 2.7
 
-import QtQuick.Controls.Material 2.0
 import QtQuick.Controls 2.0
-import QtQuick.Dialogs 1.2
-import QtQuick.Window 2.2
+import QtQuick.Dialogs 1.3
+import QtQuick.Window 2.3
 
 import FGear 0.1
 import FGear.Controls 0.1
@@ -30,16 +29,12 @@ import FGear.Styles 0.1
 ApplicationWindow {
     id: splashWindow
 
-    property var windowSource
+    property string windowSource
     property alias asynchronous: loader.asynchronous
     property FgSplashScreenStyle style: FgSplashScreenStyle { }
 
     title: AppConfig.appName
     color: "transparent"
-
-    Material.theme: style.colorType
-    Material.accent: style.accent
-    Material.primary: style.primary
 
     visible: AppConfig.showSplashScreen
     flags: Qt.SplashScreen
@@ -50,23 +45,12 @@ ApplicationWindow {
     Component.onCompleted: {
         /* We need to start loading application window
          * only after splashWindow has been created */
-        if (!setWindowSource(windowSource)) {
+        if (!windowSource) {
             console.error("[SplashScreen] window source didn't set.");
             loader.sourceComponent = message;
         }
-    }
 
-    function setWindowSource (_windowSource) {
-        var windowSourceType = typeof _windowSource;
-        switch (windowSourceType) {
-            case "string":
-                loader.source = Qt.resolvedUrl(_windowSource);
-                return true;
-            case "object":
-                loader.sourceComponent = windowSource;
-                return true;
-            default: return false;
-        }
+        loader.active = true;
     }
 
     background: Rectangle {
@@ -99,14 +83,14 @@ ApplicationWindow {
 
     Loader {
         id: loader
-        onStatusChanged: {
-            if (status == Loader.Loading)
-                return
 
-            if (loader.status == Loader.Ready)
-                close()
-            else
+        active: false
+        source: Qt.resolvedUrl(windowSource)
+        onLoaded: splashWindow.close()
+        onStatusChanged: {
+            if (status == Loader.Error) {
                 loader.sourceComponent = message
+            }
         }
     }
 

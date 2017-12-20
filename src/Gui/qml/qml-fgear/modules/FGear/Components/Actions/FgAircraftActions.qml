@@ -16,34 +16,30 @@
  * limitations under the License.
  */
 
-import QtQuick 2.7
+import QtQuick 2.0
+import QtQuick.Controls 2.3
 import QtQml 2.2
 
 import FGear 0.1
 import FGear.Components.Actions 0.1
 
-FgBaseActionManager {
-    id: aircraftActionManager
-    objectName: "aircraftActionManager"
+ActionGroup {
+    id: aircraftActions
+    objectName: "aircraftActions"
 
-    actions: [
-        FgAircraftAction {
-            objectName: "aircraftConnectedAction"
-        },
-        FgAircraftAction {
-            objectName: "aircraftDisconnectedAction"
-        }
-    ]
 
-    readonly property int count: aircraftObjects.count
+    readonly property FgAircraftAction connectedAction: __connectedAction
+    readonly property FgAircraftAction disconnectedAction: __disconnectedAction
 
+
+
+    property alias aircraftObjectsModel: __aircraftObjects.model
+    readonly property int count: __aircraftObjects.count
     property int connectedCount: 0
     readonly property int disconnectedCount: (count - connectedCount)
 
-    readonly property FgAircraftAction connectedAction: getByName("aircraftConnectedAction")
-    readonly property FgAircraftAction disconnectedAction: getByName("aircraftDisconnectedAction")
-
     readonly property Instantiator aircraftObjects: Instantiator {
+        id: __aircraftObjects
         QtObject {
             property Connections __intConn: Connections {
                 target: qtObject
@@ -62,5 +58,14 @@ FgBaseActionManager {
             }
 
         }
+    }
+
+    FgAircraftAction {
+        id: __connectedAction
+        objectName: "aircraftConnectedAction"
+    }
+    FgAircraftAction {
+        id: __disconnectedAction
+        objectName: "aircraftDisconnectedAction"
     }
 }

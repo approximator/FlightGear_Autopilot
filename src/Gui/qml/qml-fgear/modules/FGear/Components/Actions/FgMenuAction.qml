@@ -25,21 +25,11 @@ FgBaseAction {
     id: menuAction
     objectName: "menuAction"
 
-    property FgMenuActionGroup group
-    readonly property bool active: group && (group.activatedAction === menuAction)
-
     property string pageSource: ""
     signal menuSelected(string source)
 
     onTriggered: {
-        if (group) {
-            if (active) {
-                console.log("[MenuAction]", objectName, "already activated!");
-                return;
-            }
-
-            group.activatedAction = menuAction;
-        }
+        console.log("Actiion")
         menuSelected(pageSource)
     }
 }

@@ -21,7 +21,6 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 
 import FGear 0.1
-import FGear.Models 0.1
 import FGear.ListItems 0.1
 
 FgListSideMenu {
@@ -30,10 +29,7 @@ FgListSideMenu {
 
     title: AppConfig.appName
 
-    model: FgMainViewModel { }
     delegate: FgMenuItem {
-        text: model.text
-        actionName: model.actionName
         width: mainViewSideMenu.width
     }
 }

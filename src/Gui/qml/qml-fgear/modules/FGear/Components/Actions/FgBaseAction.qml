@@ -15,14 +15,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import QtQuick 2.0
+import QtQuick.Controls 2.3
 
-import QtQuick 2.7
-
-
-QtObject {
+Action {
     id: baseAction
     objectName: "baseAction"
 
-    signal triggered()
     onTriggered: console.info("[" + objectName + "] action triggered.")
 }

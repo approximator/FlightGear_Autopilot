@@ -15,12 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import QtQuick 2.0
 
-import QtQuick 2.7
-
-import QtQuick.Controls.Material 2.0
-import QtQuick.Controls 2.0
-import QtQuick.Window 2.2
+import QtQuick.Controls 2.3
 import Qt.labs.settings 1.0
 
 import FGear 0.1
@@ -35,22 +32,16 @@ ApplicationWindow {
     id: mainWindow
     objectName: "mainWindow"
 
+    readonly property FgAircraftsManager aircraftsManager: FgAircraftsManager { }
+    readonly property FgPageActions pageActions: FgPageActions { }
+    readonly property FgAircraftActions aircraftActionsModel: FgAircraftActions {
+        aircraftObjectsModel: aircraftsManager.model
+    }
+    readonly property FgBaseAction menuShowAction: FgSideBarShowAction { }
 
-    property FgBaseActionManager actionsManager: FgMainViewActionManager { }
-
-    property FgAircraftsManager aircraftsManager: FgAircraftsManager { }
-    property FgBaseActionManager aircraftActionManager:
-        FgAircraftActionManager { aircraftObjects.model: aircraftsManager.model }
-
-    property FgMainWindowStyle style: FgMainWindowStyle { }
+    readonly property FgMainWindowStyle style: FgMainWindowStyle { }
 
     title: AppConfig.appName
-
-    Material.theme: style.colorType
-    Material.accent: style.accent
-    Material.primary: style.primary
-
-    color: style.background
 
     width: style.width
     height: style.height
@@ -58,8 +49,9 @@ ApplicationWindow {
 
     Component.onCompleted: {
         /* It is needed to recalculate pixelDensity */
-        AppConfig.screenUpdated(Screen);
+        AppConfig.screenUpdated(screen)
     }
+
 
     FgSplitPageView {
         id: splitPageView
@@ -67,15 +59,11 @@ ApplicationWindow {
         anchors.fill: parent
 
         splitContentWidth: style.sideBarWidth
-        splitContent: FgMainViewSideMenu { }
+        splitContent: FgMainViewSideMenu { model: pageActions.actions }
 
         FgMainView {
             anchors.fill: parent
-            menuActions: FgBaseActionGroup {
-                actions: actionsManager.getActionsByName("PageMenuAction");
-            }
         }
-
     }
 
     /* Saving settings to config file */

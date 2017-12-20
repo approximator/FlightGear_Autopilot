@@ -18,21 +18,13 @@
 
 import QtQuick 2.7
 
-import QtQuick.Layouts 1.1
-
 import FGear 0.1
-import FGear.Components.Actions 0.1
 
 Item {
     id: splitPageView
 
-    property string actionName: "menuShowAction"
-    readonly property FgSideBarShowAction action: !!actionsManager
-                                               ? actionsManager.getByName(actionName)
-                                               : null
-
     property int splitContentWidth: 200
-    property bool sidePanelHidden: action ? !action.isShown : false
+    property bool sidePanelHidden: !menuShowAction.checked
 
     default property alias data: baseContent.data
     property alias splitContent: splitContent.data

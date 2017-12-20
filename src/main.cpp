@@ -41,7 +41,6 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QApplication app(argc, argv);
-    QQuickStyle::setStyle("Material");
     qInstallMessageHandler(logMessageHandler);
 
     /* Set up settings */

@@ -50,17 +50,17 @@ ToolBar {
         }
 
         FgToolBarButton {
-            actionName: "aircraftControlPageMenuAction"
+            action: pageActions.aircraftControlPageMenuAction
             text: qsTr("\u25C0 Aircraft")
         }
 
         FgToolBarButton {
-            actionName: "mapPageMenuAction"
+            action: pageActions.mapPageMenuAction
             text: qsTr("\uD83C Map")
         }
 
         FgToolBarButton {
-            actionName: "instrumentsPageMenuAction"
+            action: pageActions.instrumentsPageMenuAction
             text: qsTr("\u25C0 Instruments")
         }
     }

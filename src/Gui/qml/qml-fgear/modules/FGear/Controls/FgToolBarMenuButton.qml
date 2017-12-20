@@ -25,15 +25,15 @@ import FGear.Controls 0.1
 FgToolBarButton {
     id: mbButtom
 
-    actionName: "menuShowAction"
-
-    property bool back: action ? action.isShown : false
+    readonly property bool back: action ? action.checked : false
     property int animationDuration: 250
 
     property color color: Material.foreground
     readonly property real lineHeight: /*Math.round(AppConfig.dp(4))*/ 3
     readonly property real lineSplacing: /*Math.round(AppConfig.dp(15))*/ 10
     readonly property real contentHeight: Math.round(2 * (lineHeight + lineSplacing))
+
+    action: mainWindow.menuShowAction
 
     flat: true
     clip: true
@@ -118,4 +118,11 @@ FgToolBarButton {
             }
         }
     ]
+
+    Connections {
+        target: action
+        onToggled: {
+            action.checked = !action.checked;
+        }
+    }
 }

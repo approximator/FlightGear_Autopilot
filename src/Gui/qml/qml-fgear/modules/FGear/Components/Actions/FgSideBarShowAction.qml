@@ -1,3 +1,4 @@
+
 /*
  * Copyright © 2015-2016 Oleksii Aliakin. All rights reserved.
  * Author: Oleksii Aliakin (alex@nls.la)
@@ -15,15 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import QtQuick 2.7
 
 import FGear 0.1
 import FGear.Components.Actions 0.1
 
-FgShowHideAction {
+FgBaseAction {
     id: sidebarShowAction
     objectName: "sidebarShowAction"
 
-    isShown: AppConfig.showSidebar
+    checkable: true
+    checked: AppConfig.showSidebar
 }

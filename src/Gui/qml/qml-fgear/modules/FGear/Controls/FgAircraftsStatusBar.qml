@@ -22,9 +22,9 @@ import FGear 0.1
 import FGear.Styles 0.1
 
 FgToolBarButton {
-    actionName: "aircraftsPageMenuAction"
+    action: pageActions.aircraftsPageMenuAction
 
     text: objectName
     /* QTBUG-50992 see in SplashScreen.qml */
-    // background: FgToolBarBackground {}
+     background: FgToolBarBackground {}
 }
